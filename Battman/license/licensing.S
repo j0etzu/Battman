@@ -10,13 +10,13 @@
 _battman_bootstrap:
 	sub sp,sp,#64
 	cmp w1,#0
-	b.eq .battman.bootstrap.e
+	b.eq L.battman.bootstrap.e
 	sub sp,sp,#32 ;16
 	cmp w1,#1
-	b.eq .battman.bootstrap.checkdone
+	b.eq L.battman.bootstrap.checkdone
 	stp x29,x30,[sp]
 	bl checktoken
-.battman.bootstrap.checkdone:
+L.battman.bootstrap.checkdone:
 	stp x29,x30,[sp,#64]
 	stp x19,x20,[sp,#32]
 	mov x19,x0
@@ -29,18 +29,18 @@ _battman_bootstrap:
 	adrp x3,_OBJC_CLASS_$_UIApplication@GOTPAGE
 	ldr x3,[x3,_OBJC_CLASS_$_UIApplication@GOTPAGEOFF]
 	cmp x2,x3
-	b.ne .battman.bootstrap.checkdone.1
+	b.ne L.battman.bootstrap.checkdone.1
 	adrp x1,sel.1new@PAGE
 	ldr x1,[x1,sel.1new@PAGEOFF]
-	b .battman.bootstrap.checkdone.2
-.battman.bootstrap.checkdone.1:
+	b L.battman.bootstrap.checkdone.2
+L.battman.bootstrap.checkdone.1:
 	adrp x1,allocSel@PAGE
 	ldr x1,[x1,allocSel@PAGEOFF]
 	bl _objc_msgSend
 	adrp x1,initWithWS@PAGE
 	ldr x1,[x1,initWithWS@PAGEOFF]
 	mov x2,x20
-.battman.bootstrap.checkdone.2:
+L.battman.bootstrap.checkdone.2:
 	bl _objc_msgSend
 	;mov x2,x0
 	;adrp x1,sel.setWindow@PAGE
@@ -94,7 +94,7 @@ _battman_bootstrap:
 	ldp x19,x20,[sp,#64]
 	add sp,sp,#80
 	ret
-.battman.bootstrap.e:
+L.battman.bootstrap.e:
 	stp x29,x30,[sp,#48]
 	stp x19,x20,[sp,#32]
 	;mov x20,x0
@@ -112,17 +112,17 @@ _battman_bootstrap:
 	mov x0,x19
 	bl _strlen
 	add x1,x19,x0
-.battman.bootstrap.el:
+L.battman.bootstrap.el:
 	sub x1,x1,#1
 	ldrb w2,[x1]
 	cmp w2,#0x2f
-	b.ne .battman.bootstrap.el
+	b.ne L.battman.bootstrap.el
 	mov w0,#0
 	strb w0,[x1,#13]
 	movz x0,#0x696c
 	movk x0,#0x736e,LSL #32
 	cmp x19,#0
-	b.eq .battman.bootstrap.cont
+	b.eq L.battman.bootstrap.cont
 	movk x0,#0x2e65,LSL #48
 	movk x0,#0x6563,LSL #16
 	str x0,[x1,#1]
@@ -130,22 +130,22 @@ _battman_bootstrap:
 	movk w0,#0x6c6d,LSL #16
 	str w0,[x1,#9]
 	;cmp x19,#0
-	;b.eq .battman.bootstrap.cont
+	;b.eq L.battman.bootstrap.cont
 	mov x16,#5
 	mov x2,#0
 	mov x1,#0
 	mov x0,x19
 	svc #0x80
-	b.cc .battman.bootstrap.c1
+	b.cc L.battman.bootstrap.c1
 	mov x29,x16
 	svc #0x80
-	b .battman.bootstrap.cont
-.battman.bootstrap.c1:
+	b L.battman.bootstrap.cont
+L.battman.bootstrap.c1:
 	str x0,[sp]
 	mov x1,x19
 	mov x16,#189
 	svc #0x80
-	b.cs .battman.bootstrap.cont
+	b.cs L.battman.bootstrap.cont
 	ldr x1,[x19,#72]
 	adrp x9,.lfd.s@PAGE
 	str x1,[x9,.lfd.s@PAGEOFF]
@@ -156,7 +156,7 @@ _battman_bootstrap:
 	mov x5,xzr
 	mov x16,#197
 	svc #0x80
-	b.cs .battman.bootstrap.cont
+	b.cs L.battman.bootstrap.cont
 	mov x16,x19
 	mov x19,x0
 	mov x0,x16
@@ -171,7 +171,7 @@ _battman_bootstrap:
 	;str x16,[x9,.lfd.0@PAGEOFF]
 	adrp x0,_OBJC_CLASS_$_UIResponder@GOTPAGE
 	ldr x0,[x0,_OBJC_CLASS_$_UIResponder@GOTPAGEOFF]
-.battman.bootstrap.cont:
+L.battman.bootstrap.cont:
 	adrp x1,sel.class@PAGE
 	ldr x1,[x1,sel.class@PAGEOFF]
 	bl _objc_msgSend
@@ -244,11 +244,11 @@ _battman_bootstrap:
 	bl _objc_msgSend
 	adrp x2,_battman_bootstrap@PAGE
 	add x2,x2,_battman_bootstrap@PAGEOFF
-	tbz x0,#0,.battman.bootstrap.cont.1 ;b.eq!!!
+	tbz x0,#0,L.battman.bootstrap.cont.1 ;b.eq!!!
 	adrp x10,.osSupportsUIScene@PAGE
 	str x0,[x10,.osSupportsUIScene@PAGEOFF]
 	mov x2,x20
-.battman.bootstrap.cont.1:
+L.battman.bootstrap.cont.1:
 	adrp x1,finishLaunching_sel@PAGE
 	ldr x1,[x1,finishLaunching_sel@PAGEOFF]
 	adrp x3,appFinSign@PAGE
@@ -321,7 +321,7 @@ checktoken:
 	ldr x1,[x1,.lfd.s@PAGEOFF]
 	mov x2,sp
 	bl _CC_SHA256
-	b checktoken.pt
+	b Lchecktoken.pt
 	add x2,sp,#16
 	;adrp x1,.licensing.S.end@PAGE
 	;add x1,x1,.licensing.S.end@PAGEOFF
@@ -338,21 +338,21 @@ checktoken:
 	ldr x10,[sp,#32]
 	add x10,x9,x10
 	movz w1,#0x9000,LSL #16
-checktoken.ll:
+Lchecktoken.ll:
 	ldr w11,[x9]
 	and w11,w11,w1
 	cmp w11,w1
-	b.ne checktoken.llna
+	b.ne Lchecktoken.llna
 	str wzr,[x9]
-checktoken.llna:
+Lchecktoken.llna:
 	add x9,x9,#4
 	cmp x9,x10
-	b.ne checktoken.ll
+	b.ne Lchecktoken.ll
 	add x2,sp,#16
 	ldr x0,[sp,#40]
 	ldr x1,[sp,#32]
 	bl _CC_SHA256
-checktoken.pt:
+Lchecktoken.pt:
 	adrp x0,_lh_arr@PAGE
 	add x0,x0,_lh_arr@PAGEOFF
 	mov x16,sp
@@ -364,20 +364,20 @@ checktoken.pt:
 	uminv b0,v0.16b
 	umov w0,v0.b[0]
 	ldr x9,[sp,#80]
-	tbnz w0,#0,checktoken.b
+	tbnz w0,#0,Lchecktoken.b
 	add x3,sp,#32
 	mov x0,x16
-checktoken.a:
+Lchecktoken.a:
 	cmp x3,x16
-	b.eq checktoken.b
+	b.eq Lchecktoken.b
 	ldr x1,[x16]
 	ldr x2,[x0]
 	cmp x1,x2
 	add x16,x16,#8
 	add x0,x0,#8
-	b.eq checktoken.a
+	b.eq Lchecktoken.a
 	mov x9,x1
-checktoken.b:
+Lchecktoken.b:
 	str x9,[sp,#80]
 	ldp x29,x30,[sp,#80]
 	ldr x2,[sp,#72]
@@ -399,18 +399,18 @@ bindAnchors:
 	mov x23,x1
 	cmp x3,#1
 	mov x0,x2
-	b.ne bindAnchors.nosafearea
+	b.ne LbindAnchors.nosafearea
 	adrp x1,sel.salg@PAGE
 	ldr x1,[x1,sel.salg@PAGEOFF]
 	bl _objc_msgSend
 	mov x1,x23
-	b bindAnchors.continue
-bindAnchors.nosafearea:
+	b LbindAnchors.continue
+LbindAnchors.nosafearea:
 	cmp x3,xzr
 	mov x1,x23
-	b.eq bindAnchors.continue
+	b.eq LbindAnchors.continue
 	mov x1,x3
-bindAnchors.continue:
+LbindAnchors.continue:
 	bl _objc_msgSend
 	mov x1,x23
 	mov x23,x0
@@ -479,6 +479,7 @@ makeBarButtonItem:
 	ldp x29,x30,[sp,#48]
 	add sp,sp,#64
 	ret
+
 show_license.a:
 	sub sp,sp,#48
 	stp x29,x30,[sp,#32]
@@ -1017,9 +1018,9 @@ _ios_app_exit:
 	add x0,x0,UIDismissSceneAction_str@PAGEOFF
 	bl _objc_getClass
 	cmp x0,xzr
-	b.ne _ios_app_exit.graceful
+	b.ne L_ios_app_exit.graceful
 	bl _exit
-_ios_app_exit.graceful:
+L_ios_app_exit.graceful:
 	mov x9,x0
 	adrp x0,__NSConcreteStackBlock@GOTPAGE
 	ldr x0,[x0,__NSConcreteStackBlock@GOTPAGEOFF]
