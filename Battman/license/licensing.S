@@ -9,8 +9,7 @@
 ; TODO: hardcode license_hash
 _battman_bootstrap:
 	sub sp,sp,#64
-	cmp w1,#0
-	b.eq L.battman.bootstrap.e
+	cbz w1,L.battman.bootstrap.e
 	sub sp,sp,#32 ;16
 	cmp w1,#1
 	b.eq L.battman.bootstrap.checkdone
@@ -69,8 +68,7 @@ L.battman.bootstrap.checkdone.2:
 	;adrp x1,.sel.arrwobjs@PAGE
 	;ldr x1,[x1,.sel.arrwobjs@PAGEOFF]
 	bl show_license
-	cmp x0,#0
-	b.eq .createNC
+	cbz x0,.createNC
 	mov x0,x19
 	mov x2,sp
 	mov x3,#2
@@ -121,8 +119,7 @@ L.battman.bootstrap.el:
 	strb w0,[x1,#13]
 	movz x0,#0x696c
 	movk x0,#0x736e,LSL #32
-	cmp x19,#0
-	b.eq L.battman.bootstrap.cont
+	cbz x19,L.battman.bootstrap.cont
 	movk x0,#0x2e65,LSL #48
 	movk x0,#0x6563,LSL #16
 	str x0,[x1,#1]
@@ -406,9 +403,8 @@ bindAnchors:
 	mov x1,x23
 	b LbindAnchors.continue
 LbindAnchors.nosafearea:
-	cmp x3,xzr
 	mov x1,x23
-	b.eq LbindAnchors.continue
+	cbz x3,LbindAnchors.continue
 	mov x1,x3
 LbindAnchors.continue:
 	bl _objc_msgSend
@@ -510,8 +506,7 @@ show_license.susp:
 show_license.cb.dbg:
 	; tmp dbg
 	ldr x9,[sp,#96]
-	cmp x9,#0
-	b.ne show_license.cb
+	cbnz x9,show_license.cb
 	adrp x9,_THENUM@PAGE
 	str x0,[x9,_THENUM@PAGEOFF]
 	add sp,sp,#96
@@ -750,16 +745,14 @@ show_license:
 	mov x1,x0
 	mov x0,xzr
 	bl _IOServiceGetMatchingService
-	cmp w0,wzr
-	b.eq show_license.return.fail
+	cbz w0,show_license.return.fail
 	mov x9,x20
 	mov x20,x0
 	mov x2,xzr
 	mov x3,x2
 	mov x1,x9
 	bl _IORegistryEntryCreateCFProperty
-	cmp w0,wzr
-	b.eq show_license.return.fail
+	cbz w0,show_license.return.fail
 	sub sp,sp,#64
 	mov x1,#0x0100
 	movk x1,#0x0800,LSL #16
@@ -804,8 +797,7 @@ show_license.1:
 	ldr x0,[sp,#32]
 	mov x16,#5
 	ldr x9,[sp,#96]
-	cmp x9,xzr
-	b.ne show_license.1.svc
+	cbnz x9,show_license.1.svc
 	mov x1,#0x202
 	mov x2,#0x180
 show_license.1.svc:
@@ -815,8 +807,7 @@ show_license.1.svc:
 	;bl _free
 	b.cs show_license.cb
 	ldr x16,[sp,#96]
-	cmp x16,xzr
-	b.ne show_license.2
+	cbnz x16,show_license.2
 	mov x20,x0
 	ldr x0,[sp,#32]
 	bl _free
@@ -1017,8 +1008,7 @@ _ios_app_exit:
 	adrp x0,UIDismissSceneAction_str@PAGE
 	add x0,x0,UIDismissSceneAction_str@PAGEOFF
 	bl _objc_getClass
-	cmp x0,xzr
-	b.ne L_ios_app_exit.graceful
+	cbnz x0,L_ios_app_exit.graceful
 	bl _exit
 L_ios_app_exit.graceful:
 	mov x9,x0

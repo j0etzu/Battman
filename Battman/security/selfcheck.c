@@ -20,6 +20,8 @@
 #include <CoreGraphics/CoreGraphics.h>
 #include <dispatch/dispatch.h>
 
+#include "cobjc.h"
+
 typedef unsigned long NSUInteger;
 typedef long NSInteger;
 
@@ -29,144 +31,156 @@ extern void NSLog(CFStringRef, ...);
 #define UISceneActivationStateForegroundActive 0
 #define UIAlertControllerStyleAlert 1
 #define UIAlertActionStyleDefault 0
-static id gAlertWindow;
-static __strong id _viewsQueue;
 
 // Forward declarations
 void showCompletionAlert(void);
 void removeAllViews(void);
-id collectAllSubviewsBottomUp(id view);
+CFArrayRef collectAllSubviewsBottomUp(id view);
 
 /* TODO: make all of them inline */
 
-void showCompletionAlert(void) {
-	id gwindowAlloc = ((id (*)(Class, SEL))objc_msgSend)(objc_getClass("UIWindow"), sel_registerName("alloc"));
-	id gwindow = ((id (*)(id, SEL))objc_msgSend)(gwindowAlloc, sel_registerName("init"));
+uint64_t my_block_descriptor_1arg[2]={0,40};
+
+struct my_block {
+	void *isa;
+	int flags;
+	int reserved;
+	void *invoke;
+	void *descriptor;
+	void *data;
+};
+
+// strictly no inline
+static void open_url_block__invoke(struct my_block *blk) {
+	((void (*)(id, SEL, BOOL))objc_msgSend)(blk->data,oselector(setHidden:),1);
+	objc_release(blk->data);
+	CFURLRef link=CFURLCreateWithString(0,CFSTR("https://github.com/Torrekie/Battman"),NULL);
+	CFDictionaryRef emptyDict=CFDictionaryCreate(0,NULL,NULL,0,NULL,NULL);
+	struct my_block eblk;
+	eblk.isa=&_NSConcreteStackBlock;
+	eblk.flags=(1<<29);
+	eblk.reserved=0;
+	eblk.invoke=app_exit;
+	eblk.data=NULL;
+	eblk.descriptor=&my_block_descriptor_1arg;
+	id eblk_c=((id(*)(struct my_block*,SEL))objc_msgSend)(&eblk,oselector(copy));
+	((BOOL(*)(id,SEL,CFURLRef,CFDictionaryRef,id))objc_msgSend)(((id(*)(Class,SEL))objc_msgSend)(oclass(UIApplication),oselector(sharedApplication)),oselector(openURL:options:completionHandler:),link,emptyDict,eblk_c);
+	CFRelease(link);
+	CFRelease(emptyDict);
+	objc_release(eblk_c);
+}
+
+static void rmview__invoke(void **data) {
+	int cnt=CFArrayGetCount(*data);
+	if(!cnt) {
+		CFRelease(*data);
+		dispatch_source_cancel(data[1]);
+		dispatch_release(data[1]);
+		free(data);
+		showCompletionAlert();
+		return;
+	}
+	id view=(id)CFArrayGetValueAtIndex(*data,0);
+	CFArrayRemoveValueAtIndex(*data,0);
+	((void (*)(id, SEL))objc_msgSend)(view, oselector(removeFromSuperview));
+	objc_release(view);
+}
+
+void showCompletionAlert_f(void) {
+	id gAlertWindow=NULL;
+	id sharedApp=((id (*)(Class, SEL))objc_msgSend)(oclass(UIApplication), oselector(sharedApplication));
 	
-	extern void objc_storeStrong(id *, id);
-	objc_storeStrong(&gAlertWindow, gwindow);
-
-	dispatch_async(dispatch_get_main_queue(), ^{
-		id window = NULL;
-		Class uiAppClass = objc_getClass("UIApplication");
-		SEL selSharedApp = sel_registerName("sharedApplication");
-		id sharedApp = ((id (*)(Class, SEL))objc_msgSend)(uiAppClass, selSharedApp);
-		
-		// iOS 13+: find foreground-active UIWindowScene
-		if (__builtin_available(iOS 13.0, *)) {
-			SEL selConnectedScenes = sel_registerName("connectedScenes");
-			id connectedScenes = ((id (*)(id, SEL))objc_msgSend)(sharedApp, selConnectedScenes);
+	// iOS 13+: find foreground-active UIWindowScene
+	if (__builtin_available(iOS 13.0, *)) {
+		id scene;
+		CFSetRef connectedScenes = ((CFSetRef (*)(id, SEL))objc_msgSend)(sharedApp, oselector(connectedScenes));
+		int cntScene=CFSetGetCount(connectedScenes);
+		id *allScenes=malloc(cntScene*sizeof(id));
+		CFSetGetValues(connectedScenes,(const void**)allScenes);
+		for(int i=0;i<cntScene;i++) {
+			// Check activationState == UISceneActivationStateForegroundActive
+			NSInteger state = ((NSInteger (*)(id, SEL))objc_msgSend)(allScenes[i], oselector(activationState));
+			if (state != UISceneActivationStateForegroundActive)
+				continue;
 			
-			// Enumerate the scenes
-			SEL selObjectEnumerator = sel_registerName("objectEnumerator");
-			id enumerator = ((id (*)(id, SEL))objc_msgSend)(connectedScenes, selObjectEnumerator);
-			SEL selNextObject = sel_registerName("nextObject");
-			
-			id scene = NULL;
-			id s;
-			while ((s = ((id (*)(id, SEL))objc_msgSend)(enumerator, selNextObject))) {
-				// Check activationState == UISceneActivationStateForegroundActive
-				NSInteger state = ((NSInteger (*)(id, SEL))objc_msgSend)(s, sel_registerName("activationState"));
-				if (state != UISceneActivationStateForegroundActive)
-					continue;
-				
-				// Check [scene isKindOfClass:UIWindowScene.class]
-				Class windowSceneClass = objc_getClass("UIWindowScene");
-				SEL selIsKind = sel_registerName("isKindOfClass:");
-				BOOL isWindowScene = ((BOOL (*)(id, SEL, Class))objc_msgSend)(s, selIsKind, windowSceneClass);
-				if (isWindowScene) {
-					scene = s;
-					break;
-				}
-			}
-			
-			if (scene) {
-				// Allocate/init UIWindow with initWithWindowScene:
-				Class windowClass = objc_getClass("UIWindow");
-				SEL selAlloc = sel_registerName("alloc");
-				id windowAlloc = ((id (*)(Class, SEL))objc_msgSend)(windowClass, selAlloc);
-				
-				SEL selInitWithScene = sel_registerName("initWithWindowScene:");
-				window = ((id (*)(id, SEL, id))objc_msgSend)(windowAlloc, selInitWithScene, scene);
-				
-				gAlertWindow = window;
-				// You can now set the window level, rootViewController, etc.
+			BOOL isWindowScene = ((BOOL (*)(id, SEL, Class))objc_msgSend)(allScenes[i], oselector(isKindOfClass:), oclass(UIWindowScene));
+			if (isWindowScene) {
+				scene = allScenes[i];
+				break;
 			}
 		}
+		free(allScenes);
 		
-		// Fallback for <iOS13 or no scene
-		if (!window) {
-			Class screenClass = objc_getClass("UIScreen");
-			SEL selMain = sel_registerName("mainScreen");
-			id mainScreen = ((id (*)(Class, SEL))objc_msgSend)(screenClass, selMain);
-			SEL selBounds = sel_registerName("bounds");
-			CGRect bounds = ((CGRect (*)(id, SEL))objc_msgSend)(mainScreen, selBounds);
-			
-			Class windowClass = objc_getClass("UIWindow");
-			SEL selAlloc = sel_registerName("alloc");
-			id tmp = ((id (*)(Class, SEL))objc_msgSend)(windowClass, selAlloc);
-			SEL selInitFrame = sel_registerName("initWithFrame:");
-			window = ((id (*)(id, SEL, CGRect))objc_msgSend)(tmp, selInitFrame, bounds);
-			gAlertWindow = window;
-		}
-		
-		SEL selSetLevel = sel_registerName("setWindowLevel:");
-		((void (*)(id, SEL, CGFloat))objc_msgSend)(gAlertWindow, selSetLevel, UIWindowLevelAlert + 1);
-		
-		Class vcClass = objc_getClass("UIViewController");
-		SEL selNew = sel_registerName("new");
-		id vc = ((id (*)(Class, SEL))objc_msgSend)(vcClass, selNew);
-		
-		SEL selView = sel_registerName("view");
-		id viewObj = ((id (*)(id, SEL))objc_msgSend)(vc, selView);
-		Class colorClass = objc_getClass("UIColor");
-		SEL selClear = sel_registerName("clearColor");
-		id clear = ((id (*)(Class, SEL))objc_msgSend)(colorClass, selClear);
-		SEL selSetBG = sel_registerName("setBackgroundColor:");
-		((void (*)(id, SEL, id))objc_msgSend)(viewObj, selSetBG, clear);
-		
-		SEL selSetRoot = sel_registerName("setRootViewController:");
-		((void (*)(id, SEL, id))objc_msgSend)(gAlertWindow, selSetRoot, vc);
-		
-		SEL selMake = sel_registerName("makeKeyAndVisible");
-		((void (*)(id, SEL))objc_msgSend)(gAlertWindow, selMake);
-		
-		Class alertClass = objc_getClass("UIAlertController");
-		SEL selAlert = sel_registerName("alertControllerWithTitle:message:preferredStyle:");
-		CFStringRef title = _("Sorry");
-		CFStringRef msg   = _("Please download Battman from our official page.");
-		id alert = ((id (*)(Class, SEL, CFStringRef, CFStringRef, NSInteger))objc_msgSend)(alertClass, selAlert, title, msg, (NSInteger)UIAlertControllerStyleAlert);
-		
-		Class actionClass = objc_getClass("UIAlertAction");
-		SEL selAction = sel_registerName("actionWithTitle:style:handler:");
-		
-		typedef void (*ActionHandlerIMP)(id, SEL, id);
-		struct Block_literal {
-			void *isa;
-			int flags;
-			int reserved;
-			void (*invoke)(void *, id);
-			struct Block_descriptor {
-				unsigned long int reserved;
-				unsigned long int size;
-			} *descriptor;
-		};
-		
-		void (^handlerBlock)(id) = ^(id action) {
-			SEL selHide = sel_registerName("setHidden:");
-			((void (*)(id, SEL, BOOL))objc_msgSend)(gAlertWindow, selHide, YES);
-			gAlertWindow = NULL;
-			open_url("https://github.com/Torrekie/Battman");
-		};
-		
-		id ok = ((id (*)(Class, SEL, CFStringRef, NSInteger, id))objc_msgSend)(actionClass, selAction, _("Open URL"), (NSInteger)UIAlertActionStyleDefault, (id)handlerBlock);
+		if (scene)
+			gAlertWindow=((id (*)(id, SEL, id))objc_msgSend)(objc_alloc(oclass(UIWindow)), oselector(initWithWindowScene:), scene);
+	}
+	
+	// Fallback for <iOS13 or no scene
+	if (!gAlertWindow)
+		gAlertWindow = objc_alloc_init(oclass(UIWindow));
+	
+	SEL selSetLevel = sel_registerName("setWindowLevel:");
+	((void (*)(id, SEL, CGFloat))objc_msgSend)(gAlertWindow, selSetLevel, UIWindowLevelAlert + 1);
+	
+	id vc = objc_alloc_init(oclass(UIViewController));
+	
+	id viewObj = ((id (*)(id, SEL))objc_msgSend)(vc, oselector(view));
+	/*Class colorClass = objc_getClass("UIColor");
+	SEL selClear = sel_registerName("clearColor");
+	id clear = ((id (*)(Class, SEL))objc_msgSend)(colorClass, selClear);
+	SEL selSetBG = sel_registerName("setBackgroundColor:");
+	((void (*)(id, SEL, id))objc_msgSend)(viewObj, selSetBG, clear);
+	commented bc I think uivc is clear by default
+	*/
+	
+	((void (*)(id, SEL, id))objc_msgSend)(gAlertWindow, oselector(setRootViewController:), vc);
+	((void (*)(id, SEL))objc_msgSend)(gAlertWindow, oselector(makeKeyAndVisible));
+	
+	Class alertClass = oclass(UIAlertController);
+	SEL selAlert = oselector(alertControllerWithTitle:message:preferredStyle:);
+	CFStringRef title = _("Sorry");
+	CFStringRef msg   = _("Please download Battman from our official page.");
+	id alert = ((id (*)(Class, SEL, CFStringRef, CFStringRef, NSInteger))objc_msgSend)(alertClass, selAlert, title, msg, (NSInteger)UIAlertControllerStyleAlert);
+	
+	Class actionClass = oclass(UIAlertAction);
+	SEL selAction = oselector(actionWithTitle:style:handler:);
+	
+	
+	struct my_block open_url_block;
+	open_url_block.isa=&_NSConcreteStackBlock;
+	open_url_block.flags=(1<<29);
+	open_url_block.reserved=0;
+	open_url_block.invoke=open_url_block__invoke;
+	open_url_block.data=gAlertWindow;
+	open_url_block.descriptor=&my_block_descriptor_1arg;
+	id open_url_block_c=((id(*)(struct my_block*,SEL))objc_msgSend)(&open_url_block,oselector(copy));
+	
+	/*void (^handlerBlock)(id) = ^(id action) {
+		SEL selHide = sel_registerName("setHidden:");
+		((void (*)(id, SEL, BOOL))objc_msgSend)(gAlertWindow, selHide, YES);
+		gAlertWindow = NULL; // also this line will not work in C
+		open_url("https://github.com/Torrekie/Battman");
+	};
+	// Franken C ???
+	*/
+	
+	id ok = ((id (*)(Class, SEL, CFStringRef, NSInteger, id))objc_msgSend)(actionClass, selAction, _("Open URL"), (NSInteger)UIAlertActionStyleDefault, open_url_block_c);
+	open_url_block.invoke=app_exit;
+	id open_url_block_d=((id(*)(struct my_block*,SEL))objc_msgSend)(&open_url_block,oselector(copy));
+	id exit_btn=((id (*)(Class, SEL, CFStringRef, NSInteger, id))objc_msgSend)(actionClass, selAction, _("Exit"), 1, open_url_block_d);
 
-		SEL selAdd = sel_registerName("addAction:");
-		((void (*)(id, SEL, id))objc_msgSend)(alert, selAdd, ok);
-		
-		SEL selPresent = sel_registerName("presentViewController:animated:completion:");
-		((void (*)(id, SEL, id, BOOL, id))objc_msgSend)(vc, selPresent, alert, YES, NULL);
-	});
+	SEL selAdd = oselector(addAction:);
+	((void (*)(id, SEL, id))objc_msgSend)(alert, selAdd, ok);
+	((void (*)(id, SEL, id))objc_msgSend)(alert, selAdd, exit_btn);
+	objc_release(open_url_block_c);
+	objc_release(open_url_block_d);
+	
+	SEL selPresent = oselector(presentViewController:animated:completion:);
+	((void (*)(id, SEL, id, BOOL, id))objc_msgSend)(vc, selPresent, alert, YES, NULL);
+}
+
+void showCompletionAlert() {
+	dispatch_async_f(dispatch_get_main_queue(),NULL,(void(*)(void*))showCompletionAlert_f);
 }
 
 void removeAllViews(void) {
@@ -174,91 +188,54 @@ void removeAllViews(void) {
 	if (scheduled) return;
 	scheduled = true;
 	
-	Class mutableArrayCls = objc_getClass("NSMutableArray");
-	SEL selArray          = sel_registerName("array");
-	id  viewsQueue        = ((id (*)(Class, SEL))objc_msgSend)(mutableArrayCls, selArray);
+	CFMutableArrayRef viewsQueue=CFArrayCreateMutable(0,64,NULL);
 	
-	// for (UIWindow *win in UIApplication.sharedApplication.windows) { … }
-	Class uiAppCls        = objc_getClass("UIApplication");
-	SEL   selSharedApp    = sel_registerName("sharedApplication");
-	id    sharedApp       = ((id (*)(Class, SEL))objc_msgSend)(uiAppCls, selSharedApp);
+	CFArrayRef windows=((CFArrayRef(*)(id,SEL))objc_msgSend)(((id(*)(Class,SEL))objc_msgSend)(oclass(UIApplication),oselector(sharedApplication)),oselector(windows));
+	int arrCnt=CFArrayGetCount(windows);
 	
-	SEL selWindows        = sel_registerName("windows");
-	id  windowsArray      = ((id (*)(id, SEL))objc_msgSend)(sharedApp, selWindows);
-
-	NSUInteger arrCount   = ((NSUInteger (*)(id, SEL))objc_msgSend)(windowsArray, sel_registerName("count"));
-	id  win;
-	DBGLOG(CFSTR("COUNT: %u"), arrCount);
-	for (NSUInteger i = 0; i < arrCount; i++) {
-		// NSArray *subviews = collectAllSubviewsBottomUp_C(win);
-		win = ((id (*)(id, SEL, NSUInteger))objc_msgSend)(windowsArray, sel_registerName("objectAtIndex:"), i);
-		id subviews = collectAllSubviewsBottomUp(win);
-
-		// [viewsQueue addObjectsFromArray:subviews];
-		SEL selAddMany = sel_registerName("addObjectsFromArray:");
-		((void (*)(id, SEL, id))objc_msgSend)(viewsQueue, selAddMany, subviews);
+	DBGLOG(CFSTR("COUNT: %u"), arrCnt);
+	for (int i=0;i<arrCnt;i++) {
+		CFArrayRef subviews = collectAllSubviewsBottomUp((id)CFArrayGetValueAtIndex(windows,i));
+		
+		CFArrayAppendArray(viewsQueue,subviews,(CFRange){0,CFArrayGetCount(subviews)});
+		CFRelease(subviews);
 	}
 
-	// Call [viewsQueue count]
-	NSUInteger count = ((NSUInteger (*)(id, SEL))objc_msgSend)(viewsQueue, sel_registerName("count"));
-	if (count == 0) {
+	int count=CFArrayGetCount(viewsQueue);
+	if(!count) {
+		showCompletionAlert();
 		return;
 	}
-
-	//_viewsQueue = ((id (*)(Class, SEL, id))objc_msgSend)(mutableArrayCls, sel_registerName("arrayWithArray:"), viewsQueue);
-	extern void objc_storeStrong(id *object, id value);
-	objc_storeStrong(&_viewsQueue, viewsQueue);
-	//extern id objc_retain(id);
-	//_viewsQueue = objc_retain(_viewsQueue);
-
-	NSLog(CFSTR("Will remove %zu views..."), count);
+	
+	void **evh_data=malloc(2*sizeof(void*));
+	evh_data[0]=viewsQueue;
 	
 	// Start the GCD timer on main queue
 	dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+	evh_data[1]=timer;
+	dispatch_set_context(timer,evh_data);
 	dispatch_source_set_timer(timer, dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC / 60), NSEC_PER_SEC / 60, 0);
-	dispatch_source_set_event_handler(timer, ^{
-		NSUInteger _count = ((NSUInteger (*)(id, SEL))objc_msgSend)(_viewsQueue, sel_registerName("count"));
-		if (_count == 0) {
-			dispatch_source_cancel(timer);
-			DBGLOG(CFSTR("✅ All views removed."));
-			showCompletionAlert();
-			return;
-		}
-		id v = ((id (*)(id, SEL))objc_msgSend)(_viewsQueue, sel_registerName("firstObject"));
-		((void (*)(id, SEL, NSUInteger))objc_msgSend)(_viewsQueue, sel_registerName("removeObjectAtIndex:"), 0);
-		id superv = ((id (*)(id, SEL))objc_msgSend)(v, sel_registerName("superview"));
-		if (superv) {
-			((void (*)(id, SEL))objc_msgSend)(v, sel_registerName("removeFromSuperview"));
-			DBGLOG(CFSTR("− Removed view: %@"), v);
-		}
-	});
+	dispatch_source_set_event_handler_f(timer, (void(*)(void*))rmview__invoke);
 	dispatch_resume(timer);
 }
 
-id collectAllSubviewsBottomUp(id view) {
-	// Create a mutable array to store results
-	id resultArray = ((id (*)(Class, SEL))objc_msgSend)(objc_getClass("NSMutableArray"), sel_registerName("array"));
+CFArrayRef collectAllSubviewsBottomUp(id view) {
+	CFMutableArrayRef resultArray=CFArrayCreateMutable(0,32,NULL);
+	CFArrayRef subviews=((CFArrayRef (*)(id, SEL))objc_msgSend)(view, oselector(subviews));
+	int count=CFArrayGetCount(subviews);
 	
-	// Get the subviews array
-	id subviews = ((id (*)(id, SEL))objc_msgSend)(view, sel_registerName("subviews"));
-	
-	// Get count of subviews
-	NSUInteger count = ((NSUInteger (*)(id, SEL))objc_msgSend)(subviews, sel_registerName("count"));
-	
-	// Iterate through subviews
-	for (NSUInteger i = 0; i < count; i++) {
-		// Get each subview
-		id subview = ((id (*)(id, SEL, NSUInteger))objc_msgSend)(subviews, sel_registerName("objectAtIndex:"), i);
-		
-		// First collect children's children
-		id childResults = collectAllSubviewsBottomUp(subview);
-		
-		// Add all objects from child results to our result array
-		((void (*)(id, SEL, id))objc_msgSend)(resultArray, sel_registerName("addObjectsFromArray:"), childResults);
-		
-		// Then add the subview itself
-		((void (*)(id, SEL, id))objc_msgSend)(resultArray, sel_registerName("addObject:"), subview);
+	for(int i=0;i<count;i++) {
+		id subview=(id)CFArrayGetValueAtIndex(subviews,i);
+		objc_retain(subview);
+		CFArrayRef subResults=collectAllSubviewsBottomUp(subview);
+		CFArrayAppendArray(resultArray,subResults,(CFRange){0,CFArrayGetCount(subResults)});
+		CFArrayAppendValue(resultArray,subview);
+		CFRelease(subResults);
 	}
 	
 	return resultArray;
+}
+
+void push_fatal_notif(void) {
+	notify_post(kBattmanFatalNotifyKey);
 }

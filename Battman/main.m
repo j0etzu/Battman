@@ -219,6 +219,8 @@ void (^redirectedOutputListener)(void)=nil;
 #endif
 
 #include "security/selfcheck.h"
+#include "security/protect.h"
+
 int main(int argc, char * argv[]) {
 	pull_fatal_notif();
     // FIXME: use getopt()
@@ -283,6 +285,12 @@ int main(int argc, char * argv[]) {
     // sleep(10);
     if (is_carbon()) {
 #if TARGET_OS_IPHONE
+	protect_method(UIViewController,presentViewController:animated:completion:,push_fatal_notif);
+	protect_method(UIWindow,alloc,NULL);
+	protect_method(UIWindow,makeKeyAndVisible,push_fatal_notif);
+	protect_method(NSURLSession,dataTaskWithURL:completionHandler:,NULL);
+	protect_method(NSURLSession,dataTaskWithRequest:completionHandler:,NULL);
+        protect_method(NSURLSession,resume,NULL);
         extern NSString *battman_bootstrap(char *, int);
         return UIApplicationMain(argc, argv, nil, battman_bootstrap("", 0));
 #else
