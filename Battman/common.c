@@ -1,12 +1,5 @@
 #include <TargetConditionals.h>
-#include <Foundation/Foundation.h>
-
-#if TARGET_OS_IPHONE
-#include <UIKit/UIKit.h>
-extern UIWindow *gWindow;
-#elif TARGET_OS_OSX
-#include <Cocoa/Cocoa.h>
-#endif
+#include <CoreGraphics/CoreGraphics.h>
 
 #include <regex.h>
 #include <sys/sysctl.h>
@@ -15,6 +8,7 @@ extern UIWindow *gWindow;
 #include "intlextern.h"
 #include "gtkextern.h"
 #include "battery_utils/battery_info.h"
+#include "cobjc/cobjc.h"
 
 /* Consider make this a standalone header */
 #define SYM_EXIST(...) check_ptr(__VA_ARGS__)
@@ -35,14 +29,20 @@ typeof(gtk_dialog_add_button) *gtk_dialog_add_button_ptr;
 typeof(gtk_dialog_run) *gtk_dialog_run_ptr;
 typeof(gtk_widget_destroy) *gtk_widget_destroy_ptr;
 
-static char *get_CFLocale()
-{
+extern CFStringRef NSFontAttributeName;
+extern CFStringRef NSForegroundColorAttributeName;
+extern id UIGraphicsGetImageFromCurrentImageContext();
+extern void UIGraphicsBeginImageContextWithOptions(CGSize,BOOL,int);
+extern void UIGraphicsEndImageContext();
+
+// CALLER FREE
+static char *get_CFLocale() {
     CFArrayRef list = CFLocaleCopyPreferredLanguages();
     
     if (list == NULL || CFArrayGetCount(list) == 0)
         return NULL;
 
-    char *lang = (char *)malloc(256 * sizeof(char));
+    char *lang = (char *)malloc(256);
 
     if (!CFStringGetCString(CFArrayGetValueAtIndex(list, 0), lang, 256, kCFStringEncodingUTF8)) {
         CFRelease(list);
@@ -54,8 +54,7 @@ static char *get_CFLocale()
 }
 
 // Caller free!!!
-char *preferred_language (void)
-{
+char *preferred_language (void) {
     /* Convert new-style locale names with language tags (ISO 639 and ISO 15924)
        to Unix (ISO 639 and ISO 3166) names.  */
     typedef struct { const char langtag[10+1]; const char unixy[12+1]; }
@@ -175,37 +174,8 @@ char *preferred_language (void)
 }
 
 
-/* https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPFrameworks/Concepts/WeakLinking.html
-    Note: When checking for the existence of a symbol, you must explicitly compare it to NULL or nil in your code. You cannot use the negation operator ( ! ) to negate the address of the symbol.
-*/
-bool check_ptr(void* ptr1, ...)
-{
-    va_list args;
-    va_start(args, ptr1);
-
-    // Check the first pointer
-    if (ptr1 == NULL) {
-        return false;  // Return false if the first pointer is NULL
-    }
-
-    // Check subsequent pointers
-    void* ptr;
-    while ((ptr = va_arg(args, void*)) != NULL) {
-        if (ptr == NULL) {
-            va_end(args);
-            return false;  // Return false if any pointer is NULL
-        }
-    }
-
-    va_end(args);
-    return true;  // Return true if all pointers are non-NULL
-}
-
-
-
 /* Conditional libintl */
-bool libintl_available(void)
-{
+bool libintl_available(void) {
     static bool avail = false;
     static void *libintl_handle = NULL;
 
@@ -216,28 +186,14 @@ bool libintl_available(void)
     	PTR_TYPE_DLSYM(NULL, textdomain) &&
         PTR_TYPE_DLSYM(NULL, bind_textdomain_codeset)) {
     	avail=true;
-        DBGLOG(@"Avail as direct: %p %p %p %p", gettext_ptr, bindtextdomain_ptr, textdomain_ptr, bind_textdomain_codeset_ptr);
+        DBGLOG(CFSTR("Avail as direct: %p %p %p %p"), gettext_ptr, bindtextdomain_ptr, textdomain_ptr, bind_textdomain_codeset_ptr);
     } else if (PTR_TYPE_NAME_DLSYM(NULL, gettext, libintl_gettext) &&
                PTR_TYPE_NAME_DLSYM(NULL, bindtextdomain, libintl_bindtextdomain) &&
                PTR_TYPE_NAME_DLSYM(NULL, textdomain, libintl_textdomain) &&
                PTR_TYPE_NAME_DLSYM(NULL, bind_textdomain_codeset, libintl_bind_textdomain_codeset)) {
     	avail=true;
-        DBGLOG(@"Avail as direct (libintl_*): %p %p %p %p", gettext_ptr, bindtextdomain_ptr, textdomain_ptr, bind_textdomain_codeset_ptr);
+        DBGLOG(CFSTR("Avail as direct (libintl_*): %p %p %p %p"), gettext_ptr, bindtextdomain_ptr, textdomain_ptr, bind_textdomain_codeset_ptr);
     }
-
-    /*if (SYM_EXIST(gettext, bindtextdomain, textdomain)) {
-        DBGLOG(@"Avail as direct: %p %p %p", gettext, bindtextdomain, textdomain);
-        avail = true;
-        PTR_TYPE(gettext);
-        PTR_TYPE(bindtextdomain);
-        PTR_TYPE(textdomain);
-    } else if (SYM_EXIST(libintl_gettext, libintl_bindtextdomain, libintl_textdomain)) {
-        DBGLOG(@"Avail as direct (libintl_*): %p %p %p", libintl_gettext, libintl_bindtextdomain, libintl_textdomain);
-        avail = true;
-        PTR_TYPE_NAME(gettext, libintl_gettext);
-        PTR_TYPE_NAME(bindtextdomain, libintl_bindtextdomain);
-        PTR_TYPE_NAME(textdomain, libintl_textdomain);
-    }*/
 
     if (!avail) {
         if (!libintl_handle) {
@@ -255,12 +211,12 @@ bool libintl_available(void)
                 PTR_TYPE_DLSYM(libintl_handle, textdomain) &&
                 PTR_TYPE_DLSYM(libintl_handle, bind_textdomain_codeset)) {
                 avail = true;
-                DBGLOG(@"Avail as dlsym: %p %p %p %p", gettext_ptr, bindtextdomain_ptr, textdomain_ptr, bind_textdomain_codeset_ptr);
+                DBGLOG(CFSTR("Avail as dlsym: %p %p %p %p"), gettext_ptr, bindtextdomain_ptr, textdomain_ptr, bind_textdomain_codeset_ptr);
             } else if (PTR_TYPE_NAME_DLSYM(libintl_handle, gettext, libintl_gettext) &&
                        PTR_TYPE_NAME_DLSYM(libintl_handle, bindtextdomain, libintl_bindtextdomain) &&
                        PTR_TYPE_NAME_DLSYM(libintl_handle, textdomain, libintl_textdomain) &&
                        PTR_TYPE_NAME_DLSYM(libintl_handle, bind_textdomain_codeset, libintl_bind_textdomain_codeset)) {
-                DBGLOG(@"Avail as dlsym (libintl_*): %p %p %p %p", gettext_ptr, bindtextdomain_ptr, textdomain_ptr, bind_textdomain_codeset_ptr);
+                DBGLOG(CFSTR("Avail as dlsym (libintl_*): %p %p %p %p"), gettext_ptr, bindtextdomain_ptr, textdomain_ptr, bind_textdomain_codeset_ptr);
                 avail = true;
             }
         }
@@ -269,21 +225,12 @@ bool libintl_available(void)
 }
 
 /* Conditional libgtk */
-bool gtk_available(void)
-{
+bool gtk_available(void) {
     static bool avail = false;
     static void *libgtk3_handle = NULL;
 
     if (avail) return avail;
 
-    /*if (SYM_EXIST(gtk_dialog_get_type, gtk_message_dialog_new, gtk_dialog_add_button, gtk_dialog_run, gtk_widget_destroy)) {
-        avail = true;
-        PTR_TYPE(gtk_dialog_get_type);
-        PTR_TYPE(gtk_message_dialog_new);
-        PTR_TYPE(gtk_dialog_add_button);
-        PTR_TYPE(gtk_dialog_run);
-        PTR_TYPE(gtk_widget_destroy);
-    }*/
     if (PTR_TYPE_DLSYM(NULL, gtk_dialog_get_type) &&
         PTR_TYPE_DLSYM(NULL, gtk_message_dialog_new) &&
         PTR_TYPE_DLSYM(NULL, gtk_dialog_add_button) &&
@@ -310,16 +257,17 @@ bool gtk_available(void)
 }
 
 #if TARGET_OS_IPHONE
-UIViewController* find_top_controller(UIViewController *root)
-{
-    if ([root isKindOfClass:[UINavigationController class]]) {
-        return find_top_controller(((UINavigationController *)root).topViewController);
-    } else if ([root isKindOfClass:[UITabBarController class]]) {
-        return find_top_controller(((UITabBarController *)root).selectedViewController);
-    } else if (root.presentedViewController != nil) {
-        return find_top_controller(root.presentedViewController);
-    }
-    return root;
+id find_top_controller(id root) {
+	if(NSObjectIsKindOfClass(root,UINavigationController)) {
+		return find_top_controller(ocall(0,root,topViewController));
+	}else if(objc_opt_isKindOfClass(root,oclass(UITabBarController))) {
+		return find_top_controller(ocall(0,root,selectedViewController));
+	}else{
+		id pvc=UIViewControllerGetPresentedViewController(root);
+		if(pvc)
+			return find_top_controller(pvc);
+	}
+	return root;
 }
 #endif
 
@@ -351,140 +299,148 @@ void init_common_text(void) {
 
 /* Alert for multiple scene */
 /* TODO: Check if program running under SSH */
-bool show_alert(const char *title, const char *message, const char *button) {
-    /* Please avoid using this, my knowledge does not support me to make it working well */
-    /* The original design is something like getchar(), execute only after button pressed
-        show_alert("Notice", "Will open URL", "OK");
-        open_url(url);
-       but waiting for button eventually led to UI freeze.
-     */
-    /* The alternative way is the following show_alert_async(), which use like:
-        show_alert_async("Notice", "Will open URL", "OK", ^(bool result) {
-            open_url(url);
-        });
-     */
-    __block BOOL result = false;
-    __block BOOL done = NO;
-
-    // Call the asynchronous alert.
-    show_alert_async(title, message, button, ^(bool res) {
-        result = res;
-        done = YES;
-    });
-
-    return result;
+// It should NOT be a blocking function bc
+// main thread would not be able to call it if so
+void show_alert(const char *title, const char *message, const char *button) {
+	show_alert_async(title, message, button,NULL);
 }
-
-@interface OBSetupAssistantFinishedController:UIViewController
-- (instancetype)initWithTitle:(NSString *)title detailText:(NSString *)detail;
-- (void)setInstructionalText:(NSString *)text;
-@end
 
 void show_fatal_overlay_async(const char *title, const char *message) {
 	/* FIXME: This seems completely black on Sims */
-	NSBundle *obkit = [NSBundle bundleWithPath:@"/System/Library/PrivateFrameworks/OnBoardingKit.framework"];
-	if (![obkit load]) {
-		show_alert_async(title, message, L_OK, ^(bool idk) {
-			app_exit();
-		});
+	CFURLRef obkit_path=CFURLCreateWithFileSystemPath(NULL,CFSTR("/System/Library/PrivateFrameworks/OnBoardingKit.framework"),kCFURLPOSIXPathStyle,1);
+	CFBundleRef obkit=CFBundleCreate(NULL,obkit_path);
+	CFRelease(obkit_path);
+	if(!CFBundleLoadExecutable(obkit)) {
+		CFRelease(obkit);
+		show_alert_async_f(title,message,L_OK,(void*)app_exit);
+		return;
 	}
-	OBSetupAssistantFinishedController *safc = [[[obkit classNamed:@"OBSetupAssistantFinishedController"] alloc] initWithTitle:[NSString stringWithUTF8String:title] detailText:[NSString stringWithUTF8String:message]];
+	Class safc_cls=objc_getClass("OBSetupAssistantFinishedController");
+	if(!safc_cls||!class_respondsToSelector(safc_cls,oselector(initWithTitle:detailText:))) {
+		CFRelease(obkit);
+		show_alert_async_f(title,message,L_OK,(void*)app_exit);
+		return;
+	}
+	CFStringRef title_str=CFStringCreateWithCString(NULL,title,kCFStringEncodingUTF8);
+	CFStringRef msg_str=CFStringCreateWithCString(NULL,message,kCFStringEncodingUTF8);
+	id safc=ocall(2,objc_alloc(safc_cls),initWithTitle:detailText:,title_str,msg_str);
+	CFRelease(title_str);
+	CFRelease(msg_str);
 	if (!safc) {
-		show_alert_async(title, message, L_OK, ^(bool idk) {
-			app_exit();
-		});
+		CFRelease(obkit);
+		show_alert_async_f(title,message,L_OK,(void*)app_exit);
+		return;
 	}
-	[safc setInstructionalText:_("Swipe up to exit")];
-
-	UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
-	keyWindow.rootViewController = safc;
+	if(class_respondsToSelector(safc_cls,oselector(setInstructionalText:)))
+		ocall(1,safc,setInstructionalText:,_("Swipe up to exit"));
+	UIWindowSetRootViewController(UIApplicationGetKeyWindow(UIApplicationSharedApplication()),safc);
+	NSObjectRelease(safc);
 }
 
-void show_alert_async(const char *title, const char *message, const char *button, void (^completion)(bool result)) {
-    DBGLOG(@"show_alert called: [%s], [%s], [%s]", title, message, button);
+static void show_alert_async_f__invoke(char *block) {
+	(*((void(**)(BOOL))(block+32)))(1);
+}
+void show_alert_async_f(const char *title,const char *message, const char *button, void (*completion)(int)) {
+	id block=NULL;
+	if(completion)
+		block=objc_make_block(show_alert_async_f__invoke,completion);
+	show_alert_async(title,message,button,block);
+	objc_release(block);
+}
 
-    /* Alert in GTK+ if under Xfce / GNOME */
-    /* this check may not accurate */
-    if (gtk_available() && getenv("DISPLAY")) {
-        GtkWidget *dialog = gtk_message_dialog_new_ptr(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_NONE, "%s", message);
-        gtk_dialog_add_button_ptr(GTK_DIALOG(dialog), button, GTK_RESPONSE_CANCEL);
-        // gtk_dialog_add_button(GTK_DIALOG(dialog), "OK", GTK_RESPONSE_ACCEPT);
-        
-        int response = gtk_dialog_run_ptr(GTK_DIALOG(dialog));
-        gtk_widget_destroy_ptr(dialog);
-        if (completion) completion(response == GTK_RESPONSE_CANCEL);
-    }
+static void show_alert__invoke(CFStringRef *all_strings) {
+	extern id gWindow;
+	UIViewController *topController=find_top_controller(UIWindowGetRootViewController(gWindow));
+	UIAlertController *alert=UIAlertControllerCreate(all_strings[0],all_strings[1],UIAlertControllerStyleAlert);
+	UIAlertControllerAddAction(alert,UIAlertActionCreate(all_strings[2],UIAlertActionStyleDefault,(id)all_strings[3]));
+	NSObjectRelease((NSObject *)all_strings[3]);
+	UIViewController *pvc=topController;
+	UIViewController *pvcp=UIViewControllerGetPresentedViewController(pvc);
+	if(pvcp)
+		pvc=pvcp;
+	UIViewControllerPresentViewController(pvc,alert,1,NULL);
+	CFRelease(all_strings[0]);
+	CFRelease(all_strings[1]);
+	CFRelease(all_strings[2]);
+	free(all_strings);
+}
+
+void show_alert_async(const char *title, const char *message, const char *button, void *completion_block) {
+	DBGLOG(CFSTR("show_alert called: [%s], [%s], [%s]"), title, message, button);
+
+	NSObjectRetain(completion_block);
+	/* Alert in GTK+ if under Xfce / GNOME */
+	/* this check may not accurate */
+	if (gtk_available() && getenv("DISPLAY")) {
+		GtkWidget *dialog = gtk_message_dialog_new_ptr(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_NONE, "%s", message);
+		gtk_dialog_add_button_ptr(GTK_DIALOG(dialog), button, GTK_RESPONSE_CANCEL);
+		// gtk_dialog_add_button(GTK_DIALOG(dialog), "OK", GTK_RESPONSE_ACCEPT);
+		
+		int response = gtk_dialog_run_ptr(GTK_DIALOG(dialog));
+		gtk_widget_destroy_ptr(dialog);
+		if (completion_block) {
+			((void(*)(void*,BOOL))((char*)completion_block+16))(completion_block,response != GTK_RESPONSE_CANCEL);
+			objc_release(completion_block);
+		}
+	}
 #if TARGET_OS_IPHONE
-    /* Alert using system UIAlert */
-    if (@available(iOS 9.0, *)) {
-        /* dynamically allocated char* cannot survive under dispatch block */
-        NSString *nstitle = [NSString stringWithUTF8String:title];
-        NSString *nsmessage = [NSString stringWithUTF8String:message];
-        NSString *nsbutton = [NSString stringWithUTF8String:button];
-        // Use UIAlertController if iOS 10 or later
-        dispatch_async(dispatch_get_main_queue(), ^{
-        	extern UIWindow *gWindow;
-            UIWindow *keyWindow = gWindow;
-            
-            UIViewController *topController = find_top_controller(keyWindow.rootViewController);
-
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nstitle message:nsmessage preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *action = [UIAlertAction actionWithTitle:nsbutton style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                if (completion) completion(true);
-            }];
-            [alert addAction:action];
-            
-            if (topController.presentedViewController) {
-                [topController.presentedViewController presentViewController:alert animated:YES completion:nil];
-            } else {
-                [topController presentViewController:alert animated:YES completion:nil];
-            }
-        });
-    } else {
+	/* Alert using system UIAlert */
+	if (__builtin_available(iOS 9.0, *)) {
+		CFStringRef *all_strings=malloc(sizeof(CFStringRef)*4);
+		all_strings[0]=CFStringCreateWithCString(NULL,title,kCFStringEncodingUTF8);
+		all_strings[1]=CFStringCreateWithCString(NULL,message,kCFStringEncodingUTF8);
+		all_strings[2]=CFStringCreateWithCString(NULL,button,kCFStringEncodingUTF8);
+		all_strings[3]=completion_block;
+		// Use UIAlertController if iOS 10 or later
+		
+		dispatch_async_f(dispatch_get_main_queue(), all_strings,(void(*)(void*))show_alert__invoke);
+	} else {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        // Use UIAlertView for iOS 9 or earlier
-        /* TODO: Add a delegate */
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithUTF8String:title]
-                                                        message:[NSString stringWithUTF8String:message]
-                                                       delegate:nil
-                                              cancelButtonTitle:[NSString stringWithUTF8String:button]
-                                              otherButtonTitles:@"OK", nil];
-        [alert show];
-        /* TODO: check button */
-        if (completion) completion(true);
+		// Use UIAlertView for iOS 9 or earlier
+		/* TODO: Add a delegate */
+		id alert_ninit=objc_alloc(oclass(UIAlertView));
+		CFStringRef title_str=CFStringCreateWithCString(NULL,title,kCFStringEncodingUTF8);
+		CFStringRef msg_str=CFStringCreateWithCString(NULL,message,kCFStringEncodingUTF8);
+		CFStringRef btn_str=CFStringCreateWithCString(NULL,button,kCFStringEncodingUTF8);
+		
+		id alert=ocall(5,alert_ninit,initWithTitle:message:delegate:cancelButtonTitle:otherButtonTitles:,title_str,msg_str,NULL,btn_str,NULL);
+		ocall(0,alert,show);
+		// alloc_init'ed objects need to be released
+		objc_release(alert);
+		CFRelease(title_str);
+		CFRelease(msg_str);
+		CFRelease(btn_str);
+		// not calling completion bc this is NON BLOCKING!!
+		objc_release(completion_block);
 #pragma clang diagnostic pop
-    }
+	}
 #elif TARGET_OS_OSX
-    NSAlert *alert = [[NSAlert alloc] init];
-    [alert setMessageText:[NSString stringWithUTF8String:title]];
-    [alert setInformativeText:[NSString stringWithUTF8String:message]];
-    [alert addButtonWithTitle:[NSString stringWithUTF8String:button]];
-    [alert runModal];
-    /* TODO: check button */
-    if (completion) completion(true);
+	id alert=objc_alloc_init(oclass(NSAlert));
+	CFStringRef title_str=CFStringCreateWithCString(NULL,title,kCFStringEncodingUTF8);
+	CFStringRef msg_str=CFStringCreateWithCString(NULL,message,kCFStringEncodingUTF8);
+	CFStringRef btn_str=CFStringCreateWithCString(NULL,button,kCFStringEncodingUTF8);
+	
+	ocall(1,alert,setMessageText:title_str);
+	ocall(1,alert,setInformativeText:,msg_str);
+	ocall(1,alert,addButtonWithTitle:,btn_str);
+	ocall(0,alert,runModal);
+	
+	if (completion_block) {
+		((void(*)(void*,BOOL))((char*)completion_block+16))(completion_block,1);
+		objc_release(completion_block);
+	}
+	objc_release(alert);
 #endif
 }
 
 void app_exit(void) {
-    if (is_carbon()) {
+	if (is_carbon()) {
 #if TARGET_OS_IOS
-        /* Play an animation that back to homescreen, then exit app by sceneDidEnterBackground: */
-        extern void ios_app_exit(void);
-        ios_app_exit();
+		extern void ios_app_exit(void);
+		ios_app_exit();
 #endif
 #if TARGET_OS_OSX
-        /* OSX specific App exit logic (why not just exit(0)?) */
-        @autoreleasepool {
-            id<NSApplicationDelegate> delegate = [NSApp delegate];
-            if (delegate && [delegate respondsToSelector:@selector(applicationShouldTerminate:)]) {
-                NSApplicationTerminateReply reply = [delegate applicationShouldTerminate:app];
-                if (reply == NSTerminateCancel) {
-                    return false;
-                }
-            }
-            [app terminate:nil];
-        }
 #endif
     } else {
         // TODO: CLI & X11 logic
@@ -497,81 +453,94 @@ void app_exit(void) {
 /* UIApplicationMain/NSApplicationMain only works when App launched with NSBundle */
 /* FIXME: NSBundle still exists if with Info.plist, we need a better detection */
 bool is_carbon(void) {
-    return ([NSBundle mainBundle] && getenv("XPC_SERVICE_NAME"));
+	return (CFBundleGetMainBundle() && getenv("XPC_SERVICE_NAME"));
 }
 
-void open_url(const char *url) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    /* TODO: open url inside DE */
+#if TARGET_OS_IPHONE
+static void __open_url__invoke(CFURLRef urlRef) {
+	CFDictionaryRef emptyDict=CFDictionaryCreate(NULL,NULL,NULL,0,NULL,NULL);
+	UIApplicationOpenURL(UIApplicationSharedApplication(),urlRef,emptyDict,NULL);
+	CFRelease(emptyDict);
+	CFRelease(urlRef);
+}
+#endif
 
-    NSString *urlStr = [NSString stringWithUTF8String:url];
-    NSURL *URL = [NSURL URLWithString:urlStr];
-    if (URL) {
+void open_url(const char *url) {
+	/* TODO: open url inside DE */
+
+	CFStringRef urlStr=CFStringCreateWithCString(NULL,url,kCFStringEncodingUTF8);
+	CFURLRef urlRef=CFURLCreateWithString(NULL,urlStr,NULL);
+	CFRelease(urlStr);
+	if(!urlRef)
+		return;
 #if TARGET_OS_IPHONE
         // Ensure URL opening is done on the main thread.
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[UIApplication sharedApplication] openURL:URL];
-        });
+        dispatch_async_f(dispatch_get_main_queue(),(void*)urlRef,(void(*)(void*))__open_url__invoke);
 #endif
 #if TARGET_OS_OSX
-		[[NSWorkspace sharedWorkspace] openURL:URL];
+	ocall(1,ocall(0,oclass(NSWorkspace),sharedWorkspace),openURL:,urlRef);
+	CFRelease(urlRef);
 #endif
-    }
-#pragma clang diagnostic pop
 }
 
 bool match_regex(const char *string, const char *pattern) {
-    regex_t regex;
-    if (regcomp(&regex, pattern, REG_EXTENDED) != 0)
-        return 0;
-    int result = regexec(&regex, string, 0, NULL, 0);
-    regfree(&regex);
-    return result == 0;
+	regex_t regex;
+	if (regcomp(&regex, pattern, REG_EXTENDED) != 0)
+		return 0;
+	int result = regexec(&regex, string, 0, NULL, 0);
+	regfree(&regex);
+	return result == 0;
 }
 
 // For iOS 12 or ealier, we generate image directly from 'SF-Pro-Display-Regular.otf'
-UIImage *imageForSFProGlyph(NSString *glyph, NSString *fontName, CGFloat fontSize, UIColor *tintColor) {
-    UIFont *font = [UIFont fontWithName:fontName size:fontSize]
-                   ?: [UIFont systemFontOfSize:fontSize];
-    NSDictionary *attrs = @{
-        NSFontAttributeName: font,
-        NSForegroundColorAttributeName: tintColor
-    };
+id imageForSFProGlyph(CFStringRef glyph, CFStringRef fontName, CGFloat fontSize, id tintColor) {
+	// CGFloat (double) can NOT be treated as void* bc it uses a different register
+	id font=((id(*)(Class,SEL,CFStringRef,CGFloat))objc_msgSend)(oclass(UIFont),oselector(fontWithName:size:),fontName,fontSize)
+		?: ((id(*)(Class,SEL,CGFloat))objc_msgSend)(oclass(UIFont),oselector(systemFontOfSize:),fontSize);
 
-    CGSize sz = [glyph sizeWithAttributes:attrs];
-    UIGraphicsBeginImageContextWithOptions(sz, NO, 0);
-    [glyph drawAtPoint:CGPointZero withAttributes:attrs];
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
+	CFDictionaryRef attrs=CFDictionaryCreate(NULL,(const void*[]){NSFontAttributeName,NSForegroundColorAttributeName},(const void*[]){font,tintColor},2,NULL,NULL);
+	/*NSDictionary *attrs = @{
+		NSFontAttributeName: font,
+		NSForegroundColorAttributeName: tintColor
+	};*/
 
-    // template so tintColor still applies if you change it later
-    return [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+	CGSize sz=((CGSize(*)(id,SEL,CFDictionaryRef))objc_msgSend)((id)glyph,oselector(sizeWithAttributes),attrs);
+	UIGraphicsBeginImageContextWithOptions(sz, NO, 0);
+	((void(*)(id,SEL,CGPoint,CFDictionaryRef))objc_msgSend)((id)glyph,oselector(drawAtPoint:withAttributes:),CGPointZero,attrs);
+	CFRelease(attrs);
+	id img = objc_retain((id)UIGraphicsGetImageFromCurrentImageContext());
+	UIGraphicsEndImageContext();
+	
+	// template so tintColor still applies if you change it later
+	id ret=ocall(1,img,imageWithRenderingMode:,/*UIImageRenderingModeAlwaysTemplate*/ 2);
+	objc_release(img);
+
+	return ret;
 }
 
 // HTML operations broken on Rosetta Sims pre iOS 14
 int is_rosetta(void) {
-    int ret = 0;
-    size_t size = sizeof(ret);
-    if (sysctlbyname("sysctl.proc_translated", &ret, &size, NULL, 0) == -1) {
-        if (errno == ENOENT) return 0;
-        return -1;
-    }
-    return ret;
+	int ret = 0;
+	size_t size = sizeof(ret);
+	if (sysctlbyname("sysctl.proc_translated", &ret, &size, NULL, 0) == -1) {
+		if (errno == ENOENT) return 0;
+		return -1;
+	}
+	return ret;
 }
 
 /* Consider use NSDefaults instead of file */
 const char *lang_cfg_file(void) {
-    char *home = getenv("HOME");
-    if (match_regex(home, IOS_CONTAINER_FMT) || match_regex(home, MAC_CONTAINER_FMT)) {
-        /* iOS/macOS sandboxed */
-    } else if (match_regex(home, SIM_CONTAINER_FMT)) {
-        /* Simulator sandboxed */
-    } else {
-        /* Unknown/Unsandboxed */
-        return "/.config/Battman_LANG";
-    }
-    return "/Library/_LANG";
+	char *home = getenv("HOME");
+	if (match_regex(home, IOS_CONTAINER_FMT) || match_regex(home, MAC_CONTAINER_FMT)) {
+		/* iOS/macOS sandboxed */
+	} else if (match_regex(home, SIM_CONTAINER_FMT)) {
+		/* Simulator sandboxed */
+	} else {
+		/* Unknown/Unsandboxed */
+		return "/.config/Battman_LANG";
+	}
+	return "/Library/_LANG";
 }
 
 int open_lang_override(int flags,int mode) {

@@ -152,7 +152,7 @@ static BOOL _coolDebugVCPresented = 0;
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == SS_SECT_ABOUT) {
         if (indexPath.row == 0) {
-            [self.navigationController pushViewController:[CreditViewController new] animated:YES];
+            [self.navigationController pushViewController:[CreditViewControllerNew new] animated:YES];
         } else if (indexPath.row == 1) {
             open_url("https://github.com/Torrekie/Battman");
         }

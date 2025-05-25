@@ -57,8 +57,13 @@ extern const char *L_MV;
 extern const char *L_TRUE;
 extern const char *L_FALSE;
 
-bool show_alert(const char *title, const char *message, const char *cancel_button_title);
+void show_alert(const char *title, const char *message, const char *cancel_button_title);
+#ifdef __OBJC__
 void show_alert_async(const char *title, const char *message, const char *button, void (^completion)(bool result));
+#else
+void show_alert_async(const char *title, const char *message, const char *button, void *completion);
+#endif
+void show_alert_async_f(const char *title,const char *message,const char *button,void (*completion)(int));
 void show_fatal_overlay_async(const char *title, const char *message);
 
 char *preferred_language(void);

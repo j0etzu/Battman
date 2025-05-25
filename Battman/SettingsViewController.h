@@ -7,3 +7,5 @@
 @interface CreditViewController : UITableViewController
 @end
 
+@interface CreditViewControllerNew :UITableViewController
+@end

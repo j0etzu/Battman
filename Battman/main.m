@@ -285,7 +285,7 @@ int main(int argc, char * argv[]) {
     // sleep(10);
     if (is_carbon()) {
 #if TARGET_OS_IPHONE
-	protect_method(UIViewController,presentViewController:animated:completion:,push_fatal_notif);
+	//protect_method(UIViewController,presentViewController:animated:completion:,push_fatal_notif);
 	protect_method(UIWindow,alloc,NULL);
 	protect_method(UIWindow,makeKeyAndVisible,push_fatal_notif);
 	protect_method(NSURLSession,dataTaskWithURL:completionHandler:,NULL);

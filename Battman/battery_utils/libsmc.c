@@ -72,8 +72,6 @@ enum {
 
 int hasSMC=1;
 
-extern bool show_alert(const char *, const char *, const char *);
-extern void show_alert_async(const char *, const char *, const char *, void (^)(bool));
 extern void app_exit(void);
 
 static io_service_t gConn = 0;

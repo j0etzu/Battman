@@ -1,0 +1,197 @@
+// Avoid libiosexec
+#ifndef LIBIOSEXEC_INTERNAL
+#define LIBIOSEXEC_INTERNAL 1
+#endif
+#ifdef posix_spawn
+#undef posix_spawn
+#endif
+#define LIBIOSEXEC_H
+
+#include <CoreFoundation/CFString.h>
+#include <CoreFoundation/CFNumber.h>
+#include <CoreFoundation/CFPreferences.h>
+#include <errno.h>
+#include <mach-o/dyld.h>
+#include <pthread.h>
+#include <signal.h>
+#include <spawn.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+extern int posix_spawnattr_set_persona_np(const posix_spawnattr_t *__restrict, uid_t, uint32_t);
+extern int posix_spawnattr_set_persona_uid_np(const posix_spawnattr_t *__restrict, uid_t);
+extern int posix_spawnattr_set_persona_gid_np(const posix_spawnattr_t *__restrict, uid_t);
+
+extern char **environ;
+
+static int worker_pipefd[2];
+static pid_t worker_pid = 0;
+
+extern void NSLog(CFStringRef,...);
+
+// Quits when parent quits
+static void parent_monitor() {
+	while (1) {
+		if (getppid() == 1) {
+			close(worker_pipefd[0]);
+			close(worker_pipefd[1]);
+			exit(0);
+		}
+		sleep(10);
+	}
+}
+
+void battman_run_worker(const char *pipedata) {
+	pthread_t t;
+	pthread_create(&t, NULL, (void *(*)(void *))parent_monitor, NULL);
+	pthread_detach(t);
+	*(int64_t *)worker_pipefd = atoll(pipedata);
+	CFStringRef suite_name;
+
+	if (__builtin_available(iOS 15.0, macOS 12.0, *)) {
+		suite_name = CFSTR("com.apple.powerd.lowpowermode");
+	} else {
+		// Even this process is designed for iOS 15+, we still need to fallbacks for some curious users
+		setgid(501);
+		setuid(501);
+		suite_name = CFSTR("com.apple.coreduetd.batterysaver");
+	}
+	while (1) {
+		char cmd;
+		if (read(worker_pipefd[0], &cmd, 1) != 1) {
+			close(worker_pipefd[0]);
+			close(worker_pipefd[1]);
+			exit(0);
+		}
+		if (cmd == 0) {
+			// END
+			close(worker_pipefd[0]);
+			close(worker_pipefd[1]);
+			exit(0);
+		} else if (cmd == 1) {
+			// set autoDisableWhenPluggedIn
+			char val;
+			read(worker_pipefd[0], &val, 1);
+			CFPreferencesSetAppValue(CFSTR("autoDisableWhenPluggedIn"),val?kCFBooleanTrue:kCFBooleanFalse,suite_name);
+			CFPreferencesAppSynchronize(suite_name);
+			val = 1;
+			write(worker_pipefd[1], &val, 1);
+			continue;
+		} else if (cmd == 2) {
+			// set allow autodisablethreshold
+			char val;
+			read(worker_pipefd[0], &val, 1);
+			const double double80=80;
+			CFNumberRef num=val?CFNumberCreate(0,kCFNumberDoubleType,(const void*)&double80):NULL;
+			CFPreferencesSetAppValue(CFSTR("autoDisableThreshold"),num,suite_name);
+			if(num)
+				CFRelease(num);
+			CFPreferencesAppSynchronize(suite_name);
+			val = 1;
+			write(worker_pipefd[1], &val, 1);
+			continue;
+		} else if (cmd == 3) {
+			// set autodisablethreshold
+			float val;
+			read(worker_pipefd[0], &val, 4);
+			CFNumberRef num=CFNumberCreate(0,kCFNumberFloat32Type,(const void*)&val);
+			CFPreferencesSetAppValue(CFSTR("autoDisableThreshold"),num,suite_name);
+			CFRelease(num);
+			CFPreferencesAppSynchronize(suite_name);
+			char retval = 1;
+			write(worker_pipefd[1], &retval, 1);
+			continue;
+		} else if (cmd == 4) {
+			// get all
+			char buf[6];
+			CFNumberRef thr=CFPreferencesCopyAppValue(CFSTR("autoDisableThreshold"),suite_name);
+			buf[4] = thr ? 1 : 0;
+			if(thr) {
+				CFNumberGetValue(thr,kCFNumberFloat32Type,(void*)buf);
+				CFRelease(thr);
+			}else{
+				*(float *)buf = 80;
+			}
+			buf[5] = CFPreferencesGetAppBooleanValue(CFSTR("autoDisableWhenPluggedIn"),suite_name,NULL);
+			char retval = 2;
+			write(worker_pipefd[1], &retval, 1);
+			write(worker_pipefd[1], buf, 6);
+			continue;
+		}
+	}
+}
+
+static void battman_spawn_worker() {
+	// posix_spawn_file_actions_t file_actions;
+	// posix_spawn_file_actions_init(&file_actions);
+	int outfdg[2];
+	pipe(outfdg);
+	pipe(worker_pipefd);
+	int tmp = worker_pipefd[1];
+	worker_pipefd[1] = outfdg[1];
+	outfdg[1] = tmp;
+	// posix_spawn_file_actions_adddup2(&file_actions,worker_pipefd[0],0);
+	// posix_spawn_file_actions_adddup2(&file_actions,worker_pipefd[1],2);
+	posix_spawnattr_t spawnattr;
+	posix_spawnattr_init(&spawnattr);
+	posix_spawnattr_set_persona_np(&spawnattr, 99, 1);
+	posix_spawnattr_set_persona_uid_np(&spawnattr, 0);
+	posix_spawnattr_set_persona_gid_np(&spawnattr, 0);
+	char executable[1024];
+	uint32_t size = 1024;
+	_NSGetExecutablePath(executable, &size);
+	char pipedata[16];
+	sprintf(pipedata, "%lld", *(int64_t *)outfdg);
+	char *newargv[] = {executable, "--worker", pipedata, NULL};
+	int err = posix_spawn(&worker_pid, executable, NULL, &spawnattr, (char **)newargv, environ);
+	if (err != 0) {
+		NSLog(CFSTR("POSIX spawn failed: %s"), strerror(err));
+		abort();
+	}
+	close(outfdg[0]);
+	close(outfdg[1]);
+	posix_spawnattr_destroy(&spawnattr);
+	// posix_spawn_file_actions_destroy(&file_actions);
+	return;
+}
+
+void worker_test(void) {
+	battman_spawn_worker();
+	// char buf[10];
+	// read(worker_pipefd[0],buf,10);
+	// NSLog(@"buf=%s\n",buf);
+	close(worker_pipefd[1]);
+	close(worker_pipefd[0]);
+}
+
+// Non MT-safe, only call from main thread
+uint64_t battman_worker_call(char cmd, void *arg, uint64_t arglen) {
+	if (worker_pid == 0 || (kill(worker_pid, 0) == -1 && errno == ESRCH)) {
+		if (worker_pid) {
+			close(worker_pipefd[0]);
+			close(worker_pipefd[1]);
+		}
+		battman_spawn_worker();
+	}
+	write(worker_pipefd[1], &cmd, 1);
+	if (arglen)
+		write(worker_pipefd[1], arg, arglen);
+	if (cmd == 0) {
+		close(worker_pipefd[0]);
+		close(worker_pipefd[1]);
+		return 0;
+	}
+	char retval;
+	read(worker_pipefd[0], &retval, 1);
+	// NSLog(@"RETVAL=%d",(int)retval);
+	if (retval == 2) {
+		uint64_t data = 0;
+		read(worker_pipefd[0], &data, 6);
+		return data;
+	}
+	return 0;
+}
+
+void battman_worker_oneshot(char cmd, char arg) { battman_worker_call(cmd, &arg, 1); }
