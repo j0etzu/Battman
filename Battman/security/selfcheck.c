@@ -240,7 +240,7 @@ static CFStringRef jitterString(CFStringRef original, float pct, unichar jitterR
 	CFMutableStringRef mstr = CFStringCreateMutableCopy(kCFAllocatorDefault, 114514, original);
 	// NSMutableString *mstr = [original mutableCopy];
 	for (NSUInteger i = 0; i < CFStringGetLength(mstr); ++i) {
-		if (((float)arc4random() / UINT32_MAX) < pct) {
+		if (((double)arc4random() / (double)UINT32_MAX) < pct) {
 			unichar c         = CFStringGetCharacterAtIndex(mstr, i);
 			unichar j         = jitterUnichar(c, jitterRange);
 			CFStringRef bytes = CFStringCreateWithCharacters(kCFAllocatorDefault, &j, 1);
