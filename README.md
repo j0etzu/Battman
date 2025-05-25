@@ -39,12 +39,14 @@ What other battery utils made for iOS hasn’t done
 - [x] Real-time charging current/voltage reading
 - [x] Running perfectly when in Xcode Simulator (Other people uses IOPS in their app so not working in Sims)
 - [x] Smart Charging (Optimized Battery Charging) communication
+- [x] Low Power Mode behavior control
+- [x] Detailed information for attached MagSafe Accessories
 
 ### Requirements
 
 - Jailbroken or install with TrollStore
 - iOS 12+ / macOS 11+ (backports welcomed)
-- arm64 (A11+ theoretically / M1+)
+- arm64 (A7+ theoretically / M1+)
 - Gettext libintl (Optional, for localizations)
 - GTK+ 3 (Optional, for running under GTK+ based WM)
 
@@ -66,6 +68,8 @@ make -C Battman all
 ```
 
 ### Known Issues
+
+- Battman is not actually integrated with hardware when running under devices with A7 to A10, since there has no AppleSMC, instead they uses AppleHPM which we cannot test.
 
 ### Tested Devices
 - iPhone 12 Series (D52)
