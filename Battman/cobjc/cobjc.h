@@ -38,8 +38,8 @@ static const uint64_t _block_descriptor_1arg[2]={0,40};
 		id blk=object_copy((id)&blk_content,40); \
 		blk;})
 
-extern void objc_msgSend();
-extern void objc_msgSendSuper();
+extern void objc_msgSend(void);
+extern void objc_msgSendSuper(void);
 
 // Do not use if special types present (e.g. float)
 #define _ocall6(send,obj,sel,a1,a2,a3,a4,a5,a6) ((void*(*)(id,SEL,void*,void*,void*,void*,void*,void*))send)((id)obj,oselector(sel),(void*)a1,(void*)a2,(void*)a3,(void*)a4,(void*)a5,(void*)a6)

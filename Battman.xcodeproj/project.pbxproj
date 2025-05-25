@@ -83,7 +83,6 @@
 		68AE40BC2D8EB8870023D7B0 /* StackViewGestureHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40B42D8EB8870023D7B0 /* StackViewGestureHandler.m */; };
 		68AE40BD2D8EB8870023D7B0 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40B52D8EB8870023D7B0 /* Constants.m */; };
 		68AE40BE2D8EB8870023D7B0 /* SegmentButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40B62D8EB8870023D7B0 /* SegmentButton.m */; };
-		68B291212DC754100089BA1F /* worker.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B2911A2DC754100089BA1F /* worker.m */; };
 		68B291232DC754100089BA1F /* daemon.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B2911F2DC754100089BA1F /* daemon.c */; };
 		68B291272DC7547B0089BA1F /* ChargingLimitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B291252DC7547B0089BA1F /* ChargingLimitViewController.m */; };
 		68B291282DC75F610089BA1F /* pmnotification.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B2911E2DC754100089BA1F /* pmnotification.c */; };
@@ -97,8 +96,21 @@
 		68B5FF2E2D85606000919BC2 /* GradientArcView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B5FF2D2D85606000919BC2 /* GradientArcView.m */; };
 		68B5FF302D85617400919BC2 /* TemperatureInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B5FF2F2D85617400919BC2 /* TemperatureInfoTableViewCell.m */; };
 		68D6DEBE2D745DBC00E129A0 /* SegmentedViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D6DEBD2D745DBC00E129A0 /* SegmentedViewCell.m */; };
-		68DCA5A92D3F9339004D0104 /* common.m in Sources */ = {isa = PBXBuildFile; fileRef = 68DCA5A82D3F9338004D0104 /* common.m */; };
 		68FBDCE82DE1A1D40057870A /* protect.S in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDCE72DE1A1D40057870A /* protect.S */; };
+		68FBDCF02DE30A5E0057870A /* worker.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDCEF2DE30A5E0057870A /* worker.c */; };
+		68FBDD0B2DE30A740057870A /* UIColor.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDCF32DE30A740057870A /* UIColor.c */; };
+		68FBDD0C2DE30A740057870A /* UIWindow.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDCF72DE30A740057870A /* UIWindow.c */; };
+		68FBDD0D2DE30A740057870A /* UIViewController.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDCFA2DE30A740057870A /* UIViewController.c */; };
+		68FBDD0E2DE30A740057870A /* UILabel.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDCFB2DE30A740057870A /* UILabel.c */; };
+		68FBDD0F2DE30A740057870A /* UIScene.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDCFD2DE30A740057870A /* UIScene.c */; };
+		68FBDD102DE30A740057870A /* UIAlertController.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDD002DE30A740057870A /* UIAlertController.c */; };
+		68FBDD112DE30A740057870A /* UIApplication.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDD032DE30A740057870A /* UIApplication.c */; };
+		68FBDD122DE30A740057870A /* NSObject.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDD042DE30A740057870A /* NSObject.c */; };
+		68FBDD132DE30A740057870A /* UIView.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDD052DE30A740057870A /* UIView.c */; };
+		68FBDD142DE30A740057870A /* UITableView.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDD072DE30A740057870A /* UITableView.c */; };
+		68FBDD152DE30A740057870A /* NSIndexPath.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDD0A2DE30A740057870A /* NSIndexPath.c */; };
+		68FBDD182DE30A8E0057870A /* CreditViewController.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDD162DE30A8E0057870A /* CreditViewController.c */; };
+		68FBDD192DE30A8E0057870A /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDD172DE30A8E0057870A /* common.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -180,7 +192,6 @@
 		68AE40B62D8EB8870023D7B0 /* SegmentButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SegmentButton.m; sourceTree = "<group>"; };
 		68AE40B72D8EB8870023D7B0 /* MultiSelectSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiSelectSegmentedControl.h; sourceTree = "<group>"; };
 		68AE40BF2D8EB9190023D7B0 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		68B2911A2DC754100089BA1F /* worker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = worker.m; sourceTree = "<group>"; };
 		68B2911E2DC754100089BA1F /* pmnotification.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pmnotification.c; sourceTree = "<group>"; };
 		68B2911F2DC754100089BA1F /* daemon.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = daemon.c; sourceTree = "<group>"; };
 		68B291202DC754100089BA1F /* smctest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = smctest.c; sourceTree = "<group>"; };
@@ -213,7 +224,6 @@
 		68D6DEC02D77071300E129A0 /* not_charging_reason.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = not_charging_reason.h; sourceTree = "<group>"; };
 		68D6DEC12D770B9F00E129A0 /* kiosk_mode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = kiosk_mode.h; sourceTree = "<group>"; };
 		68DCA5602D3D0AC5004D0104 /* main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
-		68DCA5A82D3F9338004D0104 /* common.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = common.m; sourceTree = "<group>"; };
 		68DCA5AA2D3F935E004D0104 /* common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
 		68DCA5AB2D3F9A10004D0104 /* gtkextern.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gtkextern.h; sourceTree = "<group>"; };
 		68DCA5AD2D3F9BFD004D0104 /* glibextern.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = glibextern.h; sourceTree = "<group>"; };
@@ -224,8 +234,35 @@
 		68E938992D58980B00223285 /* iokit_connection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iokit_connection.h; sourceTree = "<group>"; };
 		68E9389A2D58980B00223285 /* iokit_connection.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = iokit_connection.c; sourceTree = "<group>"; };
 		68FBDCE22DE1A1D40057870A /* protect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = protect.h; sourceTree = "<group>"; };
-		68FBDCE62DE1A1D40057870A /* cobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cobjc.h; sourceTree = "<group>"; };
 		68FBDCE72DE1A1D40057870A /* protect.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = protect.S; sourceTree = "<group>"; };
+		68FBDCEF2DE30A5E0057870A /* worker.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = worker.c; sourceTree = "<group>"; };
+		68FBDCF22DE30A740057870A /* UIScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScene.h; sourceTree = "<group>"; };
+		68FBDCF32DE30A740057870A /* UIColor.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = UIColor.c; sourceTree = "<group>"; };
+		68FBDCF42DE30A740057870A /* NSObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSObject.h; sourceTree = "<group>"; };
+		68FBDCF52DE30A740057870A /* UIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIView.h; sourceTree = "<group>"; };
+		68FBDCF62DE30A740057870A /* UIApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIApplication.h; sourceTree = "<group>"; };
+		68FBDCF72DE30A740057870A /* UIWindow.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = UIWindow.c; sourceTree = "<group>"; };
+		68FBDCF82DE30A740057870A /* UIAlertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAlertController.h; sourceTree = "<group>"; };
+		68FBDCF92DE30A740057870A /* NSIndexPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSIndexPath.h; sourceTree = "<group>"; };
+		68FBDCFA2DE30A740057870A /* UIViewController.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = UIViewController.c; sourceTree = "<group>"; };
+		68FBDCFB2DE30A740057870A /* UILabel.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = UILabel.c; sourceTree = "<group>"; };
+		68FBDCFC2DE30A740057870A /* UITableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableView.h; sourceTree = "<group>"; };
+		68FBDCFD2DE30A740057870A /* UIScene.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = UIScene.c; sourceTree = "<group>"; };
+		68FBDCFE2DE30A740057870A /* UIColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIColor.h; sourceTree = "<group>"; };
+		68FBDCFF2DE30A740057870A /* UITableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITableViewController.h; sourceTree = "<group>"; };
+		68FBDD002DE30A740057870A /* UIAlertController.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = UIAlertController.c; sourceTree = "<group>"; };
+		68FBDD012DE30A740057870A /* UIWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIWindow.h; sourceTree = "<group>"; };
+		68FBDD022DE30A740057870A /* cobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cobjc.h; sourceTree = "<group>"; };
+		68FBDD032DE30A740057870A /* UIApplication.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = UIApplication.c; sourceTree = "<group>"; };
+		68FBDD042DE30A740057870A /* NSObject.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = NSObject.c; sourceTree = "<group>"; };
+		68FBDD052DE30A740057870A /* UIView.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = UIView.c; sourceTree = "<group>"; };
+		68FBDD062DE30A740057870A /* cobjc_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cobjc_types.h; sourceTree = "<group>"; };
+		68FBDD072DE30A740057870A /* UITableView.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = UITableView.c; sourceTree = "<group>"; };
+		68FBDD082DE30A740057870A /* UILabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILabel.h; sourceTree = "<group>"; };
+		68FBDD092DE30A740057870A /* UIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewController.h; sourceTree = "<group>"; };
+		68FBDD0A2DE30A740057870A /* NSIndexPath.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = NSIndexPath.c; sourceTree = "<group>"; };
+		68FBDD162DE30A8E0057870A /* CreditViewController.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CreditViewController.c; sourceTree = "<group>"; };
+		68FBDD172DE30A8E0057870A /* common.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = common.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -276,9 +313,11 @@
 		686AECC12D3B93CB0059ECD0 /* Battman */ = {
 			isa = PBXGroup;
 			children = (
+				68FBDCF12DE30A740057870A /* cobjc */,
 				68B2913E2DD86ABF0089BA1F /* EXTERNAL_HEADERS */,
 				68B291332DD1E6960089BA1F /* CompatibilityHelper.c */,
 				68B291312DD1E6960089BA1F /* CompatibilityHelper.h */,
+				68FBDD162DE30A8E0057870A /* CreditViewController.c */,
 				68B291342DD1E6960089BA1F /* FullSMCViewController.h */,
 				68B291352DD1E6960089BA1F /* FullSMCViewController.m */,
 				68B291302DD1E6960089BA1F /* SimpleTemperatureViewController.h */,
@@ -311,7 +350,7 @@
 				686AECD32D3B93CD0059ECD0 /* Info.plist */,
 				686AECD42D3B93CD0059ECD0 /* main.m */,
 				68DCA5602D3D0AC5004D0104 /* main.h */,
-				68DCA5A82D3F9338004D0104 /* common.m */,
+				68FBDD172DE30A8E0057870A /* common.c */,
 				68DCA5AA2D3F935E004D0104 /* common.h */,
 				68DCA5AB2D3F9A10004D0104 /* gtkextern.h */,
 				68DCA5AD2D3F9BFD004D0104 /* glibextern.h */,
@@ -343,11 +382,11 @@
 		68A3EAF42D5204D2003381DF /* battery_utils */ = {
 			isa = PBXGroup;
 			children = (
+				68FBDCEF2DE30A5E0057870A /* worker.c */,
 				68B291392DD1FEDA0089BA1F /* hid.m */,
 				68B2911F2DC754100089BA1F /* daemon.c */,
 				68B2911E2DC754100089BA1F /* pmnotification.c */,
 				68B291202DC754100089BA1F /* smctest.c */,
-				68B2911A2DC754100089BA1F /* worker.m */,
 				68A3EAF52D5204D2003381DF /* battery_utils.h */,
 				68A3EAF62D5204D2003381DF /* battery_info.c */,
 				68A3EAF72D5204D2003381DF /* battery_info.h */,
@@ -417,7 +456,6 @@
 		68B291472DDC76720089BA1F /* security */ = {
 			isa = PBXGroup;
 			children = (
-				68FBDCE62DE1A1D40057870A /* cobjc.h */,
 				68FBDCE22DE1A1D40057870A /* protect.h */,
 				68FBDCE72DE1A1D40057870A /* protect.S */,
 				68B291482DDC76B00089BA1F /* selfcheck.h */,
@@ -434,6 +472,38 @@
 				68DCA5B72D40F4A5004D0104 /* base.pot */,
 			);
 			path = Localizations;
+			sourceTree = "<group>";
+		};
+		68FBDCF12DE30A740057870A /* cobjc */ = {
+			isa = PBXGroup;
+			children = (
+				68FBDCF22DE30A740057870A /* UIScene.h */,
+				68FBDCF32DE30A740057870A /* UIColor.c */,
+				68FBDCF42DE30A740057870A /* NSObject.h */,
+				68FBDCF52DE30A740057870A /* UIView.h */,
+				68FBDCF62DE30A740057870A /* UIApplication.h */,
+				68FBDCF72DE30A740057870A /* UIWindow.c */,
+				68FBDCF82DE30A740057870A /* UIAlertController.h */,
+				68FBDCF92DE30A740057870A /* NSIndexPath.h */,
+				68FBDCFA2DE30A740057870A /* UIViewController.c */,
+				68FBDCFB2DE30A740057870A /* UILabel.c */,
+				68FBDCFC2DE30A740057870A /* UITableView.h */,
+				68FBDCFD2DE30A740057870A /* UIScene.c */,
+				68FBDCFE2DE30A740057870A /* UIColor.h */,
+				68FBDCFF2DE30A740057870A /* UITableViewController.h */,
+				68FBDD002DE30A740057870A /* UIAlertController.c */,
+				68FBDD012DE30A740057870A /* UIWindow.h */,
+				68FBDD022DE30A740057870A /* cobjc.h */,
+				68FBDD032DE30A740057870A /* UIApplication.c */,
+				68FBDD042DE30A740057870A /* NSObject.c */,
+				68FBDD052DE30A740057870A /* UIView.c */,
+				68FBDD062DE30A740057870A /* cobjc_types.h */,
+				68FBDD072DE30A740057870A /* UITableView.c */,
+				68FBDD082DE30A740057870A /* UILabel.h */,
+				68FBDD092DE30A740057870A /* UIViewController.h */,
+				68FBDD0A2DE30A740057870A /* NSIndexPath.c */,
+			);
+			path = cobjc;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -659,27 +729,36 @@
 				6834254B2D7C4F560070CE6F /* iokit_connection.c in Sources */,
 				68AE40BE2D8EB8870023D7B0 /* SegmentButton.m in Sources */,
 				687743462D4F6C7800375A2C /* BatteryCellView.m in Sources */,
-				68DCA5A92D3F9339004D0104 /* common.m in Sources */,
 				6838BF832DC27F1E007EB66C /* ChargingManagementViewController.m in Sources */,
 				687743482D4F6C7800375A2C /* BatteryInfoTableViewCell.m in Sources */,
+				68FBDD0D2DE30A740057870A /* UIViewController.c in Sources */,
+				68FBDD142DE30A740057870A /* UITableView.c in Sources */,
 				68B2914A2DDC76B10089BA1F /* selfcheck.c in Sources */,
 				68B2913D2DD86AAB0089BA1F /* accessory.c in Sources */,
 				68AE40BD2D8EB8870023D7B0 /* Constants.m in Sources */,
 				68AE40B92D8EB8870023D7B0 /* MultiSelectSegmentedControl.m in Sources */,
+				68FBDD152DE30A740057870A /* NSIndexPath.c in Sources */,
 				68AE40BA2D8EB8870023D7B0 /* DividerView.m in Sources */,
 				68B2913A2DD1FEDA0089BA1F /* hid.m in Sources */,
 				68B2912B2DC799A40089BA1F /* BatterySubscriberViewControllerBase.m in Sources */,
+				68FBDD0F2DE30A740057870A /* UIScene.c in Sources */,
 				68B291362DD1E6960089BA1F /* SimpleTemperatureViewController.m in Sources */,
 				6838BF762DBF810D007EB66C /* localized.c in Sources */,
 				687743372D4E08AD00375A2C /* BatteryInfoViewController.m in Sources */,
+				68FBDD132DE30A740057870A /* UIView.c in Sources */,
 				687743472D4F6C7800375A2C /* SPWaterProgressIndicatorView.m in Sources */,
 				6833A8C92DA3C6E500B71299 /* WarnAccessoryView.m in Sources */,
 				686AECD52D3B93CD0059ECD0 /* main.m in Sources */,
 				68AE40BC2D8EB8870023D7B0 /* StackViewGestureHandler.m in Sources */,
 				68FBDCE82DE1A1D40057870A /* protect.S in Sources */,
 				68B5FF302D85617400919BC2 /* TemperatureInfoTableViewCell.m in Sources */,
+				68FBDD182DE30A8E0057870A /* CreditViewController.c in Sources */,
+				68FBDCF02DE30A5E0057870A /* worker.c in Sources */,
+				68FBDD0B2DE30A740057870A /* UIColor.c in Sources */,
+				68FBDD122DE30A740057870A /* NSObject.c in Sources */,
 				683425502D7D6A240070CE6F /* MultilineViewCell.m in Sources */,
 				68AE40BB2D8EB8870023D7B0 /* UIView+Fill.m in Sources */,
+				68FBDD112DE30A740057870A /* UIApplication.c in Sources */,
 				68AE40B82D8EB8870023D7B0 /* UberSegmentedControl.m in Sources */,
 				68D6DEBE2D745DBC00E129A0 /* SegmentedViewCell.m in Sources */,
 				68B291382DD1E6960089BA1F /* FullSMCViewController.m in Sources */,
@@ -690,9 +769,12 @@
 				6838BF6B2DB8D06B007EB66C /* licensing.S in Sources */,
 				6838BFAC2DC3984C007EB66C /* SliderTableViewCell.m in Sources */,
 				68171A372D534E6B00DD4224 /* BatteryDetailsViewController.m in Sources */,
-				68B291212DC754100089BA1F /* worker.m in Sources */,
 				68B291372DD1E6960089BA1F /* CompatibilityHelper.c in Sources */,
+				68FBDD102DE30A740057870A /* UIAlertController.c in Sources */,
+				68FBDD192DE30A8E0057870A /* common.c in Sources */,
 				687743362D4E08AD00375A2C /* SettingsViewController.m in Sources */,
+				68FBDD0C2DE30A740057870A /* UIWindow.c in Sources */,
+				68FBDD0E2DE30A740057870A /* UILabel.c in Sources */,
 				68B291272DC7547B0089BA1F /* ChargingLimitViewController.m in Sources */,
 				68171A302D5221C400DD4224 /* libsmc.c in Sources */,
 			);

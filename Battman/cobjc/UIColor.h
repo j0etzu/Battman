@@ -1,4 +1,4 @@
 #pragma once
 #include "./cobjc.h"
 
-UIColor *UIColorLinkColor();
+UIColor *UIColorLinkColor(void);
