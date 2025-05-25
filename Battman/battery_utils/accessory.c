@@ -3,14 +3,9 @@
 //#include "intlextern.h"
 #include <mach/mach.h>
 
-#if TARGET_OS_SIMULATOR
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunreachable-code"
-#pragma clang diagnostic ignored "-Wunused-variable"
-#endif
-
 io_iterator_t gAccessories;
 io_service_t gAccPrimary;
+static bool use_libioam = false;
 
 const char *acc_id_0_f[] = {
 	"3K: Simple dock (beep on insert)",
@@ -120,6 +115,26 @@ const char *manf_id_string(SInt32 manf) {
 	return NULL;
 }
 
+/* Private func of IOAM */
+static IOReturn checkIDBusAvailable(io_registry_entry_t entry, bool accessory_mode) {
+	IOReturn result = kIOReturnSuccess;
+	UInt8 bytes[6];
+	
+	memset(bytes, 0xAA, 6);
+
+	result = get_acc_digitalid(entry, bytes);
+	if (result == kIOReturnSuccess) {
+		result = kIOReturnNotReadable;
+		if (bytes[0] <= 0x3F) {
+			if (accessory_mode && (bytes[1] & 3) == 0)
+				return kIOReturnUnsupportedMode;
+			else
+				return kIOReturnNotFound;
+		}
+	}
+	return result;
+}
+
 /* Make sure logics are not directly called in the UI */
 #pragma mark - IOAccessoryMananger
 
@@ -136,53 +151,64 @@ io_iterator_t IOAccessoryManagerGetServices(void) {
 }
 
 /* Different from AppleSMC calls, we are going to get services quite often */
-
-/* TODO: Runtime check of Sim IOAM existence */
+__attribute__((constructor))
+void check_ioam_existance(void) {
+	void *lib = dlopen("/usr/lib/libIOAccessoryManager.dylib", RTLD_LAZY);
+	if (lib) {
+		use_libioam = true;
+	}
+}
 
 io_service_t acc_open_with_port(int port) {
-#if TARGET_OS_SIMULATOR
-	return MACH_PORT_NULL;
-#endif
+	if (use_libioam)
+		return IOAccessoryManagerGetServiceWithPrimaryPort(port);
 
-	/*
-	IOReturn kr = kIOReturnSuccess;
-	io_connect_t connect = MACH_PORT_NULL;
-
-	io_service_t service = IOAccessoryManagerGetServiceWithPrimaryPort(port);
-	if (!service) NSLog(CFSTR("could not find IOAccessoryManager service for port %d"), port);
-
-	kr = IOServiceOpen(service, mach_task_self(), 0, &connect);
-	if (kr != kIOReturnSuccess) {
-		NSLog(CFSTR("could not open IOAccessoryManager service: %s"), mach_error_string(kr));
-	}
-
-	return connect;
-*/
-	return IOAccessoryManagerGetServiceWithPrimaryPort(port);
+	CFMutableDictionaryRef service;
+	CFDictionaryRef matching;
+	void *values;
+	void *keys;
+	int valuePtr;
+	
+	valuePtr = port;
+	service = IOServiceMatching("IOAccessoryManager");
+	keys = (void *)CFSTR("IOAccessoryPrimaryDevicePort");
+	values = (void *)CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &valuePtr);
+	matching = CFDictionaryCreate(kCFAllocatorDefault, (const void **)&keys, (const void **)&values, 1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+	CFDictionarySetValue(service, CFSTR("IOPropertyMatch"), matching);
+	CFRelease(matching);
+	CFRelease(keys);
+	CFRelease(values);
+	return IOServiceGetMatchingService(kIOMasterPortDefault, service);
 }
 
 SInt32 get_accid(io_connect_t connect) {
-#if TARGET_OS_SIMULATOR
-	return 100;
-#else
-	SInt32 accid = IOAccessoryManagerGetAccessoryID(connect);
-	DBGLOG(CFSTR("accid: %d"), accid);
+	SInt32 accid = -1;
+	if (use_libioam) {
+		accid = IOAccessoryManagerGetAccessoryID(connect);
+	} else {
+		CFNumberRef number;
+		number = IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryID"), kCFAllocatorDefault, kNilOptions);
+		if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &accid)) {
+			accid = -1;
+		}
+		if (number) CFRelease(number);
+	}
 	return accid;
-#endif
 }
 
-SInt32 get_acc_battery_pack_mode(io_connect_t connect) {
-#if TARGET_OS_SIMULATOR
-	return 0;
-#else
-	return IOAccessoryManagerGetBatteryPackMode(connect);
-#endif
+bool get_acc_battery_pack_mode(io_connect_t connect) {
+	if (use_libioam)
+		return IOAccessoryManagerGetBatteryPackMode(connect);
+
+	CFBooleanRef boolean = IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryBatteryPack"), kCFAllocatorDefault, kNilOptions);
+
+	bool result = (boolean == kCFBooleanTrue);
+	if (boolean) CFRelease(boolean);
+
+	return result;
 }
 
 SInt32 get_acc_allowed_features(io_connect_t connect) {
-#if TARGET_OS_SIMULATOR
-	return -1;
-#endif
 	SInt32 buffer = -1;
 	CFNumberRef AllowedFeatures;
 
@@ -203,14 +229,15 @@ typedef struct {
 	AccessoryInfo   key;
 	void           *dest;
 	size_t          len;
+	
 } AccQuery;
 accessory_info_t get_acc_info(io_connect_t connect) {
-	IOReturn     kr;
-	CFTypeRef    buffer;
+	IOReturn     kr = kIOReturnSuccess;
+	CFTypeRef    buffer = NULL;
 	accessory_info_t info;
 	
 	memset(&info, 0, sizeof(info));
-#if !TARGET_OS_SIMULATOR
+
 	AccQuery queries[] = {
 		{kIOAMAccessorySerialNumber,    info.serial, sizeof(info.serial)},
 		{kIOAMAccessoryManufacturer,    info.vendor, sizeof(info.vendor)},
@@ -222,7 +249,38 @@ accessory_info_t get_acc_info(io_connect_t connect) {
 	};
 	
 	for (size_t i = 0; i < sizeof(queries) / sizeof(queries[0]); i++) {
-		kr = IOAccessoryManagerCopyDeviceInfo(connect, queries[i].key, &buffer);
+		if (use_libioam) {
+			kr = IOAccessoryManagerCopyDeviceInfo(connect, queries[i].key, &buffer);
+		} else {
+			bool accessory_mode = true;
+			CFStringRef key = NULL;
+			switch (queries[i].key) {
+				case kIOAMInterfaceDeviceSerialNumber:
+					accessory_mode = false;
+					key = CFSTR("IOAccessoryInterfaceDeviceSerialNumber");
+					break;
+				case kIOAMInterfaceModuleSerialNumber:
+					accessory_mode = false;
+					key = CFSTR("IOAccessoryInterfaceModuleSerialNumber");
+					break;
+				case kIOAMAccessorySerialNumber:    key = CFSTR("IOAccessoryAccessorySerialNumber"); break;
+				case kIOAMAccessoryManufacturer:    key = CFSTR("IOAccessoryAccessoryManufacturer"); break;
+				case kIOAMAccessoryName:            key = CFSTR("IOAccessoryAccessoryName"); break;
+				case kIOAMAccessoryModelNumber:     key = CFSTR("IOAccessoryAccessoryModelNumber"); break;
+				case kIOAMAccessoryFirmwareVersion: key = CFSTR("IOAccessoryAccessoryFirmwareVersion"); break;
+				case kIOAMAccessoryHardwareVersion: key = CFSTR("IOAccessoryAccessoryHardwareVersion"); break;
+				case kIOAMAccessoryPPID:            key = CFSTR("IOAccessoryAccessoryPPID"); break;
+				default: kr = kIOReturnBadArgument;
+			}
+			if (kr == kIOReturnSuccess) {
+				buffer = IORegistryEntryCreateCFProperty(connect, key, kCFAllocatorDefault, kNilOptions);
+				if (buffer) {
+					kr = kIOReturnSuccess;
+				} else {
+					kr = checkIDBusAvailable(connect, accessory_mode);
+				}
+			}
+		}
 		if (kr != kIOReturnSuccess) {
 			NSLog(CFSTR("get_acc_info(%d): %s"), queries[i].key, mach_error_string(kr));
 			continue;
@@ -230,6 +288,7 @@ accessory_info_t get_acc_info(io_connect_t connect) {
 
 		memset(queries[i].dest, 0, queries[i].len);
 
+		/* We only handle Accessories, so they are all strings */
 		if (!CFStringGetCString((CFStringRef)buffer, queries[i].dest, queries[i].len, kCFStringEncodingUTF8)) {
 			NSLog(CFSTR("get_acc_info(%d): CF Error"), queries[i].key);
 			continue;
@@ -237,7 +296,7 @@ accessory_info_t get_acc_info(io_connect_t connect) {
 		DBGLOG(CFSTR("get_acc_info(%d): got %s"), queries[i].key, (char *)queries[i].dest);
 		if (buffer) CFRelease(buffer);
 	}
-#endif
+
 	return info;
 }
 
@@ -246,9 +305,22 @@ accessory_powermode_t get_acc_powermode(io_connect_t connect) {
 	CFArrayRef supported;
 
 	memset(&mode, 0, sizeof(mode));
-#if !TARGET_OS_SIMULATOR
-	mode.mode = IOAccessoryManagerGetPowerMode(connect);
-	mode.active = IOAccessoryManagerGetActivePowerMode(connect);
+
+	if (use_libioam) {
+		mode.mode = IOAccessoryManagerGetPowerMode(connect);
+		mode.active = IOAccessoryManagerGetActivePowerMode(connect);
+	} else {
+		CFNumberRef number;
+		number = (CFNumberRef)IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryPowerMode"), kCFAllocatorDefault, kNilOptions);
+		if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &mode.mode)) {
+			mode.mode = 0;
+		}
+		number = (CFNumberRef)IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryActivePowerMode"), kCFAllocatorDefault, kNilOptions);
+		if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &mode.active)) {
+			mode.active = 0;
+		}
+		if (number) CFRelease(number);
+	}
 
 	supported = IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessorySupportedPowerModes"), kCFAllocatorDefault, kNilOptions);
 	if (supported) {
@@ -259,13 +331,28 @@ accessory_powermode_t get_acc_powermode(io_connect_t connect) {
 		for (int i = 0; i < mode.supported_cnt; i++) {
 			CFNumberRef value = CFArrayGetValueAtIndex(supported, i);
 			if (CFNumberGetValue(value, kCFNumberSInt32Type, &mode.supported[i])) {
-				mode.supported_lim[i] = IOAccessoryManagerPowerModeCurrentLimit(connect, mode.supported[i]);
+				if (use_libioam)
+					mode.supported_lim[i] = IOAccessoryManagerPowerModeCurrentLimit(connect, mode.supported[i]);
+				else {
+					CFArrayRef array = IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryPowerCurrentLimits"), kCFAllocatorDefault, kNilOptions);
+					if (array) {
+						if (mode.supported[i]) {
+							CFIndex modeIndex = mode.supported[i] - 1;
+							if (CFArrayGetCount(array) > i) {
+								CFNumberRef number = CFArrayGetValueAtIndex(array, modeIndex);
+								if (number)
+									CFNumberGetValue(number, kCFNumberSInt32Type, &mode.supported_lim[i]);
+							}
+						}
+						CFRelease(array);
+					}
+				}
 			}
 			if (value) CFRelease(value);
 		}
 	}
 	if (supported) CFRelease(supported);
-#endif
+
 	return mode;
 }
 
@@ -273,18 +360,30 @@ accessory_sleeppower_t get_acc_sleeppower(io_connect_t connect) {
 	accessory_sleeppower_t sleep;
 
 	memset(&sleep, 0, sizeof(sleep));
-#if !TARGET_OS_SIMULATOR
-	sleep.supported = IOAccessoryManagerPowerDuringSleepIsSupported(connect);
-	sleep.enabled = IOAccessoryManagerGetPowerDuringSleep(connect);
-	sleep.limit = IOAccessoryManagerGetSleepPowerCurrentLimit(connect);
-#endif
+
+	if (use_libioam) {
+		sleep.supported = IOAccessoryManagerPowerDuringSleepIsSupported(connect);
+		sleep.enabled = IOAccessoryManagerGetPowerDuringSleep(connect);
+		sleep.limit = IOAccessoryManagerGetSleepPowerCurrentLimit(connect);
+	} else {
+		CFBooleanRef result;
+		result = IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryManagerSleepPower"), kCFAllocatorDefault, kNilOptions);
+		sleep.supported = (result != NULL);
+		sleep.enabled = (result == kCFBooleanTrue);
+		if (result) CFRelease(result);
+
+		CFNumberRef number;
+		number = (CFNumberRef)IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessorySleepPowerCurrentLimit"), kCFAllocatorDefault, kNilOptions);
+		if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &sleep.limit)) {
+			sleep.limit = 0;
+		}
+		if (number) CFRelease(number);
+	}
+
 	return sleep;
 }
 
 bool get_acc_supervised(io_connect_t connect) {
-#if TARGET_OS_SIMULATOR
-	return false;
-#endif
 	CFBooleanRef supervised;
 
 	supervised = IORegistryEntryCreateCFProperty(connect, CFSTR("SupervisedAccessoryAttached"), kCFAllocatorDefault, kNilOptions);
@@ -296,9 +395,6 @@ bool get_acc_supervised(io_connect_t connect) {
 }
 
 bool get_acc_supervised_transport_restricted(io_connect_t connect) {
-#if TARGET_OS_SIMULATOR
-	return false;
-#endif
 	CFBooleanRef restricted;
 	
 	restricted = IORegistryEntryCreateCFProperty(connect, CFSTR("SupervisedTransportsRestricted"), kCFAllocatorDefault, kNilOptions);
@@ -309,6 +405,40 @@ bool get_acc_supervised_transport_restricted(io_connect_t connect) {
 	return ret;
 }
 
-#if TARGET_OS_SIMULATOR
-#pragma clang diagnostic pop
-#endif
+SInt32 get_acc_type(io_connect_t connect) {
+	if (use_libioam)
+		return IOAccessoryManagerGetType(connect);
+
+	CFNumberRef number;
+	SInt32 type = 0;
+	number = (CFNumberRef)IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryManagerType"), kCFAllocatorDefault, kNilOptions);
+	if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &type)) {
+		 type = 0;
+	}
+	if (number) CFRelease(number);
+
+	return type;
+}
+
+IOReturn get_acc_digitalid(io_connect_t connect, UInt8 *digitalID) {
+	IOReturn kr = kIOReturnSuccess;
+	if (use_libioam)
+		return IOAccessoryManagerGetDigitalID(connect, digitalID);
+		
+	CFDataRef data = IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryDigitalID"), kCFAllocatorDefault, kNilOptions);
+
+	if (data) {
+		CFDataGetBytes(data, CFRangeMake(0, 6), digitalID);
+		CFRelease(data);
+		return kIOReturnSuccess;
+	} else {
+		kr = kIOReturnUnsupported;
+		if ((get_acc_type(connect) & 0xF) != 0 ) {
+			CFBooleanRef detect = IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryDetect"), kCFAllocatorDefault, kNilOptions);
+			kr = (detect == kCFBooleanTrue) ? kIOReturnNotReady : kIOReturnNotAttached;
+
+			if (detect) CFRelease(detect);
+		}
+	}
+	return kr;
+}

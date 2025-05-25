@@ -135,7 +135,7 @@ SInt32 IOAccessoryPortGetStreamType(io_service_t service);
 io_service_t IOAccessoryManagerGetServiceWithPrimaryPort(SInt32 port);
 SInt32 IOAccessoryManagerGetPrimaryPort(io_service_t service);
 SInt32 IOAccessoryManagerGetType(io_service_t service);
-SInt32 IOAccessoryManagerGetBatteryPackMode(io_service_t service);
+bool IOAccessoryManagerGetBatteryPackMode(io_service_t service);
 io_registry_entry_t IOAccessoryManagerGetUpstreamService(io_service_t service);
 SInt32 IOAccessoryManagerGetUpstreamPrimaryPort(io_service_t service);
 SInt32 IOAccessoryManagerGetAccessoryID(io_service_t service);

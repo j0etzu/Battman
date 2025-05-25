@@ -38,6 +38,13 @@ typedef int IOReturn;
 typedef int kern_return_t;
 #define kIOReturnSuccess 0
 #define kIOReturnError 0xE00002BC
+#define kIOReturnBadArgument 0xE00002C2
+#define kIOReturnUnsupported 0xE00002C7
+#define kIOReturnNotReadable 0xE00002CE
+#define kIOReturnNotReady 0xE00002D8
+#define kIOReturnNotAttached 0xE00002D9
+#define kIOReturnUnsupportedMode 0xE00002E6
+#define kIOReturnNotFound 0xE00002F0
 #define MACH_PORT_NULL 0
 #define IO_OBJECT_NULL  ((io_object_t) 0)
 

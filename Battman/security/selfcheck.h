@@ -108,7 +108,7 @@ inline char **find_suspicious_images_under_app(const char *bundlePath, size_t *o
 inline void push_fatal_notif(void) {
 	notify_post(kBattmanFatalNotifyKey);
 }*/
-extern void push_fatal_notif();
+extern void push_fatal_notif(void);
 
 __attribute__((always_inline))
 inline void pull_fatal_notif(void) {

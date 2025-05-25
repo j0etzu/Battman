@@ -130,7 +130,7 @@ static BOOL _coolDebugVCPresented = 0;
         return 2;
 #ifdef DEBUG
     else if (section == SS_SECT_DEBUG)
-        return 8;
+        return 9;
 #endif
     return 0;
 }
@@ -217,6 +217,9 @@ static BOOL _coolDebugVCPresented = 0;
         	show_fatal_overlay_async("Oh no", "Some fatal error occurred :(");
 		}else if(indexPath.row==7){
 			push_fatal_notif();
+		}else if (indexPath.row == 8) {
+			extern void jitter_text(void);
+			jitter_text();
 		}
     }
 #endif
@@ -303,9 +306,14 @@ static BOOL _coolDebugVCPresented = 0;
         	//[cur.widthAnchor constraintEqualToAnchor:accView.widthAnchor multiplier:0.2].active=1;
         	cell.accessoryView=accView;
         	return cell;
-		}else if(indexPath.row==7) {
+		} else if(indexPath.row==7) {
 			UITableViewCell *cell = [UITableViewCell new];
 			cell.textLabel.text = _("Trigger fatal notify");
+			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+			return cell;
+		} else if (indexPath.row == 8) {
+			UITableViewCell *cell = [UITableViewCell new];
+			cell.textLabel.text = _("Trigger UTF jitter");
 			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 			return cell;
 		}

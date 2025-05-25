@@ -554,47 +554,46 @@ void battery_info_update(struct battery_info_node *head, bool inDetail) {
             BI_SET_ITEM(_C("Charger Configuration"), adapter_data.ChargerConfiguration);
             BI_FORMAT_ITEM_IF(adapter_data.NotChargingReason != 0, _C("Reason"), "%s", not_charging_reason_str(adapter_data.NotChargingReason));
             BI_FORMAT_ITEM_IF(adapter_info.port_type != 0, _C("Port Type"), "%s", cond_localize_c(port_type_str(adapter_info.port_type)));
-            /* Inductive Port Section */
-			/* 1: internal, 512: inductive */
-			io_connect_t connect = acc_open_with_port(512);
-			SInt32 acc_id = get_accid(connect);
-			/* 100: No device connected */
-			/* TODO: On simulators, fake an accessory to test UI */
-            if (acc_id != 100 && acc_id != -1 && connect != MACH_PORT_NULL) {
-                BI_SET_HIDDEN(_C("Inductive Port"), 0);
-				BI_FORMAT_ITEM(_C("Acc. ID"), "%s", acc_id_string(acc_id));
-				SInt32 features = get_acc_allowed_features(connect);
-                BI_FORMAT_ITEM_IF(features != -1, _C("Allowed Features"), "0x%.8X", features);
-				accessory_info_t accinfo = get_acc_info(connect);
-                BI_FORMAT_ITEM_IF(*accinfo.serial, _C("Acc. Serial No."), "%s", accinfo.serial);
-                BI_FORMAT_ITEM_IF(*accinfo.vendor, _C("Acc. Manufacturer"), "%s", accinfo.vendor);
-				/* TODO: VID/PID from IOHIDDevice */
-                //BI_FORMAT_ITEM(_C("Acc. Product ID"), "0x%0.4X", 0x1399);
-                BI_FORMAT_ITEM_IF(*accinfo.model, _C("Acc. Model"), "%s", accinfo.model);
-                BI_FORMAT_ITEM_IF(*accinfo.name, _C("Acc. Name"), "%s", accinfo.name);
-                BI_FORMAT_ITEM_IF(*accinfo.PPID, _C("Acc. PPID"), "%s", accinfo.PPID);
-                BI_FORMAT_ITEM_IF(*accinfo.fwVer, _C("Acc. Firmware Version"), "%s", accinfo.fwVer);
-                BI_FORMAT_ITEM_IF(*accinfo.hwVer, _C("Acc. Hardware Version"), "%s", accinfo.hwVer);
-				BI_FORMAT_ITEM(_C("Battery Pack"), "%s", get_acc_battery_pack_mode(connect) ? L_TRUE : L_FALSE);
-				accessory_powermode_t mode = get_acc_powermode(connect);
-                BI_FORMAT_ITEM(_C("Power Mode"), "%s: %s\n%s: %s\n%s", cond_localize_c("Configured Mode"), acc_powermode_string(mode.mode), cond_localize_c("Active Mode"), acc_powermode_string(mode.active), acc_powermode_string_supported(mode));
-				accessory_sleeppower_t sleep = get_acc_sleeppower(connect);
-				if (sleep.supported) {
-					BI_FORMAT_ITEM(_C("Sleep Power"), "%s\n%s: %d", sleep.enabled ? cond_localize_c("Enabled") : cond_localize_c("Disabled"), cond_localize_c("Limit"), sleep.limit);
-				} else {
-					BI_FORMAT_ITEM(_C("Sleep Power"), "%s", cond_localize_c("Unsupported"));
-				}
-				BI_FORMAT_ITEM(_C("Supervised Acc. Attached"), "%s", get_acc_supervised(connect) ? L_TRUE : L_FALSE);
-				BI_FORMAT_ITEM(_C("Supervised Transports Restricted"), "%s", get_acc_supervised_transport_restricted(connect) ? L_TRUE : L_FALSE);
-                if (1 /* accessory.transport_type == Inductive_InBand */) {
-                    
-                }
-            } else {
-                BI_SET_HIDDEN(_C("Inductive Port"), 1);
-            }
         } else {
             BI_SET_HIDDEN(_C("Adapter Details"), 1);
-			BI_SET_HIDDEN(_C("Inductive Port"), 1);
         }
+		/* Inductive Port Section */
+		/* 1: internal, 512: inductive */
+		io_connect_t connect = acc_open_with_port(512);
+		SInt32 acc_id = get_accid(connect);
+		/* 100: No device connected */
+		/* TODO: On simulators, fake an accessory to test UI */
+		if (acc_id != 100 && acc_id != -1 && connect != MACH_PORT_NULL) {
+			BI_SET_HIDDEN(_C("Inductive Port"), 0);
+			BI_FORMAT_ITEM(_C("Acc. ID"), "%s", acc_id_string(acc_id));
+			SInt32 features = get_acc_allowed_features(connect);
+			BI_FORMAT_ITEM_IF(features != -1, _C("Allowed Features"), "0x%.8X", features);
+			accessory_info_t accinfo = get_acc_info(connect);
+			BI_FORMAT_ITEM_IF(*accinfo.serial, _C("Acc. Serial No."), "%s", accinfo.serial);
+			BI_FORMAT_ITEM_IF(*accinfo.vendor, _C("Acc. Manufacturer"), "%s", accinfo.vendor);
+			/* TODO: VID/PID from IOHIDDevice */
+			//BI_FORMAT_ITEM(_C("Acc. Product ID"), "0x%0.4X", 0x1399);
+			BI_FORMAT_ITEM_IF(*accinfo.model, _C("Acc. Model"), "%s", accinfo.model);
+			BI_FORMAT_ITEM_IF(*accinfo.name, _C("Acc. Name"), "%s", accinfo.name);
+			BI_FORMAT_ITEM_IF(*accinfo.PPID, _C("Acc. PPID"), "%s", accinfo.PPID);
+			BI_FORMAT_ITEM_IF(*accinfo.fwVer, _C("Acc. Firmware Version"), "%s", accinfo.fwVer);
+			BI_FORMAT_ITEM_IF(*accinfo.hwVer, _C("Acc. Hardware Version"), "%s", accinfo.hwVer);
+			BI_FORMAT_ITEM(_C("Battery Pack"), "%s", get_acc_battery_pack_mode(connect) ? L_TRUE : L_FALSE);
+			accessory_powermode_t mode = get_acc_powermode(connect);
+			BI_FORMAT_ITEM(_C("Power Mode"), "%s: %s\n%s: %s\n%s", cond_localize_c("Configured Mode"), acc_powermode_string(mode.mode), cond_localize_c("Active Mode"), acc_powermode_string(mode.active), acc_powermode_string_supported(mode));
+			accessory_sleeppower_t sleep = get_acc_sleeppower(connect);
+			if (sleep.supported) {
+				BI_FORMAT_ITEM(_C("Sleep Power"), "%s\n%s: %d", sleep.enabled ? cond_localize_c("Enabled") : cond_localize_c("Disabled"), cond_localize_c("Limit"), sleep.limit);
+			} else {
+				BI_FORMAT_ITEM(_C("Sleep Power"), "%s", cond_localize_c("Unsupported"));
+			}
+			BI_FORMAT_ITEM(_C("Supervised Acc. Attached"), "%s", get_acc_supervised(connect) ? L_TRUE : L_FALSE);
+			BI_FORMAT_ITEM(_C("Supervised Transports Restricted"), "%s", get_acc_supervised_transport_restricted(connect) ? L_TRUE : L_FALSE);
+			if (1 /* accessory.transport_type == Inductive_InBand */) {
+				
+			}
+		} else {
+			BI_SET_HIDDEN(_C("Inductive Port"), 1);
+		}
     }
 }

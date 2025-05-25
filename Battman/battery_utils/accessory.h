@@ -44,13 +44,15 @@ const char *acc_powermode_string_supported(accessory_powermode_t mode);
 io_connect_t acc_open_with_port(int port);
 
 SInt32 get_accid(io_connect_t connect);
-SInt32 get_acc_battery_pack_mode(io_connect_t connect);
+bool get_acc_battery_pack_mode(io_connect_t connect);
 SInt32 get_acc_allowed_features(io_connect_t connect);
 accessory_info_t get_acc_info(io_connect_t connect);
 accessory_powermode_t get_acc_powermode(io_connect_t connect);
 accessory_sleeppower_t get_acc_sleeppower(io_connect_t connect);
 bool get_acc_supervised(io_connect_t connect);
 bool get_acc_supervised_transport_restricted(io_connect_t connect);
+SInt32 get_acc_type(io_connect_t connect);
+IOReturn get_acc_digitalid(io_connect_t connect, UInt8 *digitalID);
 
 __END_DECLS
 
