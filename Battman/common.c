@@ -264,13 +264,13 @@ bool gtk_available(void) {
 
 #if TARGET_OS_IPHONE
 id find_top_controller(id root) {
-	if (NSObjectIsKindOfClass(root, UINavigationController)) {
-		return find_top_controller(ocall(0, root, topViewController));
-	} else if (objc_opt_isKindOfClass(root, oclass(UITabBarController))) {
-		return find_top_controller(ocall(0, root, selectedViewController));
-	} else {
-		id pvc = UIViewControllerGetPresentedViewController(root);
-		if (pvc)
+	if(NSObjectIsKindOfClass(root,UINavigationController)) {
+		return find_top_controller(ocall(root,topViewController));
+	}else if(objc_opt_isKindOfClass(root,oclass(UITabBarController))) {
+		return find_top_controller(ocall(root,selectedViewController));
+	}else{
+		id pvc=UIViewControllerGetPresentedViewController(root);
+		if(pvc)
 			return find_top_controller(pvc);
 	}
 	return root;
@@ -327,9 +327,10 @@ void show_fatal_overlay_async(const char *title, const char *message) {
 		show_alert_async_f(title, message, L_OK, (void *)app_exit);
 		return;
 	}
-	CFStringRef title_str = CFStringCreateWithCString(NULL, title, kCFStringEncodingUTF8);
-	CFStringRef msg_str   = CFStringCreateWithCString(NULL, message, kCFStringEncodingUTF8);
-	id          safc      = ocall(2, objc_alloc(safc_cls), initWithTitle:detailText:, title_str, msg_str);
+	CFStringRef title_str=CFStringCreateWithCString(NULL,title,kCFStringEncodingUTF8);
+	CFStringRef msg_str=CFStringCreateWithCString(NULL,message,kCFStringEncodingUTF8);
+	id safc=ocall(objc_alloc(safc_cls),initWithTitle:detailText:,title_str,msg_str);
+
 	CFRelease(title_str);
 	CFRelease(msg_str);
 	if (!safc) {
@@ -337,9 +338,9 @@ void show_fatal_overlay_async(const char *title, const char *message) {
 		show_alert_async_f(title, message, L_OK, (void *)app_exit);
 		return;
 	}
-	if (class_respondsToSelector(safc_cls, oselector(setInstructionalText:)))
-		ocall(1, safc, setInstructionalText:, _("Swipe up to exit"));
-	UIWindowSetRootViewController(UIApplicationGetKeyWindow(UIApplicationSharedApplication()), safc);
+	if(class_respondsToSelector(safc_cls,oselector(setInstructionalText:)))
+		ocall(safc,setInstructionalText:,_("Swipe up to exit"));
+	UIWindowSetRootViewController(UIApplicationGetKeyWindow(UIApplicationSharedApplication()),safc);
 	NSObjectRelease(safc);
 }
 
@@ -405,32 +406,32 @@ void show_alert_async(const char *title, const char *message, const char *button
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 		// Use UIAlertView for iOS 9 or earlier
 		/* TODO: Add a delegate */
-		id          alert_ninit = objc_alloc(oclass(UIAlertView));
-		CFStringRef title_str   = CFStringCreateWithCString(NULL, title, kCFStringEncodingUTF8);
-		CFStringRef msg_str     = CFStringCreateWithCString(NULL, message, kCFStringEncodingUTF8);
-		CFStringRef btn_str     = CFStringCreateWithCString(NULL, button, kCFStringEncodingUTF8);
-
-		id          alert       = ocall(5, alert_ninit, initWithTitle:message:delegate:cancelButtonTitle:otherButtonTitles:, title_str, msg_str, NULL, btn_str, NULL);
-		ocall(0, alert, show);
+		id alert_ninit=objc_alloc(oclass(UIAlertView));
+		CFStringRef title_str=CFStringCreateWithCString(NULL,title,kCFStringEncodingUTF8);
+		CFStringRef msg_str=CFStringCreateWithCString(NULL,message,kCFStringEncodingUTF8);
+		CFStringRef btn_str=CFStringCreateWithCString(NULL,button,kCFStringEncodingUTF8);
+		
+		id alert=ocall(alert_ninit,initWithTitle:message:delegate:cancelButtonTitle:otherButtonTitles:,title_str,msg_str,NULL,btn_str,NULL);
+		ocall(alert,show);
 		// alloc_init'ed objects need to be released
-		objc_release(alert);
+		NSObjectRelease(alert);
 		CFRelease(title_str);
 		CFRelease(msg_str);
 		CFRelease(btn_str);
 		// not calling completion bc this is NON BLOCKING!!
-		objc_release(completion_block);
+		NSObjectRelease(completion_block);
 #pragma clang diagnostic pop
 	}
 #elif TARGET_OS_OSX
-	id          alert     = objc_alloc_init(oclass(NSAlert));
-	CFStringRef title_str = CFStringCreateWithCString(NULL, title, kCFStringEncodingUTF8);
-	CFStringRef msg_str   = CFStringCreateWithCString(NULL, message, kCFStringEncodingUTF8);
-	CFStringRef btn_str   = CFStringCreateWithCString(NULL, button, kCFStringEncodingUTF8);
-
-	ocall(1, alert, setMessageText : title_str);
-	ocall(1, alert, setInformativeText:, msg_str);
-	ocall(1, alert, addButtonWithTitle:, btn_str);
-	ocall(0, alert, runModal);
+	id alert=objc_alloc_init(oclass(NSAlert));
+	CFStringRef title_str=CFStringCreateWithCString(NULL,title,kCFStringEncodingUTF8);
+	CFStringRef msg_str=CFStringCreateWithCString(NULL,message,kCFStringEncodingUTF8);
+	CFStringRef btn_str=CFStringCreateWithCString(NULL,button,kCFStringEncodingUTF8);
+	
+	ocall(alert,setMessageText:title_str);
+	ocall(alert,setInformativeText:,msg_str);
+	ocall(alert,addButtonWithTitle:,btn_str);
+	ocall(alert,runModal);
 
 	if (completion_block) {
 		((void (*)(void *, BOOL))((char *)completion_block + 16))(completion_block, 1);
@@ -484,7 +485,7 @@ void open_url(const char *url) {
 	dispatch_async_f(dispatch_get_main_queue(), (void *)urlRef, (void (*)(void *))__open_url__invoke);
 #endif
 #if TARGET_OS_OSX
-	ocall(1, ocall(0, oclass(NSWorkspace), sharedWorkspace), openURL:, urlRef);
+	ocall(ocall(oclass(NSWorkspace),sharedWorkspace),openURL:,urlRef);
 	CFRelease(urlRef);
 #endif
 }
@@ -518,7 +519,8 @@ id imageForSFProGlyph(CFStringRef glyph, CFStringRef fontName, CGFloat fontSize,
 	UIGraphicsEndImageContext();
 
 	// template so tintColor still applies if you change it later
-	id ret = ocall(1, img, imageWithRenderingMode:, /*UIImageRenderingModeAlwaysTemplate*/ 2);
+	id ret=ocall(img,imageWithRenderingMode:,/*UIImageRenderingModeAlwaysTemplate*/ 2);
+
 	objc_release(img);
 
 	return ret;

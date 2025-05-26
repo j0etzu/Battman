@@ -5,7 +5,7 @@
 #include <CoreGraphics/CoreGraphics.h>
 #include <CoreFoundation/CoreFoundation.h>
 
-#include "./cobjc_types.h"
+#include "cpp_magic.h"
 
 #define oclass(cls) \
 	({Class v;asm("adrp %0,_OBJC_CLASS_$_" #cls "@GOTPAGE \n" \
@@ -41,19 +41,22 @@ static const uint64_t _block_descriptor_1arg[2]={0,40};
 extern void objc_msgSend(void);
 extern void objc_msgSendSuper(void);
 
-// Do not use if special types present (e.g. float)
-#define _ocall6(send,obj,sel,a1,a2,a3,a4,a5,a6) ((void*(*)(id,SEL,void*,void*,void*,void*,void*,void*))send)((id)obj,oselector(sel),(void*)a1,(void*)a2,(void*)a3,(void*)a4,(void*)a5,(void*)a6)
-#define _ocall5(send,obj,sel,a1,a2,a3,a4,a5) ((void*(*)(id,SEL,void*,void*,void*,void*,void*))send)((id)obj,oselector(sel),(void*)a1,(void*)a2,(void*)a3,(void*)a4,(void*)a5)
-#define _ocall4(send,obj,sel,a1,a2,a3,a4) ((void*(*)(id,SEL,void*,void*,void*,void*))send)((id)obj,oselector(sel),(void*)a1,(void*)a2,(void*)a3,(void*)a4)
-#define _ocall3(send,obj,sel,a1,a2,a3) ((void*(*)(id,SEL,void*,void*,void*))send)((id)obj,oselector(sel),(void*)a1,(void*)a2,(void*)a3)
-#define _ocall2(send,obj,sel,a1,a2) ((void*(*)(id,SEL,void*,void*))send)((id)obj,oselector(sel),(void*)a1,(void*)a2)
-#define _ocall1(send,obj,sel,a1) ((void*(*)(id,SEL,void*))send)((id)obj,oselector(sel),(void*)a1)
-#define _ocall0(send,obj,sel) ((void*(*)(id,SEL))send)((id)obj,oselector(sel))
+#define _ocall_type_expand_r(val,...) ,typeof(val) IF(HAS_ARGS(__VA_ARGS__)) ( DEFER2(_ocall_type_expand_)()(__VA_ARGS__) )
+#define _ocall_type_expand_() _ocall_type_expand_r
+#define _ocall_type_expand(...) IF(HAS_ARGS(__VA_ARGS__)) ( EVAL(_ocall_type_expand_r(__VA_ARGS__)) )
+#define _ocall_name_expand_r(val,...) ,val IF(HAS_ARGS(__VA_ARGS__)) ( DEFER2(_ocall_name_expand_)()(__VA_ARGS__) )
+#define _ocall_name_expand_() _ocall_name_expand_r
+#define _ocall_name_expand(...) IF(HAS_ARGS(__VA_ARGS__)) ( EVAL(_ocall_name_expand_r(__VA_ARGS__)) )
 
-#define ocall(n,obj,...) _ocall##n(objc_msgSend,obj,__VA_ARGS__)
-#define super_call(n,obj,...) \
+#define _ocall(send,obj,sel,...) ((void*(*)(typeof(obj),SEL _ocall_type_expand(__VA_ARGS__)))send)(obj,oselector(sel) _ocall_name_expand(__VA_ARGS__))
+
+#define ocall(...) _ocall(objc_msgSend,__VA_ARGS__,)
+#define osupercall(obj,...) \
 	({uint64_t refs[2]={(uint64_t)obj,(uint64_t)class_getSuperclass(object_getClass(obj))}; \
-		_ocall##n(objc_msgSendSuper,refs,__VA_ARGS__);})
+		_ocall(objc_msgSendSuper,refs,__VA_ARGS__,);})
+
+
+#include "./cobjc_types.h"
 
 #define DEFINE_CLASS(name, superclass) \
 	asm(".section __DATA,__objc_data\n" \
@@ -114,3 +117,9 @@ extern void objc_msgSendSuper(void);
 	asm(".section __DATA,__objc_const\n" \
 		".p2align 3\n_instance_methods." #class ".objc:\n.long 24\n" \
 		".long " #count "\n")
+
+// To be called inside a function
+#define COBJC_STRUCT(class,obj) \
+	({void **val;asm("adrp x9,_OBJC_IVAR_$_" #class ".cobjc_struct@PAGE\n" \
+		"ldrsw x9,[x9,_OBJC_IVAR_$_" #class ".cobjc_struct@PAGEOFF]\n" \
+		"add %0,%1,x9":"=r"(val):"r"(obj):"x9");val;})

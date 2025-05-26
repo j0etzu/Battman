@@ -55,18 +55,16 @@ struct my_block {
 };
 
 // strictly no inline
-static void open_url_block__invoke(struct my_block *blk)
-{
-	UIViewSetHidden(blk->data, 1);
-	NSObjectRelease(blk->data);
-	CFURLRef link             = CFURLCreateWithString(0, CFSTR("https://github.com/Torrekie/Battman"), NULL);
-	CFDictionaryRef emptyDict = CFDictionaryCreate(0, NULL, NULL, 0, NULL, NULL);
-	id exitBlock              = objc_make_block(app_exit, NULL);
-	UIApplicationOpenURL(UIApplicationSharedApplication(), link, emptyDict, exitBlock);
-
+static void open_url_block__invoke(struct my_block *blk) {
+	UIViewSetHidden(blk->data,1);
+	CFRelease(blk->data);
+	CFURLRef link=CFURLCreateWithString(0,CFSTR("https://github.com/Torrekie/Battman"),NULL);
+	CFDictionaryRef emptyDict=CFDictionaryCreate(0,NULL,NULL,0,NULL,NULL);
+	id exitBlock=objc_make_block(app_exit,NULL);
+	UIApplicationOpenURL(UIApplicationSharedApplication(),link,emptyDict,exitBlock);
 	CFRelease(link);
 	CFRelease(emptyDict);
-	NSObjectRelease(exitBlock);
+	CFRelease(exitBlock);
 }
 
 static void rmview__invoke(void **data)
@@ -84,7 +82,7 @@ static void rmview__invoke(void **data)
 	UIView *view = (UIView *)CFArrayGetValueAtIndex(*data, 0);
 	CFArrayRemoveValueAtIndex(*data, 0);
 	UIViewRemoveFromSuperview(view);
-	NSObjectRelease(view);
+	CFRelease(view);
 }
 
 void showCompletionAlert_f(void)
@@ -127,20 +125,20 @@ void showCompletionAlert_f(void)
 	UIWindowSetRootViewController(gAlertWindow, vc);
 	NSObjectRelease(vc);
 	UIWindowMakeKeyAndVisible(gAlertWindow);
-
-	UIAlertController *alert     = UIAlertControllerCreate(_("Sorry"), _("Please download Battman from our official page."), UIAlertControllerStyleAlert);
-
-	id open_url_block            = objc_make_block(open_url_block__invoke, gAlertWindow);
-	id exit_block                = objc_make_block(app_exit, NULL);
-
-	UIAlertAction *openurlaction = UIAlertActionCreate(_("Open URL"), UIAlertActionStyleDefault, open_url_block);
-	UIAlertAction *exitaction    = UIAlertActionCreate(_("Exit"), UIAlertActionStyleCancel, exit_block);
-	UIAlertControllerAddAction(alert, openurlaction);
-	UIAlertControllerAddAction(alert, exitaction);
-	NSObjectRelease(open_url_block);
-	NSObjectRelease(exit_block);
-
-	UIViewControllerPresentViewController(vc, alert, 1, NULL);
+	
+	UIAlertController *alert=UIAlertControllerCreate(_("Sorry"),_("Please download Battman from our official page."),UIAlertControllerStyleAlert);
+	
+	id open_url_block=objc_make_block(open_url_block__invoke,gAlertWindow);
+	id exit_block=objc_make_block(app_exit,NULL);
+	
+	UIAlertAction *openurlaction=UIAlertActionCreate(_("Open URL"), UIAlertActionStyleDefault, open_url_block);
+	UIAlertAction *exitaction=UIAlertActionCreate(_("Exit"), UIAlertActionStyleCancel, exit_block);
+	UIAlertControllerAddAction(alert,openurlaction);
+	UIAlertControllerAddAction(alert,exitaction);
+	CFRelease(open_url_block);
+	CFRelease(exit_block);
+	
+	UIViewControllerPresentViewController(vc,alert,1,NULL);
 }
 
 void showCompletionAlert()
@@ -188,19 +186,17 @@ void removeAllViews(void)
 	dispatch_resume(timer);
 }
 
-CFArrayRef collectAllSubviewsBottomUp(UIView *view)
-{
-	CFMutableArrayRef resultArray = CFArrayCreateMutable(0, 32, NULL);
-	CFArrayRef subviews           = UIViewGetSubviews(view);
-	CFIndex count                 = CFArrayGetCount(subviews);
-
-	for (CFIndex i = 0; i < count; i++) {
-		UIView *subview = (UIView *)CFArrayGetValueAtIndex(subviews, i);
-		NSObjectRetain(subview);
-		CFArrayRef subResults = collectAllSubviewsBottomUp(subview);
-		CFArrayAppendArray(resultArray, subResults, (CFRange) { 0, CFArrayGetCount(subResults) });
-		CFArrayAppendValue(resultArray, subview);
-
+CFArrayRef collectAllSubviewsBottomUp(UIView *view) {
+	CFMutableArrayRef resultArray=CFArrayCreateMutable(0,32,NULL);
+	CFArrayRef subviews=UIViewGetSubviews(view);
+	int count=CFArrayGetCount(subviews);
+	
+	for(int i=0;i<count;i++) {
+		UIView *subview=(UIView *)CFArrayGetValueAtIndex(subviews,i);
+		CFRetain(subview);
+		CFArrayRef subResults=collectAllSubviewsBottomUp(subview);
+		CFArrayAppendArray(resultArray,subResults,(CFRange){0,CFArrayGetCount(subResults)});
+		CFArrayAppendValue(resultArray,subview);
 		CFRelease(subResults);
 	}
 

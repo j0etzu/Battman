@@ -95,12 +95,16 @@ SPECIAL:
 __BEGIN_DECLS
 
 extern const char *bin_unit_strings[];
-extern void *bin_sbrk_beacon;
 
 struct battery_info_node {
     const char *name; // NONNULL
     const char *desc;
     uint32_t content;
+};
+
+struct battery_info_section {
+	struct battery_info_section *next;
+	struct battery_info_node data[];
 };
 
 struct battery_info_node *bi_construct_array(void);
