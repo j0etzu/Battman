@@ -189,9 +189,9 @@ void removeAllViews(void)
 CFArrayRef collectAllSubviewsBottomUp(UIView *view) {
 	CFMutableArrayRef resultArray=CFArrayCreateMutable(0,32,NULL);
 	CFArrayRef subviews=UIViewGetSubviews(view);
-	int count=CFArrayGetCount(subviews);
+	CFIndex count=CFArrayGetCount(subviews);
 	
-	for(int i=0;i<count;i++) {
+	for(CFIndex i=0;i<count;i++) {
 		UIView *subview=(UIView *)CFArrayGetValueAtIndex(subviews,i);
 		CFRetain(subview);
 		CFArrayRef subResults=collectAllSubviewsBottomUp(subview);

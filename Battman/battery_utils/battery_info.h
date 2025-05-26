@@ -131,6 +131,7 @@ struct bluetooth_section_context {
 #define BI_GAS_GAUGE_IOKIT_ONLY_SECTION_ID 11
 #define BI_ADAPTER_SECTION_ID 12
 #define BI_ADAPTER_IOKIT_ONLY_SECTION_ID 12
+#define BI_INDUCTIVE_SECTION_ID 13
 // For dynamically allocated sections, any section ID will work
 // Implement your own hash function to compute the same ID every time
 // for a single accessory.
@@ -161,7 +162,7 @@ char *bi_node_get_string(struct battery_info_node *node);
 void bi_node_free_string(struct battery_info_node *node);
 void battery_info_update(struct battery_info_section **head);
 int battery_info_get_section_count(struct battery_info_section *head);
-struct battery_info_section *battery_info_get_section(struct battery_info_section *head, int section);
+struct battery_info_section *battery_info_get_section(struct battery_info_section *head, long section);
 //void battery_info_update_iokit_with_data(struct battery_info_node *head, const void *info, bool inDetail);
 //void battery_info_update_iokit(struct battery_info_node *head, bool inDetail);
 void battery_info_init(struct battery_info_section **);

@@ -964,64 +964,83 @@ charging_state_t is_charging(mach_port_t *family, device_info_t *info) {
         info->port = charging;
         /* D?if(ch8*) USB Port ? Firmware version */
         key = 'D\0if' | ((0x30 + charging) << 0x10);
-        result = smc_read_n(key, info->firmware,12);
+        result = smc_read_n(key, info->firmware, 12);
         if (result == kIOReturnSuccess)
             DBGLOG(CFSTR("Port: %d, Firmware Version: %s"), charging, info->firmware);
 
         /* D?ih(ch8*) USB Port ? Hardware version */
         key = 'D\0ih' | ((0x30 + charging) << 0x10);
-        result = smc_read_n(key, info->hardware,12);
+        result = smc_read_n(key, info->hardware, 12);
         if (result == kIOReturnSuccess)
             DBGLOG(CFSTR("Port: %d, Hardware Version: %s"), charging, info->hardware);
 
         /* D?ii(ch8*) USB Port ? Adapter Model */
         key = 'D\0ii' | ((0x30 + charging) << 0x10);
-        result = smc_read_n(key, info->adapter,32);
+        result = smc_read_n(key, info->adapter, 32);
         if (result == kIOReturnSuccess)
             DBGLOG(CFSTR("Port: %d, Adapter Model: %s"), charging, info->adapter);
 
         /* D?im(ch8*) USB Port ? Vendor */
         key = 'D\0im' | ((0x30 + charging) << 0x10);
-        result = smc_read_n(key, info->vendor,32);
+        result = smc_read_n(key, info->vendor, 32);
         if (result == kIOReturnSuccess)
             DBGLOG(CFSTR("Port: %d, Vendor: %s"), charging, info->vendor);
 
         /* D?in(ch8*) USB Port ? Name */
         key = 'D\0in' | ((0x30 + charging) << 0x10);
-        result = smc_read_n(key, info->name,32);
+        result = smc_read_n(key, info->name, 32);
         if (result == kIOReturnSuccess)
             DBGLOG(CFSTR("Port: %d, Name: %s"), charging, info->name);
 
         /* D?is(ch8*) USB Port ? Serial */
         key = 'D\0is' | ((0x30 + charging) << 0x10);
-        result = smc_read_n(key, info->serial,32);
+        result = smc_read_n(key, info->serial, 32);
         if (result == kIOReturnSuccess)
             DBGLOG(CFSTR("Port: %d, Serial: %s"), charging, info->serial);
 
         /* D?DE(ch8*) USB Port ? Description */
         key = 'D\0DE' | ((0x30 + charging) << 0x10);
-        result = smc_read_n(key, &info->description,32);
+        result = smc_read_n(key, &info->description, 32);
         if (result == kIOReturnSuccess)
             DBGLOG(CFSTR("Port: %d, Description: 0x%X"), charging, info->description);
 
         /* CHI?(ui32) USB Port ? PMUConfiguration */
         key = 'CHI\0' | ((0x30 + charging) << 0x0);
-        result = smc_read_n(key, &info->PMUConfiguration,4);
+        result = smc_read_n(key, &info->PMUConfiguration, 4);
         if (result == kIOReturnSuccess)
             DBGLOG(CFSTR("Port: %d, PMUConfiguration: 0x%X"), charging, info->PMUConfiguration);
 
         /* D?IR(ui16) USB Port ? Charger current rating */
         key = 'D\0IR' | ((0x30 + charging) << 0x10);
-        result = smc_read_n(key, &info->current,2);
+        result = smc_read_n(key, &info->current, 2);
         if (result == kIOReturnSuccess)
-            DBGLOG(CFSTR("Port: %d, Current: 0x%X"), charging, info->current);
+            DBGLOG(CFSTR("Port: %d, Current Rating: 0x%X"), charging, info->current);
 
         /* D?VR(ui16) USB Port ? Charger voltage rating */
         key = 'D\0VR' | ((0x30 + charging) << 0x10);
-        result = smc_read_n(key, &info->voltage,2);
+        result = smc_read_n(key, &info->voltage, 2);
         if (result == kIOReturnSuccess)
-            DBGLOG(CFSTR("Port: %d, Voltage: %u"), charging, info->voltage);
-        
+            DBGLOG(CFSTR("Port: %d, Voltage Rating: %u"), charging, info->voltage);
+
+		/* XXX: The VBUS/IBUS should not be here, try to move this when we got a better analytics UI */
+		uint8_t ioftret[8];
+
+		/* IQ0u(ioft) IBUS Input current */
+		key = 'IQ0u'; // Only one charger can win, so theres only one IBUS
+		result = smc_read_n(key, &ioftret, 8);
+		if (result == kIOReturnSuccess) {
+			info->input_current = ioft2flt(ioftret);
+			DBGLOG(CFSTR("Port: %d, IBUS: %f"), charging, info->input_current);
+		}
+
+		/* VQ?u(ioft) VBUS Port ? Input voltage */
+		key = 'VQ\0u' | ((0x30 + charging - 1) << 0x8);
+		result = smc_read_n(key, &ioftret, 8);
+		if (result == kIOReturnSuccess) {
+			info->input_voltage = ioft2flt(ioftret);
+			DBGLOG(CFSTR("Port: %d, VBUS: %f"), charging, info->input_voltage);
+		}
+
         /* D?PM(hex_) USB Port ? HVC Power Modes */
         key = 'D\0PM' | ((0x30 + charging) << 0x10);
         //memset(info->hvc_menu, 0, sizeof(info->hvc_menu));
@@ -1074,12 +1093,12 @@ bool get_charger_data(charger_data_t *data) {
     /* CHCC(ui8 ) Charger Capable / Charger External Charge Capable */
     result = smc_read_n('CHCC', &data->ChargerCapable,1);
     if (result == kIOReturnSuccess)
-        DBGLOG(CFSTR("Charger Capable: %u"), &data->ChargerCapable);
+        DBGLOG(CFSTR("Charger Capable: %u"), data->ChargerCapable);
 
     /* CHCE(ui8 ) Charger Exist / Charger External Connected */
     result = smc_read_n('CHCE', &data->ChargerExist,1);
     if (result == kIOReturnSuccess)
-        DBGLOG(CFSTR("Charger Exist: %u"), &data->ChargerExist);
+        DBGLOG(CFSTR("Charger Exist: %u"), data->ChargerExist);
 
     /* CHCF(hex_)[1] Charger Flags / Charger External Connected */
     /* CHCR(ui8 ) */
@@ -1087,17 +1106,17 @@ bool get_charger_data(charger_data_t *data) {
     /* CHBI(ui32) Charging Current */
     result = smc_read_n('CHBI', &data->ChargingCurrent,4);
     if (result == kIOReturnSuccess)
-        DBGLOG(CFSTR("Charging Current: %u"), &data->ChargingCurrent);
+        DBGLOG(CFSTR("Charging Current: %u"), data->ChargingCurrent);
 
     /* CHBV(ui32) Charging Voltage */
     result = smc_read_n('CHBV', &data->ChargingVoltage,4);
     if (result == kIOReturnSuccess)
-        DBGLOG(CFSTR("Charging Voltage: %u"), &data->ChargingVoltage);
+        DBGLOG(CFSTR("Charging Voltage: %u"), data->ChargingVoltage);
 
     /* BVVL(ui16) Charger Vac Voltage Limit */
     result = smc_read_n('BVVL', &data->ChargerVacVoltageLimit,2);
     if (result == kIOReturnSuccess)
-        DBGLOG(CFSTR("Charger Vac Voltage Limit: %u"), &data->ChargerVacVoltageLimit);
+        DBGLOG(CFSTR("Charger Vac Voltage Limit: %u"), data->ChargerVacVoltageLimit);
 
     /* CHFC(ui8 ) */
     /* CHFS(ui32) */
@@ -1105,22 +1124,22 @@ bool get_charger_data(charger_data_t *data) {
     /* CHNC(hex_)[8] Not Charging Reason */
     result = smc_read_n('CHNC', &data->NotChargingReason,8);
     if (result == kIOReturnSuccess)
-        DBGLOG(CFSTR("Not Charging Reason: 0x%X"), &data->NotChargingReason);
+        DBGLOG(CFSTR("Not Charging Reason: 0x%X"), data->NotChargingReason);
 
     /* CHSL(hex_)[8] Charger Status ([64] on mobile devices) */
     result = smc_read_n('CHSL', &data->ChargerStatus,-64);
     if (result == kIOReturnSuccess)
-        DBGLOG(CFSTR("Charger Status: 0x%X"), &data->ChargerStatus);
+        DBGLOG(CFSTR("Charger Status: 0x%X"), data->ChargerStatus);
 
     /* CH0D(hex_)[4] Charger ID */
     result = smc_read_n('CH0D', &data->ChargerId,4);
     if (result == kIOReturnSuccess)
-        DBGLOG(CFSTR("Charger ID: 0x%X"), &data->ChargerId);
+        DBGLOG(CFSTR("Charger ID: 0x%X"), data->ChargerId);
 
     /* CHAS(ui32) Charger Configuration */
     result = smc_read_n('CHAS', &data->ChargerConfiguration,4);
     if (result == kIOReturnSuccess)
-        DBGLOG(CFSTR("Charger Configuration: 0x%X"), &data->ChargerConfiguration);
+        DBGLOG(CFSTR("Charger Configuration: 0x%X"), data->ChargerConfiguration);
     
     return (data->ChargerExist & 1) != 0;
 }
@@ -1158,9 +1177,6 @@ hvc_menu_t *hvc_menu_parse(uint8_t *input, size_t *size) {
 
 #include "inductive_status.h"
 /* Known charger Keys:
- VQ0u(ioft)[8]: VBUS 0 Voltage (V)
- VQ1u(ioft)[8]: VBUS 1 Voltage (V)
- IQ0u(ioft)[8]: IBUS 0 Current (A)
  CHIE(hex_)[1]: Inflow Inhibit
  CHIS(ui32): Charger Input State (like D?AP)?
  */
@@ -1168,7 +1184,7 @@ bool accessory_available(void) {
     SMC_INIT_CHK(false);
 
     static uint8_t count = 0;
-    static dispatch_once_t wireless_once = -1;
+    static dispatch_once_t wireless_once;
 
     /* Constants only do once */
     dispatch_once(&wireless_once, ^{
@@ -1186,7 +1202,7 @@ accessory_state_t accessory_charging_detect(void) {
     uint32_t st = 0;
 
     /* VBUS(ui32) Voltage Bus */
-    result = smc_read_n('VBUS', &st,4);
+    result = smc_read_n('VBUS', &st, 4);
     if (result != kIOReturnSuccess)
         return false;
 
@@ -1280,12 +1296,49 @@ bool get_iktara_drv_stat(iktara_drv_t *drv) {
     return true;
 }
 
+bool get_iktara_array(iktara_array_t *array) {
+	SMC_INIT_CHK(false);
+
+	uint8_t arrayA[12];
+
+	memset(array, 0, sizeof(iktara_array_t));
+
+	/* AY1A(hex_) Accessory A Array */
+	result = smc_read_n('AY1A', &arrayA, 12);
+	if (result != kIOReturnSuccess) {
+		DBGLOG(CFSTR("Accessory A Array: FAILED %s"), mach_error_string(result));
+		/* AY1C(ui8 ): Accessory Charging */
+		if (smc_read_n('AY1C', &array->charging, 1) != kIOReturnSuccess) array->charging = -1;
+
+		/* AY1P(ui8 ): Accessory Present */
+		if (smc_read_n('AY1P', &array->present, 1) != kIOReturnSuccess) array->present = 0;
+
+		/* AY1S(ui8 ): Accessory SoC */
+		if (smc_read_n('AY1S', &array->capacity, 1) != kIOReturnSuccess) array->capacity = -1;
+
+		/* AY1P(ui8 ): Accessory Charging */
+		if (smc_read_n('AY1C', &array->charging, 1) != kIOReturnSuccess) array->charging = -1;
+	} else {
+		/* [0-3 Status] */
+		array->status = (uint32_t)arrayA[0] << 0x00 | (uint32_t)arrayA[1] << 0x08 | (uint32_t)arrayA[2] << 0x10 | (uint32_t)arrayA[3] << 0x18;
+		/* [4 AY1P] */
+		array->present = arrayA[4];
+		/* [5 AY1C] */
+		array->charging = arrayA[5];
+		/* [6 AY1T] */
+		array->external_connected = arrayA[6];
+		/* [7 AY1S] */
+		array->capacity = arrayA[7];
+		/* [8-9 VendorID] */
+		array->VID = (uint16_t)arrayA[8] << 0x00 | (uint16_t)arrayA[9] << 0x08;
+		/* [A-B ProductID] */
+		array->PID = (uint16_t)arrayA[10] << 0x00 | (uint16_t)arrayA[11] << 0x08;
+	}
+	DBGLOG(CFSTR("Accessory A Array: Present %d, Charging %d, Connected %d, Capacity %d, VID %x, PID %x"), array->present, array->charging, array->external_connected, array->capacity, array->VID, array->PID);
+	return true;
+}
+
 /*
- AY1A(hex_): Accessory A Array [0-4 Status?][5 AY1P][6 AY1C][7 AY1T][8 AY1S][9-10 VendorID][11-12 ProductID]
- AY1C(ui8 ): Accessory Charging
- AY1P(ui8 ): Accessory Present
- AY1S(ui8 ): Accessory Curent Capacity
- AY1T(ui8 ):
  AP*: Power Out keys
 */
 /*

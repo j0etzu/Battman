@@ -16,21 +16,21 @@
 @implementation GradientArcView
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    DBGLOG(@"initWithFrame");
+    //DBGLOG(@"initWithFrame");
     self = [super initWithFrame:frame];
     self.backgroundColor = [UIColor clearColor];
     return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
-    DBGLOG(@"initWithCoder");
+    //DBGLOG(@"initWithCoder");
     self = [super initWithCoder:coder];
     self.backgroundColor = [UIColor clearColor];
     return self;
 }
 
 - (void)setupPointerLayer {
-    DBGLOG(@"setupPointerLayer");
+    //DBGLOG(@"setupPointerLayer");
     self.pointerLayer = [CAShapeLayer layer];
     // we want to center it at the bottom of arc.
     // Update this in layoutSubviews to match your drawing calculations.
@@ -66,12 +66,12 @@
 }
 
 - (void)layoutSubviews {
-    DBGLOG(@"layoutSubviews");
+    //DBGLOG(@"layoutSubviews");
     [super layoutSubviews];
 }
 
 - (void)rotatePointerToAngle:(CGFloat)angle {
-    DBGLOG(@"rotatePointerToAngle");
+    //DBGLOG(@"rotatePointerToAngle");
     if (!self.pointerLayer) {
         DBGLOG(@"rotatePointerToAngle called too early!");
         // If pointerLayer is nil, force a redraw and schedule the rotation shortly after.
@@ -99,7 +99,7 @@
 }
 
 - (void)drawRect:(CGRect)rect {
-    NSLog(@"drawRect");
+    //NSLog(@"drawRect");
 #if TARGET_OS_IPHONE
     CGContextRef context = UIGraphicsGetCurrentContext();
 #else

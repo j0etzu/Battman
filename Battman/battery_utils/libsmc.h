@@ -138,6 +138,8 @@ typedef struct device_info {
     uint32_t PMUConfiguration;
     uint16_t current;
     uint16_t voltage;
+	float input_current;
+	float input_voltage;
     /* HVC (High Voltage Charging) */
     uint8_t hvc_menu[28]; /* hex_[28], 4 bit each hvc, max 7 hvc */
     int8_t hvc_index;
@@ -468,6 +470,16 @@ typedef struct iktara_drv {
     bool sys_trans;
 } iktara_drv_t;
 
+typedef struct iktara_array {
+	uint32_t status;
+	int8_t present;
+	int8_t charging;
+	int8_t capacity;
+	int8_t external_connected;
+	uint16_t VID;
+	uint16_t PID;
+} iktara_array_t;
+
 typedef struct inductive_param {
     uint32_t FwMode;            /* WASM */
     uint16_t RectifierVoltage;  /* WAVR */
@@ -526,6 +538,8 @@ bool accessory_available(void);
 accessory_state_t accessory_charging_detect(void);
 bool get_iktara_fw_stat(iktara_fw_t *fw);
 bool get_iktara_drv_stat(iktara_drv_t *drv);
+bool get_iktara_array(iktara_array_t *array);
+
 __END_DECLS
 
 #endif

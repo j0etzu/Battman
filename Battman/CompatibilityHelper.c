@@ -26,6 +26,6 @@ int strncmp(const char *a, const char *b, unsigned long c) {
 	return _platform_strncmp(a, b, c);
 }
 
-void _Unwind_Resume(void) {}
+void _Unwind_Resume(void) { }
 
 #endif

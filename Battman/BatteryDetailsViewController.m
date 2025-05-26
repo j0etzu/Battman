@@ -335,7 +335,7 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 		titleLabel = cell.textLabel.text;
 	}
 
-    show_alert([titleLabel UTF8String], _C(battery_info_get_section(*batteryInfo,indexPath.section)->data[indexPath.row + pendingLoadOffsets[indexPath.section][indexPath.row]].desc), L_OK);
+    show_alert([titleLabel UTF8String], _C(battery_info_get_section(*batteryInfo,(int)indexPath.section)->data[indexPath.row + pendingLoadOffsets[indexPath.section][indexPath.row]].desc), L_OK);
     return;
     // TODO: Implement this
 #if 0

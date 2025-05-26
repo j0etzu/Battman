@@ -4,11 +4,11 @@
 typedef UIViewController CreditVC;
 
 CFStringRef CreditViewControllerGetTitle(void) {
-	return _("Credit");
+    return _("Credit");
 }
 
 CreditVC *CreditViewControllerInit(CreditVC *self) {
-	return osupercall(self,initWithStyle:,UITableViewStyleGrouped);
+	return osupercall(self, initWithStyle:, UITableViewStyleGrouped);
 }
 
 long CreditViewControllerNumRows(void) {
@@ -28,12 +28,12 @@ void CreditViewControllerDidSelectRow(CreditVC *self, SEL s, UITableView *tv, NS
 	UITableViewDeselectRow(tv, indexPath, 1);
 }
 
-UITableViewCell *CreditViewCellForRow(CreditVC *self,SEL s,UITableView *tv,NSIndexPath *indexPath) {
-	UITableViewCell *cell=NSObjectNew(UITableViewCell);
-	UILabel *label=UITableViewCellGetTextLabel(cell);
-	UILabelSetText(label,NSIndexPathGetRow(indexPath)?CFSTR("Ruphane"):CFSTR("Torrekie"));
-	UILabelSetTextColor(label,UIColorLinkColor());
-	return (UITableViewCell*)CFAutorelease(cell);
+UITableViewCell *CreditViewCellForRow(CreditVC *self, SEL s, UITableView *tv, NSIndexPath *indexPath) {
+	UITableViewCell *cell  = NSObjectNew(UITableViewCell);
+	UILabel         *label = UITableViewCellGetTextLabel(cell);
+	UILabelSetText(label, NSIndexPathGetRow(indexPath) ? CFSTR("Ruphane") : CFSTR("Torrekie"));
+	UILabelSetTextColor(label, UIColorLinkColor());
+	return (UITableViewCell *)CFAutorelease(cell);
 }
 
 DEFINE_CLASS(CreditViewControllerNew, UITableViewController);

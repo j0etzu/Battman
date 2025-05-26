@@ -109,7 +109,17 @@ const char *acc_powermode_string_supported(accessory_powermode_t mode) {
 const char *manf_id_string(SInt32 manf) {
 	switch (manf) {
 		// retrieve from online db? or just common vids?
-		case 0x05AC: return "Apple Inc.";
+		case VID_APPLE: return "Apple Inc.";
+		default: break;
+	}
+	return NULL;
+}
+
+const char *apple_prod_id_string(SInt32 prod) {
+	switch (prod) {
+		case 0x1395: return "Smart Battery Case [iPhone 6]";
+		case 0x1398: return "Smart Battery Case";
+		case 0x1399: return "MagSafe Battery Pack";
 		default: break;
 	}
 	return NULL;

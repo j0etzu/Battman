@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include "IOAccessoryManager.h"
 
+#define VID_APPLE 0x05ac
+
 typedef struct accessory_info {
 	char serial[32];
 	char vendor[256];
@@ -38,6 +40,8 @@ typedef struct accessory_sleeppower {
 __BEGIN_DECLS
 
 const char *acc_id_string(SInt32 accid);
+const char *manf_id_string(SInt32 manf);
+const char *apple_prod_id_string(SInt32 prod);
 const char *acc_powermode_string(AccessoryPowermode powermode);
 const char *acc_powermode_string_supported(accessory_powermode_t mode);
 
