@@ -25,7 +25,8 @@ enum sections_batteryinfo {
 }
 
 - (void)batteryStatusDidUpdate:(NSDictionary *)info {
-	battery_info_update_iokit_with_data(batteryInfo,(__bridge CFDictionaryRef)info,0);
+	battery_info_update(&batteryInfo);
+	//battery_info_update_iokit_with_data(batteryInfo,(__bridge CFDictionaryRef)info,0);
 	[super batteryStatusDidUpdate];
 }
 
@@ -75,7 +76,7 @@ enum sections_batteryinfo {
     }
     tabbarItem.tag = 0;
     self.tabBarItem = tabbarItem;
-    batteryInfo = battery_info_init();
+    battery_info_init(&batteryInfo);
 
     return [super initWithStyle:UITableViewStyleGrouped];
 }
@@ -109,7 +110,7 @@ enum sections_batteryinfo {
 
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == BI_SECT_BATTERY_INFO)
-        [self.navigationController pushViewController:[[BatteryDetailsViewController alloc] initWithBatteryInfo:batteryInfo] animated:YES];
+        [self.navigationController pushViewController:[[BatteryDetailsViewController alloc] initWithBatteryInfo:&batteryInfo] animated:YES];
 	else if (indexPath.section == BI_SECT_MANAGE)
 		[self.navigationController pushViewController:indexPath.row == 0 ? [ChargingManagementViewController new] : [ChargingLimitViewController new] animated:YES];
     else if(indexPath.section==BI_SECT_HW_TEMP)
@@ -123,7 +124,7 @@ enum sections_batteryinfo {
         BatteryInfoTableViewCell *cell=[tv dequeueReusableCellWithIdentifier:@"BTTVC-cell"];
         if(!cell)
         	cell=[BatteryInfoTableViewCell new];
-        cell.batteryInfo = batteryInfo;
+        cell.batteryInfo = &batteryInfo;
         // battery_info_update shall be called within cell impl.
         [cell updateBatteryInfo];
         return cell;
@@ -154,12 +155,16 @@ enum sections_batteryinfo {
 }
 
 - (void)dealloc {
-	for (struct battery_info_node *i = batteryInfo; i->name; i++) {
-		if (i->content && !(i->content & BIN_IS_SPECIAL)) {
-			bi_node_free_string(i);
+	for(struct battery_info_section *sect=batteryInfo;sect;) {
+		struct battery_info_section *next=sect->next;
+		for (struct battery_info_node *i = sect->data; i->name; i++) {
+			if (i->content && !(i->content & BIN_IS_SPECIAL)) {
+				bi_node_free_string(i);
+			}
 		}
+		bi_destroy_section(sect);
+		sect=next;
 	}
-	free(batteryInfo);
 }
 
 @end

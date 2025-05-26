@@ -4,7 +4,7 @@
 
 @interface BatteryInfoViewController : BatterySubscriberViewControllerBase
 {
-	struct battery_info_node *batteryInfo;
+	struct battery_info_section *batteryInfo;
 }
 @end
 

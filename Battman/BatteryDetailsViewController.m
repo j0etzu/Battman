@@ -73,7 +73,7 @@ void equipDetailCell(UITableViewCell *cell, struct battery_info_node *i)
         return cell;
     }*/
     NSString *final_str;
-    (void)equipCellTitle(cell, _(i->name));
+    equipCellTitle(cell, _(i->name));
     if (i->desc) {
         // DBGLOG(@"Accessory %@, Desc %@", cell.textLabel.text, components[1]);
         if (@available(iOS 13.0, *)) {
@@ -206,6 +206,9 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 }
 
 - (void)batteryStatusDidUpdate:(NSDictionary *)info {
+	// TODO: reimplement IOKit method to update battery info
+	[self updateTableView];
+#if 0
 	BOOL charging = [info[@"AppleRawExternalConnected"] boolValue];
 	if(charging != last_charging) {
 		last_charging = charging;
@@ -215,6 +218,7 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 	battery_info_update_iokit_with_data(batteryInfoStruct, (__bridge CFDictionaryRef)info, 1);
 	[self.tableView reloadData];
 	// DO NOT CALL updateTableView
+#endif
 }
 
 - (void)viewDidLoad
@@ -275,7 +279,7 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
     [self.navigationController pushViewController:[FullSMCViewController new] animated:1];
 }
 
-- (instancetype)initWithBatteryInfo:(struct battery_info_node *)bi
+- (instancetype)initWithBatteryInfo:(struct battery_info_section **)bi
 {
     if (@available(iOS 13.0, *)) {
         self = [super initWithStyle:UITableViewStyleInsetGrouped];
@@ -283,20 +287,14 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
         self = [super initWithStyle:UITableViewStyleGrouped];
     }
 
-    self.tableView.allowsSelection =
-        YES; // for now no ops specified it will just be stuck
-    battery_info_update(bi, true);
-    batteryInfoStruct = bi;
-    int sectionNum    = 0;
-    for (struct battery_info_node *i = bi; i->name; i++) {
-        if ((i->content & BIN_SECTION) == BIN_SECTION) {
-            batteryInfo[sectionNum] = i + 1;
-            sectionNum++;
-        }
-    }
-    for (int i = 0; i < sectionNum; i++) {
-        pendingLoadOffsets[i] = malloc(64);
-    }
+    self.tableView.allowsSelection=YES;
+    battery_info_update(bi);
+    batteryInfo = bi;
+    int sectionNum=0;
+    for(struct battery_info_section *i=*bi;i;i=i->next)
+    	sectionNum++;
+    for (int i = 0; i < sectionNum; i++)
+        pendingLoadOffsets[i] = malloc(BI_APPROX_ROWS);
     if (!hasSMC)
 	    return self;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:_("Advanced") style:UIBarButtonItemStylePlain target:self action:@selector(showAdvanced)];
@@ -304,16 +302,16 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
     return self;
 }
 
-- (void)dealloc
-{
-    for (int i = 0; i < BI_SECTION_NUM; i++)
-        free(pendingLoadOffsets[i]);
+- (void)dealloc {
+	int section_num=battery_info_get_section_count(*batteryInfo);
+	for(int i=0;i<section_num;i++)
+		free(pendingLoadOffsets[i]);
 }
 
 - (void)updateTableView
 {
     [self.refreshControl beginRefreshing];
-    battery_info_update(batteryInfoStruct, true);
+    battery_info_update(batteryInfo);
     [self.tableView reloadData];
     [self.refreshControl endRefreshing];
 }
@@ -337,7 +335,7 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 		titleLabel = cell.textLabel.text;
 	}
 
-    show_alert([titleLabel UTF8String], _C(batteryInfo[indexPath.section][indexPath.row + pendingLoadOffsets[indexPath.section][indexPath.row]].desc), L_OK);
+    show_alert([titleLabel UTF8String], _C(battery_info_get_section(*batteryInfo,indexPath.section)->data[indexPath.row + pendingLoadOffsets[indexPath.section][indexPath.row]].desc), L_OK);
     return;
     // TODO: Implement this
 #if 0
@@ -383,42 +381,32 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 
 - (NSString *)tableView:(id)tv titleForHeaderInSection:(NSInteger)section
 {
-    if (batteryInfo[section][-1].content & (1 << 5))
-        return nil;
+    //if (batteryInfo[section][-1].content & (1 << 5))
+    //    return nil;
     // Doesn't matter, it will be changed by willDisplayHeaderView
     return @"This is a Title yeah";
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    header.textLabel.text               = _(batteryInfo[section][-1].name);
+	UITableViewHeaderFooterView *header=(UITableViewHeaderFooterView *)view;
+	header.textLabel.text=_(battery_info_get_section(*batteryInfo,section)->data[0].name);
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    if (batteryInfo[section][-1].content & (1 << 5))
-        return nil;
-    /* Don't remove this, otherwise users will blame us */
-    /* TODO: Identify other Gas Gauging system */
-    if (section == 0) {
-        return _("All Gas Gauge metrics are dynamically retrieved from the onboard sensor array in real time. Should anomalies be detected in specific readings, this may indicate the presence of unauthorized components or require diagnostics through Apple Authorised Service Provider.");
-    }
-    if (section == 1) {
-        return _("All adapter information is dynamically retrieved from the hardware of the currently connected adapter (or cable if you are using Lightning ports). If any of the data is missing, it may indicate that the power source is not providing the relevant information, or there may be a hardware issue with the power source.");
-    }
-    return nil;
+	struct battery_info_section *cur=battery_info_get_section(*batteryInfo,section);
+	return cur->data[0].desc?_(cur->data[0].desc):nil;
 }
 
 - (NSInteger)tableView:(id)tv numberOfRowsInSection:(NSInteger)section
 {
+	struct battery_info_section *sect=battery_info_get_section(*batteryInfo,section);
     int rows = 0;
-    if (batteryInfo[section][-1].content & (1 << 5))
-        return rows;
-    for (struct battery_info_node *i = batteryInfo[section]; i->name && (i->content & BIN_SECTION) != BIN_SECTION; i++) {
+    for (struct battery_info_node *i = sect->data+1; i->name /*&& (i->content & BIN_SECTION) != BIN_SECTION*/; i++) {
         if ((i->content & BIN_DETAILS_SHARED) == BIN_DETAILS_SHARED || (i->content && !((i->content & BIN_IS_SPECIAL) == BIN_IS_SPECIAL))) {
             if ((i->content & 1) != 1 || (i->content & (1 << 5)) != 1 << 5) {
-                pendingLoadOffsets[section][rows] = (unsigned char)((i - batteryInfo[section]) - rows);
+                pendingLoadOffsets[section][rows] = (unsigned char)((i - sect->data) - rows);
                 rows++;
             }
         }
@@ -429,14 +417,14 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 
 - (NSInteger)numberOfSectionsInTableView:(id)tv
 {
-    return BI_SECTION_NUM;
+    return battery_info_get_section_count(*batteryInfo);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)ip
 {
     NSString *ident = @"bdvc:sect0";
     id cell_class   = [UITableViewCell class];
-    if (ip.section != BI_SECTION_GENERAL) {
+    if (ip.section != 0) {
         ident      = @"bdvc:addt";
         cell_class = [MultilineViewCell class];
     }
@@ -446,7 +434,7 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
     if (!cell)
         cell = [[cell_class alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ident];
 
-    struct battery_info_node *pending_bi = batteryInfo[ip.section] + ip.row + pendingLoadOffsets[ip.section][ip.row];
+    struct battery_info_node *pending_bi = battery_info_get_section(*batteryInfo,ip.section)->data + ip.row + pendingLoadOffsets[ip.section][ip.row];
     /* Flags special handler */
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wstring-compare"

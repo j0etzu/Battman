@@ -3,12 +3,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-enum {
-    BI_SECTION_GENERAL,
-    BI_SECTION_ADAPTER,
-    BI_SECTION_ACCESSORY,
-    BI_SECTION_NUM,
-};
+// this isn't enforced
+#define BI_MAX_SECTION_NUM 64
 
 #define BI_APPROX_ROWS 64
 
@@ -65,6 +61,8 @@ SPECIAL:
 #define BIN_UNIT_BITMASK            (((1 << 7) - 1) << 6)
 #define BIN_SECTION					(1 << 13 | BIN_IS_SPECIAL)
 #define BIN_SECTION_HIDDEN			(1 << 14)
+#define BIN_SECTION_PRIORITY(p) ((p&0xffff)<<16)
+#define DEFINE_SECTION(priority)	BIN_SECTION|BIN_SECTION_PRIORITY(priority)
 // ^ Use >>6 when retrieving, max 7 bits
 #define BIN_DETAILS_SHARED          (1 << 14 | BIN_IS_SPECIAL)
 #define BIN_IN_DETAILS              (1 << 14 | BIN_IS_HIDDEN | BIN_IS_SPECIAL)
@@ -102,12 +100,52 @@ struct battery_info_node {
     uint32_t content;
 };
 
+// struct battery_info_section
+// + 0 - prev
+// + 8 - next
+// +16 - data
+// +16+?*sizeof(struct battery_info_node)-NULL terminator
+
+struct battery_info_section;
+struct battery_info_section_context {
+	uint64_t custom_identifier;
+	void (*update)(struct battery_info_section *);
+	// ... user-defined context
+};
+
+#if 0
+// For example,
+// If we have a section for all bluetooth devices connected,
+// the context would be something like:
+
+struct bluetooth_section_context {
+	uint64_t identifier;
+	void (*update)(struct battery_info_section *);
+	CFTypeRef someOpaqueBluetoothObject;
+};
+// where identifier=hash(mac address)
+
+#endif
+
+#define BI_GAS_GAUGE_SECTION_ID 10
+#define BI_GAS_GAUGE_IOKIT_ONLY_SECTION_ID 11
+#define BI_ADAPTER_SECTION_ID 12
+#define BI_ADAPTER_IOKIT_ONLY_SECTION_ID 12
+// For dynamically allocated sections, any section ID will work
+// Implement your own hash function to compute the same ID every time
+// for a single accessory.
+
 struct battery_info_section {
+	struct battery_info_section **self_ref;
 	struct battery_info_section *next;
+	struct battery_info_section_context *context;
 	struct battery_info_node data[];
 };
 
-struct battery_info_node *bi_construct_array(void);
+#define SECTION_PRIORITY(sect) (((sect)->data[0].content>>16)&0xffff)
+
+struct battery_info_section *bi_make_section(const char *name, uint64_t context_size);
+void bi_destroy_section(struct battery_info_section *sect);
 // This function modifies the value without changing the
 // definition bits.
 void bi_node_change_content_value(struct battery_info_node *node,
@@ -121,9 +159,12 @@ char *bi_node_ensure_string(struct battery_info_node *node, int identifier,
                             uint64_t length);
 char *bi_node_get_string(struct battery_info_node *node);
 void bi_node_free_string(struct battery_info_node *node);
-void battery_info_update(struct battery_info_node *head, bool inDetail);
-void battery_info_update_iokit_with_data(struct battery_info_node *head, const void *info, bool inDetail);
-void battery_info_update_iokit(struct battery_info_node *head, bool inDetail);
-struct battery_info_node *battery_info_init(void);
+void battery_info_update(struct battery_info_section **head);
+int battery_info_get_section_count(struct battery_info_section *head);
+struct battery_info_section *battery_info_get_section(struct battery_info_section *head, int section);
+//void battery_info_update_iokit_with_data(struct battery_info_node *head, const void *info, bool inDetail);
+//void battery_info_update_iokit(struct battery_info_node *head, bool inDetail);
+void battery_info_init(struct battery_info_section **);
+void battery_info_remove_section(struct battery_info_section *sect);
 
 __END_DECLS

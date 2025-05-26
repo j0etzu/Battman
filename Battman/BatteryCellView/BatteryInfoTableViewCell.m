@@ -38,7 +38,10 @@
 - (void)updateBatteryInfo {
     NSString *final_str = @"";
     // TODO: Arabian? We need Arabian hackers to fix this code
-    for (struct battery_info_node *i = _batteryInfo; i->name != NULL; i++) {
+    for(struct battery_info_section *sect=*_batteryInfo;sect;sect=sect->next) {
+    	if(sect->context->custom_identifier!=BI_GAS_GAUGE_SECTION_ID)
+    		continue;
+    for (struct battery_info_node *i = sect->data; i->name != NULL; i++) {
         if (i->content & BIN_IS_SPECIAL) {
         	uint32_t value=i->content>>16;
             if ((i->content & BIN_IS_FOREGROUND) == BIN_IS_FOREGROUND) {
@@ -66,6 +69,8 @@
         }
         // Only show in details if is string
     }
+    }
+    if(!final_str.length)return;
     _batteryLabel.text = [final_str substringFromIndex:1];
 }
 
