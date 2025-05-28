@@ -8,7 +8,7 @@ CFStringRef CreditViewControllerGetTitle(void) {
 }
 
 CreditVC *CreditViewControllerInit(CreditVC *self) {
-	return osupercall(self, initWithStyle:, UITableViewStyleGrouped);
+	return osupercall(CreditViewControllerNew,self, initWithStyle:, UITableViewStyleGrouped);
 }
 
 long CreditViewControllerNumRows(void) {
@@ -23,12 +23,19 @@ CFStringRef CreditViewControllerTableTitle(void) {
 	return _("Battman Credit");
 }
 
-void CreditViewControllerDidSelectRow(CreditVC *self, SEL s, UITableView *tv, NSIndexPath *indexPath) {
+CFNumberRef CVGetRef(id self,void *ref) {
+	return CFAutorelease(CFNumberCreate(NULL,kCFNumberSInt64Type,&ref));
+}
+CFStringRef CVGetRef1(id self,SEL sel) {
+	return _(sel_getName(sel));
+}
+
+void CreditViewControllerDidSelectRow(CreditVC *self, void *data, UITableView *tv, NSIndexPath *indexPath) {
 	open_url(NSIndexPathGetRow(indexPath) ? "https://github.com/LNSSPsd" : "https://github.com/Torrekie");
 	UITableViewDeselectRow(tv, indexPath, 1);
 }
 
-UITableViewCell *CreditViewCellForRow(CreditVC *self, SEL s, UITableView *tv, NSIndexPath *indexPath) {
+UITableViewCell *CreditViewCellForRow(CreditVC *self, void *data, UITableView *tv, NSIndexPath *indexPath) {
 	UITableViewCell *cell  = NSObjectNew(UITableViewCell);
 	UILabel         *label = UITableViewCellGetTextLabel(cell);
 	UILabelSetText(label, NSIndexPathGetRow(indexPath) ? CFSTR("Ruphane") : CFSTR("Torrekie"));
@@ -36,13 +43,13 @@ UITableViewCell *CreditViewCellForRow(CreditVC *self, SEL s, UITableView *tv, NS
 	return (UITableViewCell *)CFAutorelease(cell);
 }
 
-DEFINE_CLASS(CreditViewControllerNew, UITableViewController);
-DEFINE_CLASS_METHODS(CreditViewControllerNew, 0);
-DEFINE_INSTANCE_METHODS(CreditViewControllerNew, 7);
-ADD_METHOD(CreditViewControllerInit, init);
-ADD_METHOD(CreditViewControllerGetTitle, title);
-ADD_METHOD(CreditViewControllerNumRows, tableView:numberOfRowsInSection:);
-ADD_METHOD(CreditViewControllerNumSects, numberOfSectionsInTableView:);
-ADD_METHOD(CreditViewControllerTableTitle, tableView:titleForHeaderInSection:);
-ADD_METHOD(CreditViewControllerDidSelectRow, tableView:didSelectRowAtIndexPath:);
-ADD_METHOD(CreditViewCellForRow, tableView:cellForRowAtIndexPath:);
+MAKE_CLASS(CreditViewControllerNew,UITableViewController,0, \
+	CVGetRef1, debugGetRefC,, \
+	CreditViewControllerInit, init, \
+	CreditViewControllerGetTitle, title, \
+	CreditViewControllerNumRows, tableView:numberOfRowsInSection:, \
+	CreditViewControllerNumSects, numberOfSectionsInTableView:, \
+	CreditViewControllerTableTitle, tableView:titleForHeaderInSection:, \
+	CreditViewControllerDidSelectRow, tableView:didSelectRowAtIndexPath:, \
+	CreditViewCellForRow, tableView:cellForRowAtIndexPath:, \
+	CVGetRef, debugGetRef);

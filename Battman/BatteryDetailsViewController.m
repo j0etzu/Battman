@@ -290,10 +290,7 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
     self.tableView.allowsSelection=YES;
     battery_info_update(bi);
     batteryInfo = bi;
-    int sectionNum=0;
-    for(struct battery_info_section *i=*bi;i;i=i->next)
-    	sectionNum++;
-    for (int i = 0; i < sectionNum; i++)
+    for (int i = 0; i < BI_MAX_SECTION_NUM; i++)
         pendingLoadOffsets[i] = malloc(BI_APPROX_ROWS);
     if (!hasSMC)
 	    return self;
@@ -304,7 +301,7 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 
 - (void)dealloc {
 	int section_num=battery_info_get_section_count(*batteryInfo);
-	for(int i=0;i<section_num;i++)
+	for(int i=0;i<BI_MAX_SECTION_NUM;i++)
 		free(pendingLoadOffsets[i]);
 }
 
