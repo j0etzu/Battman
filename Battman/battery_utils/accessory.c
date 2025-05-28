@@ -110,16 +110,44 @@ const char *manf_id_string(SInt32 manf) {
 	switch (manf) {
 		// retrieve from online db? or just common vids?
 		case VID_APPLE: return "Apple Inc.";
+		case VID_UGREEN: return "Ugreen Group Limited";
 		default: break;
+	}
+	return NULL;
+}
+
+const char *ugreen_prod_id_string(SInt32 prod) {
+	switch (prod) {
+		case 0xC5DC: return "MagSafe Charger (MFi Module)";	// 219693601610 A2463
+		default:
+			break;
 	}
 	return NULL;
 }
 
 const char *apple_prod_id_string(SInt32 prod) {
 	switch (prod) {
+		case 0x0500: return "MagSafe Charger";					// A2140
+		case 0x0501: return "MagSafe Charger (MFi Module)";		// A2463
+		case 0x0502: return "MagSafe Duo Charger";				// A2458
+		case 0x0503: return "WatchPuck";						// A2515
+		case 0x0504: return "WatchPuck (MFi Module)";			// A2755
+		case 0x0505: return "WatchPuck (MFi Module)";			// A2675
+		case 0x0506: return "MagSafe Charger";					// A2580
+
 		case 0x1395: return "Smart Battery Case [iPhone 6]";
 		case 0x1398: return "Smart Battery Case";
-		case 0x1399: return "MagSafe Battery Pack";
+		case 0x1399: return "MagSafe Battery Pack";				// A2384
+		case 0x139B: return "MagSafe Charger (MFi Module)";		// A2728
+
+		case 0x7002:											// A2166
+		case 0x7016:											// A2518
+		case 0x7019:											// A2452
+		case 0x701A:											// A2571
+		case 0x701B: return "Power Adapter";					// A2676
+
+		case 0x7800: return "MagSafe Cable";					// A2363
+		case 0x7803: return "MagSafe Charger";					// A2781
 		default: break;
 	}
 	return NULL;

@@ -11,7 +11,8 @@
 #include <stdio.h>
 #include "IOAccessoryManager.h"
 
-#define VID_APPLE 0x05ac
+#define VID_APPLE 0x05AC
+#define VID_UGREEN 0x2B89
 
 typedef struct accessory_info {
 	char serial[32];

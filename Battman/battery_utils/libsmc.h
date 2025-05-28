@@ -424,11 +424,6 @@ typedef struct board_info {
     char TargetName[8];         /* RPlt */
 } board_info_t;
 
-typedef enum {
-    kIsPresent = 1, /* Capable */
-    kIsDetected,    /* Detected */
-} accessory_state_t;
-
 typedef struct iktara_fw {
     bool Charging;              /* (WAFS & 0xF000000) == 0xE000000 */
     bool Connected;             /* (WAFS >> 0x0B) & 1 */
@@ -470,7 +465,7 @@ typedef struct iktara_drv {
     bool sys_trans;
 } iktara_drv_t;
 
-typedef struct iktara_array {
+typedef struct iktara_accessory_array {
 	uint32_t status;
 	int8_t present;
 	int8_t charging;
@@ -478,7 +473,7 @@ typedef struct iktara_array {
 	int8_t external_connected;
 	uint16_t VID;
 	uint16_t PID;
-} iktara_array_t;
+} iktara_accessory_array_t;
 
 typedef struct inductive_param {
     uint32_t FwMode;            /* WASM */
@@ -535,10 +530,10 @@ int smc_read_n(uint32_t key, void *bytes, int32_t size);
 int smc_call(int index, SMCParamStruct *inputStruct,SMCParamStruct *outputStruct);
 
 bool accessory_available(void);
-accessory_state_t accessory_charging_detect(void);
+bool iktara_charging_detect(void);
 bool get_iktara_fw_stat(iktara_fw_t *fw);
 bool get_iktara_drv_stat(iktara_drv_t *drv);
-bool get_iktara_array(iktara_array_t *array);
+bool get_iktara_accessory_array(iktara_accessory_array_t *array);
 
 __END_DECLS
 

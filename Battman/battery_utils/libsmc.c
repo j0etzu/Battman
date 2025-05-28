@@ -1196,7 +1196,7 @@ bool accessory_available(void) {
     return (count != 0);
 }
 
-accessory_state_t accessory_charging_detect(void) {
+bool iktara_charging_detect(void) {
     SMC_INIT_CHK(0);
 
     uint32_t st = 0;
@@ -1296,12 +1296,12 @@ bool get_iktara_drv_stat(iktara_drv_t *drv) {
     return true;
 }
 
-bool get_iktara_array(iktara_array_t *array) {
+bool get_iktara_accessory_array(iktara_accessory_array_t *array) {
 	SMC_INIT_CHK(false);
 
 	uint8_t arrayA[12];
 
-	memset(array, 0, sizeof(iktara_array_t));
+	memset(array, 0, sizeof(iktara_accessory_array_t));
 
 	/* AY1A(hex_) Accessory A Array */
 	result = smc_read_n('AY1A', &arrayA, 12);

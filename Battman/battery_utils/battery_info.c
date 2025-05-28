@@ -717,7 +717,7 @@ void inductive_info_update(struct battery_info_section *section) {
 	accessory_info_t accinfo              = get_acc_info(connect);
 	accessory_powermode_t mode            = get_acc_powermode(connect);
 	accessory_sleeppower_t sleep          = get_acc_sleeppower(connect);
-	iktara_array_t array;
+	iktara_accessory_array_t array;
 
 	if (acc_id == 100 || acc_id == -1 || connect == MACH_PORT_NULL) {
 		bi_destroy_section(section);
@@ -746,8 +746,8 @@ void inductive_info_update(struct battery_info_section *section) {
 
 	/* AppleSMC Part */
 	if (hasSMC && accessory_available()) {
-		BI_SET_ITEM(_C("Power Device"), accessory_charging_detect());
-		if (get_iktara_array(&array)) {
+		BI_SET_ITEM(_C("Power Device"), iktara_charging_detect());
+		if (get_iktara_accessory_array(&array) && array.present == 1) {
 			/* TODO: Search VID/PID online */
 			const char *vendor_name = manf_id_string((SInt32)array.VID);
 			if (vendor_name) {
