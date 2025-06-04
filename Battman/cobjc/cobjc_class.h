@@ -64,6 +64,7 @@
 		".quad \"cobjc**_" #func "**\"\n" \
 		".section __TEXT,__objc_methtype,cstring_literals\n"\
 		"l_cls_method_type_" #func "_: .asciz \"" #type "\"\n"\
+		".section __TEXT,__objc_methname,cstring_literals\n" \
 		"l_cls_method_name_" #func "_: .asciz \"" #selector "\"\n"\
 		".section __TEXT,__text,regular,pure_instructions\n" \
 		"\"cobjc**_" #func "**\": \n" \
