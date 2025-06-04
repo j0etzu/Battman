@@ -74,6 +74,8 @@
 		687743462D4F6C7800375A2C /* BatteryCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 687743412D4F6C7800375A2C /* BatteryCellView.m */; };
 		687743472D4F6C7800375A2C /* SPWaterProgressIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 687743422D4F6C7800375A2C /* SPWaterProgressIndicatorView.m */; };
 		687743482D4F6C7800375A2C /* BatteryInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 687743442D4F6C7800375A2C /* BatteryInfoTableViewCell.m */; };
+		689FE0B52DEAEA4A00550EBE /* BatterySubscriberViewControllerBase.c in Sources */ = {isa = PBXBuildFile; fileRef = 689FE0B42DEAEA4A00550EBE /* BatterySubscriberViewControllerBase.c */; };
+		689FE0B92DEEEDC600550EBE /* UPSMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 689FE0B82DEEEDC600550EBE /* UPSMonitor.m */; };
 		68A3EAFB2D5204D2003381DF /* battery_info.c in Sources */ = {isa = PBXBuildFile; fileRef = 68A3EAF62D5204D2003381DF /* battery_info.c */; };
 		68A3EAFD2D5204EA003381DF /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68A3EAFC2D5204EA003381DF /* IOKit.framework */; };
 		68AE40B82D8EB8870023D7B0 /* UberSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40AA2D8EB8870023D7B0 /* UberSegmentedControl.m */; };
@@ -86,7 +88,6 @@
 		68B291232DC754100089BA1F /* daemon.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B2911F2DC754100089BA1F /* daemon.c */; };
 		68B291272DC7547B0089BA1F /* ChargingLimitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B291252DC7547B0089BA1F /* ChargingLimitViewController.m */; };
 		68B291282DC75F610089BA1F /* pmnotification.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B2911E2DC754100089BA1F /* pmnotification.c */; };
-		68B2912B2DC799A40089BA1F /* BatterySubscriberViewControllerBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B291292DC799A40089BA1F /* BatterySubscriberViewControllerBase.m */; };
 		68B291362DD1E6960089BA1F /* SimpleTemperatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B291322DD1E6960089BA1F /* SimpleTemperatureViewController.m */; };
 		68B291372DD1E6960089BA1F /* CompatibilityHelper.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B291332DD1E6960089BA1F /* CompatibilityHelper.c */; };
 		68B291382DD1E6960089BA1F /* FullSMCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B291352DD1E6960089BA1F /* FullSMCViewController.m */; };
@@ -162,6 +163,9 @@
 		687743432D4F6C7800375A2C /* BatteryCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BatteryCellView.h; path = BatteryCellView/BatteryCellView.h; sourceTree = "<group>"; };
 		687743442D4F6C7800375A2C /* BatteryInfoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BatteryInfoTableViewCell.m; path = BatteryCellView/BatteryInfoTableViewCell.m; sourceTree = "<group>"; };
 		687743452D4F6C7800375A2C /* SPWaterProgressIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPWaterProgressIndicatorView.h; sourceTree = "<group>"; };
+		689FE0B42DEAEA4A00550EBE /* BatterySubscriberViewControllerBase.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = BatterySubscriberViewControllerBase.c; sourceTree = "<group>"; };
+		689FE0B72DEEEDC600550EBE /* UPSMonitor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPSMonitor.h; sourceTree = "<group>"; };
+		689FE0B82DEEEDC600550EBE /* UPSMonitor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPSMonitor.m; sourceTree = "<group>"; };
 		68A3EAF52D5204D2003381DF /* battery_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = battery_utils.h; sourceTree = "<group>"; };
 		68A3EAF62D5204D2003381DF /* battery_info.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = battery_info.c; sourceTree = "<group>"; };
 		68A3EAF72D5204D2003381DF /* battery_info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = battery_info.h; sourceTree = "<group>"; };
@@ -186,7 +190,6 @@
 		68B291202DC754100089BA1F /* smctest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = smctest.c; sourceTree = "<group>"; };
 		68B291252DC7547B0089BA1F /* ChargingLimitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChargingLimitViewController.m; sourceTree = "<group>"; };
 		68B291262DC7547B0089BA1F /* ChargingLimitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChargingLimitViewController.h; sourceTree = "<group>"; };
-		68B291292DC799A40089BA1F /* BatterySubscriberViewControllerBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatterySubscriberViewControllerBase.m; sourceTree = "<group>"; };
 		68B2912A2DC799A40089BA1F /* BatterySubscriberViewControllerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatterySubscriberViewControllerBase.h; sourceTree = "<group>"; };
 		68B291302DD1E6960089BA1F /* SimpleTemperatureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleTemperatureViewController.h; sourceTree = "<group>"; };
 		68B291312DD1E6960089BA1F /* CompatibilityHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompatibilityHelper.h; sourceTree = "<group>"; };
@@ -302,7 +305,7 @@
 				68B291302DD1E6960089BA1F /* SimpleTemperatureViewController.h */,
 				68B291322DD1E6960089BA1F /* SimpleTemperatureViewController.m */,
 				68B2912A2DC799A40089BA1F /* BatterySubscriberViewControllerBase.h */,
-				68B291292DC799A40089BA1F /* BatterySubscriberViewControllerBase.m */,
+				689FE0B42DEAEA4A00550EBE /* BatterySubscriberViewControllerBase.c */,
 				68B291262DC7547B0089BA1F /* ChargingLimitViewController.h */,
 				68B291252DC7547B0089BA1F /* ChargingLimitViewController.m */,
 				6838BF7E2DC27F1E007EB66C /* ChargingManagementViewController.h */,
@@ -335,6 +338,8 @@
 				68DCA5AD2D3F9BFD004D0104 /* glibextern.h */,
 				68DCA5AE2D3FA4DA004D0104 /* intlextern.h */,
 				68B291432DDC60510089BA1F /* iokitextern.h */,
+				689FE0B72DEEEDC600550EBE /* UPSMonitor.h */,
+				689FE0B82DEEEDC600550EBE /* UPSMonitor.m */,
 			);
 			path = Battman;
 			sourceTree = "<group>";
@@ -706,7 +711,6 @@
 				68AE40B92D8EB8870023D7B0 /* MultiSelectSegmentedControl.m in Sources */,
 				68AE40BA2D8EB8870023D7B0 /* DividerView.m in Sources */,
 				68B2913A2DD1FEDA0089BA1F /* hid.m in Sources */,
-				68B2912B2DC799A40089BA1F /* BatterySubscriberViewControllerBase.m in Sources */,
 				68B291362DD1E6960089BA1F /* SimpleTemperatureViewController.m in Sources */,
 				6838BF762DBF810D007EB66C /* localized.c in Sources */,
 				687743372D4E08AD00375A2C /* BatteryInfoViewController.m in Sources */,
@@ -719,6 +723,7 @@
 				68FBDD182DE30A8E0057870A /* CreditViewController.c in Sources */,
 				68FBDCF02DE30A5E0057870A /* worker.c in Sources */,
 				683425502D7D6A240070CE6F /* MultilineViewCell.m in Sources */,
+				689FE0B92DEEEDC600550EBE /* UPSMonitor.m in Sources */,
 				68AE40BB2D8EB8870023D7B0 /* UIView+Fill.m in Sources */,
 				68AE40B82D8EB8870023D7B0 /* UberSegmentedControl.m in Sources */,
 				68D6DEBE2D745DBC00E129A0 /* SegmentedViewCell.m in Sources */,
@@ -727,6 +732,7 @@
 				68A3EAFB2D5204D2003381DF /* battery_info.c in Sources */,
 				68B291282DC75F610089BA1F /* pmnotification.c in Sources */,
 				68B5FF2E2D85606000919BC2 /* GradientArcView.m in Sources */,
+				689FE0B52DEAEA4A00550EBE /* BatterySubscriberViewControllerBase.c in Sources */,
 				6838BF6B2DB8D06B007EB66C /* licensing.S in Sources */,
 				6838BFAC2DC3984C007EB66C /* SliderTableViewCell.m in Sources */,
 				68171A372D534E6B00DD4224 /* BatteryDetailsViewController.m in Sources */,

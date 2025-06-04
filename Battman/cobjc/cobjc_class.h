@@ -89,7 +89,7 @@
 		"ldrsw x9,[x9,_OBJC_IVAR_$_" #class ".cobjc_struct@PAGEOFF]\n" \
 		"add %0,%1,x9":"=r"(val):"r"(obj):"x9");val;})
 
-extern void objc_msgSendSuper2();
+extern void objc_msgSendSuper2(void);
 
 #define osupercall(class,obj,...) \
 	({uint64_t superclass;asm("adrp %0,l_suprefs_" #class "@PAGE\n" \

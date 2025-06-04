@@ -1196,7 +1196,7 @@ bool accessory_available(void) {
     return (count != 0);
 }
 
-bool iktara_charging_detect(void) {
+int vbus_port(void) {
     SMC_INIT_CHK(0);
 
     uint32_t st = 0;
@@ -1206,7 +1206,7 @@ bool iktara_charging_detect(void) {
     if (result != kIOReturnSuccess)
         return false;
 
-    return (st & 2);
+	return st;
 }
 
 bool get_iktara_fw_stat(iktara_fw_t *fw) {

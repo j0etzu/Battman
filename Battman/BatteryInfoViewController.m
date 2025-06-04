@@ -6,6 +6,7 @@
 #import "ChargingLimitViewController.h"
 #include "battery_utils/battery_utils.h"
 #import "SimpleTemperatureViewController.h"
+#import "UPSMonitor.h"
 
 #include "common.h"
 
@@ -77,6 +78,7 @@ enum sections_batteryinfo {
     tabbarItem.tag = 0;
     self.tabBarItem = tabbarItem;
     battery_info_init(&batteryInfo);
+	[UPSMonitor startWatchingUPS];
 
     return [super initWithStyle:UITableViewStyleGrouped];
 }

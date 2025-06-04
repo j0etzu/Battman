@@ -23,6 +23,10 @@ typedef struct task *task_t;
 typedef task_t task_port_t;
 __END_DECLS
 #endif
+#include <CoreFoundation/CFPlugIn.h>
+#if COREFOUNDATION_CFPLUGINCOM_SEPARATE
+#include <CoreFoundation/CFPlugInCOM.h>
+#endif
 
 __BEGIN_DECLS
 
@@ -36,6 +40,21 @@ typedef io_object_t io_connect_t;
 typedef io_object_t io_registry_entry_t;
 typedef int IOReturn;
 typedef int kern_return_t;
+
+#define IOCFPLUGINBASE							\
+UInt16	version;						\
+UInt16	revision;						\
+IOReturn (*Probe)(void *thisPointer, CFDictionaryRef propertyTable,	\
+io_service_t service, SInt32 * order);		\
+IOReturn (*Start)(void *thisPointer, CFDictionaryRef propertyTable,	\
+io_service_t service);				\
+IOReturn (*Stop)(void *thisPointer)
+
+typedef struct IOCFPlugInInterfaceStruct {
+	IUNKNOWN_C_GUTS;
+	IOCFPLUGINBASE;
+} IOCFPlugInInterface;
+
 #define kIOReturnSuccess 0
 #define kIOReturnError 0xE00002BC
 #define kIOReturnBadArgument 0xE00002C2
@@ -54,7 +73,6 @@ typedef void (*IOServiceInterestCallback)(void *refcon, io_service_t service, ui
 typedef void (*IOServiceMatchingCallback)(void *refcon, io_iterator_t iterator);
 
 extern IOReturn IOMasterPort(mach_port_t, mach_port_t *);
-extern int IOServiceAddMatchingNotification(void *, const char *, void *, void *, void *, io_iterator_t *);
 extern CFMutableDictionaryRef IOServiceMatching(const char *);
 extern kern_return_t IOServiceOpen(io_service_t, task_port_t, uint32_t, io_connect_t *);
 extern io_service_t IOServiceGetMatchingService(mach_port_t, CFDictionaryRef);
@@ -68,6 +86,11 @@ extern IONotificationPortRef IONotificationPortCreate(mach_port_t);
 extern void IONotificationPortSetDispatchQueue(IONotificationPortRef, dispatch_queue_t);
 extern kern_return_t IOServiceGetMatchingServices(mach_port_t masterPort, CFDictionaryRef matching, io_iterator_t *existing);
 extern CFTypeRef IORegistryEntryCreateCFProperty(io_registry_entry_t, CFStringRef, CFAllocatorRef, uint32_t);
+extern int IOServiceAddMatchingNotification(IONotificationPortRef notifyPort, const char *notificationType, CFDictionaryRef matching, IOServiceMatchingCallback callback, void *refCon, io_iterator_t *notification);
+extern CFRunLoopSourceRef IONotificationPortGetRunLoopSource(IONotificationPortRef notify);
+extern void IONotificationPortDestroy(IONotificationPortRef notify);
+extern CFTypeRef IORegistryEntrySearchCFProperty(io_registry_entry_t entry, const char *plane, CFStringRef key, CFAllocatorRef allocator, uint32_t options);
+extern kern_return_t IOCreatePlugInInterfaceForService(io_service_t service, CFUUIDRef pluginType, CFUUIDRef interfaceType, IOCFPlugInInterface ***theInterface, SInt32 *theScore);
 __END_DECLS
 #endif
 

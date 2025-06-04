@@ -47,7 +47,7 @@ struct battery_info_node main_battery_template[] = {
 	{ _C("Avg. Current"), NULL, BIN_UNIT_MAMP | BIN_IN_DETAILS },
 	{ _C("Avg. Power"), NULL, BIN_UNIT_MWATT | BIN_IN_DETAILS },
 	{ _C("Cell Count"), NULL, BIN_IN_DETAILS },
- /* TODO: TimeToFull */
+	/* TODO: TimeToFull */
 	{ _C("Time To Empty"), NULL, BIN_UNIT_MIN | BIN_IN_DETAILS },
 	{ _C("Cycle Count"), NULL, BIN_IN_DETAILS },
 	{ _C("Designed Cycle Count"), NULL, BIN_IN_DETAILS },
@@ -93,7 +93,6 @@ struct battery_info_node main_battery_template[] = {
 	{ _C("Charger Configuration"), NULL, BIN_IN_DETAILS | BIN_UNIT_MAMP },
 	{ _C("HVC Mode"), _C("High Voltage Charging (HVC) Mode may accquired by your power adapter or system, all supported modes will be listed below."), BIN_IN_DETAILS },
 	{ _C("Inductive Port"), NULL, DEFINE_SECTION(8500) },
- /* FIXME: We are meeting situations that needing rows with same names but not same sections, current data structure cannot let us do this. */
 	{ _C("Acc. ID"), NULL, 0 },
 	{ _C("Allowed Features"), _C("Accessory Feature Flags, I don't know how to parse it yet."), 0 },
 	{ _C("Serial No."), NULL, 0 },
@@ -106,7 +105,28 @@ struct battery_info_node main_battery_template[] = {
 	{ _C("Firmware Version"), NULL, 0 },
 	{ _C("Hardware Version"), NULL, 0 },
 	{ _C("Battery Pack"), _C("This indicates if an accessory is now working as a Battery Pack."), 0 },
-	{ _C("Power Device"), _C("This indicates if an accessory is now providing power."), BIN_IN_DETAILS | BIN_IS_BOOLEAN },
+	{ _C("Power Supply"), _C("This indicates if an accessory is now providing power."), BIN_IN_DETAILS | BIN_IS_BOOLEAN },
+	{ _C("Status"), 0 },
+	{ _C("State of Charge"), _C("The accessory battery percentage reported by AppleSMC."), 0 },
+	{ _C("Accepting Charge"), NULL, BIN_IN_DETAILS | BIN_IS_BOOLEAN },
+	{ _C("Power Mode"), NULL, 0 },
+	{ _C("Sleep Power"), NULL, 0 },
+	{ _C("Supervised Acc. Attached"), NULL, 0 },
+	{ _C("Supervised Transports Restricted"), NULL, 0 },
+	{ _C("Primary Port"), NULL, DEFINE_SECTION(8000) },
+	{ _C("Acc. ID"), NULL, 0 },
+	{ _C("Allowed Features"), _C("Accessory Feature Flags, I don't know how to parse it yet."), 0 },
+	{ _C("Serial No."), NULL, 0 },
+	{ _C("Manufacturer"), NULL, 0 },
+	{ _C("Product ID"), NULL, 0 },
+	{ _C("Vendor ID"), NULL, 0 },
+	{ _C("Model"), NULL, 0 },
+	{ _C("Name"), NULL, 0 },
+	{ _C("PPID"), NULL, 0 },
+	{ _C("Firmware Version"), NULL, 0 },
+	{ _C("Hardware Version"), NULL, 0 },
+	{ _C("Battery Pack"), _C("This indicates if an accessory is now working as a Battery Pack."), 0 },
+	{ _C("Power Supply"), _C("This indicates if an accessory is now providing power."), BIN_IN_DETAILS | BIN_IS_BOOLEAN },
 	{ _C("Status"), 0 },
 	{ _C("State of Charge"), _C("The accessory battery percentage reported by AppleSMC."), 0 },
 	{ _C("Accepting Charge"), NULL, BIN_IN_DETAILS | BIN_IS_BOOLEAN },
@@ -407,6 +427,7 @@ static int battery_info_has(struct battery_info_section *head, uint64_t identifi
 void adapter_info_update_smc(struct battery_info_section *section);
 void battery_info_update_smc(struct battery_info_section *section);
 void inductive_info_update(struct battery_info_section *section);
+void usb1_info_update(struct battery_info_section *section);
 
 void battery_info_poll(struct battery_info_section **head) {
 	if (hasSMC) {
@@ -437,6 +458,24 @@ void battery_info_poll(struct battery_info_section **head) {
 			indSect->context->update             = inductive_info_update;
 			battery_info_insert_section(indSect, head);
 		}
+
+		IOObjectRelease(connect);
+	}
+
+	/* Primary Port Section */
+	/* 1: internal, 512: inductive */
+	connect = acc_open_with_port(1);
+	acc_id = get_accid(connect);
+	/* 100: No device connected */
+	if (acc_id != 100 && acc_id != -1 && connect != MACH_PORT_NULL) {
+		if (!battery_info_has(*head, BI_INDUCTIVE_SECTION_ID)) {
+			struct battery_info_section *indSect = bi_make_section(_C("Inductive Port"), sizeof(struct battery_info_section_context));
+			indSect->context->custom_identifier  = BI_INDUCTIVE_SECTION_ID;
+			indSect->context->update             = usb1_info_update;
+			battery_info_insert_section(indSect, head);
+		}
+
+		IOObjectRelease(connect);
 	}
 }
 
@@ -705,13 +744,13 @@ void battery_info_update_smc(struct battery_info_section *section) {
 	BI_SET_ITEM_IF(gGauge.DailyMinSoc, _C("Daily Min SoC"), gGauge.DailyMinSoc);
 }
 
-void inductive_info_update(struct battery_info_section *section) {
+void accessory_info_update(struct battery_info_section *section, int port) {
 	if (!section->data[0].name)
 		return; // no data need to be freed
 
 	struct battery_info_node *head        = section->data;
 	struct battery_info_node *head_arr[2] = { head, head };
-	io_connect_t connect                  = acc_open_with_port(512);
+	io_connect_t connect                  = acc_open_with_port(port);
 	SInt32 acc_id                         = get_accid(connect);
 	SInt32 features                       = get_acc_allowed_features(connect);
 	accessory_info_t accinfo              = get_acc_info(connect);
@@ -745,8 +784,8 @@ void inductive_info_update(struct battery_info_section *section) {
 	BI_FORMAT_ITEM(_C("Supervised Transports Restricted"), "%s", get_acc_supervised_transport_restricted(connect) ? L_TRUE : L_FALSE);
 
 	/* AppleSMC Part */
-	if (hasSMC && accessory_available()) {
-		BI_SET_ITEM(_C("Power Device"), iktara_charging_detect());
+	if (hasSMC && accessory_available() && port == 512) {
+		BI_SET_ITEM(_C("Power Supply"), vbus_port() == 2);
 		if (get_iktara_accessory_array(&array) && array.present == 1) {
 			/* TODO: Search VID/PID online */
 			const char *vendor_name = manf_id_string((SInt32)array.VID);
@@ -772,10 +811,23 @@ void inductive_info_update(struct battery_info_section *section) {
 	}
 
 	/* TODO: IOHIDDevice Part */
+	/* Inductive Port: kHIDPage_AppleVendor:70 */
+	/* MagSafe Charger: kHIDPage_AppleVendor:17 */
+	/* MagSafe Battery: kHIDPage_AppleVendor:11 */
+	/* Accessory Battery: kHIDPage_BatterySystem:kHIDUsage_BS_PrimaryBattery */
+	/* The MagSafe Battery details are stored in kHIDPage_BatterySystem */
 	/* TODO: VID/PID from IOHIDDevice */
 	//BI_FORMAT_ITEM(_C("Acc. Product ID"), "0x%0.4X", 0x1399);
 
 	/* TODO: CoreAccessory Part */
 
-	/* TODO: EAAccessory Part */
+	IOObjectRelease(connect);
+}
+
+void inductive_info_update(struct battery_info_section *section) {
+	return accessory_info_update(section, 512);
+}
+
+void usb1_info_update(struct battery_info_section *section) {
+	return accessory_info_update(section, 1);
 }

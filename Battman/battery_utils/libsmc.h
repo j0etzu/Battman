@@ -530,7 +530,7 @@ int smc_read_n(uint32_t key, void *bytes, int32_t size);
 int smc_call(int index, SMCParamStruct *inputStruct,SMCParamStruct *outputStruct);
 
 bool accessory_available(void);
-bool iktara_charging_detect(void);
+int vbus_port(void);
 bool get_iktara_fw_stat(iktara_fw_t *fw);
 bool get_iktara_drv_stat(iktara_drv_t *drv);
 bool get_iktara_accessory_array(iktara_accessory_array_t *array);
