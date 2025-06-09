@@ -46,11 +46,12 @@ const char *acc_id_50_5e[] = {
 
 /* Sadly I didn't got the full list of accids, but we can guess */
 const char *acc_id_string(SInt32 accid) {
-	static char idstr[256];
+	char *idstr = calloc(1, 256);
+	if (!idstr) return NULL;
 
 	if (accid < 16) sprintf(idstr, "%d\n%s", accid, acc_id_0_f[accid]);
-	if (95 > accid && accid > 79 && accid != 89) {
-		sprintf(idstr, "%d\n(%s)", accid, acc_id_50_5e[accid]);
+	if ((95 > accid) && (accid > 79) && (accid != 89)) {
+		sprintf(idstr, "%d\n(%s)", accid, acc_id_50_5e[accid - 80]);
 	}
 	if (accid == 70) sprintf(idstr, "%d\n%s", accid, "Scorpius: unknown");
 	if (accid == 71) sprintf(idstr, "%d\n%s", accid, "Scorpius: pencil");
@@ -124,7 +125,7 @@ const char *acc_powermode_string(AccessoryPowermode powermode) {
 const char *acc_usb_connstat_string(SInt32 usb_connstat) {
 	if (usb_connstat > 5) return _C("Unknown");
 	
-	return acc_usb_connstats[usb_connstat];
+	return _C(acc_usb_connstats[usb_connstat]);
 }
 
 const char *acc_powermode_string_supported(accessory_powermode_t mode) {
@@ -164,7 +165,7 @@ const char *acc_port_type_string(SInt32 pt) {
 	if (pt > 19) {
 		return _C("Undefined");
 	}
-	return acc_port_types[pt];
+	return _C(acc_port_types[pt]);
 }
 
 const char *manf_id_string(SInt32 manf) {
@@ -280,6 +281,43 @@ io_service_t acc_open_with_port(int port) {
 	return IOServiceGetMatchingService(kIOMasterPortDefault, service);
 }
 
+static IOReturn copyDeviceInfo(io_connect_t connect, AccessoryInfo infoID, CFTypeRef *buf) {
+	IOReturn kr = kIOReturnSuccess;
+	if (use_libioam) {
+		kr = IOAccessoryManagerCopyDeviceInfo(connect, infoID, buf);
+	} else {
+		bool accessory_mode = true;
+		CFStringRef key = NULL;
+		switch (infoID) {
+			case kIOAMInterfaceDeviceSerialNumber:
+				accessory_mode = false;
+				key = CFSTR("IOAccessoryInterfaceDeviceSerialNumber");
+				break;
+			case kIOAMInterfaceModuleSerialNumber:
+				accessory_mode = false;
+				key = CFSTR("IOAccessoryInterfaceModuleSerialNumber");
+				break;
+			case kIOAMAccessorySerialNumber:    key = CFSTR("IOAccessoryAccessorySerialNumber"); break;
+			case kIOAMAccessoryManufacturer:    key = CFSTR("IOAccessoryAccessoryManufacturer"); break;
+			case kIOAMAccessoryName:            key = CFSTR("IOAccessoryAccessoryName"); break;
+			case kIOAMAccessoryModelNumber:     key = CFSTR("IOAccessoryAccessoryModelNumber"); break;
+			case kIOAMAccessoryFirmwareVersion: key = CFSTR("IOAccessoryAccessoryFirmwareVersion"); break;
+			case kIOAMAccessoryHardwareVersion: key = CFSTR("IOAccessoryAccessoryHardwareVersion"); break;
+			case kIOAMAccessoryPPID:            key = CFSTR("IOAccessoryAccessoryPPID"); break;
+			default: kr = kIOReturnBadArgument;
+		}
+		if (kr == kIOReturnSuccess) {
+			*buf = IORegistryEntryCreateCFProperty(connect, key, kCFAllocatorDefault, kNilOptions);
+			if (buf) {
+				kr = kIOReturnSuccess;
+			} else {
+				kr = checkIDBusAvailable(connect, accessory_mode);
+			}
+		}
+	}
+	return kr;
+}
+
 SInt32 get_accid(io_connect_t connect) {
 	SInt32 accid = -1;
 	if (use_libioam) {
@@ -314,13 +352,30 @@ SInt32 get_acc_allowed_features(io_connect_t connect) {
 	AllowedFeatures = IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryManagerAllowedFeatures"), kCFAllocatorDefault, kNilOptions);
 	if (AllowedFeatures) {
 		if (!CFNumberGetValue(AllowedFeatures, kCFNumberSInt32Type, &buffer)) {
-			DBGLOG(CFSTR("get_allowed_features: Invalid"));
+			DBGLOG(CFSTR("get_acc_allowed_features: Invalid"));
 		}
 	} else {
-		DBGLOG(CFSTR("get_allowed_features: None"));
+		DBGLOG(CFSTR("get_acc_allowed_features: None"));
 	}
 	if (AllowedFeatures) CFRelease(AllowedFeatures);
 
+	return buffer;
+}
+
+SInt32 get_acc_port_type(io_connect_t connect) {
+	SInt32 buffer = -1;
+	CFNumberRef PortType;
+	
+	PortType = IORegistryEntryCreateCFProperty(connect, CFSTR("PortType"), kCFAllocatorDefault, kNilOptions);
+	if (PortType) {
+		if (!CFNumberGetValue(PortType, kCFNumberSInt32Type, &buffer)) {
+			DBGLOG(CFSTR("get_acc_port_type: Invalid"));
+		}
+	} else {
+		DBGLOG(CFSTR("get_acc_port_type: None"));
+	}
+	if (PortType) CFRelease(PortType);
+	
 	return buffer;
 }
 
@@ -348,38 +403,7 @@ accessory_info_t get_acc_info(io_connect_t connect) {
 	};
 	
 	for (size_t i = 0; i < sizeof(queries) / sizeof(queries[0]); i++) {
-		if (use_libioam) {
-			kr = IOAccessoryManagerCopyDeviceInfo(connect, queries[i].key, &buffer);
-		} else {
-			bool accessory_mode = true;
-			CFStringRef key = NULL;
-			switch (queries[i].key) {
-				case kIOAMInterfaceDeviceSerialNumber:
-					accessory_mode = false;
-					key = CFSTR("IOAccessoryInterfaceDeviceSerialNumber");
-					break;
-				case kIOAMInterfaceModuleSerialNumber:
-					accessory_mode = false;
-					key = CFSTR("IOAccessoryInterfaceModuleSerialNumber");
-					break;
-				case kIOAMAccessorySerialNumber:    key = CFSTR("IOAccessoryAccessorySerialNumber"); break;
-				case kIOAMAccessoryManufacturer:    key = CFSTR("IOAccessoryAccessoryManufacturer"); break;
-				case kIOAMAccessoryName:            key = CFSTR("IOAccessoryAccessoryName"); break;
-				case kIOAMAccessoryModelNumber:     key = CFSTR("IOAccessoryAccessoryModelNumber"); break;
-				case kIOAMAccessoryFirmwareVersion: key = CFSTR("IOAccessoryAccessoryFirmwareVersion"); break;
-				case kIOAMAccessoryHardwareVersion: key = CFSTR("IOAccessoryAccessoryHardwareVersion"); break;
-				case kIOAMAccessoryPPID:            key = CFSTR("IOAccessoryAccessoryPPID"); break;
-				default: kr = kIOReturnBadArgument;
-			}
-			if (kr == kIOReturnSuccess) {
-				buffer = IORegistryEntryCreateCFProperty(connect, key, kCFAllocatorDefault, kNilOptions);
-				if (buffer) {
-					kr = kIOReturnSuccess;
-				} else {
-					kr = checkIDBusAvailable(connect, accessory_mode);
-				}
-			}
-		}
+		kr = copyDeviceInfo(connect, queries[i].key, &buffer);
 		if (kr != kIOReturnSuccess) {
 			NSLog(CFSTR("get_acc_info(%d): %s"), queries[i].key, mach_error_string(kr));
 			continue;
@@ -519,7 +543,7 @@ SInt32 get_acc_type(io_connect_t connect) {
 	return type;
 }
 
-IOReturn get_acc_digitalid(io_connect_t connect, UInt8 *digitalID) {
+IOReturn get_acc_digitalid(io_connect_t connect, void *digitalID) {
 	IOReturn kr = kIOReturnSuccess;
 	if (use_libioam)
 		return IOAccessoryManagerGetDigitalID(connect, digitalID);
@@ -640,5 +664,31 @@ IOReturn get_acc_usb_ilim(io_connect_t connect, accessory_usb_ilim_t *ilim) {
 		kr = kIOReturnNotAttached;
 	}
 	
+	return kr;
+}
+
+IOReturn get_acc_idsn(io_connect_t connect, SInt64 *buf) {
+	IOReturn kr;
+	CFTypeRef number;
+	kr = copyDeviceInfo(connect, kIOAMInterfaceDeviceSerialNumber, &number);
+	if (kr == kIOReturnSuccess) {
+		if (!CFNumberGetValue((CFNumberRef)number, kCFNumberSInt64Type, buf)) {
+			kr = kIOReturnError;
+		}
+		CFRelease(number);
+	}
+	return kr;
+}
+
+IOReturn get_acc_msn(io_connect_t connect, void *buf) {
+	IOReturn kr;
+	CFTypeRef sn;
+	kr = copyDeviceInfo(connect, kIOAMInterfaceModuleSerialNumber, &sn);
+	if (kr == kIOReturnSuccess) {
+		if (!CFStringGetCString(sn, buf, 32, kCFStringEncodingUTF8)) {
+			kr = kIOReturnError;
+		}
+		CFRelease(sn);
+	}
 	return kr;
 }

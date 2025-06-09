@@ -132,6 +132,7 @@ struct bluetooth_section_context {
 #define BI_ADAPTER_SECTION_ID 12
 #define BI_ADAPTER_IOKIT_ONLY_SECTION_ID 12
 #define BI_INDUCTIVE_SECTION_ID 13
+#define BI_SERIAL1_SECTION_ID 14
 // For dynamically allocated sections, any section ID will work
 // Implement your own hash function to compute the same ID every time
 // for a single accessory.

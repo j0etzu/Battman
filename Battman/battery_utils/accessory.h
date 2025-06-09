@@ -67,16 +67,19 @@ io_connect_t acc_open_with_port(int port);
 SInt32 get_accid(io_connect_t connect);
 bool get_acc_battery_pack_mode(io_connect_t connect);
 SInt32 get_acc_allowed_features(io_connect_t connect);
+SInt32 get_acc_port_type(io_connect_t connect);
 accessory_info_t get_acc_info(io_connect_t connect);
 accessory_powermode_t get_acc_powermode(io_connect_t connect);
 accessory_sleeppower_t get_acc_sleeppower(io_connect_t connect);
 bool get_acc_supervised(io_connect_t connect);
 bool get_acc_supervised_transport_restricted(io_connect_t connect);
 SInt32 get_acc_type(io_connect_t connect);
-IOReturn get_acc_digitalid(io_connect_t connect, UInt8 *digitalID);
+IOReturn get_acc_digitalid(io_connect_t connect, void *digitalID);
 IOReturn get_acc_usb_connstat(io_connect_t connect, accessory_usb_connstat_t *connstat);
 IOReturn get_acc_usb_voltage(io_connect_t connect, SInt32 *voltage);
 IOReturn get_acc_usb_ilim(io_connect_t connect, accessory_usb_ilim_t *ilim);
+IOReturn get_acc_idsn(io_connect_t connect, SInt64 *buf);
+IOReturn get_acc_msn(io_connect_t connect, void *buf);
 
 __END_DECLS
 

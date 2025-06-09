@@ -477,11 +477,11 @@ void battery_info_poll(struct battery_info_section **head) {
 	acc_id = get_accid(connect);
 	/* 100: No device connected */
 	if (acc_id != 100 && acc_id != -1 && connect != MACH_PORT_NULL) {
-		if (!battery_info_has(*head, BI_INDUCTIVE_SECTION_ID)) {
-			struct battery_info_section *indSect = bi_make_section(_C("Serial Port"), sizeof(struct battery_info_section_context));
-			indSect->context->custom_identifier  = BI_INDUCTIVE_SECTION_ID;
-			indSect->context->update             = usb1_info_update;
-			battery_info_insert_section(indSect, head);
+		if (!battery_info_has(*head, BI_SERIAL1_SECTION_ID)) {
+			struct battery_info_section *usbSect = bi_make_section(_C("Serial Port"), sizeof(struct battery_info_section_context));
+			usbSect->context->custom_identifier  = BI_SERIAL1_SECTION_ID;
+			usbSect->context->update             = usb1_info_update;
+			battery_info_insert_section(usbSect, head);
 		}
 
 		IOObjectRelease(connect);
@@ -761,6 +761,7 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 	struct battery_info_node *head_arr[2] = { head, head };
 	io_connect_t connect                  = acc_open_with_port(port);
 	SInt32 acc_id                         = get_accid(connect);
+	SInt32 port_type                      = get_acc_port_type(connect);
 	SInt32 features                       = get_acc_allowed_features(connect);
 	accessory_info_t accinfo              = get_acc_info(connect);
 	accessory_powermode_t mode            = get_acc_powermode(connect);
@@ -776,8 +777,11 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 	}
 
 	/* IOAM Part */
-	BI_FORMAT_ITEM(_C("Acc. ID"), "%s", acc_id_string(acc_id));
+	const char *idstr = acc_id_string(acc_id);
+	BI_FORMAT_ITEM(_C("Acc. ID"), "%s", idstr);
+	free((char *)idstr);
 	BI_FORMAT_ITEM_IF(features != -1, _C("Allowed Features"), "0x%.8X", features);
+	BI_FORMAT_ITEM_IF(port_type != -1, _C("Port Type"), "%s", acc_port_type_string(port_type));
 	BI_FORMAT_ITEM_IF(*accinfo.serial, _C("Serial No."), "%s", accinfo.serial);
 	// Consider add a warnaccessory if vendor name appears a fake "Apple Inc."
 	BI_FORMAT_ITEM_IF(*accinfo.vendor, _C("Manufacturer"), "%s", accinfo.vendor);
@@ -848,11 +852,17 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 		}
 	} else if (port == kIOAccessoryPortIDSerial) {
 		if (acc_id == 91) {
+			UInt8 digitalID[6];
+			SInt64 idsn;
+			char msn[32];
 			// Digital ID
-			
+			BI_FORMAT_ITEM_IF(get_acc_digitalid(connect, &digitalID) == kIOReturnSuccess, _C("Digital ID"), "%02x %02x %02x %02x %02x %02x", digitalID[0], digitalID[1], digitalID[2], digitalID[3], digitalID[4], digitalID[5]);
+			BI_FORMAT_ITEM_IF(get_acc_idsn(connect, &idsn) == kIOReturnSuccess, _C("ID Serial No."), "%llX", idsn);
+			BI_FORMAT_ITEM_IF(get_acc_msn(connect, &msn) == kIOReturnSuccess, _C("IM Serial No."), "%s", msn);
+			// TODO: Digital Info
 		}
 		if (get_acc_usb_connstat(connect, &connstat) == kIOReturnSuccess) {
-			BI_FORMAT_ITEM(_C("USB Connect State"), "%s\n%s, %s (%s)", connstat.active ? cond_localize_c("Active") : cond_localize_c("Inactive"), acc_usb_connstat_string(connstat.type), acc_usb_connstat_string(connstat.published_type), cond_localize_c("Published"));
+			BI_FORMAT_ITEM(_C("USB Connect State"), "%s\n%s: %s, %s: %s", connstat.active ? cond_localize_c("Active") : cond_localize_c("Inactive"), cond_localize_c("Type"), acc_usb_connstat_string(connstat.type), cond_localize_c("Published Type"), acc_usb_connstat_string(connstat.published_type));
 		}
 		SInt32 voltage = 0;
 		BI_SET_ITEM_IF(get_acc_usb_voltage(connect, &voltage) != kIOReturnNotAttached, _C("USB Charging Volt."), voltage);
