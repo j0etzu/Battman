@@ -7,6 +7,12 @@
 
 __BEGIN_DECLS
 
+#define kIOAccessoryPortIDSerial	1
+#define kIOAccessoryPortIDUSB		2
+// Scorpius 0x100, SmartConnector 0x101
+// Serial2 0x102
+#define kIOAccessoryPortID0Pin		0x200
+
 #define kIOAMUSBModeEnableHostMode	2
 
 #define kIOAMFeatureHighCurrentPower	0xFFFF
@@ -163,6 +169,7 @@ IOReturn IOAccessoryManagerGetUSBCurrentLimitBase(io_service_t service, SInt32 *
 IOReturn IOAccessoryManagerSetUSBCurrentOffset(io_service_t service, SInt32 offset);
 IOReturn IOAccessoryManagerGetUSBCurrentLimitOffset(io_service_t service, SInt32 *offset);
 IOReturn IOAccessoryManagerSetUSBCurrentLimitMaximum(io_service_t service, uint64_t ilimMax);
+IOReturn IOAccessoryManagerGetUSBCurrentLimitMaximum(io_service_t service, SInt32 *ilimMax);
 IOReturn IOAccessoryManagerClearUSBCurrentLimitMaximum(io_service_t service);
 
 __END_DECLS

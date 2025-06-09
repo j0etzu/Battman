@@ -1,4 +1,5 @@
 #include "battery_info.h"
+#include "iokit_connection.h"
 #include "../common.h"
 #include "accessory.h"
 #include "libsmc.h"
@@ -62,15 +63,15 @@ struct battery_info_node main_battery_template[] = {
 	{ _C("OCV Voltage"), NULL, BIN_UNIT_MVOLT | BIN_IN_DETAILS },
 	{ _C("Max Load Current"), NULL, BIN_UNIT_MAMP | BIN_IN_DETAILS },
 	{ _C("Max Load Current 2"), NULL, BIN_UNIT_MAMP | BIN_IN_DETAILS },
- /* TODO: Parse ITMiscStatus
-  * Known components: DOD0Update, FastQmaxUpdate, ITSimulation, QmaxAtEOC, QmaxDisqualified, QmaxDOD0, QmaxUpdate, RaUpdate */
+	/* TODO: Parse ITMiscStatus
+	 * Known components: DOD0Update, FastQmaxUpdate, ITSimulation, QmaxAtEOC, QmaxDisqualified, QmaxDOD0, QmaxUpdate, RaUpdate */
 	{ _C("IT Misc Status"), _C("This field refers to the miscellaneous data returned by battery Impedance Track™ Gas Gauge IC."), 0 },
 	{ _C("Simulation Rate"), _C("This field refers to the rate of Gas Gauge performing Impedance Track™ simulations."), BIN_UNIT_HOUR | BIN_IN_DETAILS },
 	{ _C("Daily Max SoC"), NULL, BIN_UNIT_PERCENT | BIN_IN_DETAILS },
 	{ _C("Daily Min SoC"), NULL, BIN_UNIT_PERCENT | BIN_IN_DETAILS },
 	{ _C("Adapter Details"), _C("All adapter information is dynamically retrieved from the hardware of the currently connected adapter (or cable if you are using Lightning ports). If any of the data is missing, it may indicate that the power source is not providing the relevant information, or there may be a hardware issue with the power source."), DEFINE_SECTION(9000) },
 	{ _C("Port"), _C("Port of currently connected adapter. On macOS, this is the USB port that the adapter currently attached."), BIN_IN_DETAILS },
-	{ _C("Port Type"), NULL, 0 },
+	{ _C("Adapter Type"), NULL, 0 },
 	{ _C("Compatibility"), NULL, 0 },
 	{ _C("Type"), _C("This field refers to the Family Code (kIOPSPowerAdapterFamilyKey) of currently connected power adapter."), 0 },
 	{ _C("Status"), NULL, 0 },
@@ -94,6 +95,7 @@ struct battery_info_node main_battery_template[] = {
 	{ _C("HVC Mode"), _C("High Voltage Charging (HVC) Mode may accquired by your power adapter or system, all supported modes will be listed below."), BIN_IN_DETAILS },
 	{ _C("Inductive Port"), NULL, DEFINE_SECTION(8500) },
 	{ _C("Acc. ID"), NULL, 0 },
+	{ _C("Port Type"), NULL, 0 },
 	{ _C("Allowed Features"), _C("Accessory Feature Flags, I don't know how to parse it yet."), 0 },
 	{ _C("Serial No."), NULL, 0 },
 	{ _C("Manufacturer"), NULL, 0 },
@@ -113,10 +115,14 @@ struct battery_info_node main_battery_template[] = {
 	{ _C("Sleep Power"), NULL, 0 },
 	{ _C("Supervised Acc. Attached"), NULL, 0 },
 	{ _C("Supervised Transports Restricted"), NULL, 0 },
-	{ _C("Primary Port"), NULL, DEFINE_SECTION(8000) },
+	{ _C("Serial Port"), NULL, DEFINE_SECTION(8000) },
 	{ _C("Acc. ID"), NULL, 0 },
+	{ _C("Digital ID"), _C("The \"Chip ID\" of attached accessory."), 0 },
+	{ _C("ID Serial No."), _C("Interface Device Serial Number (ID-SN)."), 0 },
+	{ _C("IM Serial No."), _C("Interface Module Serial Number (MSN)."), 0 },
+	{ _C("Port Type"), NULL, 0 },
 	{ _C("Allowed Features"), _C("Accessory Feature Flags, I don't know how to parse it yet."), 0 },
-	{ _C("Serial No."), NULL, 0 },
+	{ _C("Serial No."), _C("Accessory Serial Number (ASN)."), 0 },
 	{ _C("Manufacturer"), NULL, 0 },
 	{ _C("Product ID"), NULL, 0 },
 	{ _C("Vendor ID"), NULL, 0 },
@@ -127,13 +133,18 @@ struct battery_info_node main_battery_template[] = {
 	{ _C("Hardware Version"), NULL, 0 },
 	{ _C("Battery Pack"), _C("This indicates if an accessory is now working as a Battery Pack."), 0 },
 	{ _C("Power Supply"), _C("This indicates if an accessory is now providing power."), BIN_IN_DETAILS | BIN_IS_BOOLEAN },
-	{ _C("Status"), 0 },
-	{ _C("State of Charge"), _C("The accessory battery percentage reported by AppleSMC."), 0 },
-	{ _C("Accepting Charge"), NULL, BIN_IN_DETAILS | BIN_IS_BOOLEAN },
+	// FIXME: We need a Smart Battery Case to test
+	// { _C("Status"), 0 },
+	// { _C("State of Charge"), _C("The accessory battery percentage reported by AppleSMC."), 0 },
+	// { _C("Accepting Charge"), NULL, BIN_IN_DETAILS | BIN_IS_BOOLEAN },
+	{ _C("USB Connect State"), NULL, 0 },
+	{ _C("USB Charging Volt."), NULL, BIN_IN_DETAILS | BIN_UNIT_MVOLT },
+	{ _C("USB Current Config"), NULL, 0 },
 	{ _C("Power Mode"), NULL, 0 },
 	{ _C("Sleep Power"), NULL, 0 },
 	{ _C("Supervised Acc. Attached"), NULL, 0 },
 	{ _C("Supervised Transports Restricted"), NULL, 0 },
+	// TODO: Scorpius (I don't have Apple Pencil to test)
 	{ NULL }  // DO NOT DELETE
 };
 
@@ -447,8 +458,7 @@ void battery_info_poll(struct battery_info_section **head) {
 	}
 
 	/* Inductive Section */
-	/* 1: internal, 512: inductive */
-	io_connect_t connect = acc_open_with_port(512);
+	io_connect_t connect = acc_open_with_port(kIOAccessoryPortID0Pin);
 	SInt32 acc_id = get_accid(connect);
 	/* 100: No device connected */
 	if (acc_id != 100 && acc_id != -1 && connect != MACH_PORT_NULL) {
@@ -462,14 +472,13 @@ void battery_info_poll(struct battery_info_section **head) {
 		IOObjectRelease(connect);
 	}
 
-	/* Primary Port Section */
-	/* 1: internal, 512: inductive */
-	connect = acc_open_with_port(1);
+	/* Serial Port Section */
+	connect = acc_open_with_port(kIOAccessoryPortIDSerial);
 	acc_id = get_accid(connect);
 	/* 100: No device connected */
 	if (acc_id != 100 && acc_id != -1 && connect != MACH_PORT_NULL) {
 		if (!battery_info_has(*head, BI_INDUCTIVE_SECTION_ID)) {
-			struct battery_info_section *indSect = bi_make_section(_C("Inductive Port"), sizeof(struct battery_info_section_context));
+			struct battery_info_section *indSect = bi_make_section(_C("Serial Port"), sizeof(struct battery_info_section_context));
 			indSect->context->custom_identifier  = BI_INDUCTIVE_SECTION_ID;
 			indSect->context->update             = usb1_info_update;
 			battery_info_insert_section(indSect, head);
@@ -670,7 +679,7 @@ void adapter_info_update_smc(struct battery_info_section *section) {
 	BI_FORMAT_ITEM_IF((int32_t)adapter_info.PMUConfiguration == -1, _C("PMU Configuration"), "%s", cond_localize_c("Unspecified"));
     BI_SET_ITEM(_C("Charger Configuration"), adapter_data.ChargerConfiguration);
     BI_FORMAT_ITEM_IF(adapter_data.NotChargingReason != 0, _C("Reason"), "%s", not_charging_reason_str(adapter_data.NotChargingReason));
-    BI_FORMAT_ITEM_IF(adapter_info.port_type != 0, _C("Port Type"), "%s", cond_localize_c(port_type_str(adapter_info.port_type)));
+    BI_FORMAT_ITEM_IF(adapter_info.adap_type != 0, _C("Adapter Type"), "%d", adapter_info.adap_type);
 }
 
 void battery_info_update_smc(struct battery_info_section *section) {
@@ -757,7 +766,10 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 	accessory_powermode_t mode            = get_acc_powermode(connect);
 	accessory_sleeppower_t sleep          = get_acc_sleeppower(connect);
 	iktara_accessory_array_t array;
+	accessory_usb_connstat_t connstat;
+	accessory_usb_ilim_t ilim;
 
+	// 100: Not connected, -1: Unrecognized
 	if (acc_id == 100 || acc_id == -1 || connect == MACH_PORT_NULL) {
 		bi_destroy_section(section);
 		return;
@@ -767,6 +779,7 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 	BI_FORMAT_ITEM(_C("Acc. ID"), "%s", acc_id_string(acc_id));
 	BI_FORMAT_ITEM_IF(features != -1, _C("Allowed Features"), "0x%.8X", features);
 	BI_FORMAT_ITEM_IF(*accinfo.serial, _C("Serial No."), "%s", accinfo.serial);
+	// Consider add a warnaccessory if vendor name appears a fake "Apple Inc."
 	BI_FORMAT_ITEM_IF(*accinfo.vendor, _C("Manufacturer"), "%s", accinfo.vendor);
 	BI_FORMAT_ITEM_IF(*accinfo.model, _C("Model"), "%s", accinfo.model);
 	BI_FORMAT_ITEM_IF(*accinfo.name, _C("Name"), "%s", accinfo.name);
@@ -784,7 +797,7 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 	BI_FORMAT_ITEM(_C("Supervised Transports Restricted"), "%s", get_acc_supervised_transport_restricted(connect) ? L_TRUE : L_FALSE);
 
 	/* AppleSMC Part */
-	if (hasSMC && accessory_available() && port == 512) {
+	if (hasSMC && accessory_available() && port == kIOAccessoryPortID0Pin) {
 		BI_SET_ITEM(_C("Power Supply"), vbus_port() == 2);
 		if (get_iktara_accessory_array(&array) && array.present == 1) {
 			/* TODO: Search VID/PID online */
@@ -812,12 +825,55 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 
 	/* TODO: IOHIDDevice Part */
 	/* Inductive Port: kHIDPage_AppleVendor:70 */
+	if ((!array.PID || !array.VID) && port == kIOAccessoryPortID0Pin) {
+		uint32_t vid, pid;
+		vid = pid = 0;
+		// Normally, only one device will be at 0xFF00:70
+		if (first_vendor_at_usagepagepairs(&vid, &pid, 0xFF00, 70)) {
+			const char *vendor_name = manf_id_string((SInt32)vid);
+			if (vendor_name) {
+				BI_FORMAT_ITEM(_C("Vendor ID"), "0x%0.4X\n(%s)", vid, vendor_name);
+			} else {
+				BI_FORMAT_ITEM_IF(vid, _C("Vendor ID"), "0x%0.4X", vid);
+			}
+			if (vid == VID_APPLE) {
+				const char *product_name = apple_prod_id_string(pid);
+				if (product_name)
+					BI_FORMAT_ITEM(_C("Product ID"), "0x%0.4X\n(%s)", pid, product_name);
+				else
+					BI_FORMAT_ITEM_IF(pid, _C("Product ID"), "0x%0.4X", pid);
+			} else {
+				BI_FORMAT_ITEM_IF(pid, _C("Product ID"), "0x%0.4X", pid);
+			}
+		}
+	} else if (port == kIOAccessoryPortIDSerial) {
+		if (acc_id == 91) {
+			// Digital ID
+			
+		}
+		if (get_acc_usb_connstat(connect, &connstat) == kIOReturnSuccess) {
+			BI_FORMAT_ITEM(_C("USB Connect State"), "%s\n%s, %s (%s)", connstat.active ? cond_localize_c("Active") : cond_localize_c("Inactive"), acc_usb_connstat_string(connstat.type), acc_usb_connstat_string(connstat.published_type), cond_localize_c("Published"));
+		}
+		SInt32 voltage = 0;
+		BI_SET_ITEM_IF(get_acc_usb_voltage(connect, &voltage) != kIOReturnNotAttached, _C("USB Charging Volt."), voltage);
+		// XXX: Consider use custom UI for this
+		BI_FORMAT_ITEM_IF(get_acc_usb_ilim(connect, &ilim) != kIOReturnNotAttached, _C("USB Current Config"), "%s", acc_usb_ilim_string_multiline(ilim));
+		/* TODO: Transport types */
+
+		/* How do we actually get VID/PID if wired? MFA Cables does not seems having them */
+	} else if (port == 256) {
+		/* TODO: SmartConnector */
+	} else if (port == 257) {
+		/* TODO: Scorpius */
+	}
 	/* MagSafe Charger: kHIDPage_AppleVendor:17 */
 	/* MagSafe Battery: kHIDPage_AppleVendor:11 */
-	/* Accessory Battery: kHIDPage_BatterySystem:kHIDUsage_BS_PrimaryBattery */
-	/* The MagSafe Battery details are stored in kHIDPage_BatterySystem */
-	/* TODO: VID/PID from IOHIDDevice */
-	//BI_FORMAT_ITEM(_C("Acc. Product ID"), "0x%0.4X", 0x1399);
+	// By verifying 0xFF00:(17/11), we can know which type of device actually attached
+
+	/* Accessory Battery: kHIDPage_PowerDevice:kHIDUsage_PD_PeripheralDevice */
+	/* Battery Case: kHIDPage_BatterySystem:kHIDUsage_BS_PrimaryBattery */
+	/* The Battery Case / Battery Pack details are stored in kHIDPage_BatterySystem normally */
+	// check UPSMonitor.m
 
 	/* TODO: CoreAccessory Part */
 
@@ -825,9 +881,9 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 }
 
 void inductive_info_update(struct battery_info_section *section) {
-	return accessory_info_update(section, 512);
+	return accessory_info_update(section, kIOAccessoryPortID0Pin);
 }
 
 void usb1_info_update(struct battery_info_section *section) {
-	return accessory_info_update(section, 1);
+	return accessory_info_update(section, kIOAccessoryPortIDSerial);
 }

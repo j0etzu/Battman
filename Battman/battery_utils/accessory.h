@@ -38,13 +38,29 @@ typedef struct accessory_sleeppower {
 	SInt32 limit;
 } accessory_sleeppower_t;
 
+typedef struct accessory_usb_connstat {
+	SInt32 type;
+	SInt32 published_type;
+	bool active;
+} accessory_usb_connstat_t;
+
+typedef struct accessory_usb_ilim {
+	SInt32 limit;
+	SInt32 base;
+	SInt32 offset;
+	SInt32 max;
+} accessory_usb_ilim_t;
+
 __BEGIN_DECLS
 
 const char *acc_id_string(SInt32 accid);
+const char *acc_port_type_string(SInt32 pt);
 const char *manf_id_string(SInt32 manf);
 const char *apple_prod_id_string(SInt32 prod);
 const char *acc_powermode_string(AccessoryPowermode powermode);
 const char *acc_powermode_string_supported(accessory_powermode_t mode);
+const char *acc_usb_ilim_string_multiline(accessory_usb_ilim_t ilim);
+const char *acc_usb_connstat_string(SInt32 usb_connstat);
 
 io_connect_t acc_open_with_port(int port);
 
@@ -58,6 +74,9 @@ bool get_acc_supervised(io_connect_t connect);
 bool get_acc_supervised_transport_restricted(io_connect_t connect);
 SInt32 get_acc_type(io_connect_t connect);
 IOReturn get_acc_digitalid(io_connect_t connect, UInt8 *digitalID);
+IOReturn get_acc_usb_connstat(io_connect_t connect, accessory_usb_connstat_t *connstat);
+IOReturn get_acc_usb_voltage(io_connect_t connect, SInt32 *voltage);
+IOReturn get_acc_usb_ilim(io_connect_t connect, accessory_usb_ilim_t *ilim);
 
 __END_DECLS
 

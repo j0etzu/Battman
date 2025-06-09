@@ -45,8 +45,6 @@ const char *acc_id_50_5e[] = {
 };
 
 /* Sadly I didn't got the full list of accids, but we can guess */
-// 62: MagSafe Charger
-// 64: MagSafe Battery
 const char *acc_id_string(SInt32 accid) {
 	static char idstr[256];
 
@@ -70,13 +68,44 @@ const char *acc_id_string(SInt32 accid) {
 #undef _C
 #endif
 #define _C(x) x
-static char *acc_powermodes[] = {
+static const char *acc_powermodes[] = {
 	_C("Off"),
 	_C("Low"),
 	_C("On"),
 	_C("High Current"),
 	_C("High Current (BM3)"),
 	_C("Low Voltage"),
+};
+static const char *acc_usb_connstats[] = {
+	_C("None"),
+	_C("Charger"),
+	_C("Host"),
+	_C("Host (alternate config)"), // HostAltConfig
+	_C("Device"),
+	_C("Device (Auth required)"),  // DeviceAuthRequired
+};
+static const char *acc_port_types[] = {
+	_C("Unknown"),
+	_C("Virtual"),
+	_C("USB-C"),
+	_C("USB-A"),
+	_C("Mini DP"),
+	_C("FireWire 800"),
+	_C("HDMI"),
+	_C("Audio Jack (Mini)"),
+	_C("Ethernet"),
+	_C("MagSafe"),			// This is typically old MagSafe charger port on old MacBooks
+	_C("MagSafe 2"),
+	_C("SD Card"),
+	_C("Lightning"),
+	_C("30-Pin"),			// Wow, who still using this
+	_C("Inductive"),		// iPhone wireless charging (or they called MagSafe)
+	_C("Smart Connector"),
+	_C("Display Port"),
+	_C("MagSafe 3"),		// 2021 introduced MagSafe 3 for MacBooks
+	// We need help on testing 'Inductive', 'Contactless' and 'Wireless'
+	_C("Contactless"),
+	_C("Wireless")
 };
 #undef _C
 extern const char *cond_localize_c(const char *);
@@ -92,18 +121,50 @@ const char *acc_powermode_string(AccessoryPowermode powermode) {
 	snprintf(modestr, 32, "<%d>", powermode);
 	return modestr;
 }
+const char *acc_usb_connstat_string(SInt32 usb_connstat) {
+	if (usb_connstat > 5) return _C("Unknown");
+	
+	return acc_usb_connstats[usb_connstat];
+}
 
 const char *acc_powermode_string_supported(accessory_powermode_t mode) {
 	if (mode.supported_cnt == 0) return NULL;
 
 	static char buffer[1024];
-	memset(buffer, 0, sizeof(buffer));
 	sprintf(buffer, "%s: ", _C("Supported List"));
 	for (size_t i = 0; i < mode.supported_cnt; i++) {
-		sprintf(buffer, "%s%s<%lu %s>\n", buffer, acc_powermode_string(mode.supported[i]), mode.supported_lim[i], L_MA);
+		sprintf(buffer, "%s%s%s<%lu %s>", buffer, (i == 0) ? "" : "\n", acc_powermode_string(mode.supported[i]), mode.supported_lim[i], L_MA);
 	}
 
 	return buffer;
+}
+
+const char *acc_usb_ilim_string_multiline(accessory_usb_ilim_t ilim) {
+	if (ilim.limit == 0) return NULL;
+
+	// XXX: This is terrible, consider migrate to a better UI
+	static char buffer[1024];
+	sprintf(buffer, "%s: %lu %s", _C("Limit"), (unsigned long)ilim.limit, L_MA);
+	if (ilim.base || ilim.offset || ilim.max) {
+		sprintf(buffer, "%s\n(", buffer);
+		if (ilim.base)
+			sprintf(buffer, "%s%s: %lu", buffer, _C("Base"), (unsigned long)ilim.base);
+		if (ilim.offset)
+			sprintf(buffer, "%s%s%s: %lu", buffer, (ilim.base) ? " " : "", _C("Offset"), (unsigned long)ilim.offset);
+		if (ilim.max)
+			sprintf(buffer, "%s%s%s: %lu", buffer, (ilim.base || ilim.offset) ? " " : "", _C("Max"), (unsigned long)ilim.max);
+		
+		sprintf(buffer, "%s)", buffer);
+	}
+
+	return buffer;
+}
+
+const char *acc_port_type_string(SInt32 pt) {
+	if (pt > 19) {
+		return _C("Undefined");
+	}
+	return acc_port_types[pt];
 }
 
 const char *manf_id_string(SInt32 manf) {
@@ -478,5 +539,106 @@ IOReturn get_acc_digitalid(io_connect_t connect, UInt8 *digitalID) {
 			if (detect) CFRelease(detect);
 		}
 	}
+	return kr;
+}
+
+IOReturn get_acc_usb_connstat(io_connect_t connect, accessory_usb_connstat_t *connstat) {
+	IOReturn kr = kIOReturnSuccess;
+	memset(connstat, 0, sizeof(accessory_usb_connstat_t));
+
+	if (use_libioam) {
+		SInt32 buf;
+		bool active;
+		kr = IOAccessoryManagerGetUSBConnectType(connect, &buf, &active);
+		if (kr == kIOReturnSuccess) {
+			connstat->active = active;
+			connstat->type = buf;
+		}
+
+		kr = IOAccessoryManagerGetUSBConnectTypePublished(connect, &buf, &active);
+		if (kr == kIOReturnSuccess) {
+			connstat->active = active;
+			connstat->published_type = buf;
+		}
+	} else {
+		CFMutableDictionaryRef properties;
+		kr = IORegistryEntryCreateCFProperties(connect, &properties, kCFAllocatorDefault, kNilOptions);
+		if (kr == kIOReturnSuccess) {
+			CFNumberRef number = CFDictionaryGetValue(properties, CFSTR("IOAccessoryUSBConnectType"));
+			if (number) {
+				if (!CFNumberGetValue(number, kCFNumberSInt32Type, &(connstat->type)))
+					connstat->type = -1;
+			}
+			number = CFDictionaryGetValue(properties, CFSTR("IOAccessoryUSBConnectTypePublished"));
+			if (number) {
+				if (!CFNumberGetValue(number, kCFNumberSInt32Type, &(connstat->published_type)))
+					connstat->published_type = -1;
+			}
+			connstat->active = (CFDictionaryGetValue(properties, CFSTR("IOAccessoryUSBActive")) == kCFBooleanTrue);
+
+			CFRelease(properties);
+		}
+	}
+	return kr;
+}
+
+IOReturn get_acc_usb_voltage(io_connect_t connect, SInt32 *voltage) {
+	IOReturn kr = kIOReturnSuccess;
+	if (use_libioam)
+		return IOAccessoryManagerGetUSBChargingVoltage(connect, voltage);
+	
+	CFNumberRef number;
+	number = (CFNumberRef)IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryUSBChargingVoltage"), kCFAllocatorDefault, kNilOptions);
+	if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, voltage)) {
+		*voltage = 0;
+		kr = kIOReturnNotAttached;
+	}
+	if (number) CFRelease(number);
+	
+	return kr;
+}
+
+IOReturn get_acc_usb_ilim(io_connect_t connect, accessory_usb_ilim_t *ilim) {
+	IOReturn kr = kIOReturnSuccess;
+	IOReturn lim = 0, base = 0, offset = 0, max = 0;
+
+	memset(ilim, 0, sizeof(accessory_usb_ilim_t));
+	if (use_libioam) {
+		lim = IOAccessoryManagerGetUSBCurrentLimit(connect, &(ilim->limit));
+		base = IOAccessoryManagerGetUSBCurrentLimitBase(connect, &(ilim->base));
+		offset = IOAccessoryManagerGetUSBCurrentLimitOffset(connect, &(ilim->offset));
+		max = IOAccessoryManagerGetUSBCurrentLimitMaximum(connect, &(ilim->max));
+	} else {
+		CFNumberRef number;
+
+		number = IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryUSBCurrentLimit"), kCFAllocatorDefault, kNilOptions);
+		if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &(ilim->limit))) {
+			lim = kIOReturnNotAttached;
+		}
+		CFRelease(number);
+
+		number = IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryUSBCurrentLimitBase"), kCFAllocatorDefault, kNilOptions);
+		if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &(ilim->base))) {
+			base = kIOReturnNotAttached;
+		}
+		CFRelease(number);
+
+		number = IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryUSBCurrentLimitOffset"), kCFAllocatorDefault, kNilOptions);
+		if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &(ilim->offset))) {
+			offset = kIOReturnNotFound;
+		}
+		CFRelease(number);
+
+		number = IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryUSBCurrentLimitMaximum"), kCFAllocatorDefault, kNilOptions);
+		if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &(ilim->max))) {
+			offset = kIOReturnNotFound;
+		}
+		CFRelease(number);
+	}
+
+	if ((lim == kIOReturnNotAttached) && (base == kIOReturnNotAttached) && (offset == kIOReturnNotFound) && (max == kIOReturnNotFound)) {
+		kr = kIOReturnNotAttached;
+	}
+	
 	return kr;
 }

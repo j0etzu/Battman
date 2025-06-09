@@ -9,6 +9,7 @@
 #define iokit_connection_h
 
 #include "libsmc.h"
+#include "../iokitextern.h"
 #include <stdio.h>
 #include <CoreFoundation/CoreFoundation.h>
 
@@ -31,6 +32,7 @@
 __BEGIN_DECLS
 
 hvc_menu_t *convert_hvc(CFDictionaryRef dict, size_t *size, int8_t *index);
+bool first_vendor_at_usagepagepairs(uint32_t *vid, uint32_t *pid, uint32_t usagePage, uint32_t usage);
 
 __END_DECLS
 

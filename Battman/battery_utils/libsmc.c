@@ -827,38 +827,6 @@ const char *not_charging_reason_str(uint64_t code) {
 #endif
 // Stub macro
 #define _C(x) x
-/* Currently we only identify port types when port is a powersource */
-/* Possible values: 1, 2, 3, 9, 10, 12, 13, 14, 17, 18, 19 */
-static const char *port_types[] = {
-    _C("Unknown"),
-    _C("Virtual"),
-    _C("USB-C"),
-    _C("USB-A"),
-    _C("Mini DP"),
-    _C("FireWire 800"),
-    _C("HDMI"),
-    _C("Audio Jack (Mini)"),
-    _C("Ethernet"),
-    _C("MagSafe"), // This is typically old MagSafe charger port on old MacBooks
-    _C("MagSafe 2"),
-    _C("SD Card"),
-    _C("Lightning"), // Lightning to Lightning port
-    _C("30-Pin"), // Wow, who still using this
-    _C("Inductive"), // iPhone wireless charging
-    _C("Smart Connector"),
-    _C("Display Port"),
-    _C("MagSafe 3"), // 2021 introduced MagSafe 3 for MacBooks
-    // We need help on testing 'Inductive', 'Contactless' and 'Wireless'
-    _C("Contactless"),
-    _C("Wireless")
-};
-
-const char *port_type_str(uint8_t pt) {
-    if (pt > 19) {
-        return _C("Undefined");
-    }
-    return port_types[pt];
-}
 
 // TODO: decode all charger status
 const char *charger_status_str(uint8_t code[64]) {
@@ -1060,9 +1028,9 @@ charging_state_t is_charging(mach_port_t *family, device_info_t *info) {
         /* Other info */
         /* D?PT(ui8 ) Adapter Type */
         key = 'D\0PT' | ((0x30 + charging) << 0x10);
-        result = smc_read_n(key, &info->port_type,1);
+        result = smc_read_n(key, &info->adap_type, 1);
         if (result == kIOReturnSuccess)
-            DBGLOG(CFSTR("Port: %d, Type: %d"), charging, info->port_type);
+            DBGLOG(CFSTR("Port: %d, Type: %d"), charging, info->adap_type);
 
         /* D?AR(ui32) Ampere Rating (Mobile Only) */
         /* D?BD(ui32) AdapterID */
