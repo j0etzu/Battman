@@ -76,7 +76,7 @@ extern IOReturn IOMasterPort(mach_port_t, mach_port_t *);
 extern CFMutableDictionaryRef IOServiceMatching(const char *);
 extern kern_return_t IOServiceOpen(io_service_t, task_port_t, uint32_t, io_connect_t *);
 extern io_service_t IOServiceGetMatchingService(mach_port_t, CFDictionaryRef);
-extern int IOServiceAddInterestNotification(IONotificationPortRef, io_service_t, const char *, void *, int, void *);
+extern int IOServiceAddInterestNotification(IONotificationPortRef, io_service_t, const char *, void(*)(void*,io_service_t,unsigned int,void*), void*, void *);
 extern int IORegistryEntryCreateCFProperties(io_registry_entry_t, CFMutableDictionaryRef *, CFAllocatorRef, uint32_t);
 extern kern_return_t IOConnectCallStructMethod(mach_port_t, uint32_t, const void *, size_t, void *, size_t *);
 extern kern_return_t IOServiceClose(io_connect_t);

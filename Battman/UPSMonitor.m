@@ -40,6 +40,7 @@
 #include <IOKit/ps/IOUPSPlugIn.h>
 #else
 
+#define kIOMessageServiceIsTerminated 0xe0000010
 #define kIOCFPlugInInterfaceID CFUUIDGetConstantUUIDWithBytes(NULL,	\
 0xC2, 0x44, 0xE8, 0x58, 0x10, 0x9C, 0x11, 0xD4,			\
 0x91, 0xD4, 0x00, 0x50, 0xE4, 0xC6, 0x42, 0x6F)
@@ -273,7 +274,7 @@ UPSDeviceAdded(void *refCon, io_iterator_t iterator)
 				goto CLEANUP_PARTIAL;
 			}
 
-			kr = IOServiceAddInterestNotification(gNotifyPort, upsDevice, kIOGeneralInterest, DeviceNotification, upsDataRef, &(upsDataRef->notification));
+			kr = IOServiceAddInterestNotification(gNotifyPort, upsDevice, "IOGeneralInterest", DeviceNotification, upsDataRef, &(upsDataRef->notification));
 			if (kr != kIOReturnSuccess)
 				goto CLEANUP_PARTIAL;
 			
