@@ -801,6 +801,7 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 	BI_FORMAT_ITEM(_C("Supervised Transports Restricted"), "%s", get_acc_supervised_transport_restricted(connect) ? L_TRUE : L_FALSE);
 
 	/* AppleSMC Part */
+	bool smc_vendor = false;
 	if (hasSMC && accessory_available() && port == kIOAccessoryPortID0Pin) {
 		BI_SET_ITEM(_C("Power Supply"), vbus_port() == 2);
 		if (get_iktara_accessory_array(&array) && array.present == 1) {
@@ -820,6 +821,9 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 			} else {
 				BI_FORMAT_ITEM_IF(array.PID, _C("Product ID"), "0x%0.4X", array.PID);
 			}
+			if (array.VID || array.PID)
+				smc_vendor = true;
+
 			BI_FORMAT_ITEM_IF(array.capacity != -1, _C("State of Charge"), "%d%%", array.capacity);
 			BI_SET_ITEM_IF(array.charging != -1, _C("Accepting Charge"), array.charging);
 			BI_FORMAT_ITEM(_C("Status"), "0x%.8X", array.status);
@@ -829,7 +833,7 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 
 	/* TODO: IOHIDDevice Part */
 	/* Inductive Port: kHIDPage_AppleVendor:70 */
-	if ((!array.PID || !array.VID) && port == kIOAccessoryPortID0Pin) {
+	if (!smc_vendor && port == kIOAccessoryPortID0Pin) {
 		uint32_t vid, pid;
 		vid = pid = 0;
 		// Normally, only one device will be at 0xFF00:70

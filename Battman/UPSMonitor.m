@@ -6,112 +6,105 @@
 //  This is exactly what ioupsd does, but ported to work with iOS App
 //
 
+#import "common.h"
 #import "UPSMonitor.h"
-#import "iokitextern.h"
+
 #include <pthread/pthread.h>
 #include <syslog.h>
 #import <UIKit/UIKit.h>
-
-#if __has_include(<IOKit/hid/AppleHIDUsageTables.h>)
-#include <IOKit/hid/AppleHIDUsageTables.h>
-#else
-#define kHIDPage_AppleVendor 0xFF00
-#define kHIDUsage_AppleVendor_AccessoryBattery 0x0014
-#endif
-#if __has_include(<IOKit/hid/IOHIDUsageTables.h>)
-#include <IOKit/hid/IOHIDUsageTables.h>
-#else
-#define kHIDPage_PowerDevice 0x0084
-#define kHIDPage_BatterySystem 0x0085
-#define kHIDUsage_PD_PeripheralDevice 0x0006
-#define kHIDUsage_BS_PrimaryBattery 0x002E
-#endif
-#if __has_include(<IOKit/hid/IOHIDKeys.h>)
-#include <IOKit/hid/IOHIDKeys.h>
-#else
-#define kIOFirstMatchNotification "IOServiceFirstMatch"
-#define kIOServicePlane "IOService"
-#define kIOHIDDeviceKey "IOHIDDevice"
-#define kIOHIDDeviceUsagePageKey "DeviceUsagePage"
-#define kIOHIDDeviceUsageKey "DeviceUsage"
-#define kIOHIDDeviceUsagePairsKey "DeviceUsagePairs"
-#endif
-#if __has_include(<IOKit/ps/IOUPSPlugIn.h>)
-#include <IOKit/ps/IOUPSPlugIn.h>
-#else
-
-#define kIOMessageServiceIsTerminated 0xe0000010
-#define kIOCFPlugInInterfaceID CFUUIDGetConstantUUIDWithBytes(NULL,	\
-0xC2, 0x44, 0xE8, 0x58, 0x10, 0x9C, 0x11, 0xD4,			\
-0x91, 0xD4, 0x00, 0x50, 0xE4, 0xC6, 0x42, 0x6F)
-#define kIOUPSPlugInTypeID CFUUIDGetConstantUUIDWithBytes(NULL, 	\
-0x40, 0xa5, 0x7a, 0x4e, 0x26, 0xa0, 0x11, 0xd8,			\
-0x92, 0x95, 0x00, 0x0a, 0x95, 0x8a, 0x2c, 0x78)
-#define kIOUPSPlugInInterfaceID_v140 CFUUIDGetConstantUUIDWithBytes(NULL, 	\
-0xe6, 0xe, 0x7, 0x99, 0x9a, 0xa6, 0x49, 0xdf,               \
-0xb5, 0x5b, 0xa5, 0xc9, 0x4b, 0xa0, 0x7a, 0x4a)
-#define kIOUPSPlugInInterfaceID CFUUIDGetConstantUUIDWithBytes(NULL, 	\
-0x63, 0xf8, 0xbf, 0xc4, 0x26, 0xa0, 0x11, 0xd8, 			\
-0x88, 0xb4, 0x0, 0xa, 0x95, 0x8a, 0x2c, 0x78)
-
-typedef void (*IOUPSEventCallbackFunction)
-(void *	 		target,
- IOReturn 		result,
- void * 			refcon,
- void * 			sender,
- CFDictionaryRef  event);
-
-#define IOUPSPLUGINBASE							\
-IOReturn (*getProperties)(	void * thisPointer, 			\
-CFDictionaryRef * properties);		\
-IOReturn (*getCapabilities)(void * thisPointer, 			\
-CFSetRef * capabilities);		\
-IOReturn (*getEvent)(	void * thisPointer, 			\
-CFDictionaryRef * event);		\
-IOReturn (*setEventCallback)(void * thisPointer, 			\
-IOUPSEventCallbackFunction callback,	\
-void * callbackTarget,  		\
-void * callbackRefcon);			\
-IOReturn (*sendCommand)(	void * thisPointer, 			\
-CFDictionaryRef command)
-
-#define IOUPSPLUGIN_V140							\
-IOReturn (*createAsyncEventSource)(void * thisPointer,      \
-CFTypeRef * source)
-
-
-typedef struct IOUPSPlugInInterface {
-	IUNKNOWN_C_GUTS;
-	IOUPSPLUGINBASE;
-} IOUPSPlugInInterface;
-
-typedef struct IOUPSPlugInInterface_v140 {
-	IUNKNOWN_C_GUTS;
-	IOUPSPLUGINBASE;
-	IOUPSPLUGIN_V140;
-} IOUPSPlugInInterface_v140;
-#endif
 
 static bool UPSWatching = false;
 static CFRunLoopRef   gBackgroundRunLoop = NULL;
 
 @implementation UPSMonitor
 
-typedef struct UPSData {
-	io_object_t                 notification;          // returned by IOServiceAddInterestNotification
-	IOUPSPlugInInterface **     upsPlugInInterface;    // the v140 or old plugin Interface
-	CFDictionaryRef             upsProperties;         // retained via getProperties
-	CFDictionaryRef             upsEvent;              // retained via getEvent
-	CFSetRef                    upsCapabilities;       // retained via getCapabilities
-	CFRunLoopSourceRef          upsEventSource;        // from createAsyncEventSource
-	CFRunLoopTimerRef           upsEventTimer;         // from createAsyncEventSource
-} UPSData;
-
-typedef UPSData * UPSDataRef;
-
 static IONotificationPortRef    gNotifyPort     = NULL;
 static io_iterator_t            gAddedIter      = MACH_PORT_NULL;
-static CFMutableSetRef          gAllUPSDevices  = NULL;   // holds (UPSDataRef) values
+
+UPSDeviceSet *gAllUPSDevices = NULL;
+
+#pragma mark gAllUPSDevices
+
+// Call this right after you do your UPSDeviceSetAdd, or whenever you want to dump the contents:
+static void PrintAllUPSDevices(void) {
+	if (!gAllUPSDevices || gAllUPSDevices->count == 0) {
+		NSLog(@"[UPSMonitor] no UPS devices in set");
+		return;
+	}
+	
+	NSLog(@"[UPSMonitor] gAllUPSDevices contains %zu entries:", gAllUPSDevices->count);
+	for (size_t i = 0; i < gAllUPSDevices->count; i++) {
+		UPSDataRef d = gAllUPSDevices->items[i];
+
+		NSLog(@"  [%zu] UPSDataRef %p entryID %llu", i, d, d->regID);
+		CFShow(d->upsProperties);
+		CFShow(d->upsCapabilities);
+		CFShow(d->upsEvent);
+	}
+}
+
+// Create an empty set
+static UPSDeviceSet *UPSDeviceSetCreate(void) {
+	UPSDeviceSet *set = calloc(1, sizeof(*set));
+	if (!set) return NULL;
+	set->capacity = 1;
+	set->items    = calloc(set->capacity, sizeof(UPSDataRef));
+	return set;
+}
+
+// Free the set itself (not the UPSDataRefs; you should free those separately)
+static void UPSDeviceSetDestroy(UPSDeviceSet *set) {
+	if (!set) return;
+	free(set->items);
+	free(set);
+}
+
+// Returns true if already present
+static bool UPSDeviceSetContains(UPSDeviceSet *set, UPSDataRef ptr) {
+	for (size_t i = 0; i < set->count; i++) {
+		if (set->items[i]->regID == ptr->regID) return true;
+	}
+	return false;
+}
+
+// Add ptr if not already in the set
+static bool UPSDeviceSetAdd(UPSDeviceSet *set, UPSDataRef ptr) {
+	if (UPSDeviceSetContains(set, ptr)) return false;
+	if (set->count == set->capacity) {
+		size_t newCap = set->capacity * 2;
+		UPSDataRef *newArr = realloc(set->items, newCap * sizeof(UPSDataRef));
+		if (!newArr) return false;
+		set->items    = newArr;
+		set->capacity = newCap;
+	}
+	set->items[set->count++] = ptr;
+	return true;
+}
+
+// Remove ptr if present; shifts tail elements down
+static bool UPSDeviceSetRemove(UPSDeviceSet *set, UPSDataRef ptr) {
+	for (size_t i = 0; i < set->count; i++) {
+		if (set->items[i]->regID == ptr->regID) {
+			memmove(&set->items[i],
+					&set->items[i+1],
+					(set->count - i - 1) * sizeof(UPSDataRef));
+			set->count--;
+			return true;
+		}
+	}
+	return false;
+}
+
+// Number of items
+static size_t UPSDeviceSetCount(UPSDeviceSet *set) {
+	return set ? set->count : 0;
+}
+
+// Copy all items into user-supplied buffer (must be at least count() in size)
+static void UPSDeviceSetGetAll(UPSDeviceSet *set, UPSDataRef *outBuffer) {
+	if (!set || !outBuffer) return;
+	memcpy(outBuffer, set->items, set->count * sizeof(UPSDataRef));
+}
 
 static void
 FreeUPSData(UPSDataRef upsDataRef)
@@ -134,19 +127,6 @@ FreeUPSData(UPSDataRef upsDataRef)
 		upsDataRef->upsPlugInInterface = NULL;
 	}
 
-	if (upsDataRef->upsProperties) {
-		CFRelease(upsDataRef->upsProperties);
-		upsDataRef->upsProperties = NULL;
-	}
-	if (upsDataRef->upsCapabilities) {
-		CFRelease(upsDataRef->upsCapabilities);
-		upsDataRef->upsCapabilities = NULL;
-	}
-	if (upsDataRef->upsEvent) {
-		CFRelease(upsDataRef->upsEvent);
-		upsDataRef->upsEvent = NULL;
-	}
-
 	if (upsDataRef->notification != MACH_PORT_NULL) {
 		IOObjectRelease(upsDataRef->notification);
 		upsDataRef->notification = MACH_PORT_NULL;
@@ -162,9 +142,7 @@ void DeviceNotification(void *refCon, io_service_t service, natural_t messageTyp
 	}
 	
 	if (messageType == kIOMessageServiceIsTerminated) {
-		if (gAllUPSDevices && CFSetContainsValue(gAllUPSDevices, upsData)) {
-			CFSetRemoveValue(gAllUPSDevices, upsData);
-		}
+		UPSDeviceSetRemove(gAllUPSDevices, upsData);
 		FreeUPSData(upsData);
 	}
 }
@@ -186,6 +164,7 @@ UPSDeviceAdded(void *refCon, io_iterator_t iterator)
 	io_object_t             upsDevice           = MACH_PORT_NULL;
 	
 	while ( (upsDevice = IOIteratorNext(iterator)) ) {
+		DBGLOG(@"[UPSMonitor] UPSDevice Got");
 		IOCFPlugInInterface **    plugInInterface = NULL;
 		IOUPSPlugInInterface_v140 **   upsPlugInInterface  = NULL;
 		SInt32                    score           = 0;
@@ -199,6 +178,9 @@ UPSDeviceAdded(void *refCon, io_iterator_t iterator)
 			continue;
 		}
 
+		uint64_t entryID = 0;
+		IORegistryEntryGetRegistryEntryID(upsDevice, &entryID);
+		upsDataRef->regID              = entryID;
 		upsDataRef->notification       = MACH_PORT_NULL;
 		upsDataRef->upsPlugInInterface = NULL;
 		upsDataRef->upsProperties      = NULL;
@@ -279,10 +261,12 @@ UPSDeviceAdded(void *refCon, io_iterator_t iterator)
 				goto CLEANUP_PARTIAL;
 			
 			if (!gAllUPSDevices) {
-				gAllUPSDevices = CFSetCreateMutable(kCFAllocatorDefault, 0, &kCFTypeSetCallBacks);
+				gAllUPSDevices = UPSDeviceSetCreate();
 			}
-			CFSetAddValue(gAllUPSDevices, upsDataRef);
-			
+			UPSDeviceSetAdd(gAllUPSDevices, upsDataRef);
+#ifdef DEBUG
+			PrintAllUPSDevices();
+#endif
 			IOObjectRelease(upsDevice);
 			continue;
 		}
@@ -290,6 +274,7 @@ UPSDeviceAdded(void *refCon, io_iterator_t iterator)
 	CLEANUP_PARTIAL:
 		// (same cleanup logic as before)
 		if (upsDataRef) {
+			DBGLOG(@"[UPSMonitor] cleanup");
 			if (upsDataRef->notification != MACH_PORT_NULL) {
 				IOObjectRelease(upsDataRef->notification);
 			}
@@ -405,7 +390,7 @@ threadMain(void)
 			NSLog(@"[UPSMonitor] ERROR: IOServiceAddMatchingNotification failed: 0x%08x", kr);
 			goto CLEANUP_ALL;
 		}
-		
+		DBGLOG(@"[UPSMonitor] thread setup");
 		// Drain any already‐present devices so they don’t get missed
 		UPSDeviceAdded(NULL, gAddedIter);
 
@@ -423,18 +408,17 @@ threadMain(void)
 		}
 
 		if (gAllUPSDevices) {
-			CFIndex n = CFSetGetCount(gAllUPSDevices);
-			if (n > 0) {
-				UPSDataRef *buffer = calloc(n, sizeof(UPSDataRef));
-				CFSetGetValues(gAllUPSDevices, (const void **)buffer);
-				for (CFIndex i = 0; i < n; i++) {
-					FreeUPSData(buffer[i]);
-				}
-				free(buffer);
+			size_t n = UPSDeviceSetCount(gAllUPSDevices);
+			UPSDataRef *buffer = calloc(n, sizeof(UPSDataRef));
+			UPSDeviceSetGetAll(gAllUPSDevices, buffer);
+			for (size_t i = 0; i < n; i++) {
+				FreeUPSData(buffer[i]);
 			}
-			CFRelease(gAllUPSDevices);
+			free(buffer);
+			UPSDeviceSetDestroy(gAllUPSDevices);
 			gAllUPSDevices = NULL;
 		}
+
 
 		if (gNotifyPort) {
 			IONotificationPortDestroy(gNotifyPort);
@@ -487,6 +471,7 @@ static bool gNotificationsPaused = false;
 
 + (void)startWatchingUPS
 {
+	DBGLOG(@"[UPSMonitor] called");
 	if (UPSWatching) {
 		return;
 	}

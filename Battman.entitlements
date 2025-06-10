@@ -29,6 +29,11 @@
 	<!--<key>com.apple.private.security.container-required</key>
 	<true/>-->
 	<!-- ^ Required when making system app -->
+
+	<key>com.apple.private.tcc.allow</key>
+	<array>
+		<string>kTCCServiceListenEvent</string>
+	</array>
 	<key>com.apple.private.security.container-manager</key>
 	<true/>
 	<key>com.apple.private.security.storage.AppDataContainers</key>
@@ -49,6 +54,12 @@
 	<key>com.apple.private.hid.client.service-protected</key>
 	<true/>
 	<key>com.apple.private.hid.manager.client</key>
+	<true/>
+	<key>com.apple.hid.manager.user-access-custom-queue-size</key>
+	<true/>
+	<key>com.apple.hid.manager.user-access-privileged</key>
+	<true/>
+	<key>com.apple.hid.manager.user-access-protected</key>
 	<true/>
 
 	<!-- PMGR/GG/SMC -->
@@ -97,6 +108,7 @@
 		<string>IOReportUserClient</string>
 		<string>IOAccessoryManagerUserClient</string>
 		<string>IOAccessoryPortUserClient</string>
+		<string>IOHIDLibUserClient</string>
 	</array>
 	<key>com.apple.security.iokit-user-client-class</key>
 	<array>
@@ -107,6 +119,7 @@
 		<string>IOReportUserClient</string>
 		<string>IOAccessoryManagerUserClient</string>
 		<string>IOAccessoryPortUserClient</string>
+		<string>IOHIDLibUserClient</string>
 	</array>
 	<key>com.apple.private.iokit.rootdomain-set-property</key>
 	<true/>

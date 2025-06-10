@@ -920,9 +920,9 @@ charging_state_t is_charging(mach_port_t *family, device_info_t *info) {
     /* kIOPSPowerAdapterFamily */
     if (family != NULL) {
         key = 'D\0FC' | ((0x30 + charging) << 0x10);
-        result = smc_read_n(key, family,4);
+        result = smc_read_n(key, family, 4);
         if (result == kIOReturnSuccess)
-            DBGLOG(CFSTR("Port: %d, Family Code: %X"), charging, family);
+            DBGLOG(CFSTR("Port: %d, Family Code: %X"), charging, *family);
     }
 
     /* Not every charger sets those, no return on err */
@@ -970,19 +970,19 @@ charging_state_t is_charging(mach_port_t *family, device_info_t *info) {
         key = 'D\0DE' | ((0x30 + charging) << 0x10);
         result = smc_read_n(key, &info->description, 32);
         if (result == kIOReturnSuccess)
-            DBGLOG(CFSTR("Port: %d, Description: 0x%X"), charging, info->description);
+            DBGLOG(CFSTR("Port: %d, Description: %s"), charging, info->description);
 
         /* CHI?(ui32) USB Port ? PMUConfiguration */
         key = 'CHI\0' | ((0x30 + charging) << 0x0);
         result = smc_read_n(key, &info->PMUConfiguration, 4);
         if (result == kIOReturnSuccess)
-            DBGLOG(CFSTR("Port: %d, PMUConfiguration: 0x%X"), charging, info->PMUConfiguration);
+            DBGLOG(CFSTR("Port: %d, PMUConfiguration: %u"), charging, info->PMUConfiguration);
 
         /* D?IR(ui16) USB Port ? Charger current rating */
         key = 'D\0IR' | ((0x30 + charging) << 0x10);
         result = smc_read_n(key, &info->current, 2);
         if (result == kIOReturnSuccess)
-            DBGLOG(CFSTR("Port: %d, Current Rating: 0x%X"), charging, info->current);
+            DBGLOG(CFSTR("Port: %d, Current Rating: %u"), charging, info->current);
 
         /* D?VR(ui16) USB Port ? Charger voltage rating */
         key = 'D\0VR' | ((0x30 + charging) << 0x10);

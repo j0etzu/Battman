@@ -464,7 +464,11 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
         get_capacity(&remain_cap, &full_cap, &design_cap);
         if (remain_cap > full_cap) {
             code = WARN_UNUSUAL;
-            *str = _C("Unusual Remaining Capacity, A non-genuine battery component may be in use.");
+			static char errmsg[256];
+			// some Shenzhen battries is spoofing this data to affect internal battery health calculations
+			// But they still had to report a real SoC so that indicating actual conditions.
+			sprintf(errmsg, "%s\n%s: %ld", _C("Unusual Remaining Capacity, A non-genuine battery component may be in use."), _C("Estimated Remaining"), lrintf((float)full_cap * gGauge.StateOfCharge / 100.0f));
+			*str = errmsg;
         } else if (remain_cap == 0) {
             code = WARN_EMPTYVAL;
             *str = _C("Remaining Capacity not detected.");
@@ -549,7 +553,7 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
         /* Non-genuine batteries are likely spoofing some unremarkable data */
         /* DOD0 is not going to bigger than Qmax normally, but sometimes it do
          * exceeds when discharging/charging with adapter attached */
-        if (gGauge.DOD0 > (gGauge.Qmax * 2)) {
+        if (gGauge.DOD0 > (gGauge.Qmax * 3)) {
             code = WARN_UNUSUAL;
             *str = _C("Unusual Depth of Discharge, A non-genuine battery component may be in use.");
         }
