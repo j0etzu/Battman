@@ -38,12 +38,14 @@ $${\color{grey}真正优雅的软件讲究代码的艺术，而非外表的点�
 - [x] 智能充电（优化电池充电）交互
 - [x] 低电量模式行为控制
 - [x] 详细的 MagSafe 配件信息
+- [x] 详细的 Lightning 线缆与配件信息
+- [x] 读取全部硬件温度传感器
 
 ### 前置条件
 
 - 越狱设备，或者通过TrollStore安装
 - iOS 12+ / macOS 11+（欢迎向前移植）
-- arm64（A11+ 理论上的 / M1+）
+- arm64（A7+ 理论上的 / M1+）
 - Gettext libintl（可选，用于本地化）
 - GTK+ 3（可选，用于运行在基于GTK+的桌面环境）
 
@@ -70,6 +72,8 @@ make -C Battman all
 ### 已测试设备
 - iPhone 12 系列 (D52)
 - iPad Pro 2021 第三代 (J51)
+- iPhone XR
+- iPad Air 2
 
 如果 Battman 未能在你的设备正常工作，请提交[疑述](../../../issues/new)。
 
@@ -83,7 +87,7 @@ make -C Battman all
 - [ ] 作为命令行程序运行
 - [ ] 作为守护进程运行
 - [x] 充电限制
-- [ ] 无线/MagSafe 适配
+- [x] 无线/MagSafe 适配
 - [ ] App 能耗限制
 - [ ] Jetsam 控制
 - [ ] 风扇控制

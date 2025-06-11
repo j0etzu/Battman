@@ -41,6 +41,8 @@ What other battery utils made for iOS hasn’t done
 - [x] Smart Charging (Optimized Battery Charging) communication
 - [x] Low Power Mode behavior control
 - [x] Detailed information for attached MagSafe Accessories
+- [x] Detailed information for attached Lightning Cables & Accessories
+- [x] Read all hardware temperature sensors
 
 ### Requirements
 
@@ -89,7 +91,7 @@ Please file [issues](../../issues/new) if Battman not working correctly on your 
 - [ ] Run as CLI
 - [ ] Run as daemon
 - [x] Charge limit
-- [ ] Wireless/MagSafe integration
+- [x] Wireless/MagSafe integration
 - [ ] App rate limit
 - [ ] Jetsam control
 - [ ] Fan control
