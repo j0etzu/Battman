@@ -16,6 +16,8 @@
 #include <CoreFoundation/CFNumber.h>
 #include <CoreFoundation/CFString.h>
 
+#include "../UPSMonitor.h"
+
 #ifdef _C
 #undef _C
 #endif
@@ -49,7 +51,7 @@ struct battery_info_node main_battery_template[] = {
 	{ _C("Avg. Power"), NULL, BIN_UNIT_MWATT | BIN_IN_DETAILS },
 	{ _C("Cell Count"), NULL, BIN_IN_DETAILS },
 	/* TODO: TimeToFull */
-	{ _C("Time To Empty"), NULL, BIN_UNIT_MIN | BIN_IN_DETAILS },
+	{ _C("Time to Empty"), NULL, BIN_UNIT_MIN | BIN_IN_DETAILS },
 	{ _C("Cycle Count"), NULL, BIN_IN_DETAILS },
 	{ _C("Designed Cycle Count"), NULL, BIN_IN_DETAILS },
 	{ _C("State of Charge"), NULL, BIN_UNIT_PERCENT | BIN_IN_DETAILS },
@@ -69,6 +71,7 @@ struct battery_info_node main_battery_template[] = {
 	{ _C("Simulation Rate"), _C("This field refers to the rate of Gas Gauge performing Impedance Track™ simulations."), BIN_UNIT_HOUR | BIN_IN_DETAILS },
 	{ _C("Daily Max SoC"), NULL, BIN_UNIT_PERCENT | BIN_IN_DETAILS },
 	{ _C("Daily Min SoC"), NULL, BIN_UNIT_PERCENT | BIN_IN_DETAILS },
+
 	{ _C("Adapter Details"), _C("All adapter information is dynamically retrieved from the hardware of the currently connected adapter (or cable if you are using Lightning ports). If any of the data is missing, it may indicate that the power source is not providing the relevant information, or there may be a hardware issue with the power source."), DEFINE_SECTION(9000) },
 	{ _C("Port"), _C("Port of currently connected adapter. On macOS, this is the USB port that the adapter currently attached."), BIN_IN_DETAILS },
 	{ _C("Adapter Type"), NULL, 0 },
@@ -93,6 +96,7 @@ struct battery_info_node main_battery_template[] = {
 	{ _C("PMU Configuration"), _C("The Configuration values is the max allowed Charging Current configurations."), 0 },
 	{ _C("Charger Configuration"), NULL, BIN_IN_DETAILS | BIN_UNIT_MAMP },
 	{ _C("HVC Mode"), _C("High Voltage Charging (HVC) Mode may accquired by your power adapter or system, all supported modes will be listed below."), BIN_IN_DETAILS },
+
 	{ _C("Inductive Port"), NULL, DEFINE_SECTION(8500) },
 	{ _C("Acc. ID"), NULL, 0 },
 	{ _C("Port Type"), NULL, 0 },
@@ -109,12 +113,28 @@ struct battery_info_node main_battery_template[] = {
 	{ _C("Battery Pack"), _C("This indicates if an accessory is now working as a Battery Pack."), 0 },
 	{ _C("Power Supply"), _C("This indicates if an accessory is now providing power."), BIN_IN_DETAILS | BIN_IS_BOOLEAN },
 	{ _C("Status"), 0 },
+	/* Accessory UPS Start */
+	{ _C("Max Capacity"), _C("The accessory battery's Full Charge Capacity."), BIN_IN_DETAILS | BIN_UNIT_MAH },
+	{ _C("Current Capacity"), NULL, BIN_IN_DETAILS | BIN_UNIT_MAH },
+	{ _C("Avg. Charging Current"), NULL, BIN_IN_DETAILS | BIN_UNIT_MAMP },
+	{ _C("Charging Voltage Rating"), NULL, BIN_IN_DETAILS | BIN_UNIT_MVOLT },
+	{ _C("Cell Count"), NULL, BIN_IN_DETAILS },
+	{ _C("Current"), _C("Real-time output current by attached accessory."), BIN_IN_DETAILS | BIN_UNIT_MAMP },
+	{ _C("Voltage"), _C("Real-time output voltage by attached accessory."), BIN_IN_DETAILS | BIN_UNIT_MVOLT },
+	{ _C("Incoming Current"), NULL, BIN_IN_DETAILS | BIN_UNIT_MAMP },
+	{ _C("Incoming Voltage"), NULL, BIN_IN_DETAILS | BIN_UNIT_MVOLT },
+	{ _C("Accepting Charge"), _C("This indicates if accessory is accepting charge."), BIN_IN_DETAILS | BIN_IS_BOOLEAN },
+	{ _C("Temperature"), NULL, BIN_IN_DETAILS | BIN_UNIT_DEGREE_C },
+	{ _C("Acc. Time to Empty"), NULL, BIN_IN_DETAILS | BIN_UNIT_MIN },
+	{ _C("Acc. Time to Full"), NULL, BIN_IN_DETAILS | BIN_UNIT_MIN },
+	/* Accessory UPS End */
 	{ _C("State of Charge"), _C("The accessory battery percentage reported by AppleSMC."), 0 },
 	{ _C("Accepting Charge"), NULL, BIN_IN_DETAILS | BIN_IS_BOOLEAN },
 	{ _C("Power Mode"), NULL, 0 },
 	{ _C("Sleep Power"), NULL, 0 },
 	{ _C("Supervised Acc. Attached"), NULL, 0 },
 	{ _C("Supervised Transports Restricted"), NULL, 0 },
+
 	{ _C("Serial Port"), NULL, DEFINE_SECTION(8000) },
 	{ _C("Acc. ID"), NULL, 0 },
 	{ _C("Digital ID"), _C("The \"Chip ID\" of attached accessory."), 0 },
@@ -133,6 +153,21 @@ struct battery_info_node main_battery_template[] = {
 	{ _C("Hardware Version"), NULL, 0 },
 	{ _C("Battery Pack"), _C("This indicates if an accessory is now working as a Battery Pack."), 0 },
 	{ _C("Power Supply"), _C("This indicates if an accessory is now providing power."), BIN_IN_DETAILS | BIN_IS_BOOLEAN },
+	/* Accessory UPS Start */
+	{ _C("Max Capacity"), _C("The accessory battery's Full Charge Capacity."), BIN_IN_DETAILS | BIN_UNIT_MAH },
+	{ _C("Current Capacity"), NULL, BIN_IN_DETAILS | BIN_UNIT_MAH },
+	{ _C("Charging Voltage Rating"), NULL, BIN_IN_DETAILS | BIN_UNIT_MVOLT },
+	{ _C("Avg. Charging Current"), NULL, BIN_IN_DETAILS | BIN_UNIT_MAMP },
+	{ _C("Cell Count"), NULL, 0 },
+	{ _C("Current"), _C("Real-time output current by attached accessory."), BIN_IN_DETAILS | BIN_UNIT_MAMP },
+	{ _C("Voltage"), _C("Real-time output voltage by attached accessory."), BIN_IN_DETAILS | BIN_UNIT_MVOLT },
+	{ _C("Incoming Current"), NULL, BIN_IN_DETAILS | BIN_UNIT_MAMP },
+	{ _C("Incoming Voltage"), NULL, BIN_IN_DETAILS | BIN_UNIT_MVOLT },
+	{ _C("Accepting Charge"), _C("This indicates if accessory is accepting charge."), BIN_IN_DETAILS | BIN_IS_BOOLEAN },
+	{ _C("Temperature"), NULL, BIN_IN_DETAILS | BIN_UNIT_DEGREE_C },
+	{ _C("Acc. Time to Empty"), NULL, BIN_IN_DETAILS | BIN_UNIT_MIN },
+	{ _C("Acc. Time to Full"), NULL, BIN_IN_DETAILS | BIN_UNIT_MIN },
+	/* Accessory UPS End */
 	// FIXME: We need a Smart Battery Case to test
 	// { _C("Status"), 0 },
 	// { _C("State of Charge"), _C("The accessory battery percentage reported by AppleSMC."), 0 },
@@ -725,7 +760,7 @@ void battery_info_update_smc(struct battery_info_section *section) {
 	BI_SET_ITEM(_C("Cell Count"), batt_cell_num());
 	/* FIXME: TTE shall display "Never" when -1 */
 	int timeToEmpty = get_time_to_empty();
-	BI_SET_ITEM_IF(timeToEmpty > 0, _C("Time To Empty"), timeToEmpty);
+	BI_SET_ITEM_IF(timeToEmpty > 0, _C("Time to Empty"), timeToEmpty);
 	BI_SET_ITEM(_C("Cycle Count"), gGauge.CycleCount);
 	BI_SET_ITEM_IF(gGauge.DesignCycleCount, _C("Designed Cycle Count"), gGauge.DesignCycleCount)
 	BI_SET_ITEM(_C("State of Charge"), gGauge.StateOfCharge);
@@ -769,6 +804,7 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 	iktara_accessory_array_t array;
 	accessory_usb_connstat_t connstat;
 	accessory_usb_ilim_t ilim;
+	uint32_t vid = 0, pid = 0;
 
 	// 100: Not connected, -1: Unrecognized
 	if (acc_id == 100 || acc_id == -1 || connect == MACH_PORT_NULL) {
@@ -821,8 +857,11 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 			} else {
 				BI_FORMAT_ITEM_IF(array.PID, _C("Product ID"), "0x%0.4X", array.PID);
 			}
-			if (array.VID || array.PID)
+			if (array.VID && array.PID) {
 				smc_vendor = true;
+				vid = array.VID;
+				pid = array.PID;
+			}
 
 			BI_FORMAT_ITEM_IF(array.capacity != -1, _C("State of Charge"), "%d%%", array.capacity);
 			BI_SET_ITEM_IF(array.charging != -1, _C("Accepting Charge"), array.charging);
@@ -833,8 +872,8 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 
 	/* TODO: IOHIDDevice Part */
 	/* Inductive Port: kHIDPage_AppleVendor:70 */
+	bool hid_vendor = false;
 	if (!smc_vendor && port == kIOAccessoryPortID0Pin) {
-		uint32_t vid, pid;
 		vid = pid = 0;
 		// Normally, only one device will be at 0xFF00:70
 		if (first_vendor_at_usagepagepairs(&vid, &pid, 0xFF00, 70)) {
@@ -854,6 +893,8 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 				BI_FORMAT_ITEM_IF(pid, _C("Product ID"), "0x%0.4X", pid);
 			}
 		}
+		if (vid && pid)
+			hid_vendor = true;
 	} else if (port == kIOAccessoryPortIDSerial) {
 		if (acc_id == 91) {
 			UInt8 digitalID[6];
@@ -888,7 +929,102 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 	/* Battery Case: kHIDPage_BatterySystem:kHIDUsage_BS_PrimaryBattery */
 	/* The Battery Case / Battery Pack details are stored in kHIDPage_BatterySystem normally */
 	// check UPSMonitor.m
+	if (smc_vendor || hid_vendor) {
+		UPSDataRef device = UPSDeviceMatchingVendorProduct(vid, pid);
+		if (device) {
+			/*
+			 MagSafe Battery Pack Events:
+			 {
+			 AppleRawCurrentCapacity = 815;
+			 "Battery Case Charging Voltage" = 0;
+			 "Cell 0 Voltage" = 3786;
+			 "Cell 1 Voltage" = 3762;
+			 Current = "-991";
+			 "Current Capacity" = 851;
+			 CycleCount = 279;
+			 "Debug Information" =     {
+			 "Attach Count 10.5W Adapter" = 1931312116;
+			 "Attach Count 12W Adapter" = 4152232521;
+			 "Attach Count 15W Adapter" = 3089525786;
+			 "Attach Count 18 - 20W Adapter" = 968817642;
+			 "Attach Count 5W Adapter" = 2124225740;
+			 "Attach Count 7.5W Adapter" = 4021667898;
+			 "Attach Count Device Type 0" = 1213098256;
+			 "Attach Count Device Type 1" = 3198192647;
+			 "Attach Count Less Than 5W Adapter" = 380749299;
+			 "Attach Count Other" = 2519347824;
+			 "Attach Count Over 20W Adapter" = 904112396;
+			 "Battery Case Average Charging Current" = 0;
+			 ChargingStatus = 364;
+			 "Host Available Power dW" = 106;
+			 InductiveStatus = 2147745799;
+			 "Kiosk Mode Count" = 0;
+			 "Lifetime Cell0 Max Q" = 1460;
+			 "Lifetime Cell0 Max Voltage" = 4354;
+			 "Lifetime Cell0 Min Voltage" = 2823;
+			 "Lifetime Cell1 Max Q" = 1462;
+			 "Lifetime Cell1 Max Voltage" = 4351;
+			 "Lifetime Cell1 Min Voltage" = 2777;
+			 "Lifetime Firmware Runtime" = 112347250;
+			 "Lifetime Max Charge Current" = 2048;
+			 "Lifetime Max Discharge Current" = "-2122";
+			 "Lifetime Max Temperature" = 49;
+			 "Lifetime Min Temperature" = 0;
+			 "Lifetime Time Above High Temperature" = 52078;
+			 "Lifetime Time Above Low Temperature" = 6215247;
+			 "Lifetime Time Above Mid Temperature" = 698591;
+			 "Lifetime Time Below Low Temperature" = 60438707;
+			 PowerStatus = 39;
+			 "Rx Power Limit" = 3;
+			 };
+			 "Device Color" = 0;
+			 "Incoming Current" = 271;
+			 "Incoming Voltage" = 92;
+			 "Is Charging" = 0;
+			 "Max Capacity" = 1281;
+			 "Nominal Capacity" = 1273;
+			 "Power Source State" = "Battery Power";
+			 Temperature = 35;
+			 "Time to Empty" = 77;
+			 Voltage = 7548;
+			 }
+			 */
+			int cell_count = 0;
+			CFIndex caps_count = CFSetGetCount(device->upsCapabilities);
+			for (CFIndex i = 0; i < caps_count; i++) {
+				CFStringRef val = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("Cell %ld Voltage"), i);
+				if (val && CFSetContainsValue(device->upsCapabilities, val)) {
+					cell_count++;
+					CFRelease(val);
+					continue;
+				} else {
+					if (val) CFRelease(val);
+					break;
+				}
+			}
+			/* We are not ready to display Cell specs for any batteries (But defined in headers) */
+			BI_SET_ITEM_IF(cell_count != 0, ("Cell Count"), cell_count);
+			ups_batt_t info = ups_battery_info(device);
+			/* Sadly, UPS does not got reports on Designed Capacity */
+			BI_SET_ITEM_IF(info.current_capacity != 0, _C("Current Capacity"), info.current_capacity);
+			BI_SET_ITEM_IF(info.max_capacity != 0, _C("Max Capacity"), info.max_capacity);
+			BI_SET_ITEM_IF(info.cycle_count != 0, _C("Cycle Count"), info.cycle_count);
+			/* XXX: Device Color */
+			BI_SET_ITEM_IF(info.batt_charging_voltage != 0, _C("Charging Voltage Rating"), info.batt_charging_voltage);
+			BI_SET_ITEM_IF(info.batt_charging_voltage != 0, _C("Avg. Charging Current"), info.batt_charging_current);
+			BI_SET_ITEM_IF(info.current != 0, _C("Current"), info.current);
+			BI_SET_ITEM_IF(info.current != 0, _C("Voltage"), info.current);
+			BI_SET_ITEM_IF(info.incoming_current != 0, _C("Incoming Current"), info.incoming_current);
+			BI_SET_ITEM_IF(info.incoming_voltage != 0, _C("Incoming Voltage"), info.incoming_voltage);
+			BI_SET_ITEM_IF(info.charging != 0, _C("Accepting Charge"), info.charging);
+			BI_SET_ITEM_IF(info.temperature != 0, _C("Temperature"), info.temperature);
+			BI_SET_ITEM_IF(info.time_to_empty != 0, _C("Acc. Time to Empty"), info.time_to_empty);
+			BI_SET_ITEM_IF(info.time_to_full != 0, _C("Acc. Time to Full"), info.time_to_full);
 
+			/* We are not ready to display Lifetime data for any batteries (But defined in headers) */
+		}
+	}
+	
 	/* TODO: CoreAccessory Part */
 
 	IOObjectRelease(connect);

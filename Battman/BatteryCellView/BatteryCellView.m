@@ -80,7 +80,6 @@ extern bool show_alert(char *, char*,char*);
 		waterViewSoC.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		waterViewSoC.phaseShift = 0.1;
 		[batteryView addSubview:waterViewSoC];
-		//TODO: StateOfCharge (BRSC)
 		[waterViewSoC updateWithPercentCompletion:(NSUInteger)percent];
 
 		[waterViewSoC startAnimation];

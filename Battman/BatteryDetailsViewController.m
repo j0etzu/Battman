@@ -526,7 +526,7 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
         }
         return code;
     });
-    equipWarningCondition_b(cell, _("Time To Empty"), ^warn_condition_t(const char **str) {
+    equipWarningCondition_b(cell, _("Time to Empty"), ^warn_condition_t(const char **str) {
         warn_condition_t code = WARN_NONE;
         uint16_t remain_cap, full_cap, design_cap;
         int tte = get_time_to_empty();
@@ -544,7 +544,7 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
         /* for ensurence, we check if TTE is bigger than 1.5*ideal */
         if (tte > (ideal * 1.5)) {
             code = WARN_UNUSUAL;
-            *str = _C("Unusual Time To Empty, A non-genuine battery component may be in use.");
+            *str = _C("Unusual Time to Empty, A non-genuine battery component may be in use.");
         }
         return code;
     });

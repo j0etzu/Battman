@@ -6,7 +6,9 @@
 //
 
 #import "iokitextern.h"
+#ifdef __OBJC__
 #import <Foundation/Foundation.h>
+#endif
 
 #if __has_include(<IOKit/hid/AppleHIDUsageTables.h>)
 #include <IOKit/hid/AppleHIDUsageTables.h>
@@ -50,12 +52,17 @@
 0x63, 0xf8, 0xbf, 0xc4, 0x26, 0xa0, 0x11, 0xd8, 			\
 0x88, 0xb4, 0x0, 0xa, 0x95, 0x8a, 0x2c, 0x78)
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnullability-completeness"
+
 typedef void (*IOUPSEventCallbackFunction)
 (void *	 		target,
  IOReturn 		result,
  void * 			refcon,
  void * 			sender,
  CFDictionaryRef  event);
+
+#pragma clang diagnostic pop
 
 #define IOUPSPLUGINBASE							\
 IOReturn (*getProperties)(	void * thisPointer, 			\
@@ -111,12 +118,33 @@ typedef struct {
 	size_t      capacity;
 } UPSDeviceSet;
 
+typedef struct ups_batt {
+	int current_capacity;
+	int max_capacity;
+	int batt_charging_current;
+	int batt_charging_voltage;
+	int current;
+	int voltage;
+	int cycle_count;
+	int device_color;
+	int incoming_current;
+	int incoming_voltage;
+	int charging;
+	int temperature;
+	int time_to_empty;
+	int time_to_full;
+} ups_batt_t;
+
 extern UPSDeviceSet *gAllUPSDevices;
+
+UPSDataRef UPSDeviceMatchingVendorProduct(int vid, int pid);
+ups_batt_t ups_battery_info(UPSDataRef device);
 
 #pragma clang diagnostic pop
 
 __END_DECLS
 
+#ifdef __OBJC__
 NS_ASSUME_NONNULL_BEGIN
 
 @interface UPSMonitor : NSObject
@@ -124,3 +152,4 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+#endif

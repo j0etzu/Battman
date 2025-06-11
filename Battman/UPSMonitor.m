@@ -106,6 +106,40 @@ static void UPSDeviceSetGetAll(UPSDeviceSet *set, UPSDataRef *outBuffer) {
 	memcpy(outBuffer, set->items, set->count * sizeof(UPSDataRef));
 }
 
+UPSDataRef UPSDeviceMatchingVendorProduct(int vid, int pid) {
+	UPSDataRef ret = NULL;
+	if (!gAllUPSDevices || gAllUPSDevices->count == 0) {
+		DBGLOG(@"[UPSMonitor] no UPS devices yet");
+		return NULL;
+	}
+	if (vid == 0 || pid == 0) {
+		DBGLOG(@"[UPSMonitor] invalid VID/PID");
+		return NULL;
+	}
+
+	for (size_t i = 0; i < gAllUPSDevices->count; i++) {
+		UPSDataRef d = gAllUPSDevices->items[i];
+
+		SInt32 vendor, product;
+		CFNumberRef number;
+		if (d->upsProperties) {
+			number = CFDictionaryGetValue(d->upsProperties, CFSTR("Vendor ID"));
+			if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &vendor)) {
+				continue;
+			}
+			number = CFDictionaryGetValue(d->upsProperties, CFSTR("Product ID"));
+			if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &product)) {
+				continue;
+			}
+			if ((vendor == vid) && (product == pid)) {
+				ret = d;
+				break;
+			}
+		}
+	}
+	return ret;
+}
+
 static void
 FreeUPSData(UPSDataRef upsDataRef)
 {
@@ -502,3 +536,37 @@ static bool gNotificationsPaused = false;
 }
 
 @end
+
+#pragma mark -- Misc
+
+#define GetIntForKey(x, y, z) 										\
+	number = CFDictionaryGetValue(x, CFSTR(y));							\
+	if (!number || !CFNumberGetValue(number, kCFNumberIntType, &(z)))	\
+		z = 0
+
+ups_batt_t ups_battery_info(UPSDataRef device) {
+	ups_batt_t info = {0};
+
+	if (!device || !device->upsEvent) return info;
+
+	CFNumberRef number;
+	/* Do not show Nominal Capacity, to avoid confusions */
+	GetIntForKey(device->upsEvent, "AppleRawCurrentCapacity", info.current_capacity);
+	GetIntForKey(device->upsEvent, "Max Capacity", info.max_capacity);
+	GetIntForKey(device->upsEvent, "Battery Case Charging Voltage", info.batt_charging_voltage);
+	GetIntForKey(device->upsEvent, "Current", info.current);
+	GetIntForKey(device->upsEvent, "Voltage", info.voltage);
+	GetIntForKey(device->upsEvent, "CycleCount", info.cycle_count);
+	GetIntForKey(device->upsEvent, "Device Color", info.device_color);
+	GetIntForKey(device->upsEvent, "Incoming Current", info.incoming_current);
+	GetIntForKey(device->upsEvent, "Incoming Voltage", info.incoming_voltage);
+	GetIntForKey(device->upsEvent, "Is Charging", info.charging);
+	GetIntForKey(device->upsEvent, "Temperature", info.temperature);
+	GetIntForKey(device->upsEvent, "Time to Empty", info.time_to_empty);
+	GetIntForKey(device->upsEvent, "Time to Full", info.time_to_full);
+
+	CFDictionaryRef debug_info = CFDictionaryGetValue(device->upsEvent, CFSTR("Debug Information"));
+	GetIntForKey(debug_info, "Battery Case Average Charging Current", info.batt_charging_current);
+
+	return info;
+}
