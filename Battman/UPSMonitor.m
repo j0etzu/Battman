@@ -474,6 +474,13 @@ static bool gNotificationsPaused = false;
 
 + (void)appDidEnterBackground:(NSNotification *)note
 {
+	extern dispatch_queue_t _powerQueue;
+	if (_powerQueue != NULL && !gNotificationsPaused) {
+		dispatch_async(_powerQueue, ^{
+			dispatch_suspend(_powerQueue);
+		});
+	}
+
 	if (gBackgroundRunLoop == NULL || gNotifyPort == NULL || gNotificationsPaused)
 		return;
 	CFRunLoopSourceRef src = IONotificationPortGetRunLoopSource(gNotifyPort);
@@ -489,6 +496,11 @@ static bool gNotificationsPaused = false;
 
 + (void)appWillEnterForeground:(NSNotification *)note
 {
+	extern dispatch_queue_t _powerQueue;
+	if (_powerQueue != NULL && gNotificationsPaused) {
+		dispatch_resume(_powerQueue);
+	}
+
 	if (gBackgroundRunLoop == NULL || gNotifyPort == NULL || !gNotificationsPaused)
 		return;
 	CFRunLoopSourceRef src = IONotificationPortGetRunLoopSource(gNotifyPort);

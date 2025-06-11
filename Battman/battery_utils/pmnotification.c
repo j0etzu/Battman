@@ -19,18 +19,49 @@
 extern void *dispatch_get_global_queue(int, int);
 #endif
 
+dispatch_queue_t   _powerQueue = NULL;
+static IONotificationPortRef  _notifyPort;
+static io_iterator_t      _notifyIter;
+
+static void stpe_cb(void *cb, io_iterator_t it) {
+	if (!it) return;
+	io_object_t next;
+	while ((next = IOIteratorNext(it))) {
+		void *refCon = NULL;
+		int err = IOServiceAddInterestNotification(_notifyPort, next, kIOGeneralInterest, (IOServiceInterestCallback)cb, NULL, (void *)&refCon);
+		if (err) abort();
+		IOObjectRelease(next);
+	}
+}
+
+
+void subscribeToPowerEvents(void (*cb)(int, io_registry_entry_t, int32_t)) {
+	_powerQueue = dispatch_queue_create("com.torrekie.Battman.pmEvents", DISPATCH_QUEUE_SERIAL);
+	_notifyPort = IONotificationPortCreate(kIOMasterPortDefault);
+	// Alternative dispatch queue for suspending, check UPSMonitor.m
+	IONotificationPortSetDispatchQueue(_notifyPort, _powerQueue);
+
+	int err = IOServiceAddMatchingNotification(_notifyPort, kIOFirstMatchNotification, IOServiceMatching("IOPMPowerSource"), (IOServiceMatchingCallback)stpe_cb, cb, &_notifyIter);
+	if (err) abort();
+
+	stpe_cb(cb, _notifyIter);
+
+	IOObjectRelease(_notifyIter);
+}
+
+#if 0
 // IOServiceMatchingCallback
 static void stpe_cb(void **pcb, io_iterator_t it) {
-    if (!it)
-        return;
-    io_object_t next;
-    while ((next = IOIteratorNext(it))) {
-        void *buf;
-        int err = IOServiceAddInterestNotification(*pcb, next, kIOGeneralInterest, (IOServiceInterestCallback)pcb[1], 0, (void *)&buf);
-        if (err)
-            abort();
-        IOObjectRelease(next);
-    }
+	if (!it)
+		return;
+	io_object_t next;
+	while ((next = IOIteratorNext(it))) {
+		void *buf;
+		int err = IOServiceAddInterestNotification(*pcb, next, kIOGeneralInterest, (IOServiceInterestCallback)pcb[1], 0, (void *)&buf);
+		if (err)
+			abort();
+		IOObjectRelease(next);
+	}
 }
 
 void subscribeToPowerEvents(void (*cb)(int, io_registry_entry_t, int32_t)) {
@@ -43,6 +74,7 @@ void subscribeToPowerEvents(void (*cb)(int, io_registry_entry_t, int32_t)) {
     stpe_cb(port, nit);
     IOObjectRelease(nit);
 }
+#endif
 
 void pmncb(int a, io_registry_entry_t b, int32_t c) {
 	if (c != -536723200)
