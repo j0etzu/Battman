@@ -381,8 +381,9 @@ static int _impl_set_item_find_item(struct battery_info_node **head, const char 
 
 static char *_impl_set_item(struct battery_info_node **head, const char *desc,
     uint64_t value, float valueAsFloat, int options) {
-	if (!_impl_set_item_find_item(head, desc))
+	if (!_impl_set_item_find_item(head, desc)) {
 		return NULL;
+	}
 	struct battery_info_node *i = *head;
 	if (options == 2 || (i->content & BIN_IS_SPECIAL) == 0) {
 		if (options == 1) {
@@ -405,22 +406,27 @@ static char *_impl_set_item(struct battery_info_node **head, const char *desc,
 
 #define BI_SET_ITEM(name, value) \
 	_impl_set_item(head_arr, name, (uint64_t)(value), (float)(value), 0)
+
 #define BI_ENSURE_STR(name) _impl_set_item(head_arr, name, 0, 0, 2)
+
 #define BI_FORMAT_ITEM(name, ...) \
 	sprintf(_impl_set_item(head_arr, name, 0, 0, 2), __VA_ARGS__)
+
 #define BI_SET_ITEM_IF(cond, name, value)        \
-	if (cond) {                                  \
+	if (__builtin_expect(!!(cond), 1)) {         \
 		BI_SET_ITEM(name, value);                \
 		_impl_set_item(head_arr, name, 0, 0, 1); \
 	} else {                                     \
 		_impl_set_item(head_arr, name, 1, 0, 1); \
 	}
+
 #define BI_FORMAT_ITEM_IF(cond, name, ...)       \
 	if (cond) {                                  \
 		BI_FORMAT_ITEM(name, __VA_ARGS__);       \
 	} else {                                     \
 		_impl_set_item(head_arr, name, 1, 0, 1); \
 	}
+
 #define BI_SET_HIDDEN(name, value) _impl_set_item(head_arr, name, value, 0, 1)
 
 #include "../iokitextern.h"
@@ -503,9 +509,8 @@ void battery_info_poll(struct battery_info_section **head) {
 			indSect->context->update             = inductive_info_update;
 			battery_info_insert_section(indSect, head);
 		}
-
-		IOObjectRelease(connect);
 	}
+	if (connect) IOObjectRelease(connect);
 
 	/* Serial Port Section */
 	connect = acc_open_with_port(kIOAccessoryPortIDSerial);
@@ -518,9 +523,8 @@ void battery_info_poll(struct battery_info_section **head) {
 			usbSect->context->update             = usb1_info_update;
 			battery_info_insert_section(usbSect, head);
 		}
-
-		IOObjectRelease(connect);
 	}
+	if (connect) IOObjectRelease(connect);
 }
 
 // Recursive call is used to support section removal while updating
@@ -844,16 +848,17 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 			/* TODO: Search VID/PID online */
 			const char *vendor_name = manf_id_string((SInt32)array.VID);
 			if (vendor_name) {
-				BI_FORMAT_ITEM(_C("Vendor ID"), "0x%0.4X\n(%s)", array.VID, vendor_name);
+				BI_FORMAT_ITEM_IF(vendor_name, _C("Vendor ID"), "0x%0.4X\n(%s)", array.VID, vendor_name);
 			} else {
 				BI_FORMAT_ITEM_IF(array.VID, _C("Vendor ID"), "0x%0.4X", array.VID);
 			}
 			if (array.VID == VID_APPLE) {
 				const char *product_name = apple_prod_id_string(array.PID);
-				if (product_name)
-					BI_FORMAT_ITEM(_C("Product ID"), "0x%0.4X\n(%s)", array.PID, product_name);
-				else
+				if (product_name) {
+					BI_FORMAT_ITEM_IF(product_name, _C("Product ID"), "0x%0.4X\n(%s)", array.PID, product_name);
+				} else {
 					BI_FORMAT_ITEM_IF(array.PID, _C("Product ID"), "0x%0.4X", array.PID);
+				}
 			} else {
 				BI_FORMAT_ITEM_IF(array.PID, _C("Product ID"), "0x%0.4X", array.PID);
 			}
@@ -865,7 +870,7 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 
 			BI_FORMAT_ITEM_IF(array.capacity != -1, _C("State of Charge"), "%d%%", array.capacity);
 			BI_SET_ITEM_IF(array.charging != -1, _C("Accepting Charge"), array.charging);
-			BI_FORMAT_ITEM(_C("Status"), "0x%.8X", array.status);
+			BI_FORMAT_ITEM_IF(array.status, _C("Status"), "0x%.8X", array.status);
 		}
 		/* TODO: Iktara Fw/Drv stat */
 	}
@@ -879,16 +884,17 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 		if (first_vendor_at_usagepagepairs(&vid, &pid, 0xFF00, 70)) {
 			const char *vendor_name = manf_id_string((SInt32)vid);
 			if (vendor_name) {
-				BI_FORMAT_ITEM(_C("Vendor ID"), "0x%0.4X\n(%s)", vid, vendor_name);
+				BI_FORMAT_ITEM_IF(vendor_name, _C("Vendor ID"), "0x%0.4X\n(%s)", vid, vendor_name);
 			} else {
 				BI_FORMAT_ITEM_IF(vid, _C("Vendor ID"), "0x%0.4X", vid);
 			}
 			if (vid == VID_APPLE) {
 				const char *product_name = apple_prod_id_string(pid);
-				if (product_name)
-					BI_FORMAT_ITEM(_C("Product ID"), "0x%0.4X\n(%s)", pid, product_name);
-				else
+				if (product_name) {
+					BI_FORMAT_ITEM_IF(product_name, _C("Product ID"), "0x%0.4X\n(%s)", pid, product_name);
+				} else {
 					BI_FORMAT_ITEM_IF(pid, _C("Product ID"), "0x%0.4X", pid);
+				}
 			} else {
 				BI_FORMAT_ITEM_IF(pid, _C("Product ID"), "0x%0.4X", pid);
 			}
@@ -906,9 +912,8 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 			BI_FORMAT_ITEM_IF(get_acc_msn(connect, &msn) == kIOReturnSuccess, _C("IM Serial No."), "%s", msn);
 			// TODO: Digital Info
 		}
-		if (get_acc_usb_connstat(connect, &connstat) == kIOReturnSuccess) {
-			BI_FORMAT_ITEM(_C("USB Connect State"), "%s\n%s: %s, %s: %s", connstat.active ? cond_localize_c("Active") : cond_localize_c("Inactive"), cond_localize_c("Type"), acc_usb_connstat_string(connstat.type), cond_localize_c("Published Type"), acc_usb_connstat_string(connstat.published_type));
-		}
+		BI_FORMAT_ITEM_IF(get_acc_usb_connstat(connect, &connstat) == kIOReturnSuccess, _C("USB Connect State"), "%s\n%s: %s, %s: %s", connstat.active ? cond_localize_c("Active") : cond_localize_c("Inactive"), cond_localize_c("Type"), acc_usb_connstat_string(connstat.type), cond_localize_c("Published Type"), acc_usb_connstat_string(connstat.published_type));
+
 		SInt32 voltage = 0;
 		BI_SET_ITEM_IF(get_acc_usb_voltage(connect, &voltage) != kIOReturnNotAttached, _C("USB Charging Volt."), voltage);
 		// XXX: Consider use custom UI for this
@@ -931,7 +936,7 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 	// check UPSMonitor.m
 	if (smc_vendor || hid_vendor) {
 		UPSDataRef device = UPSDeviceMatchingVendorProduct(vid, pid);
-		if (device) {
+		if (device != NULL) {
 			/*
 			 MagSafe Battery Pack Events:
 			 {
