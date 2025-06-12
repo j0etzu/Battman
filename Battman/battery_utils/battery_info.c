@@ -119,6 +119,7 @@ struct battery_info_node main_battery_template[] = {
 	{ _C("Avg. Charging Current"), NULL, BIN_IN_DETAILS | BIN_UNIT_MAMP },
 	{ _C("Charging Voltage Rating"), NULL, BIN_IN_DETAILS | BIN_UNIT_MVOLT },
 	{ _C("Cell Count"), NULL, BIN_IN_DETAILS },
+	{ _C("Cycle Count"), NULL, BIN_IN_DETAILS },
 	{ _C("Current"), _C("Real-time output current by attached accessory."), BIN_IN_DETAILS | BIN_UNIT_MAMP },
 	{ _C("Voltage"), _C("Real-time output voltage by attached accessory."), BIN_IN_DETAILS | BIN_UNIT_MVOLT },
 	{ _C("Incoming Current"), NULL, BIN_IN_DETAILS | BIN_UNIT_MAMP },
@@ -159,6 +160,7 @@ struct battery_info_node main_battery_template[] = {
 	{ _C("Charging Voltage Rating"), NULL, BIN_IN_DETAILS | BIN_UNIT_MVOLT },
 	{ _C("Avg. Charging Current"), NULL, BIN_IN_DETAILS | BIN_UNIT_MAMP },
 	{ _C("Cell Count"), NULL, 0 },
+	{ _C("Cycle Count"), NULL, BIN_IN_DETAILS },
 	{ _C("Current"), _C("Real-time output current by attached accessory."), BIN_IN_DETAILS | BIN_UNIT_MAMP },
 	{ _C("Voltage"), _C("Real-time output voltage by attached accessory."), BIN_IN_DETAILS | BIN_UNIT_MVOLT },
 	{ _C("Incoming Current"), NULL, BIN_IN_DETAILS | BIN_UNIT_MAMP },
@@ -979,7 +981,7 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 		BI_SET_ITEM_IF(info.batt_charging_voltage != 0, _C("Charging Voltage Rating"), info.batt_charging_voltage);
 		BI_SET_ITEM_IF(info.batt_charging_voltage != 0, _C("Avg. Charging Current"), info.batt_charging_current);
 		BI_SET_ITEM_IF(info.current != 0, _C("Current"), info.current);
-		BI_SET_ITEM_IF(info.current != 0, _C("Voltage"), info.current);
+		BI_SET_ITEM_IF(info.current != 0, _C("Voltage"), info.voltage);
 		BI_SET_ITEM_IF(info.incoming_current != 0, _C("Incoming Current"), info.incoming_current);
 		BI_SET_ITEM_IF(info.incoming_voltage != 0, _C("Incoming Voltage"), info.incoming_voltage);
 		BI_SET_ITEM_IF(info.charging != 0, _C("Accepting Charge"), info.charging);
