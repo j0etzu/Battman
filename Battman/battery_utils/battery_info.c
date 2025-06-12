@@ -405,6 +405,7 @@ static char *_impl_set_item(struct battery_info_node **head, const char *desc,
 }
 
 #define BI_SET_ITEM(name, value) \
+DBGLOG(CFSTR("BI_SET_ITEM: %s"), name); \
 	_impl_set_item(head_arr, name, (uint64_t)(value), (float)(value), 0)
 
 #define BI_ENSURE_STR(name) _impl_set_item(head_arr, name, 0, 0, 2)
@@ -413,10 +414,12 @@ static char *_impl_set_item(struct battery_info_node **head, const char *desc,
 	sprintf(_impl_set_item(head_arr, name, 0, 0, 2), __VA_ARGS__)
 
 #define BI_SET_ITEM_IF(cond, name, value)        \
-	if (__builtin_expect(!!(cond), 1)) {         \
+	if (cond) {         \
+DBGLOG(CFSTR("BI_SET_ITEM_IF: %s 1"), name);\
 		BI_SET_ITEM(name, value);                \
 		_impl_set_item(head_arr, name, 0, 0, 1); \
 	} else {                                     \
+DBGLOG(CFSTR("BI_SET_ITEM_IF: %s 0"), name);\
 		_impl_set_item(head_arr, name, 1, 0, 1); \
 	}
 
@@ -481,6 +484,11 @@ void battery_info_update_smc(struct battery_info_section *section);
 void inductive_info_update(struct battery_info_section *section);
 void usb1_info_update(struct battery_info_section *section);
 
+typedef struct acc_refcon {
+	int primary_port;
+	io_service_t connect;
+} *acc_refcon_t;
+
 void battery_info_poll(struct battery_info_section **head) {
 	if (hasSMC) {
 		if (!battery_info_has(*head, BI_GAS_GAUGE_SECTION_ID)) {
@@ -499,32 +507,34 @@ void battery_info_poll(struct battery_info_section **head) {
 	}
 
 	/* Inductive Section */
-	io_connect_t connect = acc_open_with_port(kIOAccessoryPortID0Pin);
-	SInt32 acc_id = get_accid(connect);
-	/* 100: No device connected */
-	if (acc_id != 100 && acc_id != -1 && connect != MACH_PORT_NULL) {
+	acc_refcon_t args_0pin = malloc(sizeof(struct acc_refcon));
+	io_service_t connect0pin = acc_open_with_port(kIOAccessoryPortID0Pin);
+	args_0pin->connect = connect0pin;
+	args_0pin->primary_port = kIOAccessoryPortID0Pin;
+	if (args_0pin->connect != IO_OBJECT_NULL) {
 		if (!battery_info_has(*head, BI_INDUCTIVE_SECTION_ID)) {
 			struct battery_info_section *indSect = bi_make_section(_C("Inductive Port"), sizeof(struct battery_info_section_context));
 			indSect->context->custom_identifier  = BI_INDUCTIVE_SECTION_ID;
 			indSect->context->update             = inductive_info_update;
+			indSect->context->refCon             = args_0pin;
 			battery_info_insert_section(indSect, head);
 		}
 	}
-	if (connect) IOObjectRelease(connect);
 
 	/* Serial Port Section */
-	connect = acc_open_with_port(kIOAccessoryPortIDSerial);
-	acc_id = get_accid(connect);
-	/* 100: No device connected */
-	if (acc_id != 100 && acc_id != -1 && connect != MACH_PORT_NULL) {
+	acc_refcon_t args_usb1 = malloc(sizeof(struct acc_refcon));
+	io_service_t connectusb1 = acc_open_with_port(kIOAccessoryPortIDSerial);
+	args_usb1->connect = connectusb1;
+	args_usb1->primary_port = kIOAccessoryPortIDSerial;
+	if (args_usb1->connect != IO_OBJECT_NULL) {
 		if (!battery_info_has(*head, BI_SERIAL1_SECTION_ID)) {
 			struct battery_info_section *usbSect = bi_make_section(_C("Serial Port"), sizeof(struct battery_info_section_context));
 			usbSect->context->custom_identifier  = BI_SERIAL1_SECTION_ID;
 			usbSect->context->update             = usb1_info_update;
+			usbSect->context->refCon             = args_usb1;
 			battery_info_insert_section(usbSect, head);
 		}
 	}
-	if (connect) IOObjectRelease(connect);
 }
 
 // Recursive call is used to support section removal while updating
@@ -798,7 +808,9 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 
 	struct battery_info_node *head        = section->data;
 	struct battery_info_node *head_arr[2] = { head, head };
-	io_connect_t connect                  = acc_open_with_port(port);
+	acc_refcon_t args                     = section->context->refCon;
+	io_connect_t connect                  = args->connect;
+
 	SInt32 acc_id                         = get_accid(connect);
 	SInt32 port_type                      = get_acc_port_type(connect);
 	SInt32 features                       = get_acc_allowed_features(connect);
@@ -811,7 +823,9 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 	uint32_t vid = 0, pid = 0;
 
 	// 100: Not connected, -1: Unrecognized
-	if (acc_id == 100 || acc_id == -1 || connect == MACH_PORT_NULL) {
+	if (connect == IO_OBJECT_NULL || acc_id == 100 || acc_id == -1)  {
+		if (connect) IOObjectRelease(connect);
+		free(args);
 		bi_destroy_section(section);
 		return;
 	}
@@ -819,7 +833,7 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 	/* IOAM Part */
 	const char *idstr = acc_id_string(acc_id);
 	BI_FORMAT_ITEM(_C("Acc. ID"), "%s", idstr);
-	free((char *)idstr);
+	//free((char *)idstr);
 	BI_FORMAT_ITEM_IF(features != -1, _C("Allowed Features"), "0x%.8X", features);
 	BI_FORMAT_ITEM_IF(port_type != -1, _C("Port Type"), "%s", acc_port_type_string(port_type));
 	BI_FORMAT_ITEM_IF(*accinfo.serial, _C("Serial No."), "%s", accinfo.serial);
@@ -915,9 +929,9 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 		BI_FORMAT_ITEM_IF(get_acc_usb_connstat(connect, &connstat) == kIOReturnSuccess, _C("USB Connect State"), "%s\n%s: %s, %s: %s", connstat.active ? cond_localize_c("Active") : cond_localize_c("Inactive"), cond_localize_c("Type"), acc_usb_connstat_string(connstat.type), cond_localize_c("Published Type"), acc_usb_connstat_string(connstat.published_type));
 
 		SInt32 voltage = 0;
-		BI_SET_ITEM_IF(get_acc_usb_voltage(connect, &voltage) != kIOReturnNotAttached, _C("USB Charging Volt."), voltage);
+		BI_SET_ITEM_IF((get_acc_usb_voltage(connect, &voltage) != kIOReturnNotAttached), _C("USB Charging Volt."), voltage);
 		// XXX: Consider use custom UI for this
-		BI_FORMAT_ITEM_IF(get_acc_usb_ilim(connect, &ilim) != kIOReturnNotAttached, _C("USB Current Config"), "%s", acc_usb_ilim_string_multiline(ilim));
+		BI_FORMAT_ITEM_IF((get_acc_usb_ilim(connect, &ilim) != kIOReturnNotAttached), _C("USB Current Config"), "%s", acc_usb_ilim_string_multiline(ilim));
 		/* TODO: Transport types */
 
 		/* How do we actually get VID/PID if wired? MFA Cables does not seems having them */
@@ -936,65 +950,12 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 	// check UPSMonitor.m
 	if (smc_vendor || hid_vendor) {
 		UPSDataRef device = UPSDeviceMatchingVendorProduct(vid, pid);
+		ups_batt_t info = {0};
+
+		int cell_count = 0;
 		if (device != NULL) {
-			/*
-			 MagSafe Battery Pack Events:
-			 {
-			 AppleRawCurrentCapacity = 815;
-			 "Battery Case Charging Voltage" = 0;
-			 "Cell 0 Voltage" = 3786;
-			 "Cell 1 Voltage" = 3762;
-			 Current = "-991";
-			 "Current Capacity" = 851;
-			 CycleCount = 279;
-			 "Debug Information" =     {
-			 "Attach Count 10.5W Adapter" = 1931312116;
-			 "Attach Count 12W Adapter" = 4152232521;
-			 "Attach Count 15W Adapter" = 3089525786;
-			 "Attach Count 18 - 20W Adapter" = 968817642;
-			 "Attach Count 5W Adapter" = 2124225740;
-			 "Attach Count 7.5W Adapter" = 4021667898;
-			 "Attach Count Device Type 0" = 1213098256;
-			 "Attach Count Device Type 1" = 3198192647;
-			 "Attach Count Less Than 5W Adapter" = 380749299;
-			 "Attach Count Other" = 2519347824;
-			 "Attach Count Over 20W Adapter" = 904112396;
-			 "Battery Case Average Charging Current" = 0;
-			 ChargingStatus = 364;
-			 "Host Available Power dW" = 106;
-			 InductiveStatus = 2147745799;
-			 "Kiosk Mode Count" = 0;
-			 "Lifetime Cell0 Max Q" = 1460;
-			 "Lifetime Cell0 Max Voltage" = 4354;
-			 "Lifetime Cell0 Min Voltage" = 2823;
-			 "Lifetime Cell1 Max Q" = 1462;
-			 "Lifetime Cell1 Max Voltage" = 4351;
-			 "Lifetime Cell1 Min Voltage" = 2777;
-			 "Lifetime Firmware Runtime" = 112347250;
-			 "Lifetime Max Charge Current" = 2048;
-			 "Lifetime Max Discharge Current" = "-2122";
-			 "Lifetime Max Temperature" = 49;
-			 "Lifetime Min Temperature" = 0;
-			 "Lifetime Time Above High Temperature" = 52078;
-			 "Lifetime Time Above Low Temperature" = 6215247;
-			 "Lifetime Time Above Mid Temperature" = 698591;
-			 "Lifetime Time Below Low Temperature" = 60438707;
-			 PowerStatus = 39;
-			 "Rx Power Limit" = 3;
-			 };
-			 "Device Color" = 0;
-			 "Incoming Current" = 271;
-			 "Incoming Voltage" = 92;
-			 "Is Charging" = 0;
-			 "Max Capacity" = 1281;
-			 "Nominal Capacity" = 1273;
-			 "Power Source State" = "Battery Power";
-			 Temperature = 35;
-			 "Time to Empty" = 77;
-			 Voltage = 7548;
-			 }
-			 */
-			int cell_count = 0;
+			info = ups_battery_info(device);
+
 			CFIndex caps_count = CFSetGetCount(device->upsCapabilities);
 			for (CFIndex i = 0; i < caps_count; i++) {
 				CFStringRef val = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("Cell %ld Voltage"), i);
@@ -1007,32 +968,87 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 					break;
 				}
 			}
-			/* We are not ready to display Cell specs for any batteries (But defined in headers) */
-			BI_SET_ITEM_IF(cell_count != 0, ("Cell Count"), cell_count);
-			ups_batt_t info = ups_battery_info(device);
-			/* Sadly, UPS does not got reports on Designed Capacity */
-			BI_SET_ITEM_IF(info.current_capacity != 0, _C("Current Capacity"), info.current_capacity);
-			BI_SET_ITEM_IF(info.max_capacity != 0, _C("Max Capacity"), info.max_capacity);
-			BI_SET_ITEM_IF(info.cycle_count != 0, _C("Cycle Count"), info.cycle_count);
-			/* XXX: Device Color */
-			BI_SET_ITEM_IF(info.batt_charging_voltage != 0, _C("Charging Voltage Rating"), info.batt_charging_voltage);
-			BI_SET_ITEM_IF(info.batt_charging_voltage != 0, _C("Avg. Charging Current"), info.batt_charging_current);
-			BI_SET_ITEM_IF(info.current != 0, _C("Current"), info.current);
-			BI_SET_ITEM_IF(info.current != 0, _C("Voltage"), info.current);
-			BI_SET_ITEM_IF(info.incoming_current != 0, _C("Incoming Current"), info.incoming_current);
-			BI_SET_ITEM_IF(info.incoming_voltage != 0, _C("Incoming Voltage"), info.incoming_voltage);
-			BI_SET_ITEM_IF(info.charging != 0, _C("Accepting Charge"), info.charging);
-			BI_SET_ITEM_IF(info.temperature != 0, _C("Temperature"), info.temperature);
-			BI_SET_ITEM_IF(info.time_to_empty != 0, _C("Acc. Time to Empty"), info.time_to_empty);
-			BI_SET_ITEM_IF(info.time_to_full != 0, _C("Acc. Time to Full"), info.time_to_full);
-
-			/* We are not ready to display Lifetime data for any batteries (But defined in headers) */
 		}
+		/* We are not ready to display Cell specs for any batteries (But defined in headers) */
+		BI_SET_ITEM_IF(cell_count != 0, ("Cell Count"), cell_count);
+		/* Sadly, UPS does not got reports on Designed Capacity */
+		BI_SET_ITEM_IF(info.current_capacity != 0, _C("Current Capacity"), info.current_capacity);
+		BI_SET_ITEM_IF(info.max_capacity != 0, _C("Max Capacity"), info.max_capacity);
+		BI_SET_ITEM_IF(info.cycle_count != 0, _C("Cycle Count"), info.cycle_count);
+		/* XXX: Device Color */
+		BI_SET_ITEM_IF(info.batt_charging_voltage != 0, _C("Charging Voltage Rating"), info.batt_charging_voltage);
+		BI_SET_ITEM_IF(info.batt_charging_voltage != 0, _C("Avg. Charging Current"), info.batt_charging_current);
+		BI_SET_ITEM_IF(info.current != 0, _C("Current"), info.current);
+		BI_SET_ITEM_IF(info.current != 0, _C("Voltage"), info.current);
+		BI_SET_ITEM_IF(info.incoming_current != 0, _C("Incoming Current"), info.incoming_current);
+		BI_SET_ITEM_IF(info.incoming_voltage != 0, _C("Incoming Voltage"), info.incoming_voltage);
+		BI_SET_ITEM_IF(info.charging != 0, _C("Accepting Charge"), info.charging);
+		BI_SET_ITEM_IF(info.temperature != 0, _C("Temperature"), info.temperature);
+		BI_SET_ITEM_IF(info.time_to_empty != 0, _C("Acc. Time to Empty"), info.time_to_empty);
+		BI_SET_ITEM_IF(info.time_to_full != 0, _C("Acc. Time to Full"), info.time_to_full);
+		
+		/* We are not ready to display Lifetime data for any batteries (But defined in headers) */
+
+		/*
+		 MagSafe Battery Pack Events:
+		 {
+			AppleRawCurrentCapacity = 815;
+			"Battery Case Charging Voltage" = 0;
+			"Cell 0 Voltage" = 3786;
+			"Cell 1 Voltage" = 3762;
+			Current = "-991";
+			"Current Capacity" = 851;
+			CycleCount = 279;
+			"Debug Information" =     {
+				"Attach Count 10.5W Adapter" = 1931312116;
+				"Attach Count 12W Adapter" = 4152232521;
+				"Attach Count 15W Adapter" = 3089525786;
+				"Attach Count 18 - 20W Adapter" = 968817642;
+				"Attach Count 5W Adapter" = 2124225740;
+				"Attach Count 7.5W Adapter" = 4021667898;
+				"Attach Count Device Type 0" = 1213098256;
+				"Attach Count Device Type 1" = 3198192647;
+				"Attach Count Less Than 5W Adapter" = 380749299;
+				"Attach Count Other" = 2519347824;
+				"Attach Count Over 20W Adapter" = 904112396;
+				"Battery Case Average Charging Current" = 0;
+				ChargingStatus = 364;
+				"Host Available Power dW" = 106;
+				InductiveStatus = 2147745799;
+				"Kiosk Mode Count" = 0;
+				"Lifetime Cell0 Max Q" = 1460;
+				"Lifetime Cell0 Max Voltage" = 4354;
+				"Lifetime Cell0 Min Voltage" = 2823;
+				"Lifetime Cell1 Max Q" = 1462;
+				"Lifetime Cell1 Max Voltage" = 4351;
+				"Lifetime Cell1 Min Voltage" = 2777;
+				"Lifetime Firmware Runtime" = 112347250;
+				"Lifetime Max Charge Current" = 2048;
+				"Lifetime Max Discharge Current" = "-2122";
+				"Lifetime Max Temperature" = 49;
+				"Lifetime Min Temperature" = 0;
+				"Lifetime Time Above High Temperature" = 52078;
+				"Lifetime Time Above Low Temperature" = 6215247;
+				"Lifetime Time Above Mid Temperature" = 698591;
+				"Lifetime Time Below Low Temperature" = 60438707;
+				PowerStatus = 39;
+				"Rx Power Limit" = 3;
+			};
+			"Device Color" = 0;
+			"Incoming Current" = 271;
+			"Incoming Voltage" = 92;
+			"Is Charging" = 0;
+			"Max Capacity" = 1281;
+			"Nominal Capacity" = 1273;
+			"Power Source State" = "Battery Power";
+			Temperature = 35;
+			"Time to Empty" = 77;
+			Voltage = 7548;
+		 }
+		*/
 	}
 	
 	/* TODO: CoreAccessory Part */
-
-	IOObjectRelease(connect);
 }
 
 void inductive_info_update(struct battery_info_section *section) {

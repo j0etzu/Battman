@@ -45,25 +45,29 @@ const char *acc_id_50_5e[] = {
 };
 
 /* Sadly I didn't got the full list of accids, but we can guess */
-const char *acc_id_string(SInt32 accid) {
-	char *idstr = calloc(1, 256);
-	if (!idstr) return NULL;
+const char *acc_id_string(int accid) {
+	static _Thread_local char buf[256];
 
-	if (accid < 16) sprintf(idstr, "%d\n%s", accid, acc_id_0_f[accid]);
-	if ((95 > accid) && (accid > 79) && (accid != 89)) {
-		sprintf(idstr, "%d\n(%s)", accid, acc_id_50_5e[accid - 80]);
+	buf[0] = '\0';
+	if (accid >= 0 && accid < 16) {
+		snprintf(buf, sizeof(buf), "%d\n(%s)", accid, acc_id_0_f[accid]);
+	} else if (accid > 79 && accid < 95 && accid != 89) {
+		int idx = accid - 80;
+		snprintf(buf, sizeof(buf), "%d\n(%s)", accid, acc_id_50_5e[idx]);
+	} else if (accid == 70) {
+		snprintf(buf, sizeof(buf), "%d\n(Scorpius: unknown)", accid);
+	} else if (accid == 71) {
+		snprintf(buf, sizeof(buf), "%d\n(Scorpius: pencil)", accid);
 	}
-	if (accid == 70) sprintf(idstr, "%d\n%s", accid, "Scorpius: unknown");
-	if (accid == 71) sprintf(idstr, "%d\n%s", accid, "Scorpius: pencil");
-
-	if (strlen(idstr)) {
-		return idstr;
+	
+	if (buf[0] != '\0') {
+		return buf;
 	}
-
-	// Otherwise unknown
-	sprintf(idstr, "%d", accid);
-	return idstr;
+	// Fallback for unknown IDs
+	snprintf(buf, sizeof(buf), "%d", accid);
+	return buf;
 }
+
 
 #ifdef _C
 #undef _C

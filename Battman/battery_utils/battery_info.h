@@ -110,7 +110,7 @@ struct battery_info_section;
 struct battery_info_section_context {
 	uint64_t custom_identifier;
 	void (*update)(struct battery_info_section *);
-	// ... user-defined context
+	void *refCon;
 };
 
 #if 0
