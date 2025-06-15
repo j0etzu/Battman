@@ -145,7 +145,7 @@ const char *acc_powermode_string_supported(accessory_powermode_t mode) {
 }
 
 const char *acc_usb_ilim_string_multiline(accessory_usb_ilim_t ilim) {
-	if (ilim.limit == 0) return NULL;
+	if (ilim.limit == 0) return _C("Detached");
 
 	// XXX: This is terrible, consider migrate to a better UI
 	static char buffer[1024];

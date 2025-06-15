@@ -133,8 +133,8 @@ struct battery_info_node main_battery_template[] = {
 	{ _C("Accepting Charge"), NULL, BIN_IN_DETAILS | BIN_IS_BOOLEAN },
 	{ _C("Power Mode"), NULL, 0 },
 	{ _C("Sleep Power"), NULL, 0 },
-	{ _C("Supervised Acc. Attached"), NULL, 0 },
-	{ _C("Supervised Transports Restricted"), NULL, 0 },
+	{ _C("Supervised Acc. Attached"), NULL, BIN_IN_DETAILS | BIN_IS_BOOLEAN },
+	{ _C("Supervised Transports Restricted"), NULL, BIN_IN_DETAILS | BIN_IS_BOOLEAN },
 
 	{ _C("Serial Port"), NULL, DEFINE_SECTION(8000) },
 	{ _C("Acc. ID"), NULL, 0 },
@@ -179,8 +179,8 @@ struct battery_info_node main_battery_template[] = {
 	{ _C("USB Current Config"), NULL, 0 },
 	{ _C("Power Mode"), NULL, 0 },
 	{ _C("Sleep Power"), NULL, 0 },
-	{ _C("Supervised Acc. Attached"), NULL, 0 },
-	{ _C("Supervised Transports Restricted"), NULL, 0 },
+	{ _C("Supervised Acc. Attached"), NULL, BIN_IN_DETAILS | BIN_IS_BOOLEAN },
+	{ _C("Supervised Transports Restricted"), NULL, BIN_IN_DETAILS | BIN_IS_BOOLEAN },
 	// TODO: Scorpius (I don't have Apple Pencil to test)
 	{ NULL }  // DO NOT DELETE
 };
@@ -407,7 +407,6 @@ static char *_impl_set_item(struct battery_info_node **head, const char *desc,
 }
 
 #define BI_SET_ITEM(name, value) \
-DBGLOG(CFSTR("BI_SET_ITEM: %s"), name); \
 	_impl_set_item(head_arr, name, (uint64_t)(value), (float)(value), 0)
 
 #define BI_ENSURE_STR(name) _impl_set_item(head_arr, name, 0, 0, 2)
@@ -416,12 +415,10 @@ DBGLOG(CFSTR("BI_SET_ITEM: %s"), name); \
 	sprintf(_impl_set_item(head_arr, name, 0, 0, 2), __VA_ARGS__)
 
 #define BI_SET_ITEM_IF(cond, name, value)        \
-	if (cond) {         \
-DBGLOG(CFSTR("BI_SET_ITEM_IF: %s 1"), name);\
+	if (cond) {                                  \
 		BI_SET_ITEM(name, value);                \
 		_impl_set_item(head_arr, name, 0, 0, 1); \
 	} else {                                     \
-DBGLOG(CFSTR("BI_SET_ITEM_IF: %s 0"), name);\
 		_impl_set_item(head_arr, name, 1, 0, 1); \
 	}
 
@@ -835,7 +832,6 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 	/* IOAM Part */
 	const char *idstr = acc_id_string(acc_id);
 	BI_FORMAT_ITEM(_C("Acc. ID"), "%s", idstr);
-	//free((char *)idstr);
 	BI_FORMAT_ITEM_IF(features != -1, _C("Allowed Features"), "0x%.8X", features);
 	BI_FORMAT_ITEM_IF(port_type != -1, _C("Port Type"), "%s", acc_port_type_string(port_type));
 	BI_FORMAT_ITEM_IF(*accinfo.serial, _C("Serial No."), "%s", accinfo.serial);
@@ -853,8 +849,9 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 	} else {
 		BI_FORMAT_ITEM(_C("Sleep Power"), "%s", cond_localize_c("Unsupported"));
 	}
-	BI_FORMAT_ITEM(_C("Supervised Acc. Attached"), "%s", get_acc_supervised(connect) ? L_TRUE : L_FALSE);
-	BI_FORMAT_ITEM(_C("Supervised Transports Restricted"), "%s", get_acc_supervised_transport_restricted(connect) ? L_TRUE : L_FALSE);
+	// Only show these when true
+	BI_SET_ITEM_IF(get_acc_supervised(connect), _C("Supervised Acc. Attached"), true);
+	BI_SET_ITEM_IF(get_acc_supervised_transport_restricted(connect), _C("Supervised Transports Restricted"), true);
 
 	/* AppleSMC Part */
 	bool smc_vendor = false;
@@ -889,6 +886,10 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 			BI_FORMAT_ITEM_IF(array.status, _C("Status"), "0x%.8X", array.status);
 		}
 		/* TODO: Iktara Fw/Drv stat */
+	} else {
+		// For now, I only have one MagSafe Battery Pack to test, so disable those values for other ports before someone donate some Smart Battery Cases
+		// FIXME: this is a workaround for init cells, try fix bi_make_section
+		BI_SET_ITEM_IF(array.charging != -1, _C("Accepting Charge"), array.charging);
 	}
 
 	/* TODO: IOHIDDevice Part */
@@ -950,7 +951,8 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 	/* Battery Case: kHIDPage_BatterySystem:kHIDUsage_BS_PrimaryBattery */
 	/* The Battery Case / Battery Pack details are stored in kHIDPage_BatterySystem normally */
 	// check UPSMonitor.m
-	if (smc_vendor || hid_vendor) {
+	// FIXME: kIOAccessoryPortIDSerial added as a workaround of cell init, try fix bi_make_section
+	if (smc_vendor || hid_vendor || port == kIOAccessoryPortIDSerial) {
 		UPSDataRef device = UPSDeviceMatchingVendorProduct(vid, pid);
 		ups_batt_t info = {0};
 

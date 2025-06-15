@@ -113,7 +113,6 @@ UPSDataRef UPSDeviceMatchingVendorProduct(int vid, int pid) {
 		return NULL;
 	}
 	if (vid == 0 || pid == 0) {
-		DBGLOG(@"[UPSMonitor] invalid VID/PID");
 		return NULL;
 	}
 

@@ -34,6 +34,7 @@ static void stpe_cb(void *cb, io_iterator_t it) {
 	}
 }
 
+// FIXME: Prevent overstock of pending notifications when App UI suspended
 
 void subscribeToPowerEvents(void (*cb)(int, io_registry_entry_t, int32_t)) {
 	_powerQueue = dispatch_queue_create("com.torrekie.Battman.pmEvents", DISPATCH_QUEUE_SERIAL);
