@@ -85,6 +85,7 @@
 		68AE40BC2D8EB8870023D7B0 /* StackViewGestureHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40B42D8EB8870023D7B0 /* StackViewGestureHandler.m */; };
 		68AE40BD2D8EB8870023D7B0 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40B52D8EB8870023D7B0 /* Constants.m */; };
 		68AE40BE2D8EB8870023D7B0 /* SegmentButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40B62D8EB8870023D7B0 /* SegmentButton.m */; };
+		68AFCBA42E054D04007A9EC7 /* UILabel+SFSymbolsOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AFCBA32E054D04007A9EC7 /* UILabel+SFSymbolsOverride.m */; };
 		68B291232DC754100089BA1F /* daemon.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B2911F2DC754100089BA1F /* daemon.c */; };
 		68B291272DC7547B0089BA1F /* ChargingLimitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B291252DC7547B0089BA1F /* ChargingLimitViewController.m */; };
 		68B291282DC75F610089BA1F /* pmnotification.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B2911E2DC754100089BA1F /* pmnotification.c */; };
@@ -185,6 +186,8 @@
 		68AE40B62D8EB8870023D7B0 /* SegmentButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SegmentButton.m; sourceTree = "<group>"; };
 		68AE40B72D8EB8870023D7B0 /* MultiSelectSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiSelectSegmentedControl.h; sourceTree = "<group>"; };
 		68AE40BF2D8EB9190023D7B0 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		68AFCB9F2E054CD3007A9EC7 /* UILabel+SFSymbolsOverride.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UILabel+SFSymbolsOverride.h"; sourceTree = "<group>"; };
+		68AFCBA32E054D04007A9EC7 /* UILabel+SFSymbolsOverride.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UILabel+SFSymbolsOverride.m"; sourceTree = "<group>"; };
 		68B2911E2DC754100089BA1F /* pmnotification.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pmnotification.c; sourceTree = "<group>"; };
 		68B2911F2DC754100089BA1F /* daemon.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = daemon.c; sourceTree = "<group>"; };
 		68B291202DC754100089BA1F /* smctest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = smctest.c; sourceTree = "<group>"; };
@@ -403,6 +406,8 @@
 				6833A8CA2DA3C6FE00B71299 /* WarnAccessoryView.h */,
 				6838BFAA2DC3984C007EB66C /* SliderTableViewCell.h */,
 				6838BFAB2DC3984C007EB66C /* SliderTableViewCell.m */,
+				68AFCB9F2E054CD3007A9EC7 /* UILabel+SFSymbolsOverride.h */,
+				68AFCBA32E054D04007A9EC7 /* UILabel+SFSymbolsOverride.m */,
 			);
 			name = CustomUIElements;
 			sourceTree = "<group>";
@@ -701,6 +706,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6834254B2D7C4F560070CE6F /* iokit_connection.c in Sources */,
+				68AFCBA42E054D04007A9EC7 /* UILabel+SFSymbolsOverride.m in Sources */,
 				68AE40BE2D8EB8870023D7B0 /* SegmentButton.m in Sources */,
 				687743462D4F6C7800375A2C /* BatteryCellView.m in Sources */,
 				6838BF832DC27F1E007EB66C /* ChargingManagementViewController.m in Sources */,

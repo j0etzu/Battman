@@ -40,6 +40,14 @@ typedef CF_ENUM(UInt8, SMCIndex) {
     kSMCVariableCommand
 };
 
+// AppleSMCSensorDispatcher
+typedef CF_ENUM(UInt8, SMCSensorIndex) {
+	kSMCGetSMCSensorCount,
+	kSMCGetSMCSensor4CC,
+	kSMCGetSMCSensorData,
+	kSMCSetSMCSensorData
+};
+
 typedef uint32_t SMCKey;
 typedef uint32_t SMCDataType;
 typedef uint8_t SMCDataAttributes;

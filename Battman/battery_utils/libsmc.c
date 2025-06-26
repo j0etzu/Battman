@@ -338,7 +338,7 @@ float *get_temperature_per_cell(void) {
     for (int i = 0; i < num; i++) {
         result = smc_read_n('TB\0T' | ((0x30 + i) << 0x8), &retval,4);
         if (result != kIOReturnSuccess) {
-            /* In design, you should able to get temps of all your batts */
+            /* In design, you should able to get temps of all your cells */
             break;
         }
         cells[i] = retval;
@@ -348,11 +348,9 @@ float *get_temperature_per_cell(void) {
     if (result != kIOReturnSuccess) {
         /* TG?B(ioft): Cell ? existance & real-time temperature */
         for (int i = 0; i < num; i++) {
-            //memset(ioftret, 0, sizeof(ioftret));
-            // no initialization necessary
-            result = smc_read_n('TG\0B' | ((0x30 + i) << 0x8), &ioftret,8);
+            result = smc_read_n('TG\0B' | ((0x30 + i) << 0x8), &ioftret, 8);
             if (result != kIOReturnSuccess) {
-                /* In design, you should able to get temps of all your batts */
+                /* In design, you should able to get temps of all your cells */
                 free(cells);
                 return NULL;
             }

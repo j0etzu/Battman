@@ -7,6 +7,43 @@
 
 __BEGIN_DECLS
 
+#define kIOAccessoryManagerMessageAttach						iokit_vendor_specific_msg(0x10)
+#define kIOAccessoryManagerMessageDetach						iokit_vendor_specific_msg(0x11)
+#define kIOAccessoryManagerPowerChange							iokit_vendor_specific_msg(0x12)
+#define kIOAccessoryManagerMessageAccessoryDetected				iokit_vendor_specific_msg(0x13)
+#define kIOAccessoryManagerMessageUSBConnectChange				iokit_vendor_specific_msg(0x14)
+#define kIOAccessoryManagerMessageUSBCurrentLimitChange			iokit_vendor_specific_msg(0x15)
+#define kIOAccessoryManagerMessageUSBBatteryPackChange			iokit_vendor_specific_msg(0x16)
+#define kIOAccessoryManagerMessageConfigChange					iokit_vendor_specific_msg(0x17)
+#define kIOAccessoryManagerMessageAccessoryRemoved				iokit_vendor_specific_msg(0x18)
+
+#define kIOAccessoryManagerMessageVoltageEvent					iokit_vendor_specific_msg(0x1B)
+#define kIOAccessoryManagerMessagePowerSourceChange				iokit_vendor_specific_msg(0x1C)
+#define kIOAccessoryManagerMessagePowerSourceRawChange			iokit_vendor_specific_msg(0x1D)
+#define kIOAccessoryManagerMessageInterfaceDeviceInfoChange		iokit_vendor_specific_msg(0x1e)
+#define kIOAccessoryManagerMessageSupervisedTransportsRestrictedChange \
+																iokit_vendor_specific_msg(0x1F)
+
+#define kIOAccessoryPortMessageDetach							iokit_vendor_specific_msg(0x20)
+#define kIOAccessoryPortMessageAttach							iokit_vendor_specific_msg(0x21)
+#define kIOAccessoryPortMessageUSBRoleSwitch					iokit_vendor_specific_msg(0x22)
+// 0x23?
+
+#define kIOAccessoryIDBusTransportInterrupt						iokit_vendor_specific_msg(0x30)
+// 0x38?
+// 0x3e?
+
+#define kIOAccessoryManagerMessageAccIDScorpiusUnknown			iokit_vendor_specific_msg(70)
+#define kIOAccessoryManagerMessageAccIDScorpiusPencil			iokit_vendor_specific_msg(71)
+
+#define kIOAccessoryManagerMessageAccIDDigitalNoID				iokit_vendor_specific_msg(90)
+#define kIOAccessoryManagerMessageAccIDDigitalID				iokit_vendor_specific_msg(91)
+#define kIOAccessoryManagerMessageAccIDDigitalUnsupported		iokit_vendor_specific_msg(92)
+#define kIOAccessoryManagerMessageAccIDDigitalUnreliable		iokit_vendor_specific_msg(93)
+#define kIOAccessoryManagerMessageAccIDDigitalWrongOrientation	iokit_vendor_specific_msg(94)
+
+#define kIOAccessoryManagerMessageAccIDNoneConnected			iokit_vendor_specific_msg(100)
+
 #define kIOAccessoryPortIDSerial	1
 #define kIOAccessoryPortIDUSB		2
 // Scorpius 0x100, SmartConnector 0x101

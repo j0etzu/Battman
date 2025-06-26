@@ -135,6 +135,9 @@ struct battery_info_node main_battery_template[] = {
 	{ _C("Sleep Power"), NULL, 0 },
 	{ _C("Supervised Acc. Attached"), NULL, BIN_IN_DETAILS | BIN_IS_BOOLEAN },
 	{ _C("Supervised Transports Restricted"), NULL, BIN_IN_DETAILS | BIN_IS_BOOLEAN },
+	{ _C("Inductive FW Mode"), NULL, 0 },
+	{ _C("Inductive Region Code"), _C("This indicates if current inductive accesory is following specific region configuration."), 0 },
+	{ _C("Inductive Auth Timeout"), 0, BIN_IN_DETAILS | BIN_IS_BOOLEAN },
 
 	{ _C("Serial Port"), NULL, DEFINE_SECTION(8000) },
 	{ _C("Acc. ID"), NULL, 0 },
@@ -505,6 +508,8 @@ void battery_info_poll(struct battery_info_section **head) {
 		}
 	}
 
+	// TODO: Combine acc sects to reduce redundant codes
+
 	/* Inductive Section */
 	acc_refcon_t args_0pin = malloc(sizeof(struct acc_refcon));
 	io_service_t connect0pin = acc_open_with_port(kIOAccessoryPortID0Pin);
@@ -771,7 +776,7 @@ void battery_info_update_smc(struct battery_info_section *section) {
 	BI_SET_ITEM(_C("Avg. Current"), gGauge.AverageCurrent);
 	BI_SET_ITEM(_C("Avg. Power"), gGauge.AveragePower);
 	BI_SET_ITEM(_C("Cell Count"), batt_cell_num());
-	/* FIXME: TTE shall display "Never" when -1 */
+	/* FIXME: TTE still displays when -1, WHY?? */
 	int timeToEmpty = get_time_to_empty();
 	BI_SET_ITEM_IF(timeToEmpty > 0, _C("Time to Empty"), timeToEmpty);
 	BI_SET_ITEM(_C("Cycle Count"), gGauge.CycleCount);
@@ -819,6 +824,9 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 	iktara_accessory_array_t array;
 	accessory_usb_connstat_t connstat;
 	accessory_usb_ilim_t ilim;
+	int inductive_fw_mode                 = get_acc_inductive_fw_mode(connect);
+	int inductive_region                  = get_acc_inductive_region_code(connect);
+	bool inductive_timeout                = get_acc_inductive_timeout(connect);
 	uint32_t vid = 0, pid = 0;
 
 	// 100: Not connected, -1: Unrecognized
@@ -943,6 +951,10 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 	} else if (port == 257) {
 		/* TODO: Scorpius */
 	}
+
+	BI_FORMAT_ITEM_IF(inductive_fw_mode != -1, _C("Inductive FW Mode"), "%s", acc_inductive_mode_string(inductive_fw_mode));
+	BI_FORMAT_ITEM_IF(inductive_region != -1, _C("Inductive Region Code"), "0x%04x (%c%c)", (uint16_t)inductive_region, (inductive_region & 0xFF00) >> 8, inductive_region & 0xFF);
+	BI_SET_ITEM_IF(inductive_timeout, _C("Inductive Auth Timeout"), inductive_timeout);
 	/* MagSafe Charger: kHIDPage_AppleVendor:17 */
 	/* MagSafe Battery: kHIDPage_AppleVendor:11 */
 	// By verifying 0xFF00:(17/11), we can know which type of device actually attached

@@ -8,11 +8,22 @@
 #define kIOHIDPrimaryUsageKey "PrimaryUsage"
 #endif
 
+#if __has_include(<IOKit/hid/IOHIDUsageTables.h>)
+#include <IOKit/hid/IOHIDUsageTables.h>
+#else
+#define kHIDPage_Sensor 0x20
+#define kHIDUsage_Snsr_Environmental_AtmosphericPressure 0x31
+#endif
+
 #if __has_include(<IOKit/hid/AppleHIDUsageTables.h>)
 #include <IOKit/hid/AppleHIDUsageTables.h>
 #else
 #define kHIDPage_AppleVendor 0xFF00
 #define kHIDUsage_AppleVendor_TemperatureSensor 0x0005
+#define kHIDUsage_AppleVendor_Accelerometer 0x03
+#define kHIDUsage_AppleVendor_Gyro 0x09
+#define kHIDUsage_AppleVendor_Compass 0x0A
+#define kHIDUsage_AppleVendor_Jarvis 0x3E
 #endif
 
 #if __has_include(<IOKit/hid/IOHIDEventTypes.h>)
@@ -48,13 +59,14 @@ extern CFArrayRef IOHIDEventSystemClientCopyServices(IOHIDEventSystemClientRef);
 CF_IMPLICIT_BRIDGING_DISABLED
 #endif
 
-// Sadly this is SPI
+// Sadly these are SPI
 #if __has_include(<IOKit/hid/IOHIDEventSystemClient.h>) && 0
 #include <IOKit/hid/IOHIDEventSystemClient.h>
 #else
 CF_IMPLICIT_BRIDGING_ENABLED
 extern IOHIDEventSystemClientRef IOHIDEventSystemClientCreate(CFAllocatorRef);
 extern void IOHIDEventSystemClientSetMatching(IOHIDEventSystemClientRef, CFDictionaryRef);
+extern IOHIDEventSystemClientRef IOHIDEventSystemClientCreateWithType(CFAllocatorRef allocator, uint32_t client_type, CFDictionaryRef attrs);
 CF_IMPLICIT_BRIDGING_DISABLED
 #endif
 
@@ -72,8 +84,9 @@ CF_IMPLICIT_BRIDGING_ENABLED
 extern IOHIDEventRef IOHIDServiceClientCopyEvent(IOHIDServiceClientRef service, int64_t type, int32_t options, int64_t timestamp);
 CF_IMPLICIT_BRIDGING_DISABLED
 
+// XXX: Consider migrate to pure C
 NSDictionary *getTemperatureHIDData(void) {
-    IOHIDEventSystemClientRef client = IOHIDEventSystemClientCreate(0);
+    IOHIDEventSystemClientRef client = IOHIDEventSystemClientCreate(kCFAllocatorDefault);
 	if (!client)
 		return nil;
 
@@ -96,4 +109,118 @@ NSDictionary *getTemperatureHIDData(void) {
 	}
 	CFRelease(client);
 	return dict;
+}
+
+static int GetTemperatureFromDict(CFDictionaryRef dict) {
+	if (dict == NULL) {
+		return -1;
+	}
+
+	// kAppleTemperatureDictionaryKey normally only one member
+	CFIndex count = CFDictionaryGetCount(dict);
+	if (count != 1) {
+		return -1;
+	}
+
+	const void *keys[1];
+	const void *values[1];
+	CFDictionaryGetKeysAndValues(dict, keys, values);
+	
+	CFNumberRef num = (CFNumberRef)values[0];
+	if (num == NULL || CFGetTypeID(num) != CFNumberGetTypeID()) {
+		return -1;
+	}
+	
+	int result = 0;
+	if (!CFNumberGetValue(num, kCFNumberIntType, &result)) {
+		return -1;
+	}
+	
+	return result;
+}
+
+float getSensorTemperature(int page, int usage) {
+	// kIOHIDEventSystemClientTypeMonitor
+	IOHIDEventSystemClientRef client = IOHIDEventSystemClientCreateWithType(kCFAllocatorDefault, 1, NULL);
+	if (!client) return -1;
+
+	float ret = -1;
+	void *keys[2], *values[2];
+	CFNumberRef cfPage, cfUsage;
+	CFArrayRef services = NULL;
+	keys[0] = (void *)CFSTR(kIOHIDPrimaryUsagePageKey);
+	keys[1] = (void *)CFSTR(kIOHIDPrimaryUsageKey);
+	
+	page = kHIDPage_Sensor;
+	usage = kHIDUsage_Snsr_Environmental_AtmosphericPressure;
+	
+	cfPage = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &page);
+	cfUsage = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &usage);
+	values[0] = (void *)cfPage;
+	values[1] = (void *)cfUsage;
+
+	CFDictionaryRef matchingDict = CFDictionaryCreate(kCFAllocatorDefault, (const void **)keys, (const void **)values, 2, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+	if (matchingDict) {
+		IOHIDEventSystemClientSetMatching(client, matchingDict);
+		CFRelease(matchingDict);
+
+		services = IOHIDEventSystemClientCopyServices(client);
+		CFIndex count;
+		if (services && ((void)(count = CFArrayGetCount(services)), count > 0)) {
+			int i = 0;
+			ret = 0;
+			// Even we do a loop here, the count should always be one
+			while (i < count) {
+				IOHIDServiceClientRef service = (IOHIDServiceClientRef)CFArrayGetValueAtIndex(services, i);
+				// kAppleTemperatureDictionaryKey
+				CFDictionaryRef dict = IOHIDServiceClientCopyProperty(service, CFSTR("AppleVoltageDictionary"));
+				if (dict) {
+					int num = GetTemperatureFromDict(dict);
+					if (num != -1) {
+						ret += (float)num / 100.0f;
+					}
+					CFRelease(dict);
+				}
+				i++;
+			}
+			ret /= count;
+			CFRelease(services);
+		}
+	}
+
+	CFRelease(cfPage);
+	CFRelease(cfUsage);
+	CFRelease(client);
+
+	return ret;
+}
+
+float getSensorAvgTemperature(void) {
+	// These are all known sensors with temperatures on iOS devices (except kHIDUsage_AppleVendor_TemperatureSensor)
+	int usages[] = {
+		kHIDUsage_AppleVendor_Accelerometer,
+		kHIDUsage_AppleVendor_Gyro,
+		kHIDUsage_AppleVendor_Compass,
+		/* kHIDUsage_AppleVendor_Jarvis seems the legacy compass sensor */
+		kHIDUsage_Snsr_Environmental_AtmosphericPressure,
+		/* kHIDUsage_Snsr_Environmental_Humidity seems only on HomePods, we can enable this once Battman running on HomePods */
+	};
+
+	float ret = 0;
+	int cnt = 0;
+	for (size_t i = 0; i < (sizeof(usages) / sizeof(usages[0])); i++) {
+		int page = kHIDPage_AppleVendor;
+		if (i > 2)
+			page = kHIDPage_Sensor;
+
+		float temp = getSensorTemperature(page, usages[i]);
+		if (temp) {
+			ret += temp;
+			cnt++;
+		}
+	}
+	if (cnt)
+		return (ret /= cnt);
+
+	return -1;
 }

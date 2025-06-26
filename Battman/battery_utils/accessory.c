@@ -104,13 +104,19 @@ static const char *acc_port_types[] = {
 	_C("SD Card"),
 	_C("Lightning"),
 	_C("30-Pin"),			// Wow, who still using this
-	_C("Inductive"),		// iPhone wireless charging (or they called MagSafe)
+	_C("Inductive"),		// iPhone wireless charging / Apple Pencil magnetically connect
 	_C("Smart Connector"),
 	_C("Display Port"),
 	_C("MagSafe 3"),		// 2021 introduced MagSafe 3 for MacBooks
 	// We need help on testing 'Inductive', 'Contactless' and 'Wireless'
 	_C("Contactless"),
 	_C("Wireless")
+};
+static const char *acc_inductive_modes[] = {
+	_C("RX"),
+	_C("TX"),
+	_C("TEST"),
+	_C("INVALID"),
 };
 #undef _C
 extern const char *cond_localize_c(const char *);
@@ -170,6 +176,16 @@ const char *acc_port_type_string(SInt32 pt) {
 		return _C("Undefined");
 	}
 	return _C(acc_port_types[pt]);
+}
+
+const char *acc_inductive_mode_string(int mode) {
+	static char modestr[32];
+	if (mode < 4) {
+		return _C(acc_inductive_modes[mode]);
+	}
+	
+	snprintf(modestr, 32, "<%d>", mode);
+	return modestr;
 }
 
 const char *manf_id_string(SInt32 manf) {
@@ -416,12 +432,14 @@ accessory_info_t get_acc_info(io_connect_t connect) {
 		memset(queries[i].dest, 0, queries[i].len);
 
 		/* We only handle Accessories, so they are all strings */
-		if (!CFStringGetCString((CFStringRef)buffer, queries[i].dest, queries[i].len, kCFStringEncodingUTF8)) {
-			NSLog(CFSTR("get_acc_info(%d): CF Error"), queries[i].key);
-			continue;
+		if (buffer) {
+			if (!CFStringGetCString((CFStringRef)buffer, queries[i].dest, queries[i].len, kCFStringEncodingUTF8)) {
+				NSLog(CFSTR("get_acc_info(%d): CF Error"), queries[i].key);
+				continue;
+			}
+			DBGLOG(CFSTR("get_acc_info(%d): got %s"), queries[i].key, (char *)queries[i].dest);
+			CFRelease(buffer);
 		}
-		DBGLOG(CFSTR("get_acc_info(%d): got %s"), queries[i].key, (char *)queries[i].dest);
-		if (buffer) CFRelease(buffer);
 	}
 
 	return info;
@@ -452,6 +470,7 @@ accessory_powermode_t get_acc_powermode(io_connect_t connect) {
 	supported = IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessorySupportedPowerModes"), kCFAllocatorDefault, kNilOptions);
 	if (supported) {
 #if DEBUG
+		printf("Powermodes: ");
 		CFShow(supported);
 #endif
 		mode.supported_cnt = CFArrayGetCount(supported);
@@ -643,25 +662,25 @@ IOReturn get_acc_usb_ilim(io_connect_t connect, accessory_usb_ilim_t *ilim) {
 		if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &(ilim->limit))) {
 			lim = kIOReturnNotAttached;
 		}
-		CFRelease(number);
+		if (number) CFRelease(number);
 
 		number = IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryUSBCurrentLimitBase"), kCFAllocatorDefault, kNilOptions);
 		if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &(ilim->base))) {
 			base = kIOReturnNotAttached;
 		}
-		CFRelease(number);
+		if (number) CFRelease(number);
 
 		number = IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryUSBCurrentLimitOffset"), kCFAllocatorDefault, kNilOptions);
 		if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &(ilim->offset))) {
 			offset = kIOReturnNotFound;
 		}
-		CFRelease(number);
+		if (number) CFRelease(number);
 
 		number = IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryUSBCurrentLimitMaximum"), kCFAllocatorDefault, kNilOptions);
 		if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &(ilim->max))) {
 			offset = kIOReturnNotFound;
 		}
-		CFRelease(number);
+		if (number) CFRelease(number);
 	}
 
 	if ((lim == kIOReturnNotAttached) && (base == kIOReturnNotAttached) && (offset == kIOReturnNotFound) && (max == kIOReturnNotFound)) {
@@ -695,4 +714,43 @@ IOReturn get_acc_msn(io_connect_t connect, void *buf) {
 		CFRelease(sn);
 	}
 	return kr;
+}
+
+int get_acc_inductive_fw_mode(io_connect_t connect) {
+	IOReturn kr = kIOReturnSuccess;
+	int mode = -1;
+	
+	CFNumberRef number;
+	number = (CFNumberRef)IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryManagerInductiveFwMode"), kCFAllocatorDefault, kNilOptions);
+	if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &mode)) {
+		kr = kIOReturnNotAttached;
+	}
+	if (number) CFRelease(number);
+
+	return mode;
+}
+
+int get_acc_inductive_region_code(io_connect_t connect) {
+	IOReturn kr = kIOReturnSuccess;
+	int code = -1;
+	
+	CFNumberRef number;
+	number = (CFNumberRef)IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryManagerInductiveRegionCodeData"), kCFAllocatorDefault, kNilOptions);
+	if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &code)) {
+		kr = kIOReturnNotAttached;
+	}
+	if (number) CFRelease(number);
+	
+	return code;
+}
+
+bool get_acc_inductive_timeout(io_connect_t connect) {
+	CFBooleanRef timeout;
+	
+	timeout = IORegistryEntryCreateCFProperty(connect, CFSTR("SupervisedTransportsRestricted"), kCFAllocatorDefault, kNilOptions);
+	
+	bool ret = (timeout == kCFBooleanTrue);
+	if (timeout) CFRelease(timeout);
+	
+	return ret;
 }

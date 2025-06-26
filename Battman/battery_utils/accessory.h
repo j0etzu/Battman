@@ -61,6 +61,7 @@ const char *acc_powermode_string(AccessoryPowermode powermode);
 const char *acc_powermode_string_supported(accessory_powermode_t mode);
 const char *acc_usb_ilim_string_multiline(accessory_usb_ilim_t ilim);
 const char *acc_usb_connstat_string(SInt32 usb_connstat);
+const char *acc_inductive_mode_string(int mode);
 
 io_connect_t acc_open_with_port(int port);
 
@@ -80,6 +81,9 @@ IOReturn get_acc_usb_voltage(io_connect_t connect, SInt32 *voltage);
 IOReturn get_acc_usb_ilim(io_connect_t connect, accessory_usb_ilim_t *ilim);
 IOReturn get_acc_idsn(io_connect_t connect, SInt64 *buf);
 IOReturn get_acc_msn(io_connect_t connect, void *buf);
+int get_acc_inductive_fw_mode(io_connect_t connect);
+int get_acc_inductive_region_code(io_connect_t connect);
+bool get_acc_inductive_timeout(io_connect_t connect);
 
 __END_DECLS
 
