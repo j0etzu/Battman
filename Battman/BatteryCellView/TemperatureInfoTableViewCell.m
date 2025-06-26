@@ -1,4 +1,4 @@
-#import "common.h"
+#import "../common.h"
 #import "TemperatureInfoTableViewCell.h"
 #import "../GradientArcView.h"
 #import "../CompatibilityHelper.h"
