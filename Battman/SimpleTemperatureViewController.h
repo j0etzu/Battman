@@ -2,6 +2,7 @@
 
 @interface SimpleTemperatureViewController : BatterySubscriberViewControllerBase
 {
-NSDictionary *temperatureHIDData;
+	NSDictionary *temperatureHIDData;
+	NSDictionary *sensorTemperatures;
 }
 @end

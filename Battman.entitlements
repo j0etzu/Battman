@@ -109,6 +109,7 @@
 		<string>IOAccessoryManagerUserClient</string>
 		<string>IOAccessoryPortUserClient</string>
 		<string>IOHIDLibUserClient</string>
+		<string>IOMobileFramebufferUserClient</string>
 	</array>
 	<key>com.apple.security.iokit-user-client-class</key>
 	<array>
@@ -120,6 +121,7 @@
 		<string>IOAccessoryManagerUserClient</string>
 		<string>IOAccessoryPortUserClient</string>
 		<string>IOHIDLibUserClient</string>
+		<string>IOMobileFramebufferUserClient</string>
 	</array>
 	<key>com.apple.private.iokit.rootdomain-set-property</key>
 	<true/>

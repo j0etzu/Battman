@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Battman 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 18:41+0800\n"
+"POT-Creation-Date: 2025-06-28 18:51+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -278,6 +278,14 @@ msgstr ""
 msgid "Terms of Use"
 msgstr ""
 
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:31
+msgid "Device Sensors"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:33
+msgid "HID"
+msgstr ""
+
 #: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:25
 msgid "Battman"
 msgstr ""
@@ -348,6 +356,10 @@ msgstr ""
 
 #: /Users/torrekie/proj/Battman/Battman/BatteryCellView/TemperatureInfoTableViewCell.m:138
 msgid "Sensors Avg."
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/BatteryCellView/TemperatureInfoTableViewCell.m:144
+msgid "Main Screen"
 msgstr ""
 
 #: /Users/torrekie/proj/Battman/Battman/FullSMCViewController.m:42
@@ -547,13 +559,13 @@ msgid ""
 "the translations may inaccurate."
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/main.m:283
+#: /Users/torrekie/proj/Battman/Battman/main.m:290
 msgid ""
 "stdio logs not redirected in Simulator build, please check stdio in Xcode "
 "console output instead."
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/main.m:306
+#: /Users/torrekie/proj/Battman/Battman/main.m:313
 msgid "Battman CLI not implemented yet."
 msgstr ""
 
@@ -1882,6 +1894,22 @@ msgstr ""
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:940
 msgid "Published Type"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/hid.m:212
+msgid "Accelerometer"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/hid.m:213
+msgid "Gyroscope"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/hid.m:214
+msgid "Compass"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/hid.m:217
+msgid "Atmos Pressure Sensor"
 msgstr ""
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:77

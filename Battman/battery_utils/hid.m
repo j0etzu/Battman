@@ -149,16 +149,13 @@ float getSensorTemperature(int page, int usage) {
 	CFNumberRef cfPage, cfUsage;
 	CFArrayRef services = NULL;
 	keys[0] = (void *)CFSTR(kIOHIDPrimaryUsagePageKey);
-	keys[1] = (void *)CFSTR(kIOHIDPrimaryUsageKey);
-	
-	page = kHIDPage_Sensor;
-	usage = kHIDUsage_Snsr_Environmental_AtmosphericPressure;
+	keys[1] = (void *)CFSTR(kIOHIDPrimaryUsageKey);\
 	
 	cfPage = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &page);
 	cfUsage = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &usage);
 	values[0] = (void *)cfPage;
 	values[1] = (void *)cfUsage;
-
+	
 	CFDictionaryRef matchingDict = CFDictionaryCreate(kCFAllocatorDefault, (const void **)keys, (const void **)values, 2, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 	if (matchingDict) {
 		IOHIDEventSystemClientSetMatching(client, matchingDict);
@@ -195,26 +192,61 @@ float getSensorTemperature(int page, int usage) {
 	return ret;
 }
 
+static int sensorUsages[] = {
+	kHIDUsage_AppleVendor_Accelerometer,
+	kHIDUsage_AppleVendor_Gyro,
+	kHIDUsage_AppleVendor_Compass,
+	/* kHIDUsage_AppleVendor_ProximitySensor some device seems having temp on this sensor */
+	/* kHIDUsage_AppleVendor_Jarvis seems the legacy compass sensor */
+	kHIDUsage_Snsr_Environmental_AtmosphericPressure,
+	/* kHIDUsage_Snsr_Environmental_Humidity seems only on HomePods, we can enable this once Battman running on HomePods */
+};
+#ifdef _C
+#undef _C
+#endif
+#define _C(x) x
+static char *sensorNames[] = {
+	_C("Accelerometer"),
+	_C("Gyroscope"),
+	_C("Compass"),
+	/* "Proximity Sensor" */
+	/* "Compass (Jarvis)" */
+	_C("Atmos Pressure Sensor"),
+	/* "Humidity Sensor" */
+};
+
+NSDictionary *getSensorTemperatures(void) {
+	NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+	
+	@autoreleasepool {
+		for (size_t i = 0; i < (sizeof(sensorUsages) / sizeof(sensorUsages[0])); i++) {
+			int page = kHIDPage_AppleVendor;
+			if (i > 2)
+				page = kHIDPage_Sensor;
+			
+			float temp = getSensorTemperature(page, sensorUsages[i]);
+			if (temp && temp != -1) {
+				NSString *name = [NSString stringWithCString:sensorNames[i] encoding:NSUTF8StringEncoding];
+				[dict setValue:[NSNumber numberWithDouble:temp] forKey:name];
+			}
+		}
+	}
+	
+	return dict;
+}
+
 float getSensorAvgTemperature(void) {
 	// These are all known sensors with temperatures on iOS devices (except kHIDUsage_AppleVendor_TemperatureSensor)
-	int usages[] = {
-		kHIDUsage_AppleVendor_Accelerometer,
-		kHIDUsage_AppleVendor_Gyro,
-		kHIDUsage_AppleVendor_Compass,
-		/* kHIDUsage_AppleVendor_Jarvis seems the legacy compass sensor */
-		kHIDUsage_Snsr_Environmental_AtmosphericPressure,
-		/* kHIDUsage_Snsr_Environmental_Humidity seems only on HomePods, we can enable this once Battman running on HomePods */
-	};
-
+	// FIXME: use getSensorTemperatures
 	float ret = 0;
 	int cnt = 0;
-	for (size_t i = 0; i < (sizeof(usages) / sizeof(usages[0])); i++) {
+	for (size_t i = 0; i < (sizeof(sensorUsages) / sizeof(sensorUsages[0])); i++) {
 		int page = kHIDPage_AppleVendor;
 		if (i > 2)
 			page = kHIDPage_Sensor;
 
-		float temp = getSensorTemperature(page, usages[i]);
-		if (temp) {
+		float temp = getSensorTemperature(page, sensorUsages[i]);
+		if (temp && temp != -1) {
 			ret += temp;
 			cnt++;
 		}

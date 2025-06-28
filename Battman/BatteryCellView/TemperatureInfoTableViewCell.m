@@ -138,6 +138,12 @@
 		finalText = [finalText stringByAppendingFormat:@"\n%@: %0.2f ℃", _("Sensors Avg."), snsrtemp];
 	}
 
+	extern double iomfb_primary_screen_temperature(void);
+	double scrntemp = iomfb_primary_screen_temperature();
+	if (scrntemp != -1) {
+		finalText = [finalText stringByAppendingFormat:@"\n%@: %0.2f ℃", _("Main Screen"), scrntemp];
+	}
+
 	// We need a better UI for representing temperatures ig
 	temperatureLabel.text = finalText;
 	[self.contentView addSubview:temperatureLabel];

@@ -13,6 +13,8 @@
 #include <TargetConditionals.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include <stdio.h>
+#include <os/log.h>
+
 #include "main.h"
 #include "CompatibilityHelper.h"
 
@@ -56,6 +58,8 @@ extern const char *L_MAH;
 extern const char *L_MV;
 extern const char *L_TRUE;
 extern const char *L_FALSE;
+
+extern os_log_t gLog;
 
 void show_alert(const char *title, const char *message, const char *cancel_button_title);
 #ifdef __OBJC__

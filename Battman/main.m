@@ -221,7 +221,14 @@ void (^redirectedOutputListener)(void)=nil;
 #include "security/selfcheck.h"
 #include "security/protect.h"
 
+os_log_t gLog;
+
 int main(int argc, char * argv[]) {
+	gLog = os_log_create("com.torrekie.Battman", "default");
+	if (gLog == NULL) {
+		os_log_error(OS_LOG_DEFAULT, "Couldn't create os log object");
+	}
+
 	pull_fatal_notif();
     // FIXME: use getopt()
 	if (argc == 3 && strcmp(argv[1], "--worker") == 0) {

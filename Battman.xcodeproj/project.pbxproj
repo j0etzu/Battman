@@ -66,6 +66,7 @@
 		6838BF762DBF810D007EB66C /* localized.c in Sources */ = {isa = PBXBuildFile; fileRef = 6838BF752DBF810D007EB66C /* localized.c */; };
 		6838BF832DC27F1E007EB66C /* ChargingManagementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6838BF822DC27F1E007EB66C /* ChargingManagementViewController.m */; };
 		6838BFAC2DC3984C007EB66C /* SliderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6838BFAB2DC3984C007EB66C /* SliderTableViewCell.m */; };
+		684611502E0D5250006B651D /* IOMFB_interaction.c in Sources */ = {isa = PBXBuildFile; fileRef = 6846114F2E0D5250006B651D /* IOMFB_interaction.c */; };
 		684A9EF22D65F0AF006265DC /* intl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 687743152D461E4400375A2C /* intl.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		686AECD52D3B93CD0059ECD0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 686AECD42D3B93CD0059ECD0 /* main.m */; };
 		687742B62D43838500375A2C /* locales in Resources */ = {isa = PBXBuildFile; fileRef = 687742B52D43837B00375A2C /* locales */; };
@@ -147,6 +148,8 @@
 		6838BF822DC27F1E007EB66C /* ChargingManagementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChargingManagementViewController.m; sourceTree = "<group>"; };
 		6838BFAA2DC3984C007EB66C /* SliderTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SliderTableViewCell.h; sourceTree = "<group>"; };
 		6838BFAB2DC3984C007EB66C /* SliderTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SliderTableViewCell.m; sourceTree = "<group>"; };
+		6846114E2E0D5250006B651D /* IOMFB_interaction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOMFB_interaction.h; sourceTree = "<group>"; };
+		6846114F2E0D5250006B651D /* IOMFB_interaction.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = IOMFB_interaction.c; sourceTree = "<group>"; };
 		686AECBF2D3B93CB0059ECD0 /* Battman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Battman.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		686AECD32D3B93CD0059ECD0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		686AECD42D3B93CD0059ECD0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -275,6 +278,15 @@
 			path = license;
 			sourceTree = "<group>";
 		};
+		6846114A2E0D5211006B651D /* hw */ = {
+			isa = PBXGroup;
+			children = (
+				6846114E2E0D5250006B651D /* IOMFB_interaction.h */,
+				6846114F2E0D5250006B651D /* IOMFB_interaction.c */,
+			);
+			path = hw;
+			sourceTree = "<group>";
+		};
 		686AECB62D3B93CB0059ECD0 = {
 			isa = PBXGroup;
 			children = (
@@ -298,6 +310,7 @@
 		686AECC12D3B93CB0059ECD0 /* Battman */ = {
 			isa = PBXGroup;
 			children = (
+				6846114A2E0D5211006B651D /* hw */,
 				68FBDCF12DE30A740057870A /* cobjc */,
 				68B2913E2DD86ABF0089BA1F /* EXTERNAL_HEADERS */,
 				68B291332DD1E6960089BA1F /* CompatibilityHelper.c */,
@@ -736,6 +749,7 @@
 				68B291382DD1E6960089BA1F /* FullSMCViewController.m in Sources */,
 				68B291232DC754100089BA1F /* daemon.c in Sources */,
 				68A3EAFB2D5204D2003381DF /* battery_info.c in Sources */,
+				684611502E0D5250006B651D /* IOMFB_interaction.c in Sources */,
 				68B291282DC75F610089BA1F /* pmnotification.c in Sources */,
 				68B5FF2E2D85606000919BC2 /* GradientArcView.m in Sources */,
 				689FE0B52DEAEA4A00550EBE /* BatterySubscriberViewControllerBase.c in Sources */,

@@ -16,6 +16,13 @@
 static bool UPSWatching = false;
 static CFRunLoopRef   gBackgroundRunLoop = NULL;
 
+static pthread_t gUPSWatchThread = NULL;
+static bool gTerminationInProgress = false;
+
+void suspendPowerEventMonitoring(void);
+void resumePowerEventMonitoring(void);
+void cleanupPowerEventMonitoring(void);
+
 @implementation UPSMonitor
 
 static IONotificationPortRef    gNotifyPort     = NULL;
@@ -460,57 +467,145 @@ threadMain(void)
 	}
 }
 
-void CleanupAndExit(void) {
-	CFRunLoopStop(CFRunLoopGetCurrent());
+void SignalHandler(int sigraised) {
+	syslog(LOG_INFO, "Battman: received signal %d, exiting gracefully\n", sigraised);
+	[UPSMonitor cleanupAllResources];
+	// app_exit();
 }
 
-void SignalHandler(int sigraised) {
-	syslog(LOG_INFO, "Battman: exiting\n");
-	CleanupAndExit();
+// Update the CleanupAndExit function
+void CleanupAndExit(void) {
+	[UPSMonitor cleanupAllResources];
+	CFRunLoopStop(CFRunLoopGetCurrent());
 }
 
 static bool gNotificationsPaused = false;
 
++ (void)cleanupAllResources
+{
+	if (gTerminationInProgress) {
+		return; // Prevent double cleanup
+	}
+	gTerminationInProgress = true;
+	
+	NSLog(@"[UPSMonitor] Starting graceful shutdown...");
+	
+	// Stop power event monitoring first
+	cleanupPowerEventMonitoring();
+	
+	// Stop the UPS monitoring run loop if it's running
+	if (gBackgroundRunLoop) {
+		CFRunLoopPerformBlock(gBackgroundRunLoop, kCFRunLoopDefaultMode, ^{
+			CFRunLoopStop(CFRunLoopGetCurrent());
+		});
+		CFRunLoopWakeUp(gBackgroundRunLoop);
+		
+		// Give the run loop time to stop gracefully
+		dispatch_semaphore_t stopSemaphore = dispatch_semaphore_create(0);
+		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+			// Wait a bit for the run loop to stop
+			usleep(100000); // 100ms
+			dispatch_semaphore_signal(stopSemaphore);
+		});
+		
+		// Wait up to 1 second for graceful shutdown
+		dispatch_semaphore_wait(stopSemaphore, dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC));
+	}
+	
+	// Clean up all UPS devices
+	if (gAllUPSDevices) {
+		NSLog(@"[UPSMonitor] Cleaning up %zu UPS devices", UPSDeviceSetCount(gAllUPSDevices));
+		size_t n = UPSDeviceSetCount(gAllUPSDevices);
+		if (n > 0) {
+			UPSDataRef *buffer = calloc(n, sizeof(UPSDataRef));
+			if (buffer) {
+				UPSDeviceSetGetAll(gAllUPSDevices, buffer);
+				for (size_t i = 0; i < n; i++) {
+					FreeUPSData(buffer[i]);
+				}
+				free(buffer);
+			}
+		}
+		UPSDeviceSetDestroy(gAllUPSDevices);
+		gAllUPSDevices = NULL;
+	}
+	
+	// Clean up IOKit resources
+	if (gAddedIter != MACH_PORT_NULL) {
+		IOObjectRelease(gAddedIter);
+		gAddedIter = MACH_PORT_NULL;
+	}
+	
+	if (gNotifyPort) {
+		IONotificationPortDestroy(gNotifyPort);
+		gNotifyPort = NULL;
+	}
+	
+	// Clean up run loop reference
+	if (gBackgroundRunLoop) {
+		CFRelease(gBackgroundRunLoop);
+		gBackgroundRunLoop = NULL;
+	}
+	
+	// Reset state
+	UPSWatching = false;
+	gNotificationsPaused = false;
+	
+	NSLog(@"[UPSMonitor] Graceful shutdown completed");
+}
+
++ (void)appWillTerminate:(NSNotification *)note
+{
+	NSLog(@"[UPSMonitor] App will terminate - beginning cleanup");
+	[self cleanupAllResources];
+}
+
 + (void)appDidEnterBackground:(NSNotification *)note
 {
-	extern dispatch_queue_t _powerQueue;
-	if (_powerQueue != NULL && !gNotificationsPaused) {
-		dispatch_async(_powerQueue, ^{
-			dispatch_suspend(_powerQueue);
-		});
-	}
+	if (gTerminationInProgress) return;
 
+	extern dispatch_queue_t _powerQueue;
+
+	suspendPowerEventMonitoring();
+	
 	if (gBackgroundRunLoop == NULL || gNotifyPort == NULL || gNotificationsPaused)
 		return;
+	
 	CFRunLoopSourceRef src = IONotificationPortGetRunLoopSource(gNotifyPort);
 	if (!src) return;
 	
+	// Remove the UPS monitoring run loop source
 	CFRunLoopPerformBlock(gBackgroundRunLoop, kCFRunLoopDefaultMode, ^{
 		CFRunLoopRemoveSource(CFRunLoopGetCurrent(), src, kCFRunLoopDefaultMode);
 	});
 	CFRunLoopWakeUp(gBackgroundRunLoop);
 	
 	gNotificationsPaused = true;
+	NSLog(@"[UPSMonitor] Suspended monitoring - app entered background");
 }
 
 + (void)appWillEnterForeground:(NSNotification *)note
 {
-	extern dispatch_queue_t _powerQueue;
-	if (_powerQueue != NULL && gNotificationsPaused) {
-		dispatch_resume(_powerQueue);
-	}
+	if (gTerminationInProgress) return;
 
+	extern dispatch_queue_t _powerQueue;
+
+	resumePowerEventMonitoring();
+	
 	if (gBackgroundRunLoop == NULL || gNotifyPort == NULL || !gNotificationsPaused)
 		return;
+	
 	CFRunLoopSourceRef src = IONotificationPortGetRunLoopSource(gNotifyPort);
 	if (!src) return;
 	
+	// Add back the UPS monitoring run loop source
 	CFRunLoopPerformBlock(gBackgroundRunLoop, kCFRunLoopDefaultMode, ^{
 		CFRunLoopAddSource(CFRunLoopGetCurrent(), src, kCFRunLoopDefaultMode);
 	});
 	CFRunLoopWakeUp(gBackgroundRunLoop);
 	
 	gNotificationsPaused = false;
+	NSLog(@"[UPSMonitor] Resumed monitoring - app will enter foreground");
 }
 
 
@@ -524,6 +619,7 @@ static bool gNotificationsPaused = false;
 	NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
 	[nc addObserver:self selector:@selector(appDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 	[nc addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+	[nc addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
 
 	// Install a signal handler so if someone ^C’s, we clean up
 	signal(SIGINT, SignalHandler);
@@ -541,9 +637,23 @@ static bool gNotificationsPaused = false;
 	if (err) {
 		NSLog(@"[UPSMonitor] Failed to create UPS‐watch thread: %d", err);
 	} else {
+		gUPSWatchThread = thread;
 		NSLog(@"[UPSMonitor] UPS‐watch thread launched.");
 		UPSWatching = true;
 	}
+}
+
+// manually stop monitoring (useful for testing ig)
++ (void)stopWatchingUPS
+{
+	NSLog(@"[UPSMonitor] Manually stopping UPS monitoring");
+	[self cleanupAllResources];
+	
+	// Remove notification observers
+	NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+	[nc removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+	[nc removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
+	[nc removeObserver:self name:UIApplicationWillTerminateNotification object:nil];
 }
 
 @end
