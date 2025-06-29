@@ -111,14 +111,19 @@ ifneq (${RELEASE},1)
 endif
 
 build/Payload/Battman.app/1024.png: ../Battman.svg
+	@mkdir -p $(@D)
 	./generate_icons.sh ../Battman.svg build/Payload/Battman.app/
+
 build/Payload/Battman.app/license.html: license/license.html
+	@mkdir -p $(@D)
 	cp $^ $@
+
 build/Battman.ipa: build/Payload/Battman.app/Battman build/Payload/Battman.app/Info.plist ${ICON_IF_RELEASE} build/Payload/Battman.app/license.html
 	cd build/ && zip -r Battman.ipa ./Payload
 
 %/Battman.ipa: build/Battman.ipa
 	cp $< $@
+
 %/index.html: %/install_template.html build/Battman.ipa
 	$(SED) 's/LOCAL_IP/${LOCAL_IP}/;s/LATEST_UPDATE/$(shell date)/' /var/www/html/files/battman/install_template.html>/var/www/html/files/battman/index.html
 
@@ -126,11 +131,14 @@ publish_mounted_site: mount/pub_html/battman/ \
 			mount/pub_html/battman/Battman.ipa \
 			mount/pub_html/battman/index.html
 	@echo Install on your site.
+
 publish_local_site: /var/www/html/files/battman \
 			/var/www/html/files/battman/Battman.ipa \
 			/var/www/html/files/battman/index.html
 	@echo Install at: ${LOCAL_IP}
+
 publish_none: build/Battman.ipa
 	@echo Not publishing.
+
 clean:
 	rm -rf build/
