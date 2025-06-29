@@ -288,7 +288,7 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 }
 
 - (void)dealloc {
-	int section_num = battery_info_get_section_count(*batteryInfo);
+	//int section_num = battery_info_get_section_count(*batteryInfo);
 	for (int i = 0; i < BI_MAX_SECTION_NUM; i++)
 		free(pendingLoadOffsets[i]);
 }
@@ -303,7 +303,7 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
 
-	NSArray         *target_desc;
+	//NSArray         *target_desc;
 	NSString        *titleLabel;
 	if ([cell respondsToSelector:@selector(titleLabel)]) {
 #pragma clang diagnostic push

@@ -200,6 +200,7 @@ static const CGFloat kDefaultMinimumFontSize    = 12.f;
     CGContextStrokePath(context);
 }
 
+#if 0
 /**
  * Ensure nothing would happen when user touch out of the mask(circle)
  */
@@ -212,5 +213,6 @@ static const CGFloat kDefaultMinimumFontSize    = 12.f;
     }
     return nil;
 }
+#endif
 
 @end

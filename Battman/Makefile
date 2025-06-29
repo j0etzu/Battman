@@ -2,12 +2,13 @@
 
 SED = sed
 
-IPHONEOS_DEPLOYMENT_TARGET := 13.0
+IPHONEOS_DEPLOYMENT_TARGET := 12.0
 
 LOCAL_IP := $(shell /sbin/ifconfig | $(SED) -n "s/.*inet \([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\) .*/\1/p" | tail -1)
 
 SDKROOT := ${THEOS}/sdks/iPhoneOS14.5.sdk
 SDKROOT := ${THEOS}/sdks/iPhoneOS13.7.sdk
+
 LIBS := -lobjc
 FRAMEWORKS := -framework UIKit -framework Foundation -framework CoreGraphics -framework QuartzCore -framework IOKit -framework WebKit -Wl,-weak-lIOAccessoryManager
 
@@ -41,6 +42,7 @@ else
 CC = cc
 CFLAGS += -isysroot $(SDKROOT)
 LDFLAGS += -isysroot $(SDKROOT)
+# FIXME: This should be dynamically checked by filepath or something
 NO_CLANGRT=1
 endif
 

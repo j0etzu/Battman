@@ -11,6 +11,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
+#include <Availability.h>
+#include <TargetConditionals.h>
+
 #ifdef __OBJC__
 #include <Foundation/Foundation.h>
 #endif
@@ -29,6 +32,23 @@
 
 #ifndef BATTMAN_TEXTDOMAIN
 #define BATTMAN_TEXTDOMAIN "battman"
+#endif
+
+#if (!defined(DEBUG) || (DEBUG == 0)) && TARGET_OS_IPHONE && (__ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__ > 120000)
+#error "IPHONEOS_DEPLOYMENT_TARGET must be set to iOS 12.0 (or lower) before archiving!       \
+This ensures older-OS users aren't dropped and that any @available/__builtin_available blocks \
+are weakly linked correctly at link time."
+#endif
+
+#if (!defined(DEBUG) || (DEBUG == 0)) && TARGET_OS_OSX && (__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ > 110000)
+#error "MACOS_DEPLOYMENT_TARGET must be set to macOS 11.0 before archiving!                   \
+This ensures older-OS users aren't dropped and that any @available/__builtin_available blocks \
+are weakly linked correctly at link time."
+#endif
+
+#if !defined(__arm64__) && !defined(__aarch64__) && !defined(__arm64e__)
+#error Current Battman is arm64 only! \
+Please file an issue if you would like to contribute!
 #endif
 
 __BEGIN_DECLS

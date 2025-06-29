@@ -85,7 +85,7 @@ IOReturn smc_open(void) {
     mach_port_t masterPort;
     io_service_t service;
     const char *fail_title = NULL;
-    char message[1024];
+    //char message[1024];
 
     // Init frequently used texts to global string
     init_common_text();
