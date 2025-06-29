@@ -431,7 +431,8 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
     if (!cell)
         cell = [[cell_class alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ident];
 
-    struct battery_info_node *pending_bi = battery_info_get_section(*batteryInfo,ip.section)->data + ip.row + pendingLoadOffsets[ip.section][ip.row];
+	struct battery_info_section *bi_section = battery_info_get_section(*batteryInfo,ip.section);
+    struct battery_info_node *pending_bi = bi_section->data + ip.row + pendingLoadOffsets[ip.section][ip.row];
     /* Flags special handler */
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wstring-compare"
@@ -458,108 +459,111 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 #pragma mark - Warn Conditions
     equipDetailCell(cell, pending_bi);
     /* Warning conditions */
-    equipWarningCondition_b(cell, _("Remaining Capacity"), ^warn_condition_t(const char **str) {
-        warn_condition_t code = WARN_NONE;
-        uint16_t remain_cap, full_cap, design_cap;
-        get_capacity(&remain_cap, &full_cap, &design_cap);
-        if (remain_cap > full_cap) {
-            code = WARN_UNUSUAL;
-			static char errmsg[256];
-			// some Shenzhen battries is spoofing this data to affect internal battery health calculations
-			// But they still had to report a real SoC so that indicating actual conditions.
-			sprintf(errmsg, "%s\n%s: %ld", _C("Unusual Remaining Capacity, A non-genuine battery component may be in use."), _C("Estimated Remaining"), lrintf((float)full_cap * gGauge.StateOfCharge / 100.0f));
-			*str = errmsg;
-        } else if (remain_cap == 0) {
-            code = WARN_EMPTYVAL;
-            *str = _C("Remaining Capacity not detected.");
-        }
-        return code;
-    });
-    equipWarningCondition_b(cell, _("Cycle Count"), ^warn_condition_t(const char **str) {
-        warn_condition_t code = WARN_NONE;
-        int count, design;
-        count  = gGauge.CycleCount;
-        design = gGauge.DesignCycleCount;
+	if (bi_section->context->custom_identifier == BI_GAS_GAUGE_SECTION_ID) {
+		equipWarningCondition_b(cell, _("Remaining Capacity"), ^warn_condition_t(const char **str) {
+			warn_condition_t code = WARN_NONE;
+			uint16_t remain_cap, full_cap, design_cap;
+			get_capacity(&remain_cap, &full_cap, &design_cap);
+			if (remain_cap > full_cap) {
+				code = WARN_UNUSUAL;
+				static char errmsg[256];
+				// some Shenzhen battries is spoofing this data to affect internal battery health calculations
+				// But they still had to report a real SoC so that indicating actual conditions.
+				sprintf(errmsg, "%s\n%s: %ld", _C("Unusual Remaining Capacity, A non-genuine battery component may be in use."), _C("Estimated Remaining"), lrintf((float)full_cap * gGauge.StateOfCharge / 100.0f));
+				*str = errmsg;
+			} else if (remain_cap == 0) {
+				code = WARN_EMPTYVAL;
+				*str = _C("Remaining Capacity not detected.");
+			}
+			return code;
+		});
+		equipWarningCondition_b(cell, _("Cycle Count"), ^warn_condition_t(const char **str) {
+			warn_condition_t code = WARN_NONE;
+			int count, design;
+			count  = gGauge.CycleCount;
+			design = gGauge.DesignCycleCount;
+			
+			if (gGauge.DesignCycleCount == 0) {
+				// according to https://www.apple.com/batteries/service-and-recycling
+				// Pre-iPhone15,3: 500, otherwise 1000
+				// Watch*,* iPad*,*: 1000
+				// iPod*,*: 400
+				// MacBook**,*: 1000
+				// AppleTV/Watch/AudioAccessory has no battery so ignored
+				size_t size = 0;
+				char machine[256];
+				// Do not use uname()
+				if (sysctlbyname("hw.machine", NULL, &size, NULL, 0) != 0) {
+					DBGLOG(@"sysctlbyname(hw.machine) failed");
+					return code;
+				}
+				if (sysctlbyname("hw.machine", &machine, &size, NULL, 0) != 0) {
+					DBGLOG(@"sysctlbyname(&machine) failed");
+					return code;
+				}
+				if (match_regex(machine,
+								"^(iPhone|iPad|iPod|MacBook.*)[0-9]+,[0-9]+$")) {
+					if (strncmp(machine, "iPhone", 6) == 0) {
+						int major = 0, minor = 0;
+						if (sscanf(machine + 6, "%d,%d", &major, &minor) != 2) {
+							DBGLOG(@"Unexpected iPhone model: %s", machine);
+							return code;
+						}
+						if (major < 15 || (major == 15 && minor < 4)) {
+							design = 500;
+						} else {
+							design = 1000;
+						}
+					} else if (strncmp(machine, "iPad", 4) || strncmp(machine, "Watch", 5) || strncmp(machine, "MacBook", 7))
+						design = 1000;
+					else if (strncmp(machine, "iPod", 4))
+						design = 400;
+				}
+				if (design == 0)
+					return code;
+			}
+			if (count > design) {
+				code = WARN_EXCEEDED;
+				*str = _C("Cycle Count exceeded designed cycle count, consider replacing with a genuine battery.");
+			}
+			return code;
+		});
+		equipWarningCondition_b(cell, _("Time to Empty"), ^warn_condition_t(const char **str) {
+			warn_condition_t code = WARN_NONE;
+			uint16_t remain_cap, full_cap, design_cap;
+			int tte = get_time_to_empty();
+			get_capacity(&remain_cap, &full_cap, &design_cap);
+			/* The most ideal TTE is TTE (Hour) = Capacity (mAh) / Current (mA),
+			 * some user reported their non-genuine battries
+			 * reporting a significant huge number of TTE */
+			
+			/* Battery charging, skip */
+			if (gGauge.AverageCurrent > 0)
+				return code;
+			
+			int ideal = (remain_cap / abs(gGauge.AverageCurrent)) * 60;
+			/* Normally, TI's GG IC would not emulate its TTE bigger than ideal */
+			/* for ensurence, we check if TTE is bigger than 1.5*ideal */
+			if (tte > (ideal * 1.5)) {
+				code = WARN_UNUSUAL;
+				*str = _C("Unusual Time to Empty, A non-genuine battery component may be in use.");
+			}
+			return code;
+		});
+		equipWarningCondition_b(cell, _("Depth of Discharge"), ^warn_condition_t(const char **str) {
+			warn_condition_t code = WARN_NONE;
+			/* Non-genuine batteries are likely spoofing some unremarkable data */
+			/* DOD0 is not going to bigger than Qmax normally, but sometimes it do
+			 * exceeds when discharging/charging with adapter attached */
+			if (gGauge.DOD0 > (gGauge.Qmax * 3)) {
+				code = WARN_UNUSUAL;
+				*str = _C("Unusual Depth of Discharge, A non-genuine battery component may be in use.");
+			}
+			return code;
+		});
+	}
 
-        if (gGauge.DesignCycleCount == 0) {
-            // according to https://www.apple.com/batteries/service-and-recycling
-            // Pre-iPhone15,3: 500, otherwise 1000
-            // Watch*,* iPad*,*: 1000
-            // iPod*,*: 400
-            // MacBook**,*: 1000
-            // AppleTV/Watch/AudioAccessory has no battery so ignored
-            size_t size = 0;
-            char machine[256];
-            // Do not use uname()
-            if (sysctlbyname("hw.machine", NULL, &size, NULL, 0) != 0) {
-                DBGLOG(@"sysctlbyname(hw.machine) failed");
-                return code;
-            }
-            if (sysctlbyname("hw.machine", &machine, &size, NULL, 0) != 0) {
-                DBGLOG(@"sysctlbyname(&machine) failed");
-                return code;
-            }
-            if (match_regex(machine,
-                    "^(iPhone|iPad|iPod|MacBook.*)[0-9]+,[0-9]+$")) {
-                if (strncmp(machine, "iPhone", 6) == 0) {
-                    int major = 0, minor = 0;
-                    if (sscanf(machine + 6, "%d,%d", &major, &minor) != 2) {
-                        DBGLOG(@"Unexpected iPhone model: %s", machine);
-                        return code;
-                    }
-                    if (major < 15 || (major == 15 && minor < 4)) {
-                        design = 500;
-                    } else {
-                        design = 1000;
-                    }
-                } else if (strncmp(machine, "iPad", 4) || strncmp(machine, "Watch", 5) || strncmp(machine, "MacBook", 7))
-                    design = 1000;
-                else if (strncmp(machine, "iPod", 4))
-                    design = 400;
-            }
-            if (design == 0)
-                return code;
-        }
-        if (count > design) {
-            code = WARN_EXCEEDED;
-            *str = _C("Cycle Count exceeded designed cycle count, consider replacing with a genuine battery.");
-        }
-        return code;
-    });
-    equipWarningCondition_b(cell, _("Time to Empty"), ^warn_condition_t(const char **str) {
-        warn_condition_t code = WARN_NONE;
-        uint16_t remain_cap, full_cap, design_cap;
-        int tte = get_time_to_empty();
-        get_capacity(&remain_cap, &full_cap, &design_cap);
-        /* The most ideal TTE is TTE (Hour) = Capacity (mAh) / Current (mA),
-         * some user reported their non-genuine battries
-         * reporting a significant huge number of TTE */
-
-        /* Battery charging, skip */
-        if (gGauge.AverageCurrent > 0)
-            return code;
-
-        int ideal = (remain_cap / abs(gGauge.AverageCurrent)) * 60;
-        /* Normally, TI's GG IC would not emulate its TTE bigger than ideal */
-        /* for ensurence, we check if TTE is bigger than 1.5*ideal */
-        if (tte > (ideal * 1.5)) {
-            code = WARN_UNUSUAL;
-            *str = _C("Unusual Time to Empty, A non-genuine battery component may be in use.");
-        }
-        return code;
-    });
-    equipWarningCondition_b(cell, _("Depth of Discharge"), ^warn_condition_t(const char **str) {
-        warn_condition_t code = WARN_NONE;
-        /* Non-genuine batteries are likely spoofing some unremarkable data */
-        /* DOD0 is not going to bigger than Qmax normally, but sometimes it do
-         * exceeds when discharging/charging with adapter attached */
-        if (gGauge.DOD0 > (gGauge.Qmax * 3)) {
-            code = WARN_UNUSUAL;
-            *str = _C("Unusual Depth of Discharge, A non-genuine battery component may be in use.");
-        }
-        return code;
-    });
-    WarnAccessoryView *button = (WarnAccessoryView *)[cell accessoryView];
+	WarnAccessoryView *button = (WarnAccessoryView *)[cell accessoryView];
     if (button != nil && [button isKindOfClass:[WarnAccessoryView class]]) {
         if (button.isWarn) {
             [button addTarget:self action:@selector(warnTapped:) forControlEvents:UIControlEventTouchUpInside];
