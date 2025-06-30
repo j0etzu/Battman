@@ -131,8 +131,7 @@ static void gettext_init(void) {
 #endif
             /* For some reason, libintl's locale guess was not quite working,
                this is a workaround to force it read correct language */
-            char *lang = preferred_language();
-            setlocale(LC_ALL, lang);
+            setlocale(LC_ALL, preferred_language());
             //setenv("LANG", lang, 1);
 
             char mainBundle[PATH_MAX];
@@ -195,7 +194,6 @@ static void gettext_init(void) {
 
 #undef _
 #define _(x) cond_localize(x)
-            free(lang);
         } else {
             show_alert("Warning", "Failed to load Gettext, defaulting to English", "OK");
         }

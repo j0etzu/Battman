@@ -482,7 +482,7 @@ tvend:
             cell_s.userInteractionEnabled = cell_s.slider.enabled;
 
             cell_s.slider.value = (lpm_thr) ? lpm_thr : 80;
-            cell_s.textField.text = (lpm_thr) ? [NSString stringWithFormat:@"%.2f", lpm_thr] : @"80.00";
+            cell_s.textField.text = (lpm_thr) ? [NSString stringWithFormat:@"%.4g", lpm_thr] : @"80.00";
 
             /* Set delegate */
             cell_s.delegate = self;

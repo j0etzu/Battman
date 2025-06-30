@@ -44,7 +44,7 @@
 
 - (void)sliderValueChanged:(UISlider *)sender {
     // Update text field when slider value changes
-    self.textField.text = [NSString stringWithFormat:@"%.2f", sender.value];
+    self.textField.text = [NSString stringWithFormat:@"%.4g", sender.value];
     if ([self.delegate respondsToSelector:@selector(sliderTableViewCell:didChangeValue:)]) {
         [self.delegate sliderTableViewCell:self didChangeValue:sender.value];
     }
@@ -72,7 +72,7 @@
     // Ensure the value is within the slider's min and max range
     newValue = fminf(fmaxf(newValue, self.slider.minimumValue), self.slider.maximumValue);
     self.slider.value = newValue;
-    sender.text = [NSString stringWithFormat:@"%.2f", newValue];
+    sender.text = [NSString stringWithFormat:@"%.4g", newValue];
         
     if ([self.delegate respondsToSelector:@selector(sliderTableViewCell:didChangeValue:)]) {
         [self.delegate sliderTableViewCell:self didChangeValue:newValue];

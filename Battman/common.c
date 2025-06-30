@@ -37,14 +37,13 @@ extern id                        UIGraphicsGetImageFromCurrentImageContext(void)
 extern void                      UIGraphicsBeginImageContextWithOptions(CGSize, BOOL, int);
 extern void                      UIGraphicsEndImageContext(void);
 
-// CALLER FREE
-static char                     *get_CFLocale() {
+static char *get_CFLocale() {
     CFArrayRef list = CFLocaleCopyPreferredLanguages();
 
     if (list == NULL || CFArrayGetCount(list) == 0)
         return NULL;
 
-    char *lang = (char *)malloc(256);
+	static char lang[256];
 
     if (!CFStringGetCString(CFArrayGetValueAtIndex(list, 0), lang, 256, kCFStringEncodingUTF8)) {
         CFRelease(list);
@@ -55,8 +54,8 @@ static char                     *get_CFLocale() {
     return lang;
 }
 
-// Caller free!!!
 char *preferred_language(void) {
+	static char name[256];
 	/* Convert new-style locale names with language tags (ISO 639 and ISO 15924)
 	   to Unix (ISO 639 and ISO 3166) names.  */
 	typedef struct {
@@ -124,7 +123,8 @@ char *preferred_language(void) {
 		{ "Latn", "latin"    },
 		{ "Mong", "mongolian"}
 	};
-	char *name = get_CFLocale();
+
+	sprintf(name, "%s", get_CFLocale());
 	/* Step 2: Convert using langtag_table and script_table.  */
 	if ((strlen(name) == 7 || strlen(name) == 10) && name[2] == '-') {
 		unsigned int i1, i2;
@@ -580,7 +580,6 @@ int preferred_language_code() {
 		} else {
 			_preferred_language_code = 0;
 		}
-		free(lang);
 		return _preferred_language_code;
 	}
 	int ret;

@@ -8,6 +8,7 @@
 #include "common.h"
 #include "intlextern.h"
 
+#import <CoreText/CoreText.h>
 #include <sys/sysctl.h>
 
 /* Desc */
@@ -37,6 +38,16 @@ UILabel *equipCellTitle(UITableViewCell *cell, NSString *text) {
 
 	return cell.textLabel;
 }
+
+void equipCellHighLegit(UILabel *label) {
+	CTFontDescriptorRef desc = CTFontDescriptorCreateCopyWithFeature((__bridge CTFontDescriptorRef)label.font.fontDescriptor, (__bridge CFNumberRef)@(kStylisticAlternativesType), (__bridge CFNumberRef)@(kStylisticAltSixOnSelector));
+	CTFontRef font = CTFontCreateWithFontDescriptor(desc, label.font.pointSize, NULL);
+	[label setFont:(__bridge UIFont *)font];
+
+	if (desc) CFRelease(desc);
+	if (font) CFRelease(font);
+}
+
 UILabel *equipCellDetail(UITableViewCell *cell, NSString *text) {
 	if ([cell respondsToSelector:@selector(detailLabel)]) {
 		// Suppress compiler warning about performSelector leak
@@ -94,19 +105,34 @@ void equipDetailCell(UITableViewCell *cell, struct battery_info_node *i) {
 				final_str = _("False");
 			}
 		} else if ((i->content & BIN_IS_FLOAT) == BIN_IS_FLOAT) {
-			final_str = [NSString stringWithFormat:@"%0.2f", bi_node_load_float(i)];
+			final_str = [NSString stringWithFormat:@"%.4g", bi_node_load_float(i)];
 		} else {
 			final_str = [NSString stringWithFormat:@"%d", value];
 		}
 		if (i->content & BIN_HAS_UNIT) {
 			uint32_t unit = (i->content & BIN_UNIT_BITMASK) >> 6;
-			final_str     = [NSString stringWithFormat:@"%@ %@", final_str, _(bin_unit_strings[unit])];
+			if (unit == (BIN_UNIT_MIN & BIN_UNIT_BITMASK) >> 6) {
+				// Special: Convert minutes to localized timer
+				NSDateComponentsFormatter *fmt = [[NSDateComponentsFormatter alloc] init];
+				fmt.calendar.locale            = [NSLocale localeWithLocaleIdentifier:[NSString stringWithUTF8String:preferred_language()]];
+				fmt.unitsStyle                 = NSDateComponentsFormatterUnitsStyleShort;
+				fmt.zeroFormattingBehavior     = NSDateComponentsFormatterZeroFormattingBehaviorDropAll;
+				final_str                      = [fmt stringFromTimeInterval:value * 60];
+			} else {
+				final_str                      = [NSString stringWithFormat:@"%@ %@", final_str, _(bin_unit_strings[unit])];
+			}
 		}
 	} else {
 		final_str = [NSString stringWithUTF8String:bi_node_get_string(i)];
 	}
 
 	UILabel *detailLabel = equipCellDetail(cell, final_str);
+
+	// Consider add a "BIN_IS_HIGHLEGIT"
+	if (strstr(i->name, "No.") || strstr(i->name, "ID")) {
+		equipCellHighLegit(detailLabel);
+	}
+
 	if (@available(iOS 13.0, *))
 		detailLabel.textColor = [UIColor secondaryLabelColor];
 	else

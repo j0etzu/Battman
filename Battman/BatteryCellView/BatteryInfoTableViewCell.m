@@ -55,7 +55,7 @@
 					    stringWithFormat:@"%@\n%@", final_str, _(i->name)];
 				} else if ((i->content & BIN_IS_FLOAT) == BIN_IS_FLOAT) {
 					final_str =
-					    [NSString stringWithFormat:@"%@\n%@: %0.2f", final_str, _(i->name), bi_node_load_float(i)];
+					    [NSString stringWithFormat:@"%@\n%@: %.4g", final_str, _(i->name), bi_node_load_float(i)];
 				}
 				if (i->content & BIN_HAS_UNIT) {
 					uint32_t  unit     = (i->content & BIN_UNIT_BITMASK) >> 6;

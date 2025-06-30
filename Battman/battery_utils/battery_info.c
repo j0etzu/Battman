@@ -789,6 +789,8 @@ void battery_info_update_smc(struct battery_info_section *section) {
 	}
 	BI_FORMAT_ITEM("Chemistry ID", "0x%.8X", gGauge.ChemID);
 
+	/* For Flags, I need at least DeviceName to confirm its format */
+	/* TODO: bq40z651 */
 	/* Confirmed Flags format */
 	/* bq20z45*: Battery Status (0x16):
 	 * https://www.ti.com/lit/er/sluu313a/sluu313a.pdf */
@@ -829,6 +831,7 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 	bool inductive_timeout                = get_acc_inductive_timeout(connect);
 	uint32_t vid = 0, pid = 0;
 
+	// TODO: Consider display info when -1, this typically happens when USB-C
 	// 100: Not connected, -1: Unrecognized
 	if (connect == IO_OBJECT_NULL || acc_id == 100 || acc_id == -1)  {
 		if (connect) IOObjectRelease(connect);
@@ -900,7 +903,6 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 		BI_SET_ITEM_IF(array.charging != -1, _C("Accepting Charge"), array.charging);
 	}
 
-	/* TODO: IOHIDDevice Part */
 	/* Inductive Port: kHIDPage_AppleVendor:70 */
 	bool hid_vendor = false;
 	if (!smc_vendor && port == kIOAccessoryPortID0Pin) {

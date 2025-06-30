@@ -747,7 +747,7 @@ int get_acc_inductive_region_code(io_connect_t connect) {
 bool get_acc_inductive_timeout(io_connect_t connect) {
 	CFBooleanRef timeout;
 	
-	timeout = IORegistryEntryCreateCFProperty(connect, CFSTR("SupervisedTransportsRestricted"), kCFAllocatorDefault, kNilOptions);
+	timeout = IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryManagerInductiveAuthTimedOut"), kCFAllocatorDefault, kNilOptions);
 	
 	bool ret = (timeout == kCFBooleanTrue);
 	if (timeout) CFRelease(timeout);

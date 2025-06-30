@@ -66,7 +66,7 @@ extern NSDictionary *getSensorTemperatures(void);
 		label = dict.allKeys[ip.row];
 	}
 	cell.textLabel.text = label;
-	cell.detailTextLabel.text = [NSString stringWithFormat:@"%.2f ℃", [dict[dict.allKeys[ip.row]] floatValue]];
+	cell.detailTextLabel.text = [NSString stringWithFormat:@"%.4g ℃", [dict[dict.allKeys[ip.row]] floatValue]];
 
 	return cell;
 }

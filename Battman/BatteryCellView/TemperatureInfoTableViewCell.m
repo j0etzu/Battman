@@ -126,7 +126,7 @@
 		for (int i = 0; i < num; i++) {
 			total += btemps[i];
 		}
-		finalText = [NSString stringWithFormat:@"%@: %0.2f ℃", _("Battery Avg."), total / num];
+		finalText = [NSString stringWithFormat:@"%@: %.4g ℃", _("Battery Avg."), total / num];
 		float percent = ((total / num) > 70.0) ? 1.0 : ((total / num) / 70.0);
 		[[temperatureCell arcView] rotatePointerToPercentage:percent];
 		free(btemps);
@@ -135,13 +135,13 @@
 	extern float getSensorAvgTemperature(void);
 	float snsrtemp = getSensorAvgTemperature();
 	if (snsrtemp != -1) {
-		finalText = [finalText stringByAppendingFormat:@"\n%@: %0.2f ℃", _("Sensors Avg."), snsrtemp];
+		finalText = [finalText stringByAppendingFormat:@"\n%@: %.4g ℃", _("Sensors Avg."), snsrtemp];
 	}
 
 	extern double iomfb_primary_screen_temperature(void);
 	double scrntemp = iomfb_primary_screen_temperature();
 	if (scrntemp != -1) {
-		finalText = [finalText stringByAppendingFormat:@"\n%@: %0.2f ℃", _("Main Screen"), scrntemp];
+		finalText = [finalText stringByAppendingFormat:@"\n%@: %.4g ℃", _("Main Screen"), scrntemp];
 	}
 
 	// We need a better UI for representing temperatures ig
