@@ -3,6 +3,7 @@
 SED = sed
 
 IPHONEOS_DEPLOYMENT_TARGET := 12.0
+export IPHONEOS_DEPLOYMENT_TARGET
 
 LOCAL_IP := $(shell /sbin/ifconfig | $(SED) -n "s/.*inet \([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\) .*/\1/p" | tail -1)
 
