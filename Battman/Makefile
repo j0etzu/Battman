@@ -11,7 +11,7 @@ SDKROOT := ${THEOS}/sdks/iPhoneOS14.5.sdk
 SDKROOT := ${THEOS}/sdks/iPhoneOS13.7.sdk
 
 LIBS := -lobjc
-FRAMEWORKS := -framework UIKit -framework Foundation -framework CoreGraphics -framework QuartzCore -framework IOKit -framework WebKit -Wl,-weak-lIOAccessoryManager
+FRAMEWORKS := -framework UIKit -framework Foundation -framework CoreGraphics -framework CoreText -framework QuartzCore -framework IOKit -framework WebKit -Wl,-weak-lIOAccessoryManager
 
 CFLAGS = -Wno-deprecated-declarations -Wno-nullability-completeness -Werror -target arm64-apple-ios${IPHONEOS_DEPLOYMENT_TARGET} -target arm64-apple-darwin -fobjc-arc -fconstant-cfstrings -I./EXTERNAL_HEADERS
 LDFLAGS = -target arm64-apple-ios$(IPHONEOS_DEPLOYMENT_TARGET) -target arm64-apple-darwin $(LIBS) $(FRAMEWORKS) -Wl,-dead_strip_dylibs
