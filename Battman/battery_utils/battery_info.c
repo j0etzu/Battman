@@ -455,6 +455,8 @@ void battery_info_insert_section(struct battery_info_section *sect, struct batte
 		for (;; ptr = &(*ptr)->next) {
 			if (!*ptr || SECTION_PRIORITY(sect) > SECTION_PRIORITY(*ptr)) {
 				sect->next     = *ptr;
+				if(*ptr)
+					sect->next->self_ref=&sect->next;
 				*ptr           = sect;
 				sect->self_ref = ptr;
 				return;
@@ -462,6 +464,8 @@ void battery_info_insert_section(struct battery_info_section *sect, struct batte
 		}
 	} else {
 		sect->next     = *ptr;
+		if(*ptr)
+			sect->next->self_ref=&sect->next;
 		*ptr           = sect;
 		sect->self_ref = ptr;
 	}
