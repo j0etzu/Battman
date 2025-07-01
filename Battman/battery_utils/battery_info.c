@@ -483,13 +483,7 @@ static int battery_info_has(struct battery_info_section *head, uint64_t identifi
 
 void adapter_info_update_smc(struct battery_info_section *section);
 void battery_info_update_smc(struct battery_info_section *section);
-void inductive_info_update(struct battery_info_section *section);
-void usb1_info_update(struct battery_info_section *section);
-
-typedef struct acc_refcon {
-	int primary_port;
-	io_service_t connect;
-} *acc_refcon_t;
+void accessory_info_update(struct battery_info_section *section);
 
 void battery_info_poll(struct battery_info_section **head) {
 	if (hasSMC) {
@@ -511,32 +505,21 @@ void battery_info_poll(struct battery_info_section **head) {
 	// TODO: Combine acc sects to reduce redundant codes
 
 	/* Inductive Section */
-	acc_refcon_t args_0pin = malloc(sizeof(struct acc_refcon));
-	io_service_t connect0pin = acc_open_with_port(kIOAccessoryPortID0Pin);
-	args_0pin->connect = connect0pin;
-	args_0pin->primary_port = kIOAccessoryPortID0Pin;
-	if (args_0pin->connect != IO_OBJECT_NULL) {
-		if (!battery_info_has(*head, BI_INDUCTIVE_SECTION_ID)) {
-			struct battery_info_section *indSect = bi_make_section(_C("Inductive Port"), sizeof(struct battery_info_section_context));
-			indSect->context->custom_identifier  = BI_INDUCTIVE_SECTION_ID;
-			indSect->context->update             = inductive_info_update;
-			indSect->context->refCon             = args_0pin;
-			battery_info_insert_section(indSect, head);
-		}
-	}
-
-	/* Serial Port Section */
-	acc_refcon_t args_usb1 = malloc(sizeof(struct acc_refcon));
-	io_service_t connectusb1 = acc_open_with_port(kIOAccessoryPortIDSerial);
-	args_usb1->connect = connectusb1;
-	args_usb1->primary_port = kIOAccessoryPortIDSerial;
-	if (args_usb1->connect != IO_OBJECT_NULL) {
-		if (!battery_info_has(*head, BI_SERIAL1_SECTION_ID)) {
-			struct battery_info_section *usbSect = bi_make_section(_C("Serial Port"), sizeof(struct battery_info_section_context));
-			usbSect->context->custom_identifier  = BI_SERIAL1_SECTION_ID;
-			usbSect->context->update             = usb1_info_update;
-			usbSect->context->refCon             = args_usb1;
-			battery_info_insert_section(usbSect, head);
+	
+	const char *acc_names[]={_C("Inductive Port"),_C("Serial Port"),NULL};
+	const int acc_ports[]={kIOAccessoryPortID0Pin,kIOAccessoryPortIDSerial};
+	for(int i=0;acc_names[i];i++) {
+		io_service_t cur_connect=acc_open_with_port(acc_ports[i]);
+		if(cur_connect!=IO_OBJECT_NULL) {
+			if(!battery_info_has(*head, 420+i)) {
+				struct battery_info_section *curSect=bi_make_section(acc_names[i],sizeof(struct accessory_info_section_context));
+				struct accessory_info_section_context *context=(void*)curSect->context;
+				context->identifier=420+i;
+				context->update=accessory_info_update;
+				context->primary_port=acc_ports[i];
+				context->connect=cur_connect;
+				battery_info_insert_section(curSect,head);
+			}
 		}
 	}
 }
@@ -808,14 +791,16 @@ void battery_info_update_smc(struct battery_info_section *section) {
 	BI_SET_ITEM_IF(gGauge.DailyMinSoc, _C("Daily Min SoC"), gGauge.DailyMinSoc);
 }
 
-void accessory_info_update(struct battery_info_section *section, int port) {
-	if (!section->data[0].name)
-		return; // no data need to be freed
+void accessory_info_update(struct battery_info_section *section) {
+	struct accessory_info_section_context *context=(void*)section->context;
+	if (!section->data[0].name) {
+		IOObjectRelease(context->connect);
+		return;
+	}
 
 	struct battery_info_node *head        = section->data;
 	struct battery_info_node *head_arr[2] = { head, head };
-	acc_refcon_t args                     = section->context->refCon;
-	io_connect_t connect                  = args->connect;
+	io_connect_t connect                  = context->connect;
 
 	SInt32 acc_id                         = get_accid(connect);
 	SInt32 port_type                      = get_acc_port_type(connect);
@@ -834,8 +819,6 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 	// TODO: Consider display info when -1, this typically happens when USB-C
 	// 100: Not connected, -1: Unrecognized
 	if (connect == IO_OBJECT_NULL || acc_id == 100 || acc_id == -1)  {
-		if (connect) IOObjectRelease(connect);
-		free(args);
 		bi_destroy_section(section);
 		return;
 	}
@@ -866,7 +849,7 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 
 	/* AppleSMC Part */
 	bool smc_vendor = false;
-	if (hasSMC && accessory_available() && port == kIOAccessoryPortID0Pin) {
+	if (hasSMC && accessory_available() && context->primary_port == kIOAccessoryPortID0Pin) {
 		BI_SET_ITEM(_C("Power Supply"), vbus_port() == 2);
 		if (get_iktara_accessory_array(&array) && array.present == 1) {
 			/* TODO: Search VID/PID online */
@@ -905,7 +888,7 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 
 	/* Inductive Port: kHIDPage_AppleVendor:70 */
 	bool hid_vendor = false;
-	if (!smc_vendor && port == kIOAccessoryPortID0Pin) {
+	if (!smc_vendor && context->primary_port == kIOAccessoryPortID0Pin) {
 		vid = pid = 0;
 		// Normally, only one device will be at 0xFF00:70
 		if (first_vendor_at_usagepagepairs(&vid, &pid, 0xFF00, 70)) {
@@ -928,7 +911,7 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 		}
 		if (vid && pid)
 			hid_vendor = true;
-	} else if (port == kIOAccessoryPortIDSerial) {
+	} else if (context->primary_port == kIOAccessoryPortIDSerial) {
 		if (acc_id == 91) {
 			UInt8 digitalID[6];
 			SInt64 idsn;
@@ -948,9 +931,9 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 		/* TODO: Transport types */
 
 		/* How do we actually get VID/PID if wired? MFA Cables does not seems having them */
-	} else if (port == 256) {
+	} else if (context->primary_port == 256) {
 		/* TODO: SmartConnector */
-	} else if (port == 257) {
+	} else if (context->primary_port == 257) {
 		/* TODO: Scorpius */
 	}
 
@@ -966,7 +949,7 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 	/* The Battery Case / Battery Pack details are stored in kHIDPage_BatterySystem normally */
 	// check UPSMonitor.m
 	// FIXME: kIOAccessoryPortIDSerial added as a workaround of cell init, try fix bi_make_section
-	if (smc_vendor || hid_vendor || port == kIOAccessoryPortIDSerial) {
+	if (smc_vendor || hid_vendor || context->primary_port == kIOAccessoryPortIDSerial) {
 		UPSDataRef device = UPSDeviceMatchingVendorProduct(vid, pid);
 		ups_batt_t info = {0};
 
@@ -1067,12 +1050,4 @@ void accessory_info_update(struct battery_info_section *section, int port) {
 	}
 	
 	/* TODO: CoreAccessory Part */
-}
-
-void inductive_info_update(struct battery_info_section *section) {
-	return accessory_info_update(section, kIOAccessoryPortID0Pin);
-}
-
-void usb1_info_update(struct battery_info_section *section) {
-	return accessory_info_update(section, kIOAccessoryPortIDSerial);
 }

@@ -2,6 +2,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "../iokitextern.h"
 
 // this isn't enforced
 #define BI_MAX_SECTION_NUM 64
@@ -110,7 +111,13 @@ struct battery_info_section;
 struct battery_info_section_context {
 	uint64_t custom_identifier;
 	void (*update)(struct battery_info_section *);
-	void *refCon;
+};
+
+struct accessory_info_section_context {
+	uint64_t identifier;
+	void (*update)(struct battery_info_section *);
+	int primary_port;
+	io_service_t connect;
 };
 
 #if 0
@@ -131,8 +138,8 @@ struct bluetooth_section_context {
 #define BI_GAS_GAUGE_IOKIT_ONLY_SECTION_ID 11
 #define BI_ADAPTER_SECTION_ID 12
 #define BI_ADAPTER_IOKIT_ONLY_SECTION_ID 12
-#define BI_INDUCTIVE_SECTION_ID 13
-#define BI_SERIAL1_SECTION_ID 14
+#define BI_ACCESSORY_SECTION_RANGE(i) (i>=420&&i<440)
+
 // For dynamically allocated sections, any section ID will work
 // Implement your own hash function to compute the same ID every time
 // for a single accessory.
