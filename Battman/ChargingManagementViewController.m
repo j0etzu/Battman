@@ -1,4 +1,5 @@
 #import "ChargingManagementViewController.h"
+#import "DatePickerTableViewCell.h"
 #import "SliderTableViewCell.h"
 #include "battery_utils/libsmc.h"
 #include "common.h"
@@ -18,7 +19,7 @@ extern void battman_worker_oneshot(char cmd, char arg);
 
 #pragma mark - ViewController
 
-@interface ChargingManagementViewController () <SliderTableViewCellDelegate>
+@interface ChargingManagementViewController () <SliderTableViewCellDelegate, DatePickerTableViewCellDelegate>
 
 @end
 
@@ -62,6 +63,10 @@ extern void battman_worker_oneshot(char cmd, char arg);
     [super viewDidLoad];
 
     [self.tableView registerClass:[SliderTableViewCell class] forCellReuseIdentifier:@"LPM_THR"];
+	[self.tableView registerClass:[DatePickerTableViewCell class] forCellReuseIdentifier:@"DATE_PIK"];
+
+	self.tableView.estimatedRowHeight = 500;
+	self.tableView.rowHeight          = UITableViewAutomaticDimension;
 }
 
 - (NSString *)tableView:(UITableView *)tv titleForHeaderInSection:(NSInteger)sect {
@@ -347,28 +352,44 @@ final:
 #pragma mark - TableView
 
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	if (indexPath.section == CM_SECT_SMART_CHARGING && indexPath.row == 2) {
-		NSError *err = nil;
-		NSBundle *powerUIBundle = [NSBundle bundleWithPath:@"/System/Library/PrivateFrameworks/PowerUI.framework"];
-		if (![powerUIBundle loadAndReturnError:&err]) {
-			NSString *errorMessage = [NSString stringWithFormat:@"%@ %@\n\n%s: %@", _("Failed to load"), @"PowerUI.framework", L_ERR, [err localizedDescription]];
-			show_alert(L_FAILED, [errorMessage UTF8String], L_OK);
-			goto tvend;
+	if (indexPath.section == CM_SECT_SMART_CHARGING) {
+		if (indexPath.row == 0) {
+
 		}
-		id sccClass = [powerUIBundle classNamed:@"PowerUISmartChargeClient"];
-		id sccObject = [[sccClass alloc] initWithClientName:@"ok"];
-		if(![sccObject setState:1 error:&err]) {
-			NSString *errorMessage = [NSString stringWithFormat:@"%@\n\n%s: %@", _("Failed to enable Smart Charging."), L_ERR, [err localizedDescription]];
-			show_alert(L_FAILED, [errorMessage UTF8String], L_OK);
-			goto tvend;
+		if (indexPath.row == 2) {
+			NSError *err = nil;
+			NSBundle *powerUIBundle = [NSBundle bundleWithPath:@"/System/Library/PrivateFrameworks/PowerUI.framework"];
+			if (![powerUIBundle loadAndReturnError:&err]) {
+				NSString *errorMessage = [NSString stringWithFormat:@"%@ %@\n\n%s: %@", _("Failed to load"), @"PowerUI.framework", L_ERR, [err localizedDescription]];
+				show_alert(L_FAILED, [errorMessage UTF8String], L_OK);
+				goto tvend;
+			}
+			id sccClass = [powerUIBundle classNamed:@"PowerUISmartChargeClient"];
+			id sccObject = [[sccClass alloc] initWithClientName:@"ok"];
+			if(![sccObject setState:1 error:&err]) {
+				NSString *errorMessage = [NSString stringWithFormat:@"%@\n\n%s: %@", _("Failed to enable Smart Charging."), L_ERR, [err localizedDescription]];
+				show_alert(L_FAILED, [errorMessage UTF8String], L_OK);
+				goto tvend;
+			}
+			[sccObject engageFrom:fromPicker.date until:untilPicker.date repeatUntil:untilPicker.date overrideAllSignals:1];
+			//BOOL yyy=1;
+			//smc_write_safe('CH0C', &yyy, 1);
+			show_alert(_C("Engaged"), _C("Smart Charging has been engaged. It will start after 15 minutes of power supply, or at the date you picked, whichever comes first."), L_OK);
 		}
-		[sccObject engageFrom:fromPicker.date until:untilPicker.date repeatUntil:untilPicker.date overrideAllSignals:1];
-		//BOOL yyy=1;
-		//smc_write_safe('CH0C', &yyy, 1);
-		show_alert(_C("Engaged"), _C("Smart Charging has been engaged. It will start after 15 minutes of power supply, or at the date you picked, whichever comes first."), L_OK);
 	}
 tvend:
 	return [tv deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (indexPath.section == CM_SECT_SMART_CHARGING) {
+		if (indexPath.row == 0) {
+			DatePickerTableViewCell *dcell = [tableView cellForRowAtIndexPath:indexPath];
+			if (dcell.isExpanded)
+				return dcell.button.bounds.size.height + dcell.picker.bounds.size.height;
+		}
+	}
+	return [super tableView:tableView heightForRowAtIndexPath:indexPath];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -397,32 +418,62 @@ tvend:
         cell.accessoryView = cswitch;
     } else if (indexPath.section == CM_SECT_SMART_CHARGING) {
 		if (indexPath.row == 0) {
-			cell.textLabel.text = _("Starting at");
-			UIDatePicker *datePicker = [UIDatePicker new];
-            // Default behavior determines locale by Region
-            [datePicker setLocale:[NSLocale localeWithLocaleIdentifier:[NSString stringWithUTF8String:preferred_language()]]];
-			datePicker.datePickerMode = UIDatePickerModeDateAndTime;
-            if (@available(iOS 13.0, *)) {
-                datePicker.date = [NSDate now];
-            } else {
-                datePicker.date = [NSDate date];
-            }
-			datePicker.minimumDate = datePicker.date;
-			cell.accessoryView = datePicker;
-			fromPicker = datePicker;
+			if (@available(iOS 13.4, *)) {
+				UIDatePicker *datePicker = [UIDatePicker new];
+				// Default behavior determines locale by Region
+				[datePicker setLocale:[NSLocale localeWithLocaleIdentifier:[NSString stringWithUTF8String:preferred_language()]]];
+				datePicker.datePickerMode = UIDatePickerModeDateAndTime;
+				datePicker.date = [NSDate now];
+				datePicker.minimumDate = datePicker.date;
+				datePicker.preferredDatePickerStyle = UIDatePickerStyleCompact;
+				cell.accessoryView = datePicker;
+				fromPicker = datePicker;
+				cell.textLabel.text = _("Starting at");
+			} else {
+				DatePickerTableViewCell *dcell = [[DatePickerTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+				[dcell.picker setLocale:[NSLocale localeWithLocaleIdentifier:[NSString stringWithUTF8String:preferred_language()]]];
+				dcell.picker.datePickerMode = UIDatePickerModeDateAndTime;
+				dcell.picker.date = [NSDate date];
+				dcell.picker.minimumDate = dcell.picker.date;
+				dcell.delegate = self;
+				NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+				fmt.calendar.locale = [NSLocale localeWithLocaleIdentifier:[NSString stringWithUTF8String:preferred_language()]];
+				fmt.dateStyle = NSDateFormatterShortStyle;
+				fmt.timeStyle = NSDateFormatterShortStyle;
+				[dcell.button setTitle:[fmt stringFromDate:dcell.picker.date] forState:UIControlStateNormal];
+
+				fromPicker = dcell.picker;
+				cell = (id)dcell;
+				dcell.titleLabel.text = _("Starting at");
+			}
 		} else if (indexPath.row == 1) {
-			cell.textLabel.text = _("Until");
-			UIDatePicker *datePicker = [UIDatePicker new];
-            [datePicker setLocale:[NSLocale localeWithLocaleIdentifier:[NSString stringWithUTF8String:preferred_language()]]];
-			datePicker.datePickerMode = UIDatePickerModeDateAndTime;
-			datePicker.date = [NSDate dateWithTimeIntervalSinceNow:3600 * 5];
-            if (@available(iOS 13.0, *)) {
-                datePicker.minimumDate = [NSDate now];
-            } else {
-                datePicker.minimumDate = [NSDate date];
-            }
-			cell.accessoryView = datePicker;
-			untilPicker = datePicker;
+			if (@available(iOS 13.4, *)) {
+				UIDatePicker *datePicker = [UIDatePicker new];
+				[datePicker setLocale:[NSLocale localeWithLocaleIdentifier:[NSString stringWithUTF8String:preferred_language()]]];
+				datePicker.datePickerMode = UIDatePickerModeDateAndTime;
+				datePicker.date = [NSDate dateWithTimeIntervalSinceNow:3600 * 5];
+				datePicker.minimumDate = [NSDate now];
+				datePicker.preferredDatePickerStyle = UIDatePickerStyleCompact;
+				cell.accessoryView = datePicker;
+				untilPicker = datePicker;
+				cell.textLabel.text = _("Until");
+			} else {
+				DatePickerTableViewCell *dcell = [[DatePickerTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+				[dcell.picker setLocale:[NSLocale localeWithLocaleIdentifier:[NSString stringWithUTF8String:preferred_language()]]];
+				dcell.picker.datePickerMode = UIDatePickerModeDateAndTime;
+				dcell.picker.date = [NSDate dateWithTimeIntervalSinceNow:3600 * 5];
+				dcell.picker.minimumDate = [NSDate date];
+				dcell.delegate = self;
+				NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+				fmt.calendar.locale = [NSLocale localeWithLocaleIdentifier:[NSString stringWithUTF8String:preferred_language()]];
+				fmt.dateStyle = NSDateFormatterShortStyle;
+				fmt.timeStyle = NSDateFormatterShortStyle;
+				[dcell.button setTitle:[fmt stringFromDate:dcell.picker.date] forState:UIControlStateNormal];
+				
+				untilPicker = dcell.picker;
+				cell = (id)dcell;
+				dcell.titleLabel.text = _("Until");
+			}
 		} else {
 			cell.selectionStyle = UITableViewCellSelectionStyleDefault;
 			cell.textLabel.text = _("Schedule");
@@ -515,6 +566,17 @@ tvend:
 
     NSIndexPath *ip = [self.tableView indexPathForCell:cell];
     DBGLOG(@"Slider changed at row %ld: %f", (long)ip.row, value);
+}
+
+#pragma mark - DatePickerTableViewCell Delegate
+
+- (void)datePickerCellDidToggleExpansion:(DatePickerTableViewCell *)cell {
+	NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+	if (indexPath) {
+		cell.pickerBorder.hidden = !cell.isExpanded;
+		[self.tableView beginUpdates];
+		[self.tableView endUpdates];
+	}
 }
 
 @end

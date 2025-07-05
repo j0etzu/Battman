@@ -30,10 +30,7 @@ const char *bin_unit_strings[] = {
 
 struct battery_info_node main_battery_template[] = {
 	{ _C("Gas Gauge (Basic)"), _C("All Gas Gauge metrics are dynamically retrieved from the onboard sensor array in real time. Should anomalies be detected in specific readings, this may indicate the presence of unauthorized components or require diagnostics through Apple Authorised Service Provider."), DEFINE_SECTION(10000) },
-	{
-     _C("Device Name"),
-     _C("This indicates the name of the current Gas Gauge IC used by the installed battery."),
-	 },
+	{ _C("Device Name"), _C("This indicates the name of the current Gas Gauge IC used by the installed battery."), 0 },
 	{ _C("Health"), NULL, BIN_IS_BACKGROUND | BIN_UNIT_PERCENT },
 	{ _C("SoC"), NULL, BIN_IS_FLOAT | BIN_UNIT_PERCENT },
 	{ _C("Avg. Temperature"), NULL, BIN_IS_FLOAT | BIN_UNIT_DEGREE_C | BIN_DETAILS_SHARED },
@@ -506,10 +503,6 @@ void battery_info_poll(struct battery_info_section **head) {
 		}
 	}
 
-	// TODO: Combine acc sects to reduce redundant codes
-
-	/* Inductive Section */
-	
 	const char *acc_names[]={_C("Inductive Port"),_C("Serial Port"),NULL};
 	const int acc_ports[]={kIOAccessoryPortID0Pin,kIOAccessoryPortIDSerial};
 	for(int i=0;acc_names[i];i++) {
@@ -916,6 +909,8 @@ void accessory_info_update(struct battery_info_section *section) {
 		if (vid && pid)
 			hid_vendor = true;
 	} else if (context->primary_port == kIOAccessoryPortIDSerial) {
+		BI_SET_ITEM(_C("Power Supply"), vbus_port() == 1);
+
 		if (acc_id == 91) {
 			UInt8 digitalID[6];
 			SInt64 idsn;
