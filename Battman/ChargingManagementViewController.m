@@ -353,9 +353,6 @@ final:
 
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (indexPath.section == CM_SECT_SMART_CHARGING) {
-		if (indexPath.row == 0) {
-
-		}
 		if (indexPath.row == 2) {
 			NSError *err = nil;
 			NSBundle *powerUIBundle = [NSBundle bundleWithPath:@"/System/Library/PrivateFrameworks/PowerUI.framework"];

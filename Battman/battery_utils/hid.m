@@ -84,6 +84,23 @@ CF_IMPLICIT_BRIDGING_ENABLED
 extern IOHIDEventRef IOHIDServiceClientCopyEvent(IOHIDServiceClientRef service, int64_t type, int32_t options, int64_t timestamp);
 CF_IMPLICIT_BRIDGING_DISABLED
 
+BOOL NSStringEquals4CC(uint32_t fourcc, NSString *string) {
+	if ([string length] != 4) {
+		return NO;
+	}
+	
+	// Convert fourcc to 4-character C string
+	char fourccStr[5] = {
+		(char)((fourcc >> 24) & 0xFF),
+		(char)((fourcc >> 16) & 0xFF),
+		(char)((fourcc >> 8) & 0xFF),
+		(char)(fourcc & 0xFF),
+		'\0'
+	};
+	
+	return [string isEqualToString:[NSString stringWithCString:fourccStr encoding:NSUTF8StringEncoding]];
+}
+
 // XXX: Consider migrate to pure C
 NSDictionary *getTemperatureHIDData(void) {
     IOHIDEventSystemClientRef client = IOHIDEventSystemClientCreate(kCFAllocatorDefault);
@@ -109,6 +126,33 @@ NSDictionary *getTemperatureHIDData(void) {
 	}
 	CFRelease(client);
 	return dict;
+}
+
+float getTemperatureHIDAt(NSString *locID) {
+	IOHIDEventSystemClientRef client = IOHIDEventSystemClientCreate(kCFAllocatorDefault);
+	if (!client)
+		return -1;
+	
+	NSDictionary *matching = @{
+		@kIOHIDPrimaryUsagePageKey: @(kHIDPage_AppleVendor),
+		@kIOHIDPrimaryUsageKey: @(kHIDUsage_AppleVendor_TemperatureSensor),
+	};
+	IOHIDEventSystemClientSetMatching(client, (__bridge CFDictionaryRef)matching);
+
+	float temp = -1;
+	NSArray *ret = (__bridge NSArray *)IOHIDEventSystemClientCopyServices(client);
+	for (id client in ret) {
+		NSNumber *location = (__bridge NSNumber *)IOHIDServiceClientCopyProperty((IOHIDServiceClientRef)client, CFSTR(kIOHIDLocationIDKey));
+		if (!location || !NSStringEquals4CC([location unsignedIntValue], locID))
+			continue;
+		IOHIDEventRef event = IOHIDServiceClientCopyEvent((IOHIDServiceClientRef)client, kIOHIDEventTypeTemperature, 0, 0);
+		if (!event)
+			continue;
+		
+		temp = IOHIDEventGetFloatValue(event, kIOHIDEventFieldTemperatureLevel);
+	}
+	CFRelease(client);
+	return temp;
 }
 
 static int GetTemperatureFromDict(CFDictionaryRef dict) {

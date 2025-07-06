@@ -138,6 +138,7 @@
 		finalText = [finalText stringByAppendingFormat:@"\n%@: %.4g ℃", _("Sensors Avg."), snsrtemp];
 	}
 
+	// I've seen a broken screen that not reporting this, so this could also be a way to check screen sanity
 	extern double iomfb_primary_screen_temperature(void);
 	double scrntemp = iomfb_primary_screen_temperature();
 	if (scrntemp != -1) {
