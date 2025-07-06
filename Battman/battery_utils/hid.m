@@ -4,6 +4,7 @@
 #include <IOKit/hid/IOHIDDeviceKeys.h>
 #else
 #define kIOHIDProductKey "Product"
+#define kIOHIDLocationIDKey "LocationID"
 #define kIOHIDPrimaryUsagePageKey "PrimaryUsagePage"
 #define kIOHIDPrimaryUsageKey "PrimaryUsage"
 #endif
