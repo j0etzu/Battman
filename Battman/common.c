@@ -601,7 +601,6 @@ const char *target_type(void) {
 
 	const char *name = "hw.targettype";
 	size_t      len  = 0;
-
 	if (sysctlbyname(name, NULL, &len, NULL, 0) != 0 || len == 0)
 		return NULL;
 

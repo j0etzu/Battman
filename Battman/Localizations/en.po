@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Battman 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-06 19:10+0800\n"
+"POT-Creation-Date: 2025-07-10 18:05+0800\n"
 "PO-Revision-Date: 2025-01-27 17:32+0800\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -287,12 +287,8 @@ msgid "Terms of Use"
 msgstr "Terms of Use"
 
 #: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:27
-msgid "iPhone Skin Avg."
-msgstr "iPhone Skin Avg."
-
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:28
-msgid "iPad Skin"
-msgstr "iPad Skin"
+msgid "Device Avg."
+msgstr "Device Avg."
 
 #: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:29
 msgid "Battery Cell 1"
@@ -310,20 +306,24 @@ msgstr "Battery Cell 3"
 msgid "Battery Cell 4"
 msgstr "Battery Cell 4"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:77
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:33
+msgid "Camera Module"
+msgstr "Camera Module"
+
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:84
 #: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:101
 msgid "Hardware Temperature"
 msgstr "Hardware Temperature"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:95
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:102
 msgid "Device Sensors"
 msgstr "Device Sensors"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:96
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:103
 msgid "HID"
 msgstr "HID"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:98
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:105
 msgid "HID Raw Data"
 msgstr "HID Raw Data"
 
@@ -387,17 +387,21 @@ msgstr "Open URL"
 msgid "Exit"
 msgstr "Exit"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryCellView/TemperatureInfoTableViewCell.m:129
+#: /Users/torrekie/proj/Battman/Battman/BatteryCellView/TemperatureInfoTableViewCell.m:142
 msgid "Battery Avg."
 msgstr "Battery Avg."
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryCellView/TemperatureInfoTableViewCell.m:138
+#: /Users/torrekie/proj/Battman/Battman/BatteryCellView/TemperatureInfoTableViewCell.m:152
 msgid "Sensors Avg."
 msgstr "Sensors Avg."
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryCellView/TemperatureInfoTableViewCell.m:145
+#: /Users/torrekie/proj/Battman/Battman/BatteryCellView/TemperatureInfoTableViewCell.m:160
 msgid "Main Screen"
 msgstr "Main Screen"
+
+#: /Users/torrekie/proj/Battman/Battman/BatteryCellView/TemperatureInfoTableViewCell.m:171
+msgid "Who moved my temperature sensors?"
+msgstr "Who moved my temperature sensors?"
 
 #: /Users/torrekie/proj/Battman/Battman/FullSMCViewController.m:42
 #, objc-format
@@ -617,19 +621,19 @@ msgstr ""
 msgid "Battman CLI not implemented yet."
 msgstr "Battman CLI not implemented yet."
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:74
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:76
 msgid "Failed to open daemon settings file"
 msgstr "Failed to open daemon settings file"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:90
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:92
 msgid "File mapping failed"
 msgstr "File mapping failed"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:111
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:113
 msgid "Charging Limit (Experimental)"
 msgstr "Charging Limit (Experimental)"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:117
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:119
 msgid ""
 "Charging Limit uses a background service to monitor your battery's charge "
 "level and automatically adjust charging behavior. You need to restart the "
@@ -639,56 +643,56 @@ msgstr ""
 "level and automatically adjust charging behavior. You need to restart the "
 "service after changing the configuration."
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:143
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:145
 msgid "Unable to connect to the daemon."
 msgstr "Unable to connect to the daemon."
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:165
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:167
 msgid "Couldn't start the daemon — it isn’t responding."
 msgstr "Couldn't start the daemon — it isn’t responding."
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:187
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:189
 msgid "When limit is reached"
 msgstr "When limit is reached"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:212
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:220
 msgid "Limit charging at (%)"
 msgstr "Limit charging at (%)"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:235
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:243
 msgid "Resume charging at (%)"
 msgstr "Resume charging at (%)"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:263
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:271
 msgid "Daemon is active"
 msgstr "Daemon is active"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:263
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:271
 msgid "PID"
 msgstr "PID"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:265
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:273
 msgid "Daemon is inactive"
 msgstr "Daemon is inactive"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:271
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:279
 msgid "Stop Daemon (Disable Charging Limit)"
 msgstr "Stop Daemon (Disable Charging Limit)"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:273
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:281
 msgid "Start Daemon (Enforce Charging Limit)"
 msgstr "Start Daemon (Enforce Charging Limit)"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:288
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:292
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:296
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:300
 msgid "Invalid Setup"
 msgstr "Invalid Setup"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:288
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:296
 msgid "Limit Value should be bigger than Resume Value"
 msgstr "Limit Value should be bigger than Resume Value"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:292
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:300
 msgid "Resume Value should be smaller than Limit Value"
 msgstr "Resume Value should be smaller than Limit Value"
 
@@ -1587,8 +1591,8 @@ msgstr "The real-time passing voltage to internal battery."
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:85
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:702
-msgid "Charger ID"
-msgstr "Charger ID"
+msgid "Charger IC ID"
+msgstr "Charger IC ID"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:86
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:246
@@ -2000,19 +2004,19 @@ msgstr "Inactive"
 msgid "Published Type"
 msgstr "Published Type"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/hid.m:253
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/hid.m:367
 msgid "Accelerometer"
 msgstr "Accelerometer"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/hid.m:254
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/hid.m:368
 msgid "Gyroscope"
 msgstr "Gyroscope"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/hid.m:255
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/hid.m:369
 msgid "Compass"
 msgstr "Compass"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/hid.m:258
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/hid.m:372
 msgid "Atmos Pressure Sensor"
 msgstr "Atmos Pressure Sensor"
 

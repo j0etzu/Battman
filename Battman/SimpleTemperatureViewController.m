@@ -24,30 +24,37 @@ static NSMutableDictionary *knownHIDSensors;
 #if 0
 		// Gettext
 		NSArray __unused *knownKeys = @[
-			_("iPhone Skin Avg."),
-			_("iPad Skin"),
+			_("Device Avg."),
+			// _("iPad Skin"),
 			_("Battery Cell 1"),
 			_("Battery Cell 2"),
 			_("Battery Cell 3"),
 			_("Battery Cell 4"),
-		};
+			_("Camera Module"),
+		];
 #endif
+		extern NSArray *getHIDSkinModelsOf(NSString *prod);
 		// XXX: Try to figure out more
+		// TODO: Warn on invalid VTs
+		// TODO: Show die VTs
+		// TG*B: 15 ~ 46
+		// Die: 17 ~ 75
+		// TSFC: 8 ~ 46
 		NSDictionary *dict = @{
-			@"iPhone Skin Avg.": @[@"TSRM", @"TSBE", @"TSBH"],
-			@"iPad Skin": @"TSBM",
+			@"Device Avg.": getHIDSkinModelsOf([NSString stringWithCString:target_type() encoding:NSUTF8StringEncoding]),
+			// @"iPad Skin": @"TSBM",
 			@"Battery Cell 1": @"TG0B",
 			@"Battery Cell 2": @"TG1B",
 			@"Battery Cell 3": @"TG2B",
 			@"Battery Cell 4": @"TG3B",
+			@"Camera Module": @"TSFC",
 		};
 		NSArray<NSString *> *keys = [dict allKeys];
 		NSArray *vals = [dict allValues];
 		for (NSUInteger i = 0; i < dict.count; i++) {
 			NSString *className = NSStringFromClass([vals[i] class]);
-			if ([className isEqualToString:@"__NSArrayI"]) {
+			if ([className isEqualToString:@"__NSArrayI"] || [className isEqualToString:@"NSArray"]) {
 				NSArray *buf = (NSArray *)vals[i];
-				NSLog(@"buf: %@", buf);
 				float avg = 0;
 				int valid_count = 0;
 				for (NSUInteger j = 0; j < buf.count; j++) {
@@ -62,7 +69,7 @@ static NSMutableDictionary *knownHIDSensors;
 					[knownHIDSensors setValue:[NSNumber numberWithFloat:avg] forKey:keys[i]];
 				}
 			}
-			if ([className isEqualToString:@"__NSCFConstantString"]) {
+			if ([className isEqualToString:@"__NSCFConstantString"] || [className isEqualToString:@"NSString"]) {
 				float temp = getTemperatureHIDAt(vals[i]);
 				if (temp != -1) {
 					[knownHIDSensors setValue:[NSNumber numberWithFloat:temp] forKey:keys[i]];
@@ -104,6 +111,8 @@ static NSMutableDictionary *knownHIDSensors;
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"stvc:main"];
 	NSDictionary *dict = NULL;
 	NSString *label = NULL;
+	/* TODO: thermnote */
+
 	if (ip.section == 0) {
 		dict = sensorTemperatures;
 		// ????? this is terrible, why not store cstring at beginning?
@@ -112,7 +121,7 @@ static NSMutableDictionary *knownHIDSensors;
 		dict = knownHIDSensors;
 		label = _([dict.allKeys[ip.row] UTF8String]);
 	} else if (ip.section == 2) {
-		/* TODO: Filter stub temperatures */
+		/* TODO: Filter stub & info only VTs */
 		/* Some sensors are not actually getting its temperature
 		   they always looks like 0.00 or 30.00 */
 
@@ -124,6 +133,7 @@ static NSMutableDictionary *knownHIDSensors;
 	cell.textLabel.text = label;
 	cell.detailTextLabel.text = [NSString stringWithFormat:@"%.4g ℃", [dict[dict.allKeys[ip.row]] floatValue]];
 
+	/* TODO: thermtune */
 	return cell;
 }
 

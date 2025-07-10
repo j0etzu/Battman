@@ -43,6 +43,8 @@
 #define SIM_CONTAINER_FMT "^/Users/[^/]+/Library/Developer/CoreSimulator/Devices/[0-9A-Fa-f\\-]{36}/data/Containers/Data/Application/[0-9A-Fa-f\\-]{36}$"
 #define SIM_UNSANDBOX_FMT "^/Users/[^/]+/Library/Developer/CoreSimulator/Devices/[0-9A-Fa-f\\-]{36}/data$"
 
+#define SFPRO "SFProDisplay-Regular"
+
 __BEGIN_DECLS
 
 #ifndef __OBJC__

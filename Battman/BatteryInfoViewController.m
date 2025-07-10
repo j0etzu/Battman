@@ -73,7 +73,7 @@ enum sections_batteryinfo {
         tabbarItem.image = [UIImage systemImageNamed:@"battery.100"];
     } else {
         // U+1006E8
-        tabbarItem.image = imageForSFProGlyph(@"􀛨", @"SFProDisplay-Regular", 22, [UIColor grayColor]);
+        tabbarItem.image = imageForSFProGlyph(@"􀛨", @SFPRO, 22, [UIColor grayColor]);
     }
     tabbarItem.tag = 0;
     self.tabBarItem = tabbarItem;

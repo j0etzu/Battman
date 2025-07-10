@@ -15,6 +15,6 @@
 }
 @property (nonatomic, strong) CAShapeLayer *pointerLayer;
 
-
 - (void)rotatePointerToPercentage:(CGFloat)percent;
+- (void)rotatePointerToPercentage:(CGFloat)percent duration:(NSTimeInterval)duration;
 @end

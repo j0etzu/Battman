@@ -101,6 +101,10 @@
 
 @end
 
+@interface TemperatureInfoTableViewCell ()
+@property (nonatomic) dispatch_source_t timerSource;
+@end
+
 @implementation TemperatureInfoTableViewCell
 
 - (instancetype)init {
@@ -119,22 +123,32 @@
 	temperatureLabel.numberOfLines = 0;
 
 	NSString *finalText;
+	typedef enum {
+		TEMP_NULL = 0,
+		TEMP_BATT = (1 << 0),
+		TEMP_SNSR = (1 << 1),
+		TEMP_SCRN = (1 << 2),
+	} tempbit;
+	tempbit got_temp = 0;
 	float *btemps = get_temperature_per_cell();
-	if (btemps) {
+	float batttemp = -1;
+	if (*btemps) {
+		got_temp |= TEMP_BATT;
 		float total = 0;
 		int num = batt_cell_num();
 		for (int i = 0; i < num; i++) {
 			total += btemps[i];
 		}
 		finalText = [NSString stringWithFormat:@"%@: %.4g ℃", _("Battery Avg."), total / num];
-		float percent = ((total / num) > 70.0) ? 1.0 : ((total / num) / 70.0);
-		[[temperatureCell arcView] rotatePointerToPercentage:percent];
+		// Embedded designed operating temp: 0º to 35º C
+		batttemp = ((total / num) > 45) ? 1.0 : ((total / num) / 45);
 		free(btemps);
 	}
 
 	extern float getSensorAvgTemperature(void);
 	float snsrtemp = getSensorAvgTemperature();
 	if (snsrtemp != -1) {
+		got_temp |= TEMP_SNSR;
 		finalText = [finalText stringByAppendingFormat:@"\n%@: %.4g ℃", _("Sensors Avg."), snsrtemp];
 	}
 
@@ -142,7 +156,28 @@
 	extern double iomfb_primary_screen_temperature(void);
 	double scrntemp = iomfb_primary_screen_temperature();
 	if (scrntemp != -1) {
+		got_temp |= TEMP_SCRN;
 		finalText = [finalText stringByAppendingFormat:@"\n%@: %.4g ℃", _("Main Screen"), scrntemp];
+	}
+	
+	// Temp meter anim
+	if (got_temp & TEMP_BATT) {
+		[[temperatureCell arcView] rotatePointerToPercentage:batttemp];
+	} else if (got_temp & TEMP_SNSR) {
+		[[temperatureCell arcView] rotatePointerToPercentage:snsrtemp];
+	} else if (got_temp & TEMP_SCRN) {
+		[[temperatureCell arcView] rotatePointerToPercentage:scrntemp];
+	} else {
+		finalText = _("Who moved my temperature sensors?");
+		dispatch_queue_t queue = dispatch_get_main_queue();
+		self.timerSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
+		dispatch_source_set_timer(self.timerSource, dispatch_time(DISPATCH_TIME_NOW, 0), NSEC_PER_SEC, 0);
+		dispatch_source_set_event_handler(self.timerSource, ^{
+			float percent = (arc4random_uniform(300)) / 100.0f;
+			float duration = (arc4random_uniform(101)) / 100.0f;
+			[[self.temperatureCell arcView] rotatePointerToPercentage:percent duration:duration];
+		});
+		dispatch_resume(self.timerSource);
 	}
 
 	// We need a better UI for representing temperatures ig
@@ -156,6 +191,12 @@
 
 	_temperatureCell = temperatureCell;
 	return self;
+}
+
+- (void)dealloc {
+	if (self.timerSource) {
+		dispatch_source_cancel(self.timerSource);
+	}
 }
 
 @end

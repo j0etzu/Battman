@@ -419,7 +419,7 @@
 #ifdef USE_TEXT_FLAGS
         font = [UIFont systemFontOfSize:(UIFont.smallSystemFontSize + 1) * 0.7 weight:UIFontWeightRegular];
 #else
-        font = [UIFont fontWithName:@"SFProDisplay-Regular" size:(UIFont.smallSystemFontSize + 1) * 0.7];
+        font = [UIFont fontWithName:@SFPRO size:(UIFont.smallSystemFontSize + 1) * 0.7];
 #endif
         UberSegmentedControlConfig *conf = [[UberSegmentedControlConfig alloc] initWithFont:font tintColor:nil allowsMultipleSelection:YES];
 

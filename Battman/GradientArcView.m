@@ -70,7 +70,7 @@
     [super layoutSubviews];
 }
 
-- (void)rotatePointerToAngle:(CGFloat)angle {
+- (void)rotatePointerToAngle:(CGFloat)angle duration:(NSTimeInterval)duration {
     //DBGLOG(@"rotatePointerToAngle");
     if (!self.pointerLayer) {
         DBGLOG(@"rotatePointerToAngle called too early!");
@@ -78,14 +78,14 @@
         [self setNeedsDisplay];
         [self layoutIfNeeded];
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self rotatePointerToAngle:angle];
+            [self rotatePointerToAngle:angle duration:duration];
         });
         return;
     }
     CABasicAnimation *rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
     rotationAnimation.fromValue = @(previousAngle);
     rotationAnimation.toValue = @(angle);
-    rotationAnimation.duration = 1; // Animation duration in seconds
+    rotationAnimation.duration = duration; // Animation duration in seconds
     rotationAnimation.fillMode = kCAFillModeBoth;
     rotationAnimation.removedOnCompletion = NO;
     
@@ -95,7 +95,11 @@
 }
 
 - (void)rotatePointerToPercentage:(CGFloat)percent {
-    [self rotatePointerToAngle:6 * M_PI_4 * percent - M_PI_4];
+    [self rotatePointerToAngle:6 * M_PI_4 * percent - M_PI_4 duration:1];
+}
+
+- (void)rotatePointerToPercentage:(CGFloat)percent duration:(NSTimeInterval)duration {
+	[self rotatePointerToAngle:6 * M_PI_4 * percent - M_PI_4 duration:duration];
 }
 
 - (void)drawRect:(CGRect)rect {

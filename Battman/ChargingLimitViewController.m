@@ -187,7 +187,13 @@ int connect_to_daemon(void) {
         cell.textLabel.text = _("When limit is reached");
         NSArray *items;
         if (@available(iOS 13.0, *)) {
-            items = @[ [UIImage systemImageNamed:@"pause.rectangle"], [UIImage systemImageNamed:@"arrow.rectanglepath"] ];
+			// XXX: Consider use dynamic check
+			if (@available(iOS 14.0, *)) {
+				items = @[ [UIImage systemImageNamed:@"pause.rectangle"], [UIImage systemImageNamed:@"arrow.rectanglepath"] ];
+			} else {
+				// Sadly arrow.rectanglepath is iOS 14+
+				items = @[ [UIImage systemImageNamed:@"pause.circle"], [UIImage systemImageNamed:@"arrow.triangle.2.circlepath"] ];
+			}
         } else {
             // pause.rectangle U+10029B
             // arrow.rectanglepath U+1008C1
@@ -197,7 +203,7 @@ int connect_to_daemon(void) {
         if (@available(iOS 13.0, *)) {
             // Handle something?
         } else {
-            [segCon setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"SFProDisplay-Regular" size:12.0], NSFontAttributeName, nil] forState:UIControlStateNormal];
+            [segCon setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@SFPRO size:12.0], NSFontAttributeName, nil] forState:UIControlStateNormal];
         }
 
         if (vals[0] == -1) {

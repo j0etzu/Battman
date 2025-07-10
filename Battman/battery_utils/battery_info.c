@@ -82,7 +82,7 @@ struct battery_info_node main_battery_template[] = {
 	{ _C("Input Voltage"), _C("Real-time input voltage (VBUS) from the connected power source."), BIN_IN_DETAILS | BIN_UNIT_MAMP },
 	{ _C("Charging Current"), _C("The real-time passing current to internal battery."), BIN_IN_DETAILS | BIN_UNIT_MAMP },
 	{ _C("Charging Voltage"), _C("The real-time passing voltage to internal battery."), BIN_IN_DETAILS | BIN_UNIT_MVOLT },
-	{ _C("Charger ID"), NULL, 0 },
+	{ _C("Charger IC ID"), NULL, 0 },
 	{ _C("Model Name"), NULL, 0 },
 	{ _C("Manufacturer"), NULL, 0 },
 	{ _C("Model"), NULL, 0 },
@@ -699,7 +699,7 @@ void adapter_info_update_smc(struct battery_info_section *section) {
 	BI_SET_ITEM(_C("Input Voltage"), adapter_info.input_voltage * 1000.0f);
     BI_SET_ITEM(_C("Charging Current"), adapter_data.ChargingCurrent);
     BI_SET_ITEM(_C("Charging Voltage"), adapter_data.ChargingVoltage);
-    BI_FORMAT_ITEM(_C("Charger ID"), "0x%.4X", adapter_data.ChargerId);
+    BI_FORMAT_ITEM(_C("Charger IC ID"), "0x%.4X", adapter_data.ChargerId);
     BI_FORMAT_ITEM_IF(*adapter_info.name, _C("Model Name"), "%s", adapter_info.name);
     BI_FORMAT_ITEM_IF(*adapter_info.vendor, _C("Manufacturer"), "%s", adapter_info.vendor);
     BI_FORMAT_ITEM_IF(*adapter_info.adapter, _C("Model"), "%s", adapter_info.adapter);

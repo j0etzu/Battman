@@ -274,6 +274,7 @@ final:
                 NSLog(@"[batterySaver getPowerMode] = %lld", [LPMObject getPowerMode]);
             }
         }
+		/* FIXME: The correct way of setting LPM is set & push com.apple.system.lowpowermode */
         cswitch.on = lpm_on;
     }
 }

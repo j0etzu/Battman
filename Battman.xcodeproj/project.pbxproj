@@ -88,6 +88,7 @@
 		68AE40BE2D8EB8870023D7B0 /* SegmentButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40B62D8EB8870023D7B0 /* SegmentButton.m */; };
 		68AFCBA42E054D04007A9EC7 /* UILabel+SFSymbolsOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AFCBA32E054D04007A9EC7 /* UILabel+SFSymbolsOverride.m */; };
 		68B16F072E167CE6009B63AC /* DatePickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B16F062E167CE6009B63AC /* DatePickerTableViewCell.m */; };
+		68B16F122E1BBCC7009B63AC /* NSData+HexString.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B16F112E1BBCC6009B63AC /* NSData+HexString.m */; };
 		68B291232DC754100089BA1F /* daemon.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B2911F2DC754100089BA1F /* daemon.c */; };
 		68B291272DC7547B0089BA1F /* ChargingLimitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B291252DC7547B0089BA1F /* ChargingLimitViewController.m */; };
 		68B291282DC75F610089BA1F /* pmnotification.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B2911E2DC754100089BA1F /* pmnotification.c */; };
@@ -99,6 +100,10 @@
 		68B2914A2DDC76B10089BA1F /* selfcheck.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B291492DDC76B00089BA1F /* selfcheck.c */; };
 		68B5FF2E2D85606000919BC2 /* GradientArcView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B5FF2D2D85606000919BC2 /* GradientArcView.m */; };
 		68B5FF302D85617400919BC2 /* TemperatureInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B5FF2F2D85617400919BC2 /* TemperatureInfoTableViewCell.m */; };
+		68B68F3D2E1FB49500431E14 /* thermhid.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B68F302E1FB3F600431E14 /* thermhid.c */; };
+		68B68F3F2E1FB4A200431E14 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B68F3E2E1FB4A200431E14 /* CoreFoundation.framework */; };
+		68B68F412E1FB4A600431E14 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B68F402E1FB4A600431E14 /* IOKit.framework */; };
+		68B68F5B2E1FB67B00431E14 /* thermnote.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B68F592E1FB67000431E14 /* thermnote.c */; };
 		68D6DEBE2D745DBC00E129A0 /* SegmentedViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D6DEBD2D745DBC00E129A0 /* SegmentedViewCell.m */; };
 		68FBDCE82DE1A1D40057870A /* protect.S in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDCE72DE1A1D40057870A /* protect.S */; };
 		68FBDCF02DE30A5E0057870A /* worker.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDCEF2DE30A5E0057870A /* worker.c */; };
@@ -129,6 +134,27 @@
 			remoteInfo = intl;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		68B68F342E1FB42400431E14 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		68B68F502E1FB66000431E14 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		68171A2E2D5221C400DD4224 /* libsmc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libsmc.h; sourceTree = "<group>"; };
@@ -194,6 +220,8 @@
 		68AFCBA32E054D04007A9EC7 /* UILabel+SFSymbolsOverride.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UILabel+SFSymbolsOverride.m"; sourceTree = "<group>"; };
 		68B16F052E167CE6009B63AC /* DatePickerTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DatePickerTableViewCell.h; sourceTree = "<group>"; };
 		68B16F062E167CE6009B63AC /* DatePickerTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DatePickerTableViewCell.m; sourceTree = "<group>"; };
+		68B16F102E1BBC71009B63AC /* NSData+HexString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSData+HexString.h"; sourceTree = "<group>"; };
+		68B16F112E1BBCC6009B63AC /* NSData+HexString.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSData+HexString.m"; sourceTree = "<group>"; };
 		68B2911E2DC754100089BA1F /* pmnotification.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pmnotification.c; sourceTree = "<group>"; };
 		68B2911F2DC754100089BA1F /* daemon.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = daemon.c; sourceTree = "<group>"; };
 		68B291202DC754100089BA1F /* smctest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = smctest.c; sourceTree = "<group>"; };
@@ -219,6 +247,13 @@
 		68B5FF2D2D85606000919BC2 /* GradientArcView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GradientArcView.m; sourceTree = "<group>"; };
 		68B5FF2F2D85617400919BC2 /* TemperatureInfoTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = TemperatureInfoTableViewCell.m; path = BatteryCellView/TemperatureInfoTableViewCell.m; sourceTree = "<group>"; };
 		68B5FF312D85619B00919BC2 /* TemperatureInfoTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TemperatureInfoTableViewCell.h; path = BatteryCellView/TemperatureInfoTableViewCell.h; sourceTree = "<group>"; };
+		68B68F2F2E1FB3F600431E14 /* ios.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = ios.entitlements; path = utils/thermhid/ios.entitlements; sourceTree = "<group>"; };
+		68B68F302E1FB3F600431E14 /* thermhid.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = thermhid.c; path = utils/thermhid/thermhid.c; sourceTree = "<group>"; };
+		68B68F362E1FB42400431E14 /* thermhid */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = thermhid; sourceTree = BUILT_PRODUCTS_DIR; };
+		68B68F3E2E1FB4A200431E14 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/System/Library/Frameworks/CoreFoundation.framework; sourceTree = DEVELOPER_DIR; };
+		68B68F402E1FB4A600431E14 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
+		68B68F522E1FB66000431E14 /* thermnote */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = thermnote; sourceTree = BUILT_PRODUCTS_DIR; };
+		68B68F592E1FB67000431E14 /* thermnote.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = thermnote.c; path = utils/thermnote/thermnote.c; sourceTree = "<group>"; };
 		68CC02872DB3C57B00914051 /* SF-Pro-Display-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SF-Pro-Display-Regular.otf"; path = "../../../wifi/20/SFSymbols.pkg/Library/Fonts/SF-Pro-Display-Regular.otf"; sourceTree = "<group>"; };
 		68D6DEBD2D745DBC00E129A0 /* SegmentedViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SegmentedViewCell.m; sourceTree = "<group>"; };
 		68D6DEBF2D745DCB00E129A0 /* SegmentedViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SegmentedViewCell.h; sourceTree = "<group>"; };
@@ -267,6 +302,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		68B68F332E1FB42400431E14 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				68B68F412E1FB4A600431E14 /* IOKit.framework in Frameworks */,
+				68B68F3F2E1FB4A200431E14 /* CoreFoundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		68B68F4F2E1FB66000431E14 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -293,6 +344,8 @@
 		686AECB62D3B93CB0059ECD0 = {
 			isa = PBXGroup;
 			children = (
+				68B68F4D2E1FB60A00431E14 /* thermnote */,
+				68B68F2E2E1FB3DB00431E14 /* thermhid */,
 				687743192D46359200375A2C /* Config.xcconfig */,
 				687743182D4629CB00375A2C /* Battman.entitlements */,
 				6877430F2D461E4300375A2C /* gettext.xcodeproj */,
@@ -306,6 +359,8 @@
 			isa = PBXGroup;
 			children = (
 				686AECBF2D3B93CB0059ECD0 /* Battman.app */,
+				68B68F362E1FB42400431E14 /* thermhid */,
+				68B68F522E1FB66000431E14 /* thermnote */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -313,6 +368,7 @@
 		686AECC12D3B93CB0059ECD0 /* Battman */ = {
 			isa = PBXGroup;
 			children = (
+				68B16F0C2E1BBC4B009B63AC /* ObjCExt */,
 				6846114A2E0D5211006B651D /* hw */,
 				68FBDCF12DE30A740057870A /* cobjc */,
 				68B2913E2DD86ABF0089BA1F /* EXTERNAL_HEADERS */,
@@ -374,6 +430,8 @@
 		687743162D461E5100375A2C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				68B68F402E1FB4A600431E14 /* IOKit.framework */,
+				68B68F3E2E1FB4A200431E14 /* CoreFoundation.framework */,
 				68B291402DD9EAAB0089BA1F /* libIOAccessoryManager.tbd */,
 				6838BF7B2DC22CF6007EB66C /* libMobileGestalt.tbd */,
 				6838BF6E2DB8D89E007EB66C /* WebKit.framework */,
@@ -452,6 +510,15 @@
 			path = UberSegmentedControl;
 			sourceTree = "<group>";
 		};
+		68B16F0C2E1BBC4B009B63AC /* ObjCExt */ = {
+			isa = PBXGroup;
+			children = (
+				68B16F102E1BBC71009B63AC /* NSData+HexString.h */,
+				68B16F112E1BBCC6009B63AC /* NSData+HexString.m */,
+			);
+			path = ObjCExt;
+			sourceTree = "<group>";
+		};
 		68B2913E2DD86ABF0089BA1F /* EXTERNAL_HEADERS */ = {
 			isa = PBXGroup;
 			children = (
@@ -469,6 +536,23 @@
 				68B291492DDC76B00089BA1F /* selfcheck.c */,
 			);
 			path = security;
+			sourceTree = "<group>";
+		};
+		68B68F2E2E1FB3DB00431E14 /* thermhid */ = {
+			isa = PBXGroup;
+			children = (
+				68B68F2F2E1FB3F600431E14 /* ios.entitlements */,
+				68B68F302E1FB3F600431E14 /* thermhid.c */,
+			);
+			name = thermhid;
+			sourceTree = "<group>";
+		};
+		68B68F4D2E1FB60A00431E14 /* thermnote */ = {
+			isa = PBXGroup;
+			children = (
+				68B68F592E1FB67000431E14 /* thermnote.c */,
+			);
+			name = thermnote;
 			sourceTree = "<group>";
 		};
 		68DCA5B42D40EDE8004D0104 /* Localizations */ = {
@@ -526,6 +610,40 @@
 			productReference = 686AECBF2D3B93CB0059ECD0 /* Battman.app */;
 			productType = "com.apple.product-type.application";
 		};
+		68B68F352E1FB42400431E14 /* thermhid */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 68B68F3A2E1FB42400431E14 /* Build configuration list for PBXNativeTarget "thermhid" */;
+			buildPhases = (
+				68B68F322E1FB42400431E14 /* Sources */,
+				68B68F332E1FB42400431E14 /* Frameworks */,
+				68B68F342E1FB42400431E14 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = thermhid;
+			productName = thermhid;
+			productReference = 68B68F362E1FB42400431E14 /* thermhid */;
+			productType = "com.apple.product-type.tool";
+		};
+		68B68F512E1FB66000431E14 /* thermnote */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 68B68F562E1FB66000431E14 /* Build configuration list for PBXNativeTarget "thermnote" */;
+			buildPhases = (
+				68B68F4E2E1FB66000431E14 /* Sources */,
+				68B68F4F2E1FB66000431E14 /* Frameworks */,
+				68B68F502E1FB66000431E14 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = thermnote;
+			productName = thermnote;
+			productReference = 68B68F522E1FB66000431E14 /* thermnote */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -541,6 +659,12 @@
 						CreatedOnToolsVersion = 12.5.1;
 					};
 					687743262D4CACBD00375A2C = {
+						CreatedOnToolsVersion = 12.5.1;
+					};
+					68B68F352E1FB42400431E14 = {
+						CreatedOnToolsVersion = 12.5.1;
+					};
+					68B68F512E1FB66000431E14 = {
 						CreatedOnToolsVersion = 12.5.1;
 					};
 					68DCA5AF2D40EC57004D0104 = {
@@ -575,6 +699,8 @@
 				68DCA5B82D40FA9F004D0104 /* pofiles_new */,
 				687742AB2D437EE400375A2C /* Gettext Localizations */,
 				687743262D4CACBD00375A2C /* pofiles update */,
+				68B68F352E1FB42400431E14 /* thermhid */,
+				68B68F512E1FB66000431E14 /* thermnote */,
 			);
 		};
 /* End PBXProject section */
@@ -736,6 +862,7 @@
 				68AE40BA2D8EB8870023D7B0 /* DividerView.m in Sources */,
 				68B16F072E167CE6009B63AC /* DatePickerTableViewCell.m in Sources */,
 				68B2913A2DD1FEDA0089BA1F /* hid.m in Sources */,
+				68B16F122E1BBCC7009B63AC /* NSData+HexString.m in Sources */,
 				68B291362DD1E6960089BA1F /* SimpleTemperatureViewController.m in Sources */,
 				6838BF762DBF810D007EB66C /* localized.c in Sources */,
 				687743372D4E08AD00375A2C /* BatteryInfoViewController.m in Sources */,
@@ -767,6 +894,22 @@
 				687743362D4E08AD00375A2C /* SettingsViewController.m in Sources */,
 				68B291272DC7547B0089BA1F /* ChargingLimitViewController.m in Sources */,
 				68171A302D5221C400DD4224 /* libsmc.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		68B68F322E1FB42400431E14 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				68B68F3D2E1FB49500431E14 /* thermhid.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		68B68F4E2E1FB66000431E14 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				68B68F5B2E1FB67B00431E14 /* thermnote.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1022,6 +1165,70 @@
 			};
 			name = Release;
 		};
+		68B68F3B2E1FB42400431E14 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "iphoneos macosx";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		68B68F3C2E1FB42400431E14 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "iphoneos macosx";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		68B68F572E1FB66000431E14 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphoneos";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		68B68F582E1FB66000431E14 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphoneos";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
 		68DCA5B12D40EC58004D0104 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1095,6 +1302,24 @@
 			buildConfigurations = (
 				687743282D4CACBD00375A2C /* Debug */,
 				687743292D4CACBD00375A2C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		68B68F3A2E1FB42400431E14 /* Build configuration list for PBXNativeTarget "thermhid" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				68B68F3B2E1FB42400431E14 /* Debug */,
+				68B68F3C2E1FB42400431E14 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		68B68F562E1FB66000431E14 /* Build configuration list for PBXNativeTarget "thermnote" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				68B68F572E1FB66000431E14 /* Debug */,
+				68B68F582E1FB66000431E14 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

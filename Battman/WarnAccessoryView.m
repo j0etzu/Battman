@@ -1,5 +1,6 @@
 #import "WarnAccessoryView.h"
 #import "CompatibilityHelper.h"
+#import "common.h"
 
 @implementation WarnAccessoryView
 
@@ -14,7 +15,7 @@
         [button setImage:img forState:UIControlStateNormal];
     } else {
         [button setTitle:fallbackGlyph forState:UIControlStateNormal];
-        button.titleLabel.font = [UIFont fontWithName:@"SFProDisplay-Regular" size:22];
+        button.titleLabel.font = [UIFont fontWithName:@SFPRO size:22];
     }
 
     button.tintColor = [UIColor systemBlueColor];

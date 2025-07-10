@@ -156,6 +156,119 @@ float getTemperatureHIDAt(NSString *locID) {
 	return temp;
 }
 
+/* This has to be polished
+uint32_t getMajorSkinTemperatureLocationOf(NSString *name) {
+	// A13, iPhone 12, iPhone 12 Pro, iPhone 12 Pro Max
+	NSArray *TSRM = @[@"t8030", @"D53", @"D54"];
+	for (int i = 0; i < TSRM.count; i++) {
+		if ([name rangeOfString:TSRM[i] options:NSCaseInsensitiveSearch].location != NSNotFound)
+			return 'TSRM';
+	}
+
+	// iPad8,9
+	// iPad8,10
+	// iPad8,11
+	// iPad8,12
+	// iPad13,1
+	// iPad13,2
+	// iPad13,18
+	// iPad13,19
+	NSArray *TSBM = @[@"J417", @"J418", @"J420", @"J421", @"J307", @"J308", @"J271", @"J272"];
+	for (int i = 0; i < TSBM.count; i++) {
+		if ([name rangeOfString:TSBM[i] options:NSCaseInsensitiveSearch].location != NSNotFound)
+			return 'TSBM';
+	}
+
+	// iPad12,1
+	// iPad12,2
+	// and bunch of apple watches
+	NSArray *TSBH = @[@"J181", @"J182", @"N157s", @"N157b", @"N158s", @"N158b", @"N187s", @"N187b", @"N188s", @"N188b", @"N143s", @"N143b", @"N197s", @"N197b", @"N198s", @"N198b", @"N199"];
+	for (int i = 0; i < TSBH.count; i++) {
+		if ([name rangeOfString:TSBH[i] options:NSCaseInsensitiveSearch].location != NSNotFound)
+			return 'TSBH';
+	}
+
+	// ACSK Products has no skin sensor
+	NSArray *acsk_prods = @[@"D16", @"D17", @"D27", @"D28", @"D49", @"D63", @"D64", @"D73", @"D74", @"J310", @"J311", @"J407", @"J408", @"J517", @"J518", @"J522", @"J523"];
+	for (int i = 0; i < acsk_prods.count; i++) {
+		if ([name rangeOfString:acsk_prods[i] options:NSCaseInsensitiveSearch].location != NSNotFound)
+			return 0;
+	}
+
+	// iPhone 12 mini and t8015 and forward
+	return 'TSBE';
+}
+*/
+
+NSArray<NSString *> *getHIDSkinModelsOf(NSString *product) {
+	static NSDictionary<NSString *, NSArray<NSString *> *> *skinModelsByProduct = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		// define each value array once
+		NSArray<NSString *> *TSLE   = @[@"TSLE"];
+		NSArray<NSString *> *TSBH   = @[@"TSBH"];
+		NSArray<NSString *> *BH_BR  = @[@"TSBH", @"TSBR"];
+		NSArray<NSString *> *BH_FD  = @[@"TSBH", @"TSFD"];
+		NSArray<NSString *> *BH_FD_BR = @[@"TSBH", @"TSFD", @"TSBR"];
+		NSArray<NSString *> *BM_FD_FL_BQ_FG = @[@"TSBM", @"TSFD", @"TSFL", @"TSBQ", @"TSFG"];
+		NSArray<NSString *> *BM_FD_FL_BQ_FG_BR = @[@"TSBM", @"TSFD", @"TSFL", @"TSBQ", @"TSFG", @"TSBR"];
+		NSArray<NSString *> *BM_FD_FL_BQ = @[@"TSBM", @"TSFD", @"TSFL", @"TSBQ"];
+		NSArray<NSString *> *BH_cH_dH_FD = @[@"TSBH", @"TScH", @"TSdH", @"TSFD"];
+		NSArray<NSString *> *FH_FL_FD_BH_BE_BR_FC = @[@"TSFH", @"TSFL", @"TSFD", @"TSBH", @"TSBE", @"TSBR", @"TSFC"];
+		NSArray<NSString *> *FH_FL_FD_BH_BL_BR_FC = @[@"TSFH", @"TSFL", @"TSFD", @"TSBH", @"TSBL", @"TSBR", @"TSFC"];
+		NSArray<NSString *> *BR_BH_FC_FD = @[@"TSBR", @"TSBH", @"TSFC", @"TSFD"];
+		NSArray<NSString *> *FP     = @[@"TSFP"];
+		NSArray<NSString *> *FP_BM  = @[@"TSFP", @"TSBM"];
+		NSArray<NSString *> *Wu     = @[@"TSWu"];
+		NSArray<NSString *> *BE_RM_RR_FC_Ba_FL_BQ = @[@"TSBE", @"TSRM", @"TSRR", @"TSFC", @"TSBa", @"TSFL", @"TSBQ"];
+		NSArray<NSString *> *BE_RM_RR_FC_Ba_FL_RQ = @[@"TSBE", @"TSRM", @"TSRR", @"TSFC", @"TSBa", @"TSFL", @"TSRQ"];
+		NSArray<NSString *> *BE_RM_RR_FC_FD_Ba_FL_RQ = @[@"TSBE", @"TSRM", @"TSRR", @"TSFC", @"TSFD", @"TSBa", @"TSFL", @"TSRQ"];
+		NSArray<NSString *> *BE_RM_RR_FC_FD_Ba_FL_BR = @[@"TSBE", @"TSRM", @"TSRR", @"TSFC", @"TSFD", @"TSBa", @"TSFL", @"TSBR"];
+		NSArray<NSString *> *BE_BQ_RM_RR_FC_FL_Ba = @[@"TSBE", @"TSBQ", @"TSRM", @"TSRR", @"TSFC", @"TSFL", @"TSBa"];
+		NSArray<NSString *> *BE_BQ_RM_RR_FR_LR_FC_FL_FD_Ba = @[@"TSBE", @"TSBQ", @"TSRM", @"TSRR", @"TSFR", @"TSLR", @"TSFC", @"TSFL", @"TSFD", @"TSBa"];
+		NSArray<NSString *> *BE_BQ_RM_RR_BR_FR_LR_FC_FL_FD_Ba = @[@"TSBE", @"TSBQ", @"TSRM", @"TSRR", @"TSBR", @"TSFR", @"TSLR", @"TSFC", @"TSFL", @"TSFD", @"TSBa"];
+		
+		// helper to add many keys for one value
+		NSMutableDictionary *dict = [NSMutableDictionary new];
+		void (^add)(NSArray<NSString *> *, NSArray<NSString *> *) = ^(NSArray<NSString *> *keys, NSArray<NSString *> *val){
+			for (NSString *k in keys) dict[k] = val;
+		};
+		
+		add(@[@"J42d",@"J105a",@"J305"],           TSLE);
+		add(@[@"J81",@"J96",@"J98a"],               TSBH);
+		add(@[@"J82",@"J97",@"J99a"],               BH_BR);
+		add(@[@"J127",@"J207",@"J120",@"J71s",@"J71t",@"J71b",@"J171",@"J171a",@"J181"], BH_FD);
+		add(@[@"J128",@"J208",@"J121",@"J72s",@"J72t",@"J72b",@"J172",@"J172a",@"J182"], BH_FD_BR);
+		add(@[@"J307",@"J317",@"J317x",@"J320",@"J320x",@"J417",@"J420"], BM_FD_FL_BQ_FG);
+		add(@[@"J308",@"J318",@"J318x",@"J321",@"J321x",@"J418",@"J421"], BM_FD_FL_BQ_FG_BR);
+		add(@[@"J210",@"J217",@"J271"],             BM_FD_FL_BQ);
+		add(@[@"J211",@"J218",@"J272"],             [BM_FD_FL_BQ arrayByAddingObject:@"TSBR"]);
+		add(@[@"N27d",@"N28d",@"N74",@"N75"],        BH_cH_dH_FD);
+		add(@[@"N111s",@"N111b",@"N121s",@"N121b",@"N131s",@"N131b",@"N141s",@"N141b",@"N144s",@"N144b",
+			  @"N146s",@"N146b",@"N157s",@"N157b",@"N158s",@"N158b",@"N187s",@"N187b",@"N188s",@"N188b",
+			  @"N143s",@"N143b",@"N197s",@"N197b",@"N198s",@"N198b",@"N199"], BH_FD);
+		add(@[@"N112"],                            FH_FL_FD_BH_BE_BR_FC);
+		add(@[@"N66",@"N66m",@"N71",@"N71m"],       FH_FL_FD_BH_BL_BR_FC);
+		add(@[@"N69",@"N69u"],                      BR_BH_FC_FD);
+		add(@[@"D10",@"D101",@"D11",@"D111"],       FH_FL_FD_BH_BE_BR_FC);
+		add(@[@"B238",@"B238a"],                    FP);
+		add(@[@"B520"],                             FP_BM);
+		add(@[@"B620"],                             Wu);
+		add(@[@"D20",@"D201",@"D21",@"D211"],       BE_RM_RR_FC_Ba_FL_BQ);
+		add(@[@"D22",@"D221"],                      BE_RM_RR_FC_Ba_FL_RQ);
+		add(@[@"D331",@"D331p"],                    BE_RM_RR_FC_FD_Ba_FL_RQ);
+		add(@[@"D321",@"N841"],                     BE_RM_RR_FC_FD_Ba_FL_BR);
+		add(@[@"D79"],                              BE_BQ_RM_RR_FC_FL_Ba);
+		add(@[@"D421",@"D431",@"N104"],             BE_BQ_RM_RR_FR_LR_FC_FL_FD_Ba);
+		add(@[@"D52g",@"D53g",@"D53p",@"D54p"],     BE_BQ_RM_RR_BR_FR_LR_FC_FL_FD_Ba);
+		
+		skinModelsByProduct = dict.copy;
+	});
+	
+	NSArray<NSString *> *models = skinModelsByProduct[product];
+	return models ?: @[];
+}
+
 static int GetTemperatureFromDict(CFDictionaryRef dict) {
 	if (dict == NULL) {
 		return -1;

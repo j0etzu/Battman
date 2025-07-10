@@ -5,6 +5,7 @@
 //  Created by Torrekie on 2025/6/20.
 //
 
+#import "common.h"
 #import "UILabel+SFSymbolsOverride.h"
 #import <objc/runtime.h>
 
@@ -42,7 +43,7 @@ static BOOL isPUAB(unichar high, unichar low) {
 	
 	// Build an attributed string that swaps in the symbol font on PUA‑B codepoints
 	UIFont *bodyFont   = self.font ?: [UIFont systemFontOfSize:[UIFont labelFontSize]];
-	UIFont *symbolFont = [UIFont fontWithName:@"SFProDisplay-Regular" size:bodyFont.pointSize];
+	UIFont *symbolFont = [UIFont fontWithName:@SFPRO size:bodyFont.pointSize];
 	
 	NSMutableAttributedString *m = [[NSMutableAttributedString alloc] initWithString:text attributes:@{ NSFontAttributeName: bodyFont }];
 	
