@@ -200,37 +200,37 @@ uint32_t getMajorSkinTemperatureLocationOf(NSString *name) {
 }
 */
 
-NSArray<NSString *> *getHIDSkinModelsOf(NSString *product) {
-	static NSDictionary<NSString *, NSArray<NSString *> *> *skinModelsByProduct = nil;
+NSArray *getHIDSkinModelsOf(NSString *product) {
+	static NSDictionary *skinModelsByProduct = nil;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		// define each value array once
-		NSArray<NSString *> *TSLE   = @[@"TSLE"];
-		NSArray<NSString *> *TSBH   = @[@"TSBH"];
-		NSArray<NSString *> *BH_BR  = @[@"TSBH", @"TSBR"];
-		NSArray<NSString *> *BH_FD  = @[@"TSBH", @"TSFD"];
-		NSArray<NSString *> *BH_FD_BR = @[@"TSBH", @"TSFD", @"TSBR"];
-		NSArray<NSString *> *BM_FD_FL_BQ_FG = @[@"TSBM", @"TSFD", @"TSFL", @"TSBQ", @"TSFG"];
-		NSArray<NSString *> *BM_FD_FL_BQ_FG_BR = @[@"TSBM", @"TSFD", @"TSFL", @"TSBQ", @"TSFG", @"TSBR"];
-		NSArray<NSString *> *BM_FD_FL_BQ = @[@"TSBM", @"TSFD", @"TSFL", @"TSBQ"];
-		NSArray<NSString *> *BH_cH_dH_FD = @[@"TSBH", @"TScH", @"TSdH", @"TSFD"];
-		NSArray<NSString *> *FH_FL_FD_BH_BE_BR_FC = @[@"TSFH", @"TSFL", @"TSFD", @"TSBH", @"TSBE", @"TSBR", @"TSFC"];
-		NSArray<NSString *> *FH_FL_FD_BH_BL_BR_FC = @[@"TSFH", @"TSFL", @"TSFD", @"TSBH", @"TSBL", @"TSBR", @"TSFC"];
-		NSArray<NSString *> *BR_BH_FC_FD = @[@"TSBR", @"TSBH", @"TSFC", @"TSFD"];
-		NSArray<NSString *> *FP     = @[@"TSFP"];
-		NSArray<NSString *> *FP_BM  = @[@"TSFP", @"TSBM"];
-		NSArray<NSString *> *Wu     = @[@"TSWu"];
-		NSArray<NSString *> *BE_RM_RR_FC_Ba_FL_BQ = @[@"TSBE", @"TSRM", @"TSRR", @"TSFC", @"TSBa", @"TSFL", @"TSBQ"];
-		NSArray<NSString *> *BE_RM_RR_FC_Ba_FL_RQ = @[@"TSBE", @"TSRM", @"TSRR", @"TSFC", @"TSBa", @"TSFL", @"TSRQ"];
-		NSArray<NSString *> *BE_RM_RR_FC_FD_Ba_FL_RQ = @[@"TSBE", @"TSRM", @"TSRR", @"TSFC", @"TSFD", @"TSBa", @"TSFL", @"TSRQ"];
-		NSArray<NSString *> *BE_RM_RR_FC_FD_Ba_FL_BR = @[@"TSBE", @"TSRM", @"TSRR", @"TSFC", @"TSFD", @"TSBa", @"TSFL", @"TSBR"];
-		NSArray<NSString *> *BE_BQ_RM_RR_FC_FL_Ba = @[@"TSBE", @"TSBQ", @"TSRM", @"TSRR", @"TSFC", @"TSFL", @"TSBa"];
-		NSArray<NSString *> *BE_BQ_RM_RR_FR_LR_FC_FL_FD_Ba = @[@"TSBE", @"TSBQ", @"TSRM", @"TSRR", @"TSFR", @"TSLR", @"TSFC", @"TSFL", @"TSFD", @"TSBa"];
-		NSArray<NSString *> *BE_BQ_RM_RR_BR_FR_LR_FC_FL_FD_Ba = @[@"TSBE", @"TSBQ", @"TSRM", @"TSRR", @"TSBR", @"TSFR", @"TSLR", @"TSFC", @"TSFL", @"TSFD", @"TSBa"];
+		NSArray *TSLE   = @[@"TSLE"];
+		NSArray *TSBH   = @[@"TSBH"];
+		NSArray *BH_BR  = @[@"TSBH", @"TSBR"];
+		NSArray *BH_FD  = @[@"TSBH", @"TSFD"];
+		NSArray *BH_FD_BR = @[@"TSBH", @"TSFD", @"TSBR"];
+		NSArray *BM_FD_FL_BQ_FG = @[@"TSBM", @"TSFD", @"TSFL", @"TSBQ", @"TSFG"];
+		NSArray *BM_FD_FL_BQ_FG_BR = @[@"TSBM", @"TSFD", @"TSFL", @"TSBQ", @"TSFG", @"TSBR"];
+		NSArray *BM_FD_FL_BQ = @[@"TSBM", @"TSFD", @"TSFL", @"TSBQ"];
+		NSArray *BH_cH_dH_FD = @[@"TSBH", @"TScH", @"TSdH", @"TSFD"];
+		NSArray *FH_FL_FD_BH_BE_BR_FC = @[@"TSFH", @"TSFL", @"TSFD", @"TSBH", @"TSBE", @"TSBR", @"TSFC"];
+		NSArray *FH_FL_FD_BH_BL_BR_FC = @[@"TSFH", @"TSFL", @"TSFD", @"TSBH", @"TSBL", @"TSBR", @"TSFC"];
+		NSArray *BR_BH_FC_FD = @[@"TSBR", @"TSBH", @"TSFC", @"TSFD"];
+		NSArray *FP     = @[@"TSFP"];
+		NSArray *FP_BM  = @[@"TSFP", @"TSBM"];
+		NSArray *Wu     = @[@"TSWu"];
+		NSArray *BE_RM_RR_FC_Ba_FL_BQ = @[@"TSBE", @"TSRM", @"TSRR", @"TSFC", @"TSBa", @"TSFL", @"TSBQ"];
+		NSArray *BE_RM_RR_FC_Ba_FL_RQ = @[@"TSBE", @"TSRM", @"TSRR", @"TSFC", @"TSBa", @"TSFL", @"TSRQ"];
+		NSArray *BE_RM_RR_FC_FD_Ba_FL_RQ = @[@"TSBE", @"TSRM", @"TSRR", @"TSFC", @"TSFD", @"TSBa", @"TSFL", @"TSRQ"];
+		NSArray *BE_RM_RR_FC_FD_Ba_FL_BR = @[@"TSBE", @"TSRM", @"TSRR", @"TSFC", @"TSFD", @"TSBa", @"TSFL", @"TSBR"];
+		NSArray *BE_BQ_RM_RR_FC_FL_Ba = @[@"TSBE", @"TSBQ", @"TSRM", @"TSRR", @"TSFC", @"TSFL", @"TSBa"];
+		NSArray *BE_BQ_RM_RR_FR_LR_FC_FL_FD_Ba = @[@"TSBE", @"TSBQ", @"TSRM", @"TSRR", @"TSFR", @"TSLR", @"TSFC", @"TSFL", @"TSFD", @"TSBa"];
+		NSArray *BE_BQ_RM_RR_BR_FR_LR_FC_FL_FD_Ba = @[@"TSBE", @"TSBQ", @"TSRM", @"TSRR", @"TSBR", @"TSFR", @"TSLR", @"TSFC", @"TSFL", @"TSFD", @"TSBa"];
 		
 		// helper to add many keys for one value
 		NSMutableDictionary *dict = [NSMutableDictionary new];
-		void (^add)(NSArray<NSString *> *, NSArray<NSString *> *) = ^(NSArray<NSString *> *keys, NSArray<NSString *> *val){
+		void (^add)(NSArray *, NSArray *) = ^(NSArray *keys, NSArray *val){
 			for (NSString *k in keys) dict[k] = val;
 		};
 		
@@ -265,7 +265,7 @@ NSArray<NSString *> *getHIDSkinModelsOf(NSString *product) {
 		skinModelsByProduct = dict.copy;
 	});
 	
-	NSArray<NSString *> *models = skinModelsByProduct[product];
+	NSArray *models = skinModelsByProduct[product];
 	return models ?: @[];
 }
 
