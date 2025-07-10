@@ -201,7 +201,7 @@ uint32_t getMajorSkinTemperatureLocationOf(NSString *name) {
 */
 
 NSArray *getHIDSkinModelsOf(NSString *product) {
-	static NSDictionary *skinModelsByProduct = nil;
+	__block NSDictionary *skinModelsByProduct = nil;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		// define each value array once
