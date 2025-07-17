@@ -3,12 +3,55 @@
 
 #include <regex.h>
 #include <sys/sysctl.h>
+#include <sys/types.h>
 
 #include "battery_utils/battery_info.h"
 #include "cobjc/cobjc.h"
 #include "common.h"
 #include "gtkextern.h"
 #include "intlextern.h"
+
+#if __has_include(<libproc.h>)
+#include <libproc.h>
+#else
+extern int proc_name(int pid, void *buffer, uint32_t buffersize);
+#endif
+
+#if __has_include(<sys/codesign.h>)
+#include <sys/codesign.h>
+#else
+#define CS_OPS_STATUS 0
+extern int csops(pid_t pid, unsigned int ops, void *useraddr, size_t usersize);
+#endif
+
+#if __has_include(<launch.h>)
+#include <launch.h>
+#else
+#define LAUNCH_KEY_GETJOBS "GetJobs"
+#define LAUNCH_JOBKEY_PID "PID"
+
+typedef struct _launch_data *launch_data_t;
+typedef enum {
+	LAUNCH_DATA_DICTIONARY = 1,
+	LAUNCH_DATA_ARRAY,
+	LAUNCH_DATA_FD,
+	LAUNCH_DATA_INTEGER,
+	LAUNCH_DATA_REAL,
+	LAUNCH_DATA_BOOL,
+	LAUNCH_DATA_STRING,
+	LAUNCH_DATA_OPAQUE,
+	LAUNCH_DATA_ERRNO,
+	LAUNCH_DATA_MACHPORT,
+} launch_data_type_t;
+
+extern launch_data_t launch_data_new_string(const char *val);
+extern launch_data_t launch_msg(const launch_data_t request);
+extern launch_data_type_t launch_data_get_type(const launch_data_t ld);
+extern void launch_data_free(launch_data_t ld);
+extern launch_data_t launch_data_dict_lookup(const launch_data_t ldict, const char *key);
+extern long long launch_data_get_integer(const launch_data_t ld);
+extern int launch_data_get_errno(const launch_data_t ld);
+#endif
 
 /* Consider make this a standalone header */
 #define SYM_EXIST(...) check_ptr(__VA_ARGS__)
@@ -616,4 +659,114 @@ const char *target_type(void) {
 
 	buf[len] = '\0';
 	return buf;
+}
+
+bool is_debugged(void) {
+#ifndef CS_DEBUGGED
+#define CS_DEBUGGED 0x10000000
+#endif
+	uint32_t csflags = 0;
+	
+	(void)csops(getpid(), CS_OPS_STATUS, &csflags, sizeof(csflags));
+	return (csflags & CS_DEBUGGED);
+}
+
+bool is_platformized(void) {
+#ifndef CS_PLATFORM_BINARY
+#define CS_PLATFORM_BINARY 0x04000000
+#endif
+	uint32_t csflags = 0;
+
+	(void)csops(getpid(), CS_OPS_STATUS, &csflags, sizeof(csflags));
+	return (csflags & CS_PLATFORM_BINARY);
+}
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
+// TODO: Test on iOS 16+
+// Check launchd for service info and extract PID
+pid_t get_pid_for_launchd_label(const char *label) {
+	launch_data_t msg, resp, job;
+	pid_t pid = 0;
+
+	if (!is_platformized())
+		return -1;
+
+	// Create a message requesting all jobs
+	msg = launch_data_new_string(LAUNCH_KEY_GETJOBS);
+	if (!msg) {
+		os_log_error(gLog, "Failed to create launch message.");
+		return -1;
+	}
+	
+	resp = launch_msg(msg);
+	launch_data_free(msg);
+	
+	if (!resp) {
+		os_log_error(gLog, "launch_msg returned NULL.");
+		return -1;
+	}
+
+	launch_data_type_t resptype = launch_data_get_type(resp);
+	if (resptype == LAUNCH_DATA_ERRNO) {
+		os_log_error(gLog, "Error getting launch data: %d", launch_data_get_errno(resp));
+		launch_data_free(resp);
+		return -1;
+	}
+	if (resptype != LAUNCH_DATA_DICTIONARY) {
+		os_log_error(gLog, "Response %d is not a dictionary.", resptype);
+		launch_data_free(resp);
+		return -1;
+	}
+	
+	job = launch_data_dict_lookup(resp, label);
+	if (job && launch_data_get_type(job) == LAUNCH_DATA_DICTIONARY) {
+		launch_data_t pid_data = launch_data_dict_lookup(job, LAUNCH_JOBKEY_PID);
+		if (pid_data && launch_data_get_type(pid_data) == LAUNCH_DATA_INTEGER) {
+			pid = (pid_t)launch_data_get_integer(pid_data);
+		}
+	}
+	
+	launch_data_free(resp);
+	return pid;
+}
+
+#pragma clang diagnostic pop
+
+pid_t get_pid_for_procname(const char *name) {
+	int mib[4] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL, 0};
+	unsigned int miblen = 4;
+	
+	size_t size = 0;
+	if (sysctl(mib, miblen, NULL, &size, NULL, 0) < 0) {
+		os_log_error(gLog, "get_pid_for_procname: sysctl(size)");
+		return -1;
+	}
+	
+	struct kinfo_proc *process = malloc(size);
+	if (!process) {
+		os_log_error(gLog, "get_pid_for_procname: malloc");
+		return -1;
+	}
+	
+	if (sysctl(mib, miblen, process, &size, NULL, 0) < 0) {
+		os_log_error(gLog, "get_pid_for_procname: fetch");
+		free(process);
+		return -1;
+	}
+	
+	int proc_count = (int)(size / sizeof(struct kinfo_proc));
+	pid_t pid = 0;
+	
+	for (int i = 0; i < proc_count; i++) {
+		// PPID 1 is always launchd
+		if (strcmp(name, process[i].kp_proc.p_comm) == 0 && process[i].kp_eproc.e_ppid == 1) {
+			pid = process[i].kp_proc.p_pid;
+			break;
+		}
+	}
+	
+	free(process);
+	return pid;
 }

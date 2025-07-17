@@ -59,7 +59,13 @@ enum sections_batteryinfo {
         copyright.text = [copyright.text stringByAppendingFormat:@"\n%@", _("Unsandboxed")];
     }
 
-    copyright.font = [UIFont systemFontOfSize:12];
+	if (is_platformized())
+		copyright.text = [copyright.text stringByAppendingFormat:@", %@", _("Platfomized")];
+
+	if (is_debugged())
+		copyright.text = [copyright.text stringByAppendingFormat:@", %@", _("Debugger Attached")];
+
+	copyright.font = [UIFont systemFontOfSize:12];
     copyright.textAlignment = NSTextAlignmentCenter;
     copyright.textColor = [UIColor grayColor];
     [copyright sizeToFit];

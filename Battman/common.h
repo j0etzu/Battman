@@ -13,6 +13,7 @@
 #include <TargetConditionals.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include <stdio.h>
+#include <sys/types.h>
 #include <os/log.h>
 
 #include "main.h"
@@ -91,6 +92,11 @@ int open_lang_override(int flags,int mode);
 int preferred_language_code(void);
 
 const char *target_type(void);
+
+bool is_debugged(void);
+bool is_platformized(void);
+pid_t get_pid_for_launchd_label(const char *label);
+pid_t get_pid_for_procname(const char *name);
 
 __END_DECLS
 

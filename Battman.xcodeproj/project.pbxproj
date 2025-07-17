@@ -104,6 +104,8 @@
 		68B68F3F2E1FB4A200431E14 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B68F3E2E1FB4A200431E14 /* CoreFoundation.framework */; };
 		68B68F412E1FB4A600431E14 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B68F402E1FB4A600431E14 /* IOKit.framework */; };
 		68B68F5B2E1FB67B00431E14 /* thermnote.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B68F592E1FB67000431E14 /* thermnote.c */; };
+		68B68F6A2E20FDFC00431E14 /* thermwatch.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B68F682E20F48900431E14 /* thermwatch.c */; };
+		68B68F6C2E21026600431E14 /* thermal.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B68F6B2E21026600431E14 /* thermal.c */; };
 		68D6DEBE2D745DBC00E129A0 /* SegmentedViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D6DEBD2D745DBC00E129A0 /* SegmentedViewCell.m */; };
 		68FBDCE82DE1A1D40057870A /* protect.S in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDCE72DE1A1D40057870A /* protect.S */; };
 		68FBDCF02DE30A5E0057870A /* worker.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDCEF2DE30A5E0057870A /* worker.c */; };
@@ -146,6 +148,15 @@
 			runOnlyForDeploymentPostprocessing = 1;
 		};
 		68B68F502E1FB66000431E14 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		68B68F5F2E20F47600431E14 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -254,6 +265,10 @@
 		68B68F402E1FB4A600431E14 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
 		68B68F522E1FB66000431E14 /* thermnote */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = thermnote; sourceTree = BUILT_PRODUCTS_DIR; };
 		68B68F592E1FB67000431E14 /* thermnote.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = thermnote.c; path = utils/thermnote/thermnote.c; sourceTree = "<group>"; };
+		68B68F612E20F47600431E14 /* thermwatch */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = thermwatch; sourceTree = BUILT_PRODUCTS_DIR; };
+		68B68F682E20F48900431E14 /* thermwatch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = thermwatch.c; path = utils/thermwatch/thermwatch.c; sourceTree = "<group>"; };
+		68B68F6B2E21026600431E14 /* thermal.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = thermal.c; sourceTree = "<group>"; };
+		68B68F6D2E21029000431E14 /* thermal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = thermal.h; sourceTree = "<group>"; };
 		68CC02872DB3C57B00914051 /* SF-Pro-Display-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SF-Pro-Display-Regular.otf"; path = "../../../wifi/20/SFSymbols.pkg/Library/Fonts/SF-Pro-Display-Regular.otf"; sourceTree = "<group>"; };
 		68D6DEBD2D745DBC00E129A0 /* SegmentedViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SegmentedViewCell.m; sourceTree = "<group>"; };
 		68D6DEBF2D745DCB00E129A0 /* SegmentedViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SegmentedViewCell.h; sourceTree = "<group>"; };
@@ -318,6 +333,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		68B68F5E2E20F47600431E14 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -344,6 +366,7 @@
 		686AECB62D3B93CB0059ECD0 = {
 			isa = PBXGroup;
 			children = (
+				68B68F5C2E20F46400431E14 /* thermwatch */,
 				68B68F4D2E1FB60A00431E14 /* thermnote */,
 				68B68F2E2E1FB3DB00431E14 /* thermhid */,
 				687743192D46359200375A2C /* Config.xcconfig */,
@@ -361,6 +384,7 @@
 				686AECBF2D3B93CB0059ECD0 /* Battman.app */,
 				68B68F362E1FB42400431E14 /* thermhid */,
 				68B68F522E1FB66000431E14 /* thermnote */,
+				68B68F612E20F47600431E14 /* thermwatch */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -460,6 +484,8 @@
 				68B33C3F2DAF9B38008EA090 /* inductive_status.h */,
 				68B2913B2DD86AAB0089BA1F /* accessory.h */,
 				68B2913C2DD86AAB0089BA1F /* accessory.c */,
+				68B68F6D2E21029000431E14 /* thermal.h */,
+				68B68F6B2E21026600431E14 /* thermal.c */,
 			);
 			path = battery_utils;
 			sourceTree = "<group>";
@@ -555,6 +581,14 @@
 			name = thermnote;
 			sourceTree = "<group>";
 		};
+		68B68F5C2E20F46400431E14 /* thermwatch */ = {
+			isa = PBXGroup;
+			children = (
+				68B68F682E20F48900431E14 /* thermwatch.c */,
+			);
+			name = thermwatch;
+			sourceTree = "<group>";
+		};
 		68DCA5B42D40EDE8004D0104 /* Localizations */ = {
 			isa = PBXGroup;
 			children = (
@@ -644,6 +678,23 @@
 			productReference = 68B68F522E1FB66000431E14 /* thermnote */;
 			productType = "com.apple.product-type.tool";
 		};
+		68B68F602E20F47600431E14 /* thermwatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 68B68F652E20F47600431E14 /* Build configuration list for PBXNativeTarget "thermwatch" */;
+			buildPhases = (
+				68B68F5D2E20F47600431E14 /* Sources */,
+				68B68F5E2E20F47600431E14 /* Frameworks */,
+				68B68F5F2E20F47600431E14 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = thermwatch;
+			productName = thermwatch;
+			productReference = 68B68F612E20F47600431E14 /* thermwatch */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -665,6 +716,9 @@
 						CreatedOnToolsVersion = 12.5.1;
 					};
 					68B68F512E1FB66000431E14 = {
+						CreatedOnToolsVersion = 12.5.1;
+					};
+					68B68F602E20F47600431E14 = {
 						CreatedOnToolsVersion = 12.5.1;
 					};
 					68DCA5AF2D40EC57004D0104 = {
@@ -701,6 +755,7 @@
 				687743262D4CACBD00375A2C /* pofiles update */,
 				68B68F352E1FB42400431E14 /* thermhid */,
 				68B68F512E1FB66000431E14 /* thermnote */,
+				68B68F602E20F47600431E14 /* thermwatch */,
 			);
 		};
 /* End PBXProject section */
@@ -850,6 +905,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6834254B2D7C4F560070CE6F /* iokit_connection.c in Sources */,
+				68B68F6C2E21026600431E14 /* thermal.c in Sources */,
 				68AFCBA42E054D04007A9EC7 /* UILabel+SFSymbolsOverride.m in Sources */,
 				68AE40BE2D8EB8870023D7B0 /* SegmentButton.m in Sources */,
 				687743462D4F6C7800375A2C /* BatteryCellView.m in Sources */,
@@ -910,6 +966,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				68B68F5B2E1FB67B00431E14 /* thermnote.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		68B68F5D2E20F47600431E14 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				68B68F6A2E20FDFC00431E14 /* thermwatch.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1229,6 +1293,38 @@
 			};
 			name = Release;
 		};
+		68B68F662E20F47600431E14 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphoneos";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		68B68F672E20F47600431E14 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphoneos";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
 		68DCA5B12D40EC58004D0104 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1320,6 +1416,15 @@
 			buildConfigurations = (
 				68B68F572E1FB66000431E14 /* Debug */,
 				68B68F582E1FB66000431E14 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		68B68F652E20F47600431E14 /* Build configuration list for PBXNativeTarget "thermwatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				68B68F662E20F47600431E14 /* Debug */,
+				68B68F672E20F47600431E14 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
