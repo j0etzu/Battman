@@ -142,6 +142,13 @@ static NSMutableDictionary *thermalBasics;
 	return _("HID Raw Data");
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+	if (section == 2) {
+		return _("Some sensors may not provide real‑time temperature data.");
+	}
+	return nil;
+}
+
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
 
@@ -152,13 +159,6 @@ static NSMutableDictionary *thermalBasics;
 			show_alert([cell.textLabel.text UTF8String], _C("Maximum device‑skin temperature per thermal‑monitoring cycle. Exceeding this threshold within the cycle automatically generates an AppleCare thermal‑exception log."), L_OK);
 		}
 	}
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
-	if (section == 2) {
-		return _("Some sensors may not provide real‑time temperature data.");
-	}
-	return nil;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)ip {
