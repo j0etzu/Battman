@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Battman 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-17 17:48+0800\n"
+"POT-Creation-Date: 2025-07-17 18:11+0800\n"
 "PO-Revision-Date: 2025-01-27 17:32+0800\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -53,13 +53,13 @@ msgid "mV"
 msgstr "mV"
 
 #: /Users/torrekie/proj/Battman/Battman/common.c:343
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:33
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:34
 #: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:103
 msgid "True"
 msgstr "True"
 
 #: /Users/torrekie/proj/Battman/Battman/common.c:344
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:33
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:34
 #: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:105
 msgid "False"
 msgstr "False"
@@ -181,7 +181,7 @@ msgid "Enabled"
 msgstr "Enabled"
 
 #: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:123
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:166
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:177
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:839
 msgid "Disabled"
 msgstr "Disabled"
@@ -289,73 +289,73 @@ msgstr "License"
 msgid "Terms of Use"
 msgstr "Terms of Use"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:43
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:44
 msgid "Device Avg."
 msgstr "Device Avg."
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:45
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:46
 msgid "Battery Cell 1"
 msgstr "Battery Cell 1"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:46
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:47
 msgid "Battery Cell 2"
 msgstr "Battery Cell 2"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:47
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:48
 msgid "Battery Cell 3"
 msgstr "Battery Cell 3"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:48
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:49
 msgid "Battery Cell 4"
 msgstr "Battery Cell 4"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:49
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:50
 msgid "Camera Module"
 msgstr "Camera Module"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:52
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:53
 msgid "Thermal Pressure"
 msgstr "Thermal Pressure"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:54
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:55
 msgid "Thermal Notification Level"
 msgstr "Thermal Notification Level"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:55
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:147
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:56
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:151
 msgid "Max Trigger Temperature"
 msgstr "Max Trigger Temperature"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:56
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:57
 msgid "Sunlight Exposure"
 msgstr "Sunlight Exposure"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:107
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:110
 #: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:107
 msgid "Hardware Temperature"
 msgstr "Hardware Temperature"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:130
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:134
 msgid "System Thermal Monitor Status"
 msgstr "System Thermal Monitor Status"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:132
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:136
 msgid "Thermal Basics"
 msgstr "Thermal Basics"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:134
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:138
 msgid "Device Sensors"
 msgstr "Device Sensors"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:136
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:140
 msgid "HID"
 msgstr "HID"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:138
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:142
 msgid "HID Raw Data"
 msgstr "HID Raw Data"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:145
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:149
 msgid ""
 "ThermalMonitor is a critical system component responsible for managing "
 "device and battery health. Disabling it may lead to unexpected behavior and "
@@ -365,7 +365,7 @@ msgstr ""
 "device and battery health. Disabling it may lead to unexpected behavior and "
 "is not recommended."
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:148
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:152
 msgid ""
 "Maximum device‑skin temperature per thermal‑monitoring cycle. Exceeding this "
 "threshold within the cycle automatically generates an AppleCare "
@@ -375,7 +375,11 @@ msgstr ""
 "threshold within the cycle automatically generates an AppleCare "
 "thermal‑exception log."
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:165
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:159
+msgid "Some sensors may not provide real‑time temperature data."
+msgstr "Some sensors may not provide real‑time temperature data."
+
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:176
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:77
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:112
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:690
@@ -383,15 +387,15 @@ msgstr ""
 msgid "Status"
 msgstr "Status"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:190
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:203
 msgid "Running"
 msgstr "Running"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:192
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:205
 msgid "Simulator"
 msgstr "Simulator"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:202
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:215
 msgid "Unable to detect"
 msgstr "Unable to detect"
 

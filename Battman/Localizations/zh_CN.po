@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Battman 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-17 17:48+0800\n"
+"POT-Creation-Date: 2025-07-17 18:11+0800\n"
 "PO-Revision-Date: 2025-01-27 17:32+0800\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -53,13 +53,13 @@ msgid "mV"
 msgstr "mV"
 
 #: /Users/torrekie/proj/Battman/Battman/common.c:343
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:33
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:34
 #: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:103
 msgid "True"
 msgstr "是"
 
 #: /Users/torrekie/proj/Battman/Battman/common.c:344
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:33
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:34
 #: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:105
 msgid "False"
 msgstr "否"
@@ -179,7 +179,7 @@ msgid "Enabled"
 msgstr "已启用"
 
 #: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:123
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:166
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:177
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:839
 msgid "Disabled"
 msgstr "已禁用"
@@ -287,73 +287,73 @@ msgstr "证书"
 msgid "Terms of Use"
 msgstr "使用条款"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:43
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:44
 msgid "Device Avg."
 msgstr "设备平均"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:45
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:46
 msgid "Battery Cell 1"
 msgstr "电池电芯1"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:46
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:47
 msgid "Battery Cell 2"
 msgstr "电池电芯2"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:47
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:48
 msgid "Battery Cell 3"
 msgstr "电池电芯3"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:48
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:49
 msgid "Battery Cell 4"
 msgstr "电池电芯4"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:49
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:50
 msgid "Camera Module"
 msgstr "相机模块"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:52
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:53
 msgid "Thermal Pressure"
 msgstr "温控压力"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:54
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:55
 msgid "Thermal Notification Level"
 msgstr "温控通知等级"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:55
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:147
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:56
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:151
 msgid "Max Trigger Temperature"
 msgstr "最大触发温度"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:56
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:57
 msgid "Sunlight Exposure"
 msgstr "阳光暴晒"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:107
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:110
 #: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:107
 msgid "Hardware Temperature"
 msgstr "硬件温度"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:130
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:134
 msgid "System Thermal Monitor Status"
 msgstr "系统温控状态"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:132
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:136
 msgid "Thermal Basics"
 msgstr "温控信息"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:134
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:138
 msgid "Device Sensors"
 msgstr "设备传感器"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:136
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:140
 msgid "HID"
 msgstr "HID"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:138
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:142
 msgid "HID Raw Data"
 msgstr "HID原始数据"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:145
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:149
 msgid ""
 "ThermalMonitor is a critical system component responsible for managing "
 "device and battery health. Disabling it may lead to unexpected behavior and "
@@ -362,7 +362,7 @@ msgstr ""
 "温度监测器是维护设备与电池健康的重要系统组件。手动禁用可能导致不可预期的行"
 "为，不建议进行此操作。"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:148
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:152
 msgid ""
 "Maximum device‑skin temperature per thermal‑monitoring cycle. Exceeding this "
 "threshold within the cycle automatically generates an AppleCare "
@@ -371,7 +371,11 @@ msgstr ""
 "单次温控监测周期内允许的最高机身表面温度。若在该周期内超过此阈值，系统将自动"
 "记录 AppleCare 温控异常日志。"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:165
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:159
+msgid "Some sensors may not provide real‑time temperature data."
+msgstr "某些传感器可能无法实时提供温度数据。"
+
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:176
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:77
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:112
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:690
@@ -379,15 +383,15 @@ msgstr ""
 msgid "Status"
 msgstr "状态"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:190
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:203
 msgid "Running"
 msgstr "正在运行"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:192
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:205
 msgid "Simulator"
 msgstr "虚拟机"
 
-#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:202
+#: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:215
 msgid "Unable to detect"
 msgstr "无法检测"
 
