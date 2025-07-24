@@ -44,6 +44,10 @@ int connect_to_daemon(void) {
 
 @implementation ChargingLimitViewController
 
+- (NSString *)title {
+	return _("Charging Limit");
+}
+
 - (instancetype)init {
     if (@available(iOS 13.0, *)) {
         self = [super initWithStyle:UITableViewStyleInsetGrouped];

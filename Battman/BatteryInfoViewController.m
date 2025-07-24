@@ -9,6 +9,7 @@
 #import "UPSMonitor.h"
 
 #include "common.h"
+#include "intlextern.h"
 
 // TODO: UI Refreshing
 
@@ -91,7 +92,7 @@ enum sections_batteryinfo {
 
 - (NSInteger)tableView:(id)tv numberOfRowsInSection:(NSInteger)section {
 	if (section == BI_SECT_MANAGE)
-		return 2;
+		return 3;
     return 1;
 }
 
@@ -119,31 +120,51 @@ enum sections_batteryinfo {
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == BI_SECT_BATTERY_INFO)
         [self.navigationController pushViewController:[[BatteryDetailsViewController alloc] initWithBatteryInfo:&batteryInfo] animated:YES];
-	else if (indexPath.section == BI_SECT_MANAGE)
-		[self.navigationController pushViewController:indexPath.row == 0 ? [ChargingManagementViewController new] : [ChargingLimitViewController new] animated:YES];
-    else if(indexPath.section==BI_SECT_HW_TEMP)
-    	[self.navigationController pushViewController:[SimpleTemperatureViewController new] animated:1];
+	else if (indexPath.section == BI_SECT_HW_TEMP)
+		[self.navigationController pushViewController:[SimpleTemperatureViewController new] animated:YES];
+	else if (indexPath.section == BI_SECT_MANAGE) {
+		UIViewController *vc = nil;
+		switch (indexPath.row) {
+			case 0:
+				vc = [ChargingManagementViewController new];
+				break;
+			case 1:
+				vc = [ChargingLimitViewController new];
+				break;
+			case 2:
+				//vc = [ThermalTunesViewContoller new];
+				break;
+			default:
+				break;
+		}
+		if (vc)
+			[self.navigationController pushViewController:vc animated:YES];
+		else
+			show_alert(_C("Unimplemented Yet"), _C("Will be introduced in future updates."), L_OK);
+	}
     [tv deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tv
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == BI_SECT_BATTERY_INFO) {
-        BatteryInfoTableViewCell *cell=[tv dequeueReusableCellWithIdentifier:@"BTTVC-cell"];
-        if(!cell)
-        	cell=[BatteryInfoTableViewCell new];
+        BatteryInfoTableViewCell *cell = [tv dequeueReusableCellWithIdentifier:@"BTTVC-cell"];
+        if (!cell)
+        	cell = [BatteryInfoTableViewCell new];
         cell.batteryInfo = &batteryInfo;
         // battery_info_update shall be called within cell impl.
         [cell updateBatteryInfo];
         return cell;
     } else if (indexPath.section == BI_SECT_HW_TEMP) {
-        TemperatureInfoTableViewCell *cell=[tv dequeueReusableCellWithIdentifier:@"TITVC-ri"];
-        if(!cell)
-        	cell=[TemperatureInfoTableViewCell new];
+        TemperatureInfoTableViewCell *cell = [tv dequeueReusableCellWithIdentifier:@"TITVC-ri"];
+        if (!cell)
+        	cell = [TemperatureInfoTableViewCell new];
         return cell;
     } else if (indexPath.section == BI_SECT_MANAGE) {
         UITableViewCell *cell = [UITableViewCell new];
-        cell.textLabel.text = indexPath.row == 0 ? _("Charging Management") : _("Charging Limit");
+		// I want NSConstantArray
+		NSArray *rows = @[_("Charging Management"), _("Charging Limit"), _("Thermal Tunes")];
+		cell.textLabel.text = rows[indexPath.row];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         return cell;
     }

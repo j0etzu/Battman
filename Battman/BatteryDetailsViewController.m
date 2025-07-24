@@ -115,6 +115,7 @@ void equipDetailCell(UITableViewCell *cell, struct battery_info_node *i) {
 				// Special: Convert minutes to localized timer
 				NSDateComponentsFormatter *fmt = [[NSDateComponentsFormatter alloc] init];
 				fmt.calendar.locale            = [NSLocale localeWithLocaleIdentifier:[NSString stringWithUTF8String:preferred_language()]];
+				fmt.allowedUnits               = NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute;
 				fmt.unitsStyle                 = NSDateComponentsFormatterUnitsStyleShort;
 				fmt.zeroFormattingBehavior     = NSDateComponentsFormatterZeroFormattingBehaviorDropAll;
 				final_str                      = [fmt stringFromTimeInterval:value * 60];

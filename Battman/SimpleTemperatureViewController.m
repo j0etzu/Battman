@@ -2,6 +2,7 @@
 #import "common.h"
 #include "intlextern.h"
 
+#include "scprefs/wrapper.h"
 #include "battery_utils/thermal.h"
 
 // battery_utils/hid.m
@@ -117,7 +118,7 @@ static NSMutableDictionary *thermalBasics;
 
 - (NSInteger)tableView:(id)tv numberOfRowsInSection:(NSInteger)section {
 	if (section == 0) {
-		return 1;
+		return 2;
 	} else if (section == 1) {
 		return thermalBasics.count;
 	} else if (section == 2) {
@@ -131,7 +132,7 @@ static NSMutableDictionary *thermalBasics;
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 	switch (section) {
 		case 0:
-			return _("System Thermal Monitor Status");
+			return _("System Thermal Monitor State");
 		case 1:
 			return _("Thermal Basics");
 		case 2:
@@ -143,6 +144,10 @@ static NSMutableDictionary *thermalBasics;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+	// Consider use NSAttributedString here
+	if (section == 0) {
+		return _("Adjust ThermalMonitor behavior on the Thermal Tunes page.");
+	}
 	if (section == 2) {
 		return _("Some sensors may not provide real‑time temperature data.");
 	}
@@ -153,7 +158,9 @@ static NSMutableDictionary *thermalBasics;
 	UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
 
 	if (indexPath.section == 0) {
-		show_alert([cell.textLabel.text UTF8String], _C("ThermalMonitor is a critical system component responsible for managing device and battery health. Disabling it may lead to unexpected behavior and is not recommended."), L_OK);
+		if ([cell.textLabel.text isEqualToString:_("Daemon State")]) {
+			show_alert([cell.textLabel.text UTF8String], _C("ThermalMonitor is a critical system component responsible for managing device and battery health. Disabling it may lead to unexpected behavior and is not recommended."), L_OK);
+		}
 	} else if (indexPath.section == 1) {
 		if ([cell.textLabel.text isEqualToString:_("Max Trigger Temperature")]) {
 			show_alert([cell.textLabel.text UTF8String], _C("Maximum device‑skin temperature per thermal‑monitoring cycle. Exceeding this threshold within the cycle automatically generates an AppleCare thermal‑exception log."), L_OK);
@@ -172,47 +179,73 @@ static NSMutableDictionary *thermalBasics;
 		cell = [tv dequeueReusableCellWithIdentifier:@"thermalmonitord"];
 		if (!cell)
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"thermalmonitord"];
+		if (ip.row == 0) {
+			cell.textLabel.text = _("Daemon State");
+			cell.detailTextLabel.text = _("Disabled");
 
-		cell.textLabel.text = _("Status");
-		cell.detailTextLabel.text = _("Disabled");
-
-		NSOperatingSystemVersion ios13 = {
-			.majorVersion = 13,
-			.minorVersion = 0,
-			.patchVersion = 0,
-		};
-		int pid = -1;
-		if (is_platformized() ) {
-			if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:ios13]) {
-				pid = get_pid_for_launchd_label("com.apple.thermalmonitord");
+			NSOperatingSystemVersion ios13 = {
+				.majorVersion = 13,
+				.minorVersion = 0,
+				.patchVersion = 0,
+			};
+			int pid = -1;
+			if (is_platformized() ) {
+				if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:ios13]) {
+					pid = get_pid_for_launchd_label("com.apple.thermalmonitord");
+				} else {
+					// TODO: iOS 12: also need to check if ThermalMonitor.bundle is loaded, but I don't have device
+					pid = get_pid_for_launchd_label("com.apple.mobilewatchdog");
+				}
 			} else {
-				// TODO: iOS 12: also need to check if ThermalMonitor.bundle is loaded, but I don't have device
-				pid = get_pid_for_launchd_label("com.apple.mobilewatchdog");
+				// Not that accurate workaround
+				// get_pid_for_procname() currently uses kp_proc.p_comm to match process
+				// which can be possibly spoofed
+				if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:ios13])
+					pid = get_pid_for_procname("thermalmonitord");
+				else
+					pid = get_pid_for_procname("mobilewatchdog");
 			}
-		} else {
-			// Not that accurate workaround
-			// get_pid_for_procname() currently uses kp_proc.p_comm to match process
-			// which can be possibly spoofed
-			if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:ios13])
-				pid = get_pid_for_procname("thermalmonitord");
-			else
-				pid = get_pid_for_procname("mobilewatchdog");
-		}
 
-		if (pid != -1 && pid != 0) {
-			cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (%d)", _("Running"), pid];
-		} else if (is_rosetta() || getenv("SIMULATOR_DEVICE_NAME")) {
-			cell.detailTextLabel.text = _("Simulator");
-		} else {
-			UIColor *red;
-			if (@available(iOS 13.0, *))
-				red = [UIColor systemRedColor];
-			else
-				red = [UIColor redColor];
-			cell.detailTextLabel.textColor = red;
-			cell.accessoryType = UITableViewCellAccessoryDetailButton;
-			if (pid == -1) {
-				cell.detailTextLabel.text = _("Unable to detect");
+			if (pid != -1 && pid != 0) {
+				cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (%d)", _("Running"), pid];
+			} else if (is_rosetta() || getenv("SIMULATOR_DEVICE_NAME")) {
+				cell.detailTextLabel.text = _("Simulator");
+			} else {
+				UIColor *red;
+				if (@available(iOS 13.0, *))
+					red = [UIColor systemRedColor];
+				else
+					red = [UIColor redColor];
+				cell.detailTextLabel.textColor = red;
+				cell.accessoryType = UITableViewCellAccessoryDetailButton;
+				if (pid == -1) {
+					cell.detailTextLabel.text = _("Unable to detect");
+				}
+			}
+		} else if (ip.row == 1) {
+			cell.textLabel.text = _("CLTM State");
+			int status = getCLTMStatus();
+			switch (status) {
+				case 3:
+					cell.detailTextLabel.text = _("Using CLTMv2");
+					break;
+				case 0:
+					cell.detailTextLabel.text = _("Unsupported");
+					break;
+				case -1:
+					cell.detailTextLabel.text = _("Error");
+					break;
+				default:
+					cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (%d)", _("Not Running"), status];
+					break;
+			}
+			if (status != 3) {
+				UIColor *red;
+				if (@available(iOS 13.0, *))
+					red = [UIColor systemRedColor];
+				else
+					red = [UIColor redColor];
+				cell.detailTextLabel.textColor = red;
 			}
 		}
 		return cell;

@@ -106,6 +106,8 @@
 		68B68F5B2E1FB67B00431E14 /* thermnote.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B68F592E1FB67000431E14 /* thermnote.c */; };
 		68B68F6A2E20FDFC00431E14 /* thermwatch.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B68F682E20F48900431E14 /* thermwatch.c */; };
 		68B68F6C2E21026600431E14 /* thermal.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B68F6B2E21026600431E14 /* thermal.c */; };
+		68B7513E2E2A425D003C94BC /* wrapper.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B7513D2E2A425D003C94BC /* wrapper.c */; };
+		68B751422E2A468C003C94BC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B751412E2A468C003C94BC /* SystemConfiguration.framework */; };
 		68D6DEBE2D745DBC00E129A0 /* SegmentedViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D6DEBD2D745DBC00E129A0 /* SegmentedViewCell.m */; };
 		68FBDCE82DE1A1D40057870A /* protect.S in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDCE72DE1A1D40057870A /* protect.S */; };
 		68FBDCF02DE30A5E0057870A /* worker.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDCEF2DE30A5E0057870A /* worker.c */; };
@@ -269,6 +271,11 @@
 		68B68F682E20F48900431E14 /* thermwatch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = thermwatch.c; path = utils/thermwatch/thermwatch.c; sourceTree = "<group>"; };
 		68B68F6B2E21026600431E14 /* thermal.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = thermal.c; sourceTree = "<group>"; };
 		68B68F6D2E21029000431E14 /* thermal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = thermal.h; sourceTree = "<group>"; };
+		68B7513C2E2A425D003C94BC /* scprefs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = scprefs.h; sourceTree = "<group>"; };
+		68B7513D2E2A425D003C94BC /* wrapper.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = wrapper.c; sourceTree = "<group>"; };
+		68B7513F2E2A426F003C94BC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		68B751402E2A4529003C94BC /* wrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = wrapper.h; sourceTree = "<group>"; };
+		68B751412E2A468C003C94BC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		68CC02872DB3C57B00914051 /* SF-Pro-Display-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SF-Pro-Display-Regular.otf"; path = "../../../wifi/20/SFSymbols.pkg/Library/Fonts/SF-Pro-Display-Regular.otf"; sourceTree = "<group>"; };
 		68D6DEBD2D745DBC00E129A0 /* SegmentedViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SegmentedViewCell.m; sourceTree = "<group>"; };
 		68D6DEBF2D745DCB00E129A0 /* SegmentedViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SegmentedViewCell.h; sourceTree = "<group>"; };
@@ -311,6 +318,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68B751422E2A468C003C94BC /* SystemConfiguration.framework in Frameworks */,
 				6838BF6F2DB8D89E007EB66C /* WebKit.framework in Frameworks */,
 				684A9EF22D65F0AF006265DC /* intl.framework in Frameworks */,
 				68A3EAFD2D5204EA003381DF /* IOKit.framework in Frameworks */,
@@ -392,6 +400,7 @@
 		686AECC12D3B93CB0059ECD0 /* Battman */ = {
 			isa = PBXGroup;
 			children = (
+				68B751382E2A423B003C94BC /* scprefs */,
 				68B16F0C2E1BBC4B009B63AC /* ObjCExt */,
 				6846114A2E0D5211006B651D /* hw */,
 				68FBDCF12DE30A740057870A /* cobjc */,
@@ -454,6 +463,7 @@
 		687743162D461E5100375A2C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				68B751412E2A468C003C94BC /* SystemConfiguration.framework */,
 				68B68F402E1FB4A600431E14 /* IOKit.framework */,
 				68B68F3E2E1FB4A200431E14 /* CoreFoundation.framework */,
 				68B291402DD9EAAB0089BA1F /* libIOAccessoryManager.tbd */,
@@ -587,6 +597,17 @@
 				68B68F682E20F48900431E14 /* thermwatch.c */,
 			);
 			name = thermwatch;
+			sourceTree = "<group>";
+		};
+		68B751382E2A423B003C94BC /* scprefs */ = {
+			isa = PBXGroup;
+			children = (
+				68B7513C2E2A425D003C94BC /* scprefs.h */,
+				68B751402E2A4529003C94BC /* wrapper.h */,
+				68B7513D2E2A425D003C94BC /* wrapper.c */,
+				68B7513F2E2A426F003C94BC /* README.md */,
+			);
+			path = scprefs;
 			sourceTree = "<group>";
 		};
 		68DCA5B42D40EDE8004D0104 /* Localizations */ = {
@@ -918,6 +939,7 @@
 				68AE40BA2D8EB8870023D7B0 /* DividerView.m in Sources */,
 				68B16F072E167CE6009B63AC /* DatePickerTableViewCell.m in Sources */,
 				68B2913A2DD1FEDA0089BA1F /* hid.m in Sources */,
+				68B7513E2E2A425D003C94BC /* wrapper.c in Sources */,
 				68B16F122E1BBCC7009B63AC /* NSData+HexString.m in Sources */,
 				68B291362DD1E6960089BA1F /* SimpleTemperatureViewController.m in Sources */,
 				6838BF762DBF810D007EB66C /* localized.c in Sources */,
