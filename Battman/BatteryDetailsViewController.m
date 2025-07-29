@@ -432,8 +432,11 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 		cell_class = [MultilineViewCell class];
 	}
 	UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:ident];
-	cell.accessoryType    = 0;
-	cell.accessoryView    = nil;
+	if(cell) {
+		cell.accessoryType=0;
+		cell.accessoryView=nil;
+		cell.detailTextLabel.font=[UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+	}
 	if (!cell)
 		cell = [[cell_class alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ident];
 
