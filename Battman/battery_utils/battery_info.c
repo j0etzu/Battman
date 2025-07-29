@@ -819,10 +819,14 @@ void accessory_info_update(struct battery_info_section *section) {
 		bi_destroy_section(section);
 		return;
 	}
+	
+	// This is temporary, subcells will be implemented to replace this terrible impl.
+	char str_buf[512];
+	char *bufptr=str_buf;
 
 	/* IOAM Part */
 	const char *idstr = acc_id_string(acc_id);
-	BI_FORMAT_ITEM(_C("Acc. ID"), "%s", idstr);
+	BI_FORMAT_ITEM(_C("Acc. ID"), "%d\n%s", acc_id,idstr);
 	BI_FORMAT_ITEM_IF(features != -1, _C("Allowed Features"), "0x%.8X", features);
 	BI_FORMAT_ITEM_IF(port_type != -1, _C("Port Type"), "%s", acc_port_type_string(port_type));
 	BI_FORMAT_ITEM_IF(*accinfo.serial, _C("Serial No."), "%s", accinfo.serial);
@@ -834,7 +838,15 @@ void accessory_info_update(struct battery_info_section *section) {
 	BI_FORMAT_ITEM_IF(*accinfo.fwVer, _C("Firmware Version"), "%s", accinfo.fwVer);
 	BI_FORMAT_ITEM_IF(*accinfo.hwVer, _C("Hardware Version"), "%s", accinfo.hwVer);
 	BI_FORMAT_ITEM(_C("Battery Pack"), "%s", get_acc_battery_pack_mode(connect) ? L_TRUE : L_FALSE);
-	BI_FORMAT_ITEM(_C("Power Mode"), "%s: %s\n%s: %s\n%s", cond_localize_c("Configured Mode"), acc_powermode_string(mode.mode), cond_localize_c("Active Mode"), acc_powermode_string(mode.active), acc_powermode_string_supported(mode));
+	
+	bufptr+=sprintf(bufptr,"%s: ",cond_localize_c("Configured Mode"));
+	acc_powermode_string(mode.mode,&bufptr);
+	*(bufptr++)='\n';
+	bufptr+=sprintf(bufptr,"%s: ",cond_localize_c("Active Mode"));
+	acc_powermode_string(mode.active,&bufptr);
+	*(bufptr++)='\n';
+	acc_powermode_string_supported(mode,&bufptr);
+	BI_FORMAT_ITEM(_C("Power Mode"), "%s", str_buf);
 	if (sleep.supported) {
 		BI_FORMAT_ITEM(_C("Sleep Power"), "%s\n%s: %d", sleep.enabled ? cond_localize_c("Enabled") : cond_localize_c("Disabled"), cond_localize_c("Limit"), sleep.limit);
 	} else {
@@ -926,7 +938,10 @@ void accessory_info_update(struct battery_info_section *section) {
 		SInt32 voltage = 0;
 		BI_SET_ITEM_IF((get_acc_usb_voltage(connect, &voltage) != kIOReturnNotAttached), _C("USB Charging Volt."), voltage);
 		// XXX: Consider use custom UI for this
-		BI_FORMAT_ITEM_IF((get_acc_usb_ilim(connect, &ilim) != kIOReturnNotAttached), _C("USB Current Config"), "%s", acc_usb_ilim_string_multiline(ilim));
+		if(get_acc_usb_ilim(connect, &ilim) != kIOReturnNotAttached) {
+			acc_usb_ilim_string_multiline(ilim,str_buf);
+			BI_FORMAT_ITEM(_C("USB Current Config"), "%s", str_buf);
+		}
 		/* TODO: Transport types */
 
 		/* How do we actually get VID/PID if wired? MFA Cables does not seems having them */
@@ -935,8 +950,8 @@ void accessory_info_update(struct battery_info_section *section) {
 	} else if (context->primary_port == 257) {
 		/* TODO: Scorpius */
 	}
-
-	BI_FORMAT_ITEM_IF(inductive_fw_mode != -1, _C("Inductive FW Mode"), "%s", acc_inductive_mode_string(inductive_fw_mode));
+	acc_inductive_mode_string(inductive_fw_mode,str_buf);
+	BI_FORMAT_ITEM_IF(inductive_fw_mode != -1, _C("Inductive FW Mode"), "%s", str_buf);
 	BI_FORMAT_ITEM_IF(inductive_region != -1, _C("Inductive Region Code"), "0x%04x (%c%c)", (uint16_t)inductive_region, (inductive_region & 0xFF00) >> 8, inductive_region & 0xFF);
 	BI_SET_ITEM_IF(inductive_timeout, _C("Inductive Auth Timeout"), inductive_timeout);
 	/* MagSafe Charger: kHIDPage_AppleVendor:17 */

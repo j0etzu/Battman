@@ -46,26 +46,18 @@ const char *acc_id_50_5e[] = {
 
 /* Sadly I didn't got the full list of accids, but we can guess */
 const char *acc_id_string(int accid) {
-	static _Thread_local char buf[256];
-
-	buf[0] = '\0';
 	if (accid >= 0 && accid < 16) {
-		snprintf(buf, sizeof(buf), "%d\n(%s)", accid, acc_id_0_f[accid]);
+		return acc_id_0_f[accid];
 	} else if (accid > 79 && accid < 95 && accid != 89) {
 		int idx = accid - 80;
-		snprintf(buf, sizeof(buf), "%d\n(%s)", accid, acc_id_50_5e[idx]);
+		return acc_id_50_5e[idx];
 	} else if (accid == 70) {
-		snprintf(buf, sizeof(buf), "%d\n(Scorpius: unknown)", accid);
+		return "(Scorpius: unknown)";
 	} else if (accid == 71) {
-		snprintf(buf, sizeof(buf), "%d\n(Scorpius: pencil)", accid);
+		return "(Scorpius: pencil)";
 	}
 	
-	if (buf[0] != '\0') {
-		return buf;
-	}
-	// Fallback for unknown IDs
-	snprintf(buf, sizeof(buf), "%d", accid);
-	return buf;
+	return "";
 }
 
 
@@ -122,73 +114,74 @@ static const char *acc_inductive_modes[] = {
 extern const char *cond_localize_c(const char *);
 #define _C(x) cond_localize_c(x)
 
-const char *acc_powermode_string(AccessoryPowermode powermode) {
-	static char modestr[32];
+void acc_powermode_string(AccessoryPowermode powermode, char **pbuf) {
 	// IOAM modes are starting form 1
 	if ((powermode - 1) < kIOAMPowermodeCount) {
-		return _C(acc_powermodes[powermode - 1]);
+		*pbuf=stpcpy(*pbuf,_C(acc_powermodes[powermode - 1]));
+		return;
 	}
 
-	snprintf(modestr, 32, "<%d>", powermode);
-	return modestr;
+	(*pbuf) +=sprintf(*pbuf, "<%d>", powermode);
 }
-const char *acc_usb_connstat_string(SInt32 usb_connstat) {
+const char *acc_usb_connstat_string(int usb_connstat) {
 	if (usb_connstat > 5) return _C("Unknown");
 	
 	return _C(acc_usb_connstats[usb_connstat]);
 }
 
-const char *acc_powermode_string_supported(accessory_powermode_t mode) {
-	if (mode.supported_cnt == 0) return NULL;
-
-	static char buffer[1024];
-	sprintf(buffer, "%s: ", _C("Supported List"));
-	for (size_t i = 0; i < mode.supported_cnt; i++) {
-		sprintf(buffer, "%s%s%s<%lu %s>", buffer, (i == 0) ? "" : "\n", acc_powermode_string(mode.supported[i]), mode.supported_lim[i], L_MA);
+void acc_powermode_string_supported(accessory_powermode_t mode, char **pbuf) {
+	if (mode.supported_cnt == 0) {
+		**pbuf=0;
+		return;
 	}
 
-	return buffer;
+	(*pbuf)+=sprintf(*pbuf, "%s: ", _C("Supported List"));
+	for (size_t i = 0; i < mode.supported_cnt; i++) {
+		(*pbuf)+=sprintf(*pbuf, "%s", (i == 0) ? "" : "\n");
+		acc_powermode_string(mode.supported[i],pbuf);
+		(*pbuf)+=sprintf(*pbuf, "<%lu %s>", mode.supported_lim[i], L_MA);
+	}
 }
 
-const char *acc_usb_ilim_string_multiline(accessory_usb_ilim_t ilim) {
-	if (ilim.limit == 0) return _C("Detached");
+void acc_usb_ilim_string_multiline(accessory_usb_ilim_t ilim, char *pbuf) {
+	if (ilim.limit == 0) {
+		strcpy(pbuf,_C("Detached"));
+		return;
+	}
 
 	// XXX: This is terrible, consider migrate to a better UI
-	static char buffer[1024];
-	sprintf(buffer, "%s: %lu %s", _C("Limit"), (unsigned long)ilim.limit, L_MA);
+	pbuf+=sprintf(pbuf, "%s: %lu %s", _C("Limit"), (unsigned long)ilim.limit, L_MA);
 	if (ilim.base || ilim.offset || ilim.max) {
-		sprintf(buffer, "%s\n(", buffer);
+		pbuf=stpcpy(pbuf, "\n(");
 		if (ilim.base)
-			sprintf(buffer, "%s%s: %lu", buffer, _C("Base"), (unsigned long)ilim.base);
+			pbuf+=sprintf(pbuf, "%s: %lu", _C("Base"), (unsigned long)ilim.base);
 		if (ilim.offset)
-			sprintf(buffer, "%s%s%s: %lu", buffer, (ilim.base) ? " " : "", _C("Offset"), (unsigned long)ilim.offset);
+			pbuf+=sprintf(pbuf, "%s%s: %lu", (ilim.base) ? " " : "", _C("Offset"), (unsigned long)ilim.offset);
 		if (ilim.max)
-			sprintf(buffer, "%s%s%s: %lu", buffer, (ilim.base || ilim.offset) ? " " : "", _C("Max"), (unsigned long)ilim.max);
+			pbuf+=sprintf(pbuf, "%s%s: %lu", (ilim.base || ilim.offset) ? " " : "", _C("Max"), (unsigned long)ilim.max);
 		
-		sprintf(buffer, "%s)", buffer);
+		*(pbuf++)=')';
+		*(pbuf++)=0;
 	}
-
-	return buffer;
 }
 
-const char *acc_port_type_string(SInt32 pt) {
+const char *acc_port_type_string(int pt) {
 	if (pt > 19) {
 		return _C("Undefined");
 	}
 	return _C(acc_port_types[pt]);
 }
 
-const char *acc_inductive_mode_string(int mode) {
-	static char modestr[32];
+void acc_inductive_mode_string(int mode, char *pbuf) {
 	if (mode < 4) {
-		return _C(acc_inductive_modes[mode]);
+		strcpy(pbuf,_C(acc_inductive_modes[mode]));
+		return;
 	}
 	
-	snprintf(modestr, 32, "<%d>", mode);
-	return modestr;
+	sprintf(pbuf, "<%d>", mode);
 }
 
-const char *manf_id_string(SInt32 manf) {
+const char *manf_id_string(int manf) {
 	switch (manf) {
 		// retrieve from online db? or just common vids?
 		case VID_APPLE: return "Apple Inc.";
@@ -198,7 +191,7 @@ const char *manf_id_string(SInt32 manf) {
 	return NULL;
 }
 
-const char *ugreen_prod_id_string(SInt32 prod) {
+const char *ugreen_prod_id_string(int prod) {
 	switch (prod) {
 		case 0xC5DC: return "MagSafe Charger (MFi Module)";	// 219693601610 A2463
 		default:
@@ -207,7 +200,7 @@ const char *ugreen_prod_id_string(SInt32 prod) {
 	return NULL;
 }
 
-const char *apple_prod_id_string(SInt32 prod) {
+const char *apple_prod_id_string(int prod) {
 	switch (prod) {
 		case 0x0500: return "MagSafe Charger";					// A2140
 		case 0x0501: return "MagSafe Charger (MFi Module)";		// A2463
@@ -338,8 +331,8 @@ static IOReturn copyDeviceInfo(io_connect_t connect, AccessoryInfo infoID, CFTyp
 	return kr;
 }
 
-SInt32 get_accid(io_connect_t connect) {
-	SInt32 accid = -1;
+int get_accid(io_connect_t connect) {
+	int accid = -1;
 	if (use_libioam) {
 		accid = IOAccessoryManagerGetAccessoryID(connect);
 	} else {
@@ -365,8 +358,8 @@ bool get_acc_battery_pack_mode(io_connect_t connect) {
 	return result;
 }
 
-SInt32 get_acc_allowed_features(io_connect_t connect) {
-	SInt32 buffer = -1;
+int get_acc_allowed_features(io_connect_t connect) {
+	int buffer = -1;
 	CFNumberRef AllowedFeatures;
 
 	AllowedFeatures = IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryManagerAllowedFeatures"), kCFAllocatorDefault, kNilOptions);
@@ -382,8 +375,8 @@ SInt32 get_acc_allowed_features(io_connect_t connect) {
 	return buffer;
 }
 
-SInt32 get_acc_port_type(io_connect_t connect) {
-	SInt32 buffer = -1;
+int get_acc_port_type(io_connect_t connect) {
+	int buffer = -1;
 	CFNumberRef PortType;
 	
 	PortType = IORegistryEntryCreateCFProperty(connect, CFSTR("PortType"), kCFAllocatorDefault, kNilOptions);
@@ -551,12 +544,12 @@ bool get_acc_supervised_transport_restricted(io_connect_t connect) {
 	return ret;
 }
 
-SInt32 get_acc_type(io_connect_t connect) {
+int32_t get_acc_type(io_connect_t connect) {
 	if (use_libioam)
 		return IOAccessoryManagerGetType(connect);
 
 	CFNumberRef number;
-	SInt32 type = 0;
+	int32_t type = 0;
 	number = (CFNumberRef)IORegistryEntryCreateCFProperty(connect, CFSTR("IOAccessoryManagerType"), kCFAllocatorDefault, kNilOptions);
 	if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &type)) {
 		 type = 0;
@@ -594,7 +587,7 @@ IOReturn get_acc_usb_connstat(io_connect_t connect, accessory_usb_connstat_t *co
 	memset(connstat, 0, sizeof(accessory_usb_connstat_t));
 
 	if (use_libioam) {
-		SInt32 buf;
+		int32_t buf;
 		bool active;
 		kr = IOAccessoryManagerGetUSBConnectType(connect, &buf, &active);
 		if (kr == kIOReturnSuccess) {
@@ -629,7 +622,7 @@ IOReturn get_acc_usb_connstat(io_connect_t connect, accessory_usb_connstat_t *co
 	return kr;
 }
 
-IOReturn get_acc_usb_voltage(io_connect_t connect, SInt32 *voltage) {
+IOReturn get_acc_usb_voltage(io_connect_t connect, int32_t *voltage) {
 	IOReturn kr = kIOReturnSuccess;
 	if (use_libioam)
 		return IOAccessoryManagerGetUSBChargingVoltage(connect, voltage);
@@ -690,7 +683,7 @@ IOReturn get_acc_usb_ilim(io_connect_t connect, accessory_usb_ilim_t *ilim) {
 	return kr;
 }
 
-IOReturn get_acc_idsn(io_connect_t connect, SInt64 *buf) {
+IOReturn get_acc_idsn(io_connect_t connect, long long *buf) {
 	IOReturn kr;
 	CFTypeRef number;
 	kr = copyDeviceInfo(connect, kIOAMInterfaceDeviceSerialNumber, &number);
