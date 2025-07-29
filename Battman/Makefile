@@ -2,10 +2,10 @@
 
 SED = sed
 
-IPHONEOS_DEPLOYMENT_TARGET := 12.0
+IPHONEOS_DEPLOYMENT_TARGET := 13.7
 export IPHONEOS_DEPLOYMENT_TARGET
 
-LOCAL_IP := $(shell /sbin/ifconfig | $(SED) -n "s/.*inet \([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\) .*/\1/p" | tail -1)
+LOCAL_IP := $(shell ip addr | $(SED) -n "s/.*inet \([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\)[ \\/].*/\1/p" | tail -1)
 
 SDKROOT := ${THEOS}/sdks/iPhoneOS14.5.sdk
 SDKROOT := ${THEOS}/sdks/iPhoneOS13.7.sdk
@@ -69,6 +69,8 @@ ifneq (,$(wildcard ./mount/pub_html))
 	PUBLISH_TARGET := publish_mounted_site
 else ifneq (,$(wildcard /var/www/html/files))
 	PUBLISH_TARGET := publish_local_site
+else ifneq (,$(wildcard /srv/http/files))
+	PUBLISH_TARGET := publish_local_site_srv
 else
 	PUBLISH_TARGET := publish_none
 endif
@@ -135,7 +137,7 @@ build/Battman.ipa: build/Payload/Battman.app/Battman build/Payload/Battman.app/I
 	cp $< $@
 
 %/index.html: %/install_template.html build/Battman.ipa
-	$(SED) 's/LOCAL_IP/${LOCAL_IP}/;s/LATEST_UPDATE/$(shell date)/' /var/www/html/files/battman/install_template.html>/var/www/html/files/battman/index.html
+	$(SED) 's/LOCAL_IP/${LOCAL_IP}/;s/LATEST_UPDATE/$(shell date)/' $(filter %.html,$^)>$@
 
 publish_mounted_site: mount/pub_html/battman/ \
 			mount/pub_html/battman/Battman.ipa \
@@ -145,6 +147,10 @@ publish_mounted_site: mount/pub_html/battman/ \
 publish_local_site: /var/www/html/files/battman \
 			/var/www/html/files/battman/Battman.ipa \
 			/var/www/html/files/battman/index.html
+	@echo Install at: ${LOCAL_IP}
+publish_local_site_srv: /srv/http/files/battman \
+			/srv/http/files/battman/Battman.ipa \
+			/srv/http/files/battman/index.html
 	@echo Install at: ${LOCAL_IP}
 
 publish_none: build/Battman.ipa
