@@ -39,6 +39,15 @@
 #define LICENSE LICENSE_MIT
 #endif
 
+#define DL_CALL(fn, ret, proto, call_args) \
+	({                                     \
+		static ret(*_fp) proto = NULL;     \
+		if (!_fp)                          \
+			_fp = (ret(*) proto)           \
+		dlsym(RTLD_DEFAULT, #fn);          \
+		_fp call_args;                     \
+	})
+
 #define IOS_CONTAINER_FMT "^/private/var/mobile/Containers/Data/Application/[0-9A-Fa-f\\-]{36}$"
 #define MAC_CONTAINER_FMT "^/Users/[^/]+/Library/Containers/[^/]+/Data$"
 #define SIM_CONTAINER_FMT "^/Users/[^/]+/Library/Developer/CoreSimulator/Devices/[0-9A-Fa-f\\-]{36}/data/Containers/Data/Application/[0-9A-Fa-f\\-]{36}$"

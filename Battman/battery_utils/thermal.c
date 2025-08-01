@@ -25,14 +25,6 @@ extern const char *const kOSThermalNotificationPressureLevelName;
 		}                                        \
 		(const char *)_cached;                   \
 	})
-#define DL_CALL(fn, ret, proto, call_args) \
-	({                                     \
-		static ret(*_fp) proto = NULL;     \
-		if (!_fp)                          \
-			_fp = (ret(*) proto)           \
-			    dlsym(RTLD_DEFAULT, #fn);  \
-		_fp call_args;                     \
-	})
 
 #define kOSThermalNotificationName GET_STRING_SYMBOL(kOSThermalNotificationName)
 
