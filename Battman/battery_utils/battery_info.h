@@ -60,6 +60,9 @@ SPECIAL:
 #define BIN_IS_BACKGROUND           (0 | BIN_IS_FLOAT | BIN_AFFECTS_BATTERY_CELL)
 #define BIN_IS_HIDDEN               (1 << 1)
 #define BIN_UNIT_BITMASK            (((1 << 7) - 1) << 6)
+// ^ deprecated
+#define BIN_HAS_SUBCELLS (1<<10)
+#define BIN_IS_SUBCELL (1<<11)
 #define BIN_SECTION					(1 << 13 | BIN_IS_SPECIAL)
 #define BIN_SECTION_HIDDEN			(1 << 14)
 #define BIN_SECTION_PRIORITY(p) ((p&0xffff)<<16)

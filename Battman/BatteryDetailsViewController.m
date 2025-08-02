@@ -436,9 +436,9 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 		cell.accessoryType=0;
 		cell.accessoryView=nil;
 		cell.detailTextLabel.font=[UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-	}
-	if (!cell)
+	}else{
 		cell = [[cell_class alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ident];
+	}
 
 	struct battery_info_section *bi_section = battery_info_get_section(*batteryInfo, ip.section);
 	struct battery_info_node    *pending_bi = bi_section->data + ip.row + pendingLoadOffsets[ip.section][ip.row];
