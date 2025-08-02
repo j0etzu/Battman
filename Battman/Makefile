@@ -129,7 +129,12 @@ build/Payload/Battman.app/license.html: license/license.html
 	@mkdir -p $(@D)
 	cp $^ $@
 
-build/Battman.ipa: build/Payload/Battman.app/Battman build/Payload/Battman.app/Info.plist ${ICON_IF_RELEASE} build/Payload/Battman.app/license.html
+build/%/BattmanIcons@2x.artwork: ../BattmanIcons@2x.artwork
+	cp $< $@
+build/%/BattmanIcons@3x.artwork: ../BattmanIcons@3x.artwork
+	cp $< $@
+
+build/Battman.ipa: build/Payload/Battman.app/Battman build/Payload/Battman.app/Info.plist ${ICON_IF_RELEASE} build/Payload/Battman.app/license.html build/Payload/Battman.app/BattmanIcons@2x.artwork build/Payload/Battman.app/BattmanIcons@3x.artwork
 	cd build/ && zip -r Battman.ipa ./Payload
 
 %/Battman.ipa: build/Battman.ipa
