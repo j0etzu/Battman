@@ -60,24 +60,20 @@ static void _loadAppSupportBundle(void) {
 		return;
 	}
 	artwork_avail  = true;
-	sArtworkNames  = CFRetain(names);
-	sArtworkImages = CFRetain(images);
-	CFRelease(names);
-	CFRelease(images);
+	sArtworkNames  =names;
+	sArtworkImages =images;
 }
 
 static CGImageRef getArtworkImageOf(CFStringRef name) {
-	if (!sArtworkNames || !sArtworkImages) {
-		// not loaded or error
+	if (!sArtworkNames || !sArtworkImages)
 		return NULL;
-	}
 
 	CFIndex count = CFArrayGetCount(sArtworkNames);
 	for (CFIndex i = 0; i < count; i++) {
 		CFStringRef candidate = CFArrayGetValueAtIndex(sArtworkNames, i);
 		if (CFStringCompare(candidate, name, 0) == kCFCompareEqualTo) {
 			CGImageRef img = (CGImageRef)CFArrayGetValueAtIndex(sArtworkImages, i);
-			return CGImageRetain(img);
+			return img;
 		}
 	}
 
