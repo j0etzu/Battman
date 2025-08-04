@@ -9,7 +9,7 @@
 
 #import "common.h"
 #import "intlextern.h"
-#import "UberSegmentedControl.h"
+#import "UberSegmentedControl/UberSegmentedControl.h"
 
 @interface ThermalSegmentedControl : UIView
 @property (nonatomic, assign) BOOL toggled;
@@ -67,15 +67,23 @@
 
 - (void)setToggled:(BOOL)toggled {
 	if (self.isLockerSwitch) {
-		NSMutableIndexSet *indexes = [[NSMutableIndexSet alloc] init];
-		[indexes addIndex:1];
+		NSMutableIndexSet *indexes = (NSMutableIndexSet*)[_control selectedSegmentIndexes];
+		if(toggled) {
+			[indexes addIndex:1];
+		}else{
+			[indexes removeIndex:1];
+		}
 		[_control setSelectedSegmentIndexes:indexes];
 	}
 }
 - (void)setPersist:(BOOL)persist {
 	if (self.isLockerSwitch) {
-		NSMutableIndexSet *indexes = [[NSMutableIndexSet alloc] init];
-		[indexes addIndex:0];
+		NSMutableIndexSet *indexes = (NSMutableIndexSet*)[_control selectedSegmentIndexes];
+		if(persist) {
+			[indexes addIndex:0];
+		}else{
+			[indexes removeIndex:0];
+		}
 		[_control setSelectedSegmentIndexes:indexes];
 	}
 }
