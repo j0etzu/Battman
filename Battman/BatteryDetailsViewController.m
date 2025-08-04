@@ -251,7 +251,7 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 	// FIXME: use preferred_language() for "Copy"
 	[[UIMenuController sharedMenuController] update];
 
-	[self.tableView registerClass:[SegmentedViewCell class] forCellReuseIdentifier:@"HVC"];
+	[self.tableView registerClass:[SegmentedHVCViewCell class] forCellReuseIdentifier:@"HVC"];
 	[self.tableView registerClass:[SegmentedFlagViewCell class] forCellReuseIdentifier:@"FLAGS"];
 	[self.tableView registerClass:[MultilineViewCell class] forCellReuseIdentifier:@"bdvc:addt"];
 	self.tableView.estimatedRowHeight = 100;
@@ -620,11 +620,11 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 		hvc_menu_size       = 2;
 #endif
 
-		/* Only use SegmentedViewCell when HVC exists */
+		/* Only use SegmentedHVCViewCell when HVC exists */
 		if (hvc_menu != NULL && hvc_menu_size != 0) {
-			SegmentedViewCell *cell_seg = [tv dequeueReusableCellWithIdentifier:@"HVC"];
+			SegmentedHVCViewCell *cell_seg = [tv dequeueReusableCellWithIdentifier:@"HVC"];
 			if (!cell_seg)
-				cell_seg = [[SegmentedViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"HVC"];
+				cell_seg = [[SegmentedHVCViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"HVC"];
 			if (@available(iOS 13.0, *)) {
 				cell_seg.accessoryType = UITableViewCellAccessoryDetailButton;
 			} else {
@@ -679,11 +679,11 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 
 - (void)hvcSegmentSelected:(UISegmentedControl *)segment {
 	UIView *view = segment;
-	while (view && ![view isKindOfClass:[SegmentedViewCell class]]) {
+	while (view && ![view isKindOfClass:[SegmentedHVCViewCell class]]) {
 		view = [view superview];
 	}
 	if (view) {
-		SegmentedViewCell *cell_seg  = (SegmentedViewCell *)view;
+		SegmentedHVCViewCell *cell_seg  = (SegmentedHVCViewCell *)view;
 		// Now update the cell's title
 		cell_seg.subTitleLabel.text  = [NSString stringWithFormat:@"%d %s", hvc_menu[segment.selectedSegmentIndex].voltage, L_MV];
 		cell_seg.subDetailLabel.text = [NSString stringWithFormat:@"%d %s", hvc_menu[segment.selectedSegmentIndex].current, L_MA];

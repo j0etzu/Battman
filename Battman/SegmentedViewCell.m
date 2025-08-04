@@ -1,7 +1,7 @@
 #import "SegmentedViewCell.h"
 
 /* TODO: Use WLSegmentedControls instead of UberSegmentedControl for iOS 12 or earlier */
-@implementation SegmentedViewCell
+@implementation SegmentedHVCViewCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];

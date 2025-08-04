@@ -68,6 +68,8 @@
 		6838BFAC2DC3984C007EB66C /* SliderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6838BFAB2DC3984C007EB66C /* SliderTableViewCell.m */; };
 		6845759A2E3CBD2B00618DFD /* BattmanIcons@3x.artwork in Resources */ = {isa = PBXBuildFile; fileRef = 684575992E3CBD2500618DFD /* BattmanIcons@3x.artwork */; };
 		6845759C2E3CBFEB00618DFD /* BattmanIcons@2x.artwork in Resources */ = {isa = PBXBuildFile; fileRef = 6845759B2E3CBFE500618DFD /* BattmanIcons@2x.artwork */; };
+		684575AA2E3D4ABF00618DFD /* thermtune.c in Sources */ = {isa = PBXBuildFile; fileRef = 6845759E2E3D4A9900618DFD /* thermtune.c */; };
+		684575AD2E3E038800618DFD /* ThermalTunesViewContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 684575AC2E3E032700618DFD /* ThermalTunesViewContoller.m */; };
 		684611502E0D5250006B651D /* IOMFB_interaction.c in Sources */ = {isa = PBXBuildFile; fileRef = 6846114F2E0D5250006B651D /* IOMFB_interaction.c */; };
 		684A9EF22D65F0AF006265DC /* intl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 687743152D461E4400375A2C /* intl.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		686AECD52D3B93CD0059ECD0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 686AECD42D3B93CD0059ECD0 /* main.m */; };
@@ -142,6 +144,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		684575A12E3D4AAB00618DFD /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		68B68F342E1FB42400431E14 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -192,6 +203,10 @@
 		6838BFAB2DC3984C007EB66C /* SliderTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SliderTableViewCell.m; sourceTree = "<group>"; };
 		684575992E3CBD2500618DFD /* BattmanIcons@3x.artwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BattmanIcons@3x.artwork"; sourceTree = "<group>"; };
 		6845759B2E3CBFE500618DFD /* BattmanIcons@2x.artwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BattmanIcons@2x.artwork"; sourceTree = "<group>"; };
+		6845759E2E3D4A9900618DFD /* thermtune.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = thermtune.c; path = utils/thermtune/thermtune.c; sourceTree = "<group>"; };
+		684575A32E3D4AAC00618DFD /* thermtune */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = thermtune; sourceTree = BUILT_PRODUCTS_DIR; };
+		684575AB2E3E032700618DFD /* ThermalTunesViewContoller.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThermalTunesViewContoller.h; sourceTree = "<group>"; };
+		684575AC2E3E032700618DFD /* ThermalTunesViewContoller.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThermalTunesViewContoller.m; sourceTree = "<group>"; };
 		6846114E2E0D5250006B651D /* IOMFB_interaction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOMFB_interaction.h; sourceTree = "<group>"; };
 		6846114F2E0D5250006B651D /* IOMFB_interaction.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = IOMFB_interaction.c; sourceTree = "<group>"; };
 		686AECBF2D3B93CB0059ECD0 /* Battman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Battman.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -318,6 +333,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		684575A02E3D4AAB00618DFD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		686AECBC2D3B93CB0059ECD0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -366,6 +388,14 @@
 			path = license;
 			sourceTree = "<group>";
 		};
+		6845759D2E3D4A7A00618DFD /* thermtune */ = {
+			isa = PBXGroup;
+			children = (
+				6845759E2E3D4A9900618DFD /* thermtune.c */,
+			);
+			name = thermtune;
+			sourceTree = "<group>";
+		};
 		6846114A2E0D5211006B651D /* hw */ = {
 			isa = PBXGroup;
 			children = (
@@ -380,6 +410,7 @@
 			children = (
 				6845759B2E3CBFE500618DFD /* BattmanIcons@2x.artwork */,
 				684575992E3CBD2500618DFD /* BattmanIcons@3x.artwork */,
+				6845759D2E3D4A7A00618DFD /* thermtune */,
 				68B68F5C2E20F46400431E14 /* thermwatch */,
 				68B68F4D2E1FB60A00431E14 /* thermnote */,
 				68B68F2E2E1FB3DB00431E14 /* thermhid */,
@@ -399,6 +430,7 @@
 				68B68F362E1FB42400431E14 /* thermhid */,
 				68B68F522E1FB66000431E14 /* thermnote */,
 				68B68F612E20F47600431E14 /* thermwatch */,
+				684575A32E3D4AAC00618DFD /* thermtune */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -424,6 +456,8 @@
 				68B291252DC7547B0089BA1F /* ChargingLimitViewController.m */,
 				6838BF7E2DC27F1E007EB66C /* ChargingManagementViewController.h */,
 				6838BF822DC27F1E007EB66C /* ChargingManagementViewController.m */,
+				684575AB2E3E032700618DFD /* ThermalTunesViewContoller.h */,
+				684575AC2E3E032700618DFD /* ThermalTunesViewContoller.m */,
 				6838BF632DB8D06B007EB66C /* license */,
 				68CC02872DB3C57B00914051 /* SF-Pro-Display-Regular.otf */,
 				68AE40A42D8EB7710023D7B0 /* CustomUIElements */,
@@ -651,6 +685,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		684575A22E3D4AAB00618DFD /* thermtune */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 684575A72E3D4AAC00618DFD /* Build configuration list for PBXNativeTarget "thermtune" */;
+			buildPhases = (
+				6845759F2E3D4AAB00618DFD /* Sources */,
+				684575A02E3D4AAB00618DFD /* Frameworks */,
+				684575A12E3D4AAB00618DFD /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = thermtune;
+			productName = thermtune;
+			productReference = 684575A32E3D4AAC00618DFD /* thermtune */;
+			productType = "com.apple.product-type.tool";
+		};
 		686AECBE2D3B93CB0059ECD0 /* Battman */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 686AECD82D3B93CD0059ECD0 /* Build configuration list for PBXNativeTarget "Battman" */;
@@ -730,6 +781,9 @@
 			attributes = {
 				LastUpgradeCheck = 1250;
 				TargetAttributes = {
+					684575A22E3D4AAB00618DFD = {
+						CreatedOnToolsVersion = 12.5.1;
+					};
 					686AECBE2D3B93CB0059ECD0 = {
 						CreatedOnToolsVersion = 12.5.1;
 					};
@@ -783,6 +837,7 @@
 				68B68F352E1FB42400431E14 /* thermhid */,
 				68B68F512E1FB66000431E14 /* thermnote */,
 				68B68F602E20F47600431E14 /* thermwatch */,
+				684575A22E3D4AAB00618DFD /* thermtune */,
 			);
 		};
 /* End PBXProject section */
@@ -929,6 +984,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		6845759F2E3D4AAB00618DFD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				684575AA2E3D4ABF00618DFD /* thermtune.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		686AECBB2D3B93CB0059ECD0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -973,6 +1036,7 @@
 				68B5FF2E2D85606000919BC2 /* GradientArcView.m in Sources */,
 				689FE0B52DEAEA4A00550EBE /* BatterySubscriberViewControllerBase.c in Sources */,
 				6838BF6B2DB8D06B007EB66C /* licensing.S in Sources */,
+				684575AD2E3E038800618DFD /* ThermalTunesViewContoller.m in Sources */,
 				6838BFAC2DC3984C007EB66C /* SliderTableViewCell.m in Sources */,
 				68171A372D534E6B00DD4224 /* BatteryDetailsViewController.m in Sources */,
 				68B291372DD1E6960089BA1F /* CompatibilityHelper.c in Sources */,
@@ -1023,6 +1087,30 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		684575A82E3D4AAC00618DFD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		684575A92E3D4AAC00618DFD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				MACOSX_DEPLOYMENT_TARGET = 11.2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
 		686AECD62D3B93CD0059ECD0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 687743192D46359200375A2C /* Config.xcconfig */;
@@ -1396,6 +1484,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		684575A72E3D4AAC00618DFD /* Build configuration list for PBXNativeTarget "thermtune" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				684575A82E3D4AAC00618DFD /* Debug */,
+				684575A92E3D4AAC00618DFD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		686AECBA2D3B93CB0059ECD0 /* Build configuration list for PBXProject "Battman" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

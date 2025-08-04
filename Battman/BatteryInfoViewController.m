@@ -4,6 +4,7 @@
 #import "BatteryDetailsViewController.h"
 #import "ChargingManagementViewController.h"
 #import "ChargingLimitViewController.h"
+#import "ThermalTunesViewContoller.h"
 #include "battery_utils/battery_utils.h"
 #import "SimpleTemperatureViewController.h"
 #import "UPSMonitor.h"
@@ -12,6 +13,7 @@
 #include "intlextern.h"
 #include <pthread/pthread.h>
 
+// Privates
 @interface CALayer ()
 - (BOOL)continuousCorners;
 - (BOOL)_continuousCorners;
@@ -22,9 +24,8 @@ static BOOL artwork_avail = NO;
 static CFArrayRef (*CPBitmapCreateImagesFromPath)(CFStringRef, CFPropertyListRef *, uint32_t, CFErrorRef *) = NULL;
 
 // Cached arrays
-static CFArrayRef  sArtworkNames  = NULL;
-static CFArrayRef  sArtworkImages = NULL;
-static pthread_once_t sOnceToken = PTHREAD_ONCE_INIT;
+static CFArrayRef sArtworkNames  = NULL;
+static CFArrayRef sArtworkImages = NULL;
 
 // Initialize by dlopen/dlsym + one call to CPBitmapCreateImagesFromPath
 static void _loadAppSupportBundle(void) {
@@ -205,8 +206,7 @@ enum sections_batteryinfo {
 				vc = [ChargingLimitViewController new];
 				break;
 			case 2:
-				// TODO:
-				//vc = [ThermalTunesViewContoller new];
+				vc = [ThermalTunesViewContoller new];
 				break;
 			default:
 				break;
@@ -228,11 +228,13 @@ enum sections_batteryinfo {
         cell.batteryInfo = &batteryInfo;
         // battery_info_update shall be called within cell impl.
         [cell updateBatteryInfo];
+		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         return cell;
     } else if (indexPath.section == BI_SECT_HW_TEMP) {
         TemperatureInfoTableViewCell *cell = [tv dequeueReusableCellWithIdentifier:@"TITVC-ri"];
         if (!cell)
         	cell = [TemperatureInfoTableViewCell new];
+		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         return cell;
     } else if (indexPath.section == BI_SECT_MANAGE) {
 		// XXX: Try make this section "InsetGrouped"

@@ -1,7 +1,7 @@
 #import <UIKit/UIKit.h>
 #import "UberSegmentedControl/UberSegmentedControl.h"
 
-@interface SegmentedViewCell : UITableViewCell
+@interface SegmentedHVCViewCell : UITableViewCell
 
 @property (nonatomic, strong, nonnull) UILabel *titleLabel;
 @property (nonatomic, strong, nullable) UILabel *detailLabel;

@@ -382,9 +382,13 @@ tvend:
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (indexPath.section == CM_SECT_SMART_CHARGING) {
 		if (indexPath.row == 0) {
-			DatePickerTableViewCell *dcell = [tableView cellForRowAtIndexPath:indexPath];
-			if (dcell.isExpanded)
-				return dcell.button.bounds.size.height + dcell.picker.bounds.size.height;
+			if (@available(iOS 13.0, *)) {
+				// Nothing
+			} else {
+				DatePickerTableViewCell *dcell = [tableView cellForRowAtIndexPath:indexPath];
+				if (dcell.isExpanded)
+					return dcell.button.bounds.size.height + dcell.picker.bounds.size.height;
+			}
 		}
 	}
 	return [super tableView:tableView heightForRowAtIndexPath:indexPath];

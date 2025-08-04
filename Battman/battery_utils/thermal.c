@@ -47,6 +47,8 @@ static const char *thermal_pressure_string[] = {
 };
 static const char *thermal_notif_level_string[] = {
 	_C("Normal"),
+	/* APPLE LIED TO US, THESE ARE FUCKED */
+#if !TARGET_OS_IPHONE
 	_C("70% Torch"),
 	_C("70% Backlight"),
 	_C("50% Torch"),
@@ -57,6 +59,11 @@ static const char *thermal_notif_level_string[] = {
 	_C("App Terminated"),
 	_C("Device Restart"),
 	_C("Ready")
+#else
+	_C("Fair"),
+	_C("Serious"),
+	_C("Critical")
+#endif
 };
 #undef _C
 #define _C(x) cond_localize_c(x)
@@ -136,6 +143,7 @@ thermal_pressure_t thermal_pressure(void) {
 }
 
 thermal_notif_level_t thermal_notif_level(void) {
+#if !TARGET_OS_IPHONE
 	static bool got_levels = false;
 	static int  levels[11] = { 0 };
 
@@ -155,6 +163,9 @@ thermal_notif_level_t thermal_notif_level(void) {
 			return (thermal_notif_level_t)i;
 
 	return kBattmanThermalNotificationLevelUnknown;
+#else
+	return OSThermalNotificationCurrentLevel();
+#endif
 }
 
 float thermal_max_trigger_temperature(void) {

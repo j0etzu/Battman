@@ -19,6 +19,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include "../common.h"
+#include "../intlextern.h"
 
 extern int posix_spawnattr_set_persona_np(const posix_spawnattr_t *__restrict, uid_t, uint32_t);
 extern int posix_spawnattr_set_persona_uid_np(const posix_spawnattr_t *__restrict, uid_t);
@@ -119,6 +121,27 @@ void battman_run_worker(const char *pipedata) {
 			write(worker_pipefd[1], &retval, 1);
 			write(worker_pipefd[1], buf, 6);
 			continue;
+		} else if (cmd == 5) {
+			// thermtune bool
+			uint32_t val;
+			read(worker_pipefd[0], &val, 4);
+			extern int setOSNotifEnabled(bool enable, bool persist);
+			int ret = 1001;
+			int sect = (val & 0xF000) >> 12;
+			int row = (val & 0x0F00) >> 8;
+			switch (sect) {
+				case 0: {
+					// TT_SECT_GENERAL
+					switch (row) {
+						case 0: {
+							// TT_ROW_GENERAL_ENABLED
+							ret = setOSNotifEnabled((val & 1), (val & 2) != 0);
+							break;
+						}
+					}
+				}
+			}
+			write(worker_pipefd[1], &ret, sizeof(int));
 		}
 	}
 }
@@ -148,7 +171,11 @@ static void battman_spawn_worker() {
 	int err = posix_spawn(&worker_pid, executable, NULL, &spawnattr, (char **)newargv, environ);
 	if (err != 0) {
 		NSLog(CFSTR("POSIX spawn failed: %s"), strerror(err));
-		abort();
+		char *str = malloc(1024);
+		sprintf(str, "%s: %s", _C("Helper failed to launch"), strerror(err));
+		if (is_carbon())
+			show_alert(L_FAILED, str, L_OK);
+		return;
 	}
 	close(outfdg[0]);
 	close(outfdg[1]);
