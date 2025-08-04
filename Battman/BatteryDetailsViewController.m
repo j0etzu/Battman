@@ -699,6 +699,28 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	struct battery_info_section *bi_section = battery_info_get_section(*batteryInfo, indexPath.section);
+	struct battery_info_node    *pending_bi = bi_section->data + indexPath.row + pendingLoadOffsets[indexPath.section][indexPath.row];
+	if(!(pending_bi->content&BIN_HAS_SUBCELLS))
+		return;
+	int rows=0;
+	int is_hidden=0;
+	NSMutableArray *indexPaths=[NSMutableArray array];
+	for(struct battery_info_node *node=pending_bi+1;node->name&&(node->content&BIN_IS_SUBCELL);node++) {
+		if(node->content&(1<<5))
+			is_hidden=1;
+		node->content^=(1<<5);
+		rows++;
+		[indexPaths addObject:[NSIndexPath indexPathForRow:indexPath.row+rows inSection:indexPath.section]];
+	}
+	if(!rows)
+		return;
+	if(is_hidden) {
+		[tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+	}else{
+		[tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+	}
+	//[self updateTableView];
 }
 
 @end

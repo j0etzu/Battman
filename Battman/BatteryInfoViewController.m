@@ -11,7 +11,6 @@
 
 #include "common.h"
 #include "intlextern.h"
-#include <pthread/pthread.h>
 
 // Privates
 @interface CALayer ()
