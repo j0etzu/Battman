@@ -48,7 +48,7 @@ const char *get_thermal_notif_level_string(thermal_notif_level_t level);
 
 thermal_pressure_t thermal_pressure(void);
 float thermal_max_trigger_temperature(void);
-bool thermal_solar_state(void);
+int thermal_solar_state(void);
 
 #if !(TARGET_OS_OSX || TARGET_OS_MACCATALYST)
 thermal_notif_level_t thermal_notif_level(void);

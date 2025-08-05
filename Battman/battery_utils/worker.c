@@ -125,22 +125,68 @@ void battman_run_worker(const char *pipedata) {
 			// thermtune bool
 			uint32_t val;
 			read(worker_pipefd[0], &val, 4);
-			extern int setOSNotifEnabled(bool enable, bool persist);
 			int ret = 1001;
 			int sect = (val & 0xF000) >> 12;
 			int row = (val & 0x0F00) >> 8;
+			// TODO: Reduce redundant code
 			switch (sect) {
-				case 0: {
+				case 1: {
 					// TT_SECT_GENERAL
 					switch (row) {
 						case 0: {
 							// TT_ROW_GENERAL_ENABLED
+							extern int setOSNotifEnabled(bool enable, bool persist);
 							ret = setOSNotifEnabled((val & 1), (val & 2) != 0);
 							break;
 						}
+						case 1: {
+							// TT_ROW_GENERAL_CLTM
+							extern int setCLTMEnabled(bool enable, bool persist);
+							ret = setCLTMEnabled((val & 1), (val & 2) != 0);
+							break;
+						}
 					}
+					break;
+				}
+				case 2: {
+					// TT_SECT_HIP
+					switch (row) {
+						case 0: {
+							// TT_ROW_HIP_ENABLED
+							extern int setHIPEnabled(bool enable, bool persist);
+							ret = setHIPEnabled((val & 1), (val & 2) != 0);
+							break;
+						}
+						case 1: {
+							// TT_ROW_HIP_SIMULATE
+							extern int setSimulateHIPEnabled(bool enable, bool persist);
+							ret = setSimulateHIPEnabled((val & 1), 0);
+							break;
+						}
+					}
+					break;
+				}
+				case 3: {
+					// TT_SECT_SUNLIGHT
+					switch (row) {
+						case 0: {
+							// TT_ROW_SUNLIGHT_AUTO
+							extern bool delSunlightEntry(void);
+							if (val & 1) ret = delSunlightEntry();
+							else ret = 0;
+							break;
+						}
+						case 1: {
+							// TT_ROW_SUNLIGHT_SIMULATE
+							extern int setSunlightEnabled(bool enable, bool persist);
+							ret = setSunlightEnabled((val & 1), (val & 2) != 0);
+							break;
+						}
+					}
+					break;
 				}
 			}
+			ret = 114514;
 			write(worker_pipefd[1], &ret, sizeof(int));
 		}
 	}

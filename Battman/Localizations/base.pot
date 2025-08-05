@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Battman 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-05 04:21+0800\n"
+"POT-Creation-Date: 2025-08-06 03:32+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,68 +87,72 @@ msgstr ""
 msgid "Debug"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:233
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:338
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:236
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:350
 #: /Users/torrekie/proj/Battman/Battman/CreditViewController.c:7
 msgid "Credit"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:237
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:240
 msgid "Source Code"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:250
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:249
+msgid "Battman Wiki & User Manual"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:262
 msgid "Logs (stdout)"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:255
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:267
 msgid "Select language override"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:260
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:272
 msgid "Exit App"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:265
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:277
 msgid "Logs (stdout) (very cool)"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:270
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:282
 msgid "Redirect daemon logs"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:275
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:287
 msgid "Show fatal error view"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:308
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:320
 msgid "Trigger fatal notify"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:313
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:325
 msgid "Trigger UTF jitter"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:354
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:366
 #: /Users/torrekie/proj/Battman/Battman/CreditViewController.c:23
 msgid "Battman Credit"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:410
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:422
 msgid "Language Override"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:424
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:436
 msgid "Clear"
 msgstr ""
 
 #: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:29
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:243
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:238
 msgid "Charging Management"
 msgstr ""
 
 #: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:75
-#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:136
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:178
 msgid "General"
 msgstr ""
 
@@ -174,7 +178,6 @@ msgid ""
 msgstr ""
 
 #: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:123
-#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:178
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:851
 msgid "Enabled"
 msgstr ""
@@ -324,11 +327,12 @@ msgid "Max Trigger Temperature"
 msgstr ""
 
 #: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:58
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:180
 msgid "Sunlight Exposure"
 msgstr ""
 
 #: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:111
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:182
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:177
 msgid "Hardware Temperature"
 msgstr ""
 
@@ -409,69 +413,69 @@ msgstr ""
 msgid "Not Running"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:99
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:94
 msgid "Battman"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:114
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:109
 msgid "2025 Ⓒ Torrekie <me@torrekie.dev>"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:117
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:112
 msgid "Debug Commit"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:126
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:121
 msgid "Sandboxed"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:128
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:123
 msgid "Simulator Sandboxed"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:130
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:125
 msgid "Simulator Unsandboxed"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:133
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:128
 msgid "Unsandboxed"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:137
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:132
 msgid "Platfomized"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:140
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:135
 msgid "Debugger Attached"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:151
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:146
 msgid "Battery"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:180
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:175
 msgid "Battery Info"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:184
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:179
 msgid "Manage"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:217
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:212
 msgid "Unimplemented Yet"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:217
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:212
 msgid "Will be introduced in future updates."
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:243
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:238
 #: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:48
 msgid "Charging Limit"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:243
-#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:113
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:238
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:140
 msgid "Thermal Tunes"
 msgstr ""
 
@@ -690,32 +694,68 @@ msgstr ""
 msgid "Refetch Data"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:137
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:179
 msgid "Hot-In-Pocket Mode"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:146
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:189
+msgid "Review the documentation before making any changes."
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:190
 msgid ""
 "Changing the default thermal behavior may increase wear on your battery and "
 "reduce its lifespan."
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:147
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:191
 msgid ""
 "Hot-In-Pocket Protection automatically reduces CPU & GPU power when the "
 "display is off and no media is playing, to prevent overheating while the "
 "device is stored in a pocket."
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:164
-msgid "Enable"
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:234
+msgid "State Updates"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:165
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:239
 msgid "Whether applications receive thermal state updates"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:232
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:250
+msgid "Thermal Mitigations"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:255
+msgid "Reduce power budget when heating"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:271
+msgid "Enable"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:281
+msgid "Simulate HIP"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:298
+msgid "Auto Detect"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:306
+msgid "Exposure Mode"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:318
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:77
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:112
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:690
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:889
+msgid "Status"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:370
 msgid "Thermal Tuning failed with error"
 msgstr ""
 
@@ -951,7 +991,7 @@ msgstr ""
 msgid "Unavailable"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/worker.c:175
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/worker.c:221
 msgid "Helper failed to launch"
 msgstr ""
 
@@ -1664,13 +1704,6 @@ msgstr ""
 msgid ""
 "This field refers to the Family Code (kIOPSPowerAdapterFamilyKey) of "
 "currently connected power adapter."
-msgstr ""
-
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:77
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:112
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:690
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:889
-msgid "Status"
 msgstr ""
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:78

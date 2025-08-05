@@ -32,7 +32,7 @@ static NSMutableDictionary *thermalBasics;
 		float max_temp = thermal_max_trigger_temperature();
 		if (max_temp > 0)
 			[thermalBasics setValue:@(max_temp) forKey:@"Max Trigger Temperature"];
-		[thermalBasics setValue:thermal_solar_state() ? _("True") : _("False") forKey:@"Sunlight Exposure"];
+		[thermalBasics setValue:thermal_solar_state() == 100 ? _("True") : _("False") forKey:@"Sunlight Exposure"];
 	}
 	temperatureHIDData = getTemperatureHIDData();
 	sensorTemperatures = getSensorTemperatures();

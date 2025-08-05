@@ -187,20 +187,20 @@ float thermal_max_trigger_temperature(void) {
 	return (float)level / 100.0f;
 }
 
-bool thermal_solar_state(void) {
+int thermal_solar_state(void) {
 	int      token;
 	uint64_t level;
 	
 	// This is set by thermalmonitord
-	if (notify_register_check("com.apple.system.maxthermalsensorvalue", &token)) {
-		return false;
+	if (notify_register_check("com.apple.system.thermalsunlightstate", &token)) {
+		return 0;
 	}
 	if (notify_get_state(token, &level)) {
-		return false;
+		return 0;
 	}
 	if (notify_cancel(token)) {
-		return false;
+		return 0;
 	}
 
-	return (token == 100);
+	return token;
 }

@@ -494,16 +494,16 @@ bool get_capacity(uint16_t *remaining, uint16_t *full, uint16_t *design) {
         return false;
 
     /* B0RM should be read reversed that scene (e.g. 0x760D -> 0x0D76) */
-    /* TODO: We need a better detection for this */
-    if (B0RM > B0DC) {
+    /* TODO: I believe there is a better detection for this */
+    if (B0RM > (1.1f * B0DC) && (((B0RM & 0xFF) << 8) | (B0RM >> 8)) > 0) {
         B0RM = ((B0RM & 0xFF) << 8) | (B0RM >> 8);
     }
 
-    if(remaining)
+    if (remaining)
         *remaining = B0RM * num;
-    if(full)
+    if (full)
         *full = B0FC * num;
-    if(design)
+    if (design)
         *design = B0DC * num;
 
     return result == kIOReturnSuccess;

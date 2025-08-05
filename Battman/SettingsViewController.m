@@ -124,7 +124,7 @@ static BOOL _coolDebugVCPresented = 0;
 
 - (NSInteger)tableView:(id)tv numberOfRowsInSection:(NSInteger)section {
     if (section == SS_SECT_ABOUT)
-        return 2;
+        return 3;
 #ifdef DEBUG
     else if (section == SS_SECT_DEBUG)
         return 9;
@@ -152,7 +152,9 @@ static BOOL _coolDebugVCPresented = 0;
             [self.navigationController pushViewController:[CreditViewControllerNew new] animated:YES];
         } else if (indexPath.row == 1) {
             open_url("https://github.com/Torrekie/Battman");
-        }
+		} else if (indexPath.row == 2) {
+			open_url("https://github.com/Torrekie/Battman/wiki");
+		}
     }
 #ifdef DEBUG
     if (indexPath.section == SS_SECT_DEBUG) {
@@ -226,6 +228,7 @@ static BOOL _coolDebugVCPresented = 0;
 
 - (UITableViewCell *)tableView:(id)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     // TODO: REUSE (Too few cells to reuse for now so no need at this moment)
+	// TODO: Add artwork icons
     if (indexPath.section == SS_SECT_ABOUT) {
         if (indexPath.row == 0) {
             UITableViewCell *creditCell = [UITableViewCell new];
@@ -241,7 +244,16 @@ static BOOL _coolDebugVCPresented = 0;
                 sourceCodeCell.textLabel.textColor = [UIColor colorWithRed:0 green:(122.0f / 255) blue:1 alpha:1];
             }
             return sourceCodeCell;
-        }
+		} else if (indexPath.row == 2) {
+			UITableViewCell *wikiCell = [UITableViewCell new];
+			wikiCell.textLabel.text = _("Battman Wiki & User Manual");
+			if (@available(iOS 13.0, *)) {
+				wikiCell.textLabel.textColor = [UIColor linkColor];
+			} else {
+				wikiCell.textLabel.textColor = [UIColor colorWithRed:0 green:(122.0f / 255) blue:1 alpha:1];
+			}
+			return wikiCell;
+		}
     }
 #ifdef DEBUG
     if (indexPath.section == SS_SECT_DEBUG) {

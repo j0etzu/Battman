@@ -5,6 +5,7 @@
 //  Created by Torrekie on 2025/7/18.
 //
 
+#include <stdbool.h>
 #include "scprefs.h"
 #include "../common.h"
 
@@ -70,16 +71,29 @@ int setThermPrefs(CFStringRef persistKey, CFStringRef key, CFTypeRef value, bool
 int set ## name ## Enabled(bool enable, bool persist) {		\
 	return setThermPrefs(persistKey, key, enable ? kCFBooleanTrue : kCFBooleanFalse, persist); \
 }															\
-void get ## name ## Enabled(bool *enable, bool *persist) {	\
+bool get ## name ## Enabled(bool *enable, bool *persist) {	\
 	SCPreferencesRef prefs = getThermalPrefs();				\
 	if (!prefs)												\
-		return;												\
-	*enable = SCPreferencesGetValue(prefs, key) == kCFBooleanTrue;	\
+		return false;										\
+	CFTypeRef ret = SCPreferencesGetValue(prefs, key);		\
+	*enable = (ret == kCFBooleanTrue);						\
 	if (persistKey) *persist = SCPreferencesGetValue(prefs, persistKey) == kCFBooleanTrue;	\
-	else if (persist) *persist = false;									\
 	CFRelease(prefs);										\
+	return (ret != NULL);									\
+}															\
+int del ## name ## Entry(void) {							\
+	SCPreferencesRef prefs = getThermalPrefs();				\
+	if (!prefs)												\
+		return kSCStatusFailed;								\
+	SCPreferencesRemoveValue(prefs, key);					\
+	int ret = savePrefs(prefs);								\
+	os_log_info(gLog, "Deleting %s: %d", CFStringGetCStringPtr(key, kCFStringEncodingUTF8), ret);	\
+	CFRelease(prefs);										\
+	return ret;												\
 }
 
 THERM_GETTER_SETTER(OSNotif, CFSTR("OSThermalNotificationPersistentlyEnabled"), CFSTR("OSThermalNotificationEnabled"))
 THERM_GETTER_SETTER(HIP, CFSTR("hipPersistentlyEnabled"), CFSTR("hipOverride"))
 THERM_GETTER_SETTER(SimulateHIP, NULL, CFSTR("simulateHip"))
+THERM_GETTER_SETTER(CLTM, CFSTR("engageBehaviorPersistentlyEnabled"), CFSTR("engageBehavior"))
+THERM_GETTER_SETTER(Sunlight, CFSTR("sunlightOverridePersistentlyEnabled"), CFSTR("sunlightOverride"))

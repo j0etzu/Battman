@@ -28,7 +28,7 @@ SCPreferencesRef __nullable SCPreferencesCreate(CFAllocatorRef __nullable alloca
 
 CFPropertyListRef __nullable SCPreferencesGetValue(SCPreferencesRef prefs, CFStringRef key);
 Boolean SCPreferencesSetValue(SCPreferencesRef prefs, CFStringRef key, CFPropertyListRef value);
-
+Boolean SCPreferencesRemoveValue(SCPreferencesRef prefs, CFStringRef key);
 void SCPreferencesSynchronize(SCPreferencesRef prefs);
 Boolean SCPreferencesApplyChanges(SCPreferencesRef prefs);
 Boolean SCPreferencesCommitChanges(SCPreferencesRef prefs);
