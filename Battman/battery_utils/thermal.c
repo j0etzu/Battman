@@ -202,5 +202,5 @@ int thermal_solar_state(void) {
 		return 0;
 	}
 
-	return token;
+	return level;
 }
