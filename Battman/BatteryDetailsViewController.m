@@ -49,20 +49,7 @@ void equipCellHighLegit(UILabel *label) {
 }
 
 UILabel *equipCellDetail(UITableViewCell *cell, NSString *text) {
-	if ([cell respondsToSelector:@selector(detailLabel)]) {
-		// Suppress compiler warning about performSelector leak
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-		UILabel *detail = [cell performSelector:@selector(detailLabel)];
-#pragma clang diagnostic pop
-
-		if ([detail isKindOfClass:[UILabel class]]) {
-			detail.text = text;
-		}
-		return detail;
-	} else {
-		cell.detailTextLabel.text = text;
-	}
+	cell.detailTextLabel.text = text;
 	return cell.detailTextLabel;
 }
 
@@ -126,18 +113,17 @@ void equipDetailCell(UITableViewCell *cell, struct battery_info_node *i) {
 	} else {
 		final_str = [NSString stringWithUTF8String:bi_node_get_string(i)];
 	}
-
-	UILabel *detailLabel = equipCellDetail(cell, final_str);
+	cell.detailTextLabel.text = final_str;
 
 	// Consider add a "BIN_IS_HIGHLEGIT"
 	if (strstr(i->name, "No.") || strstr(i->name, "ID")) {
-		equipCellHighLegit(detailLabel);
+		equipCellHighLegit(cell.detailTextLabel);
 	}
 
 	if (@available(iOS 13.0, *))
-		detailLabel.textColor = [UIColor secondaryLabelColor];
+		cell.detailTextLabel.textColor = [UIColor secondaryLabelColor];
 	else
-		detailLabel.textColor = [UIColor colorWithRed:(60.0f / 255) green:(60.0f / 255) blue:(67.0f / 255) alpha:0.6];
+		cell.detailTextLabel.textColor = [UIColor colorWithRed:(60.0f / 255) green:(60.0f / 255) blue:(67.0f / 255) alpha:0.6];
 
 	return;
 }
@@ -272,17 +258,6 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 		NSString        *pending;
 		UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
 		pending               = cell.detailTextLabel.text;
-		if ([cell respondsToSelector:@selector(detailLabel)]) {
-			// Suppress compiler warning about performSelector leak
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-			UILabel *detail = [cell performSelector:@selector(detailLabel)];
-#pragma clang diagnostic pop
-
-			if ([detail isKindOfClass:[UILabel class]]) {
-				pending = detail.text;
-			}
-		}
 
 		pasteboard = [UIPasteboard generalPasteboard];
 		[pasteboard setString:pending];
@@ -453,8 +428,6 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 
 		cellf.textLabel.text       = _(pending_bi->name);
 		cellf.detailTextLabel.text = _(bi_node_get_string(pending_bi));
-		cellf.titleLabel.text      = _(pending_bi->name);
-		cellf.detailLabel.text     = _(bi_node_get_string(pending_bi));
 		[cellf selectByFlags:gGauge.Flags];
 		if (strlen(gGauge.DeviceName)) {
 			[cellf setBitSetByModel:[NSString stringWithFormat:@"%s", gGauge.DeviceName]];
@@ -647,21 +620,21 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 
 			/* Content */
 			if (!hvc_soft && (hvc_index > hvc_menu_size)) {
-				cell_seg.detailLabel.text    = [NSString stringWithFormat:@"%d (%@)", hvc_index, _("Not HVC")];
+				cell_seg.detailTextLabel.text    = [NSString stringWithFormat:@"%d (%@)", hvc_index, _("Not HVC")];
 				cell_seg.subTitleLabel.text  = @" ";
 				cell_seg.subDetailLabel.text = @" ";
 			} else if (hvc_soft == true) {
-				cell_seg.detailLabel.text = [NSString stringWithFormat:@"%d (%@)", hvc_index, _("Software Controlled")];
+				cell_seg.detailTextLabel.text = [NSString stringWithFormat:@"%d (%@)", hvc_index, _("Software Controlled")];
 				[cell_seg.segmentedControl setSelectedSegmentIndex:hvc_index];
 				/* Why its not refreshing label after setSelectedSegmentIndex? */
 				cell_seg.subTitleLabel.text  = [NSString stringWithFormat:@"%d %s", hvc_menu[hvc_index].voltage, L_MV];
 				cell_seg.subDetailLabel.text = [NSString stringWithFormat:@"%d %s", hvc_menu[hvc_index].current, L_MA];
 			} else if (hvc_index == -1) {
-				cell_seg.detailLabel.text    = [NSString stringWithFormat:@"%d (%@)", hvc_index, _("Unavailable")];
+				cell_seg.detailTextLabel.text    = [NSString stringWithFormat:@"%d (%@)", hvc_index, _("Unavailable")];
 				cell_seg.subTitleLabel.text  = @" ";
 				cell_seg.subDetailLabel.text = @" ";
 			} else {
-				cell_seg.detailLabel.text = [NSString stringWithFormat:@"%d", hvc_index];
+				cell_seg.detailTextLabel.text = [NSString stringWithFormat:@"%d", hvc_index];
 				[cell_seg.segmentedControl setSelectedSegmentIndex:hvc_index];
 				/* Why its not refreshing label after setSelectedSegmentIndex? */
 				cell_seg.subTitleLabel.text  = [NSString stringWithFormat:@"%d %s", hvc_menu[hvc_index].voltage, L_MV];

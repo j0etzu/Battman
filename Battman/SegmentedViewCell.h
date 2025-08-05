@@ -2,9 +2,11 @@
 #import "UberSegmentedControl/UberSegmentedControl.h"
 
 @interface SegmentedHVCViewCell : UITableViewCell
+{
+	UILabel *_detailTextLabel;
+}
 
 @property (nonatomic, strong, nonnull) UILabel *titleLabel;
-@property (nonatomic, strong, nullable) UILabel *detailLabel;
 @property (nonatomic, strong, nullable) UIView *accessory;
 @property (nonatomic, strong, nullable) UISegmentedControl *segmentedControl;
 @property (nonatomic, strong, nullable) UILabel *subTitleLabel;
@@ -13,6 +15,9 @@
 @end
 
 @interface SegmentedFlagViewCell : UITableViewCell
+{
+	UILabel *_detailTextLabel;
+}
 
 @property (nonatomic, strong, nonnull) UILabel *titleLabel;
 @property (nonatomic, strong, nullable) UILabel *detailLabel;

@@ -19,18 +19,18 @@
         [self.contentView addSubview:self.titleLabel];
 
         // Alternative detail
-        self.detailLabel = [[UILabel alloc] init];
-        self.detailLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        _detailTextLabel = [[UILabel alloc] init];
+        self.detailTextLabel.translatesAutoresizingMaskIntoConstraints = NO;
         // For use as our custom labels' template
         UITableViewCell *cell;
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
         cell.hidden = YES;
         [self.contentView addSubview:cell];
         cell.detailTextLabel.text = @"DETAIL";
-        self.detailLabel.font = cell.detailTextLabel.font;
-        self.detailLabel.textColor = cell.detailTextLabel.textColor;
-        self.detailLabel.textAlignment = cell.detailTextLabel.textAlignment;
-        [self.contentView addSubview:self.detailLabel];
+        self.detailTextLabel.font = cell.detailTextLabel.font;
+        self.detailTextLabel.textColor = cell.detailTextLabel.textColor;
+        self.detailTextLabel.textAlignment = cell.detailTextLabel.textAlignment;
+        [self.contentView addSubview:self.detailTextLabel];
         
         // Initialize segmented control with sample segment
         self.segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"0"]];
@@ -58,9 +58,9 @@
             [self.titleLabel.leadingAnchor constraintEqualToAnchor:self.textLabel.leadingAnchor],
             [self.titleLabel.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-16],
             // Detail label
-            [self.detailLabel.topAnchor constraintEqualToAnchor:self.textLabel.topAnchor constant:(self.frame.size.height - self.textLabel.font.pointSize) / 2],
-            [self.detailLabel.leadingAnchor constraintEqualToAnchor:self.textLabel.leadingAnchor],
-            [self.detailLabel.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-16],
+            [self.detailTextLabel.topAnchor constraintEqualToAnchor:self.textLabel.topAnchor constant:(self.frame.size.height - self.textLabel.font.pointSize) / 2],
+            [self.detailTextLabel.leadingAnchor constraintEqualToAnchor:self.textLabel.leadingAnchor],
+            [self.detailTextLabel.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-16],
             
             // Segmented control constraints
             [self.segmentedControl.topAnchor constraintEqualToAnchor:self.titleLabel.bottomAnchor constant:8],
@@ -401,18 +401,18 @@
         [self.contentView addSubview:self.titleLabel];
 
         // Alternative detail
-        self.detailLabel = [[UILabel alloc] init];
-        self.detailLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        _detailTextLabel = [[UILabel alloc] init];
+        self.detailTextLabel.translatesAutoresizingMaskIntoConstraints = NO;
         // For use as our custom labels' template
         UITableViewCell *cell;
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
         cell.hidden = YES;
         [self.contentView addSubview:cell];
         cell.detailTextLabel.text = @"DETAIL";
-        self.detailLabel.font = cell.detailTextLabel.font;
-        self.detailLabel.textColor = cell.detailTextLabel.textColor;
-        self.detailLabel.textAlignment = cell.detailTextLabel.textAlignment;
-        [self.contentView addSubview:self.detailLabel];
+        self.detailTextLabel.font = cell.detailTextLabel.font;
+        self.detailTextLabel.textColor = cell.detailTextLabel.textColor;
+        self.detailTextLabel.textAlignment = cell.detailTextLabel.textAlignment;
+        [self.contentView addSubview:self.detailTextLabel];
 
         // Initialize segmented control with sample segment
         UIFont *font;
@@ -440,9 +440,9 @@
             [self.titleLabel.leadingAnchor constraintEqualToAnchor:self.textLabel.leadingAnchor],
             [self.titleLabel.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-16],
             // Detail label
-            [self.detailLabel.topAnchor constraintEqualToAnchor:self.textLabel.topAnchor constant:(self.frame.size.height - self.textLabel.font.pointSize) / 2],
-            [self.detailLabel.leadingAnchor constraintEqualToAnchor:self.textLabel.leadingAnchor],
-            [self.detailLabel.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-16],
+            [self.detailTextLabel.topAnchor constraintEqualToAnchor:self.textLabel.topAnchor constant:(self.frame.size.height - self.textLabel.font.pointSize) / 2],
+            [self.detailTextLabel.leadingAnchor constraintEqualToAnchor:self.textLabel.leadingAnchor],
+            [self.detailTextLabel.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-16],
             
             // Segmented control constraints
             [self.highByte.topAnchor constraintEqualToAnchor:self.titleLabel.bottomAnchor constant:8],
@@ -461,5 +461,7 @@
     }
     return self;
 }
+
+- (id)detailTextLabel {return _detailTextLabel;}
 
 @end
