@@ -48,11 +48,6 @@ void equipCellHighLegit(UILabel *label) {
 	if (font) CFRelease(font);
 }
 
-UILabel *equipCellDetail(UITableViewCell *cell, NSString *text) {
-	cell.detailTextLabel.text = text;
-	return cell.detailTextLabel;
-}
-
 void equipDetailCell(UITableViewCell *cell, struct battery_info_node *i) {
 	// PLEASE ENSURE no hidden cell is here when calling
 	/*if ((i->content & BIN_DETAILS_SHARED) == BIN_DETAILS_SHARED ||
