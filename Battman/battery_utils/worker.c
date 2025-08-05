@@ -124,6 +124,7 @@ void battman_run_worker(const char *pipedata) {
 		} else if (cmd == 5) {
 			// thermtune bool
 			uint32_t val;
+			char buf[6];
 			read(worker_pipefd[0], &val, 4);
 			int ret = 1001;
 			int sect = (val & 0xF000) >> 12;
@@ -172,8 +173,9 @@ void battman_run_worker(const char *pipedata) {
 						case 0: {
 							// TT_ROW_SUNLIGHT_AUTO
 							extern bool delSunlightEntry(void);
+							extern int setSunlightEnabled(bool enable, bool persist);
 							if (val & 1) ret = delSunlightEntry();
-							else ret = 0;
+							else ret = setSunlightEnabled(0, 0);
 							break;
 						}
 						case 1: {
@@ -186,8 +188,11 @@ void battman_run_worker(const char *pipedata) {
 					break;
 				}
 			}
-			ret = 114514;
-			write(worker_pipefd[1], &ret, sizeof(int));
+			*(int *)buf = ret;
+			char retval = 2;
+			write(worker_pipefd[1], &retval, 1);
+			write(worker_pipefd[1], buf, 6);
+			continue;
 		}
 	}
 }

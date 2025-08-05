@@ -321,6 +321,7 @@ static bool has_hip = false;
 			}
 		}
 	}
+	// TODO: Override4CC
 	return cell;
 }
 
@@ -364,7 +365,6 @@ static bool has_hip = false;
 - (void)writeThermalBoolCmd:(uint32_t)cmd {
 	extern uint64_t battman_worker_call(char cmd, void *arg, uint64_t arglen);
 	uint64_t ret = battman_worker_call(5, (void *)&cmd, 4);
-	// Why this always 0?
 	if (ret != 0) {
 		char *errstr = calloc(1024, 1);
 		sprintf(errstr, "%s: %llu", _C("Thermal Tuning failed with error"), ret);
