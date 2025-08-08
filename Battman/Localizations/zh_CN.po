@@ -949,7 +949,7 @@ msgstr "剩余容量"
 
 #: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:481
 msgid ""
-"Unusual Remaining Capacity, A non-genuine battery component may be in use."
+"Unusual Remaining Capacity, a non-genuine battery component may be in use."
 msgstr "电池剩余容量数据异常，使用的可能是未经认证的电池部件。"
 
 #: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:481
@@ -983,7 +983,7 @@ msgid "Time to Empty"
 msgstr "耗尽时间"
 
 #: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:558
-msgid "Unusual Time to Empty, A non-genuine battery component may be in use."
+msgid "Unusual Time to Empty, a non-genuine battery component may be in use."
 msgstr "电池耗尽时间异常，使用的可能是未经认证的电池部件"
 
 #: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:562
@@ -995,7 +995,7 @@ msgstr "放电深度"
 
 #: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:569
 msgid ""
-"Unusual Depth of Discharge, A non-genuine battery component may be in use."
+"Unusual Depth of Discharge, a non-genuine battery component may be in use."
 msgstr "电池化学放电深度异常，使用的可能是未经认证的电池部件"
 
 #: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:650

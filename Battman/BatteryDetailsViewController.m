@@ -422,6 +422,7 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 			cellf = [[SegmentedFlagViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"FLAGS"];
 
 		cellf.textLabel.text       = _(pending_bi->name);
+		cellf.titleLabel.text      = _(pending_bi->name);
 		cellf.detailTextLabel.text = _(bi_node_get_string(pending_bi));
 		[cellf selectByFlags:gGauge.Flags];
 		if (strlen(gGauge.DeviceName)) {
@@ -446,7 +447,7 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 				static char errmsg[256];
 				// some Shenzhen battries is spoofing this data to affect internal battery health calculations
 				// But they still had to report a real SoC so that indicating actual conditions.
-				sprintf(errmsg, "%s\n%s: %ld", _C("Unusual Remaining Capacity, A non-genuine battery component may be in use."), _C("Estimated Remaining"), lrintf((float)full_cap * gGauge.StateOfCharge / 100.0f));
+				sprintf(errmsg, "%s\n%s: %ld", _C("Unusual Remaining Capacity, a non-genuine battery component may be in use."), _C("Estimated Remaining"), lrintf((float)full_cap * gGauge.StateOfCharge / 100.0f));
 				*str = errmsg;
 			} else if (remain_cap == 0) {
 				code = WARN_EMPTYVAL;
@@ -523,7 +524,7 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 			/* for ensurence, we check if TTE is bigger than 1.5*ideal */
 			if (tte > (ideal * 1.5)) {
 				code = WARN_UNUSUAL;
-				*str = _C("Unusual Time to Empty, A non-genuine battery component may be in use.");
+				*str = _C("Unusual Time to Empty, a non-genuine battery component may be in use.");
 			}
 			return code;
 		});
@@ -534,7 +535,7 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 			 * exceeds when discharging/charging with adapter attached */
 			if (gGauge.DOD0 > (gGauge.Qmax * 3)) {
 				code = WARN_UNUSUAL;
-				*str = _C("Unusual Depth of Discharge, A non-genuine battery component may be in use.");
+				*str = _C("Unusual Depth of Discharge, a non-genuine battery component may be in use.");
 			}
 			return code;
 		});

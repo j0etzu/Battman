@@ -968,9 +968,9 @@ msgstr "Remaining Capacity"
 
 #: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:481
 msgid ""
-"Unusual Remaining Capacity, A non-genuine battery component may be in use."
+"Unusual Remaining Capacity, a non-genuine battery component may be in use."
 msgstr ""
-"Unusual Remaining Capacity, A non-genuine battery component may be in use."
+"Unusual Remaining Capacity, a non-genuine battery component may be in use."
 
 #: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:481
 msgid "Estimated Remaining"
@@ -1005,8 +1005,8 @@ msgid "Time to Empty"
 msgstr "Time to Empty"
 
 #: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:558
-msgid "Unusual Time to Empty, A non-genuine battery component may be in use."
-msgstr "Unusual Time to Empty, A non-genuine battery component may be in use."
+msgid "Unusual Time to Empty, a non-genuine battery component may be in use."
+msgstr "Unusual Time to Empty, a non-genuine battery component may be in use."
 
 #: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:562
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:44
@@ -1017,9 +1017,9 @@ msgstr "Depth of Discharge"
 
 #: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:569
 msgid ""
-"Unusual Depth of Discharge, A non-genuine battery component may be in use."
+"Unusual Depth of Discharge, a non-genuine battery component may be in use."
 msgstr ""
-"Unusual Depth of Discharge, A non-genuine battery component may be in use."
+"Unusual Depth of Discharge, a non-genuine battery component may be in use."
 
 #: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:650
 msgid "Not HVC"
