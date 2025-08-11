@@ -17,7 +17,8 @@ FRAMEWORKS := -framework UIKit \
 	      -framework QuartzCore \
               -framework IOKit \
               -framework WebKit \
-	      -framework SystemConfiguration
+	      -framework SystemConfiguration \
+	      -framework MessageUI
 
 CFLAGS = -Wno-deprecated-declarations -Wno-nullability-completeness -Werror -target arm64-apple-ios${IPHONEOS_DEPLOYMENT_TARGET} -target arm64-apple-darwin -fobjc-arc -fconstant-cfstrings -I./EXTERNAL_HEADERS
 LDFLAGS = -target arm64-apple-ios$(IPHONEOS_DEPLOYMENT_TARGET) -target arm64-apple-darwin $(LIBS) $(FRAMEWORKS) -Wl,-dead_strip_dylibs

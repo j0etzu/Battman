@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Battman 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-06 03:32+0800\n"
+"POT-Creation-Date: 2025-08-11 23:13+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,7 +33,7 @@ msgid "Error"
 msgstr ""
 
 #: /Users/torrekie/proj/Battman/Battman/common.c:339
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:673
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:642
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:77
 msgid "None"
 msgstr ""
@@ -55,13 +55,13 @@ msgstr ""
 
 #: /Users/torrekie/proj/Battman/Battman/common.c:343
 #: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:35
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:103
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:85
 msgid "True"
 msgstr ""
 
 #: /Users/torrekie/proj/Battman/Battman/common.c:344
 #: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:35
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:105
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:87
 msgid "False"
 msgstr ""
 
@@ -69,80 +69,85 @@ msgstr ""
 msgid "Swipe up to exit"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:34
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:35
 msgid "Logs"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:114
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:119
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:115
 #: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:120
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:121
 msgid "More"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:141
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:142
 msgid "About Battman"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:144
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:145
 msgid "Debug"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:236
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:350
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:239
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:362
 #: /Users/torrekie/proj/Battman/Battman/CreditViewController.c:7
 msgid "Credit"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:240
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:243
 msgid "Source Code"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:249
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:252
 msgid "Battman Wiki & User Manual"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:262
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:261
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:29
+msgid "Support Us"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:274
 msgid "Logs (stdout)"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:267
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:279
 msgid "Select language override"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:272
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:284
 msgid "Exit App"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:277
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:289
 msgid "Logs (stdout) (very cool)"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:282
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:294
 msgid "Redirect daemon logs"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:287
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:299
 msgid "Show fatal error view"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:320
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:332
 msgid "Trigger fatal notify"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:325
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:337
 msgid "Trigger UTF jitter"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:366
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:378
 #: /Users/torrekie/proj/Battman/Battman/CreditViewController.c:23
 msgid "Battman Credit"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:422
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:434
 msgid "Language Override"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:436
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:448
 msgid "Clear"
 msgstr ""
 
@@ -855,93 +860,160 @@ msgstr ""
 msgid "Resume Value should be smaller than Limit Value"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:181
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:34
+msgid "Patreon"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:34
+msgid "Afdian"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:34
+msgid "UniFans"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:84
+msgid "Support Battman"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:90
+msgid ""
+"If Battman saved you time or made your day easier, please consider a small "
+"donation. Even a few dollars make a real difference and help me keep adding "
+"improvements (also helps my living)."
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:97
+msgid "You can at least get Battman early accesses by donating us 🥺"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:97
+msgid "Don't worry about annoyance, this page only popup itself for once 🥺"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:104
+msgid "Having Problems?"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:110
+msgid ""
+"We'd love to hear from you! Let us know if you find any bugs or have "
+"suggestions to make things better."
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:121
+msgid "Create a new GitHub issue"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:138
+msgid "Send an Email"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:183
+msgid "No, thanks"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:237
+#, objc-format
+msgid "Goto %@"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:381
+#, objc-format
+msgid "Error when opening URL: %@"
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:406
+msgid "Your device does not support sending Emails."
+msgstr ""
+
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:162
 msgid ""
 "No value returned from sensor, device should be checked by service "
 "technician."
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:184
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:165
 msgid ""
 "Value exceeded the designed, device should be checked by service technician."
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:187
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:168
 msgid "Unusual value, device should be checked by service technician."
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:191
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:172
 msgid ""
 "Significant abnormal data, device should be checked by service technician."
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:199
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:180
 msgid "Error Data"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:202
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:183
 msgid "Unusual Data"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:205
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:186
 msgid "Data Too Large"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:208
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:189
 msgid "Empty Data"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:211
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:192
 msgid "Wrong Data"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:221
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:202
 msgid "Internal Battery"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:290
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:260
 msgid "Copied!"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:312
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:282
 msgid "Advanced"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:355
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:325
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:76
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:689
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:936
 msgid "Type"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:357
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:327
 msgid ""
 "\"External Power\" indicator may suggest that the connected adapter is a "
 "wireless charger. Most information may not be displayed because wireless "
 "chargers are handled differently by the hardware."
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:472
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:441
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:41
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:217
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:750
 msgid "Remaining Capacity"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:481
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:450
 msgid ""
-"Unusual Remaining Capacity, A non-genuine battery component may be in use."
+"Unusual Remaining Capacity, a non-genuine battery component may be in use."
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:481
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:450
 msgid "Estimated Remaining"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:485
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:454
 msgid "Remaining Capacity not detected."
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:489
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:458
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:52
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:119
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:163
@@ -951,47 +1023,47 @@ msgstr ""
 msgid "Cycle Count"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:536
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:505
 msgid ""
 "Cycle Count exceeded designed cycle count, consider replacing with a genuine "
 "battery."
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:540
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:509
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:51
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:761
 msgid "Time to Empty"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:558
-msgid "Unusual Time to Empty, A non-genuine battery component may be in use."
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:527
+msgid "Unusual Time to Empty, a non-genuine battery component may be in use."
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:562
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:531
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:44
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:220
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:753
 msgid "Depth of Discharge"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:569
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:538
 msgid ""
-"Unusual Depth of Discharge, A non-genuine battery component may be in use."
+"Unusual Depth of Discharge, a non-genuine battery component may be in use."
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:650
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:619
 msgid "Not HVC"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:654
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:623
 msgid "Software Controlled"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:660
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:629
 msgid "Unavailable"
 msgstr ""
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/worker.c:221
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/worker.c:226
 msgid "Helper failed to launch"
 msgstr ""
 
@@ -1318,7 +1390,7 @@ msgstr ""
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/libsmc.c:876
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:79
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:90
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:96
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:85
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:127
 msgid "Unknown"
