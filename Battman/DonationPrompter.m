@@ -48,23 +48,25 @@ void donation_prompter_request_check(void) {
 	if(CFAbsoluteTimeGetCurrent() - [[(id)[NSProcessInfo processInfo] processStartTime] timeIntervalSince1970] > kBattmanDonationPushAboutSeconds)
 		return;
 	
-	// verify UI is ready and not presenting another modal
-	UIViewController *topController=find_top_controller([gWindow rootViewController]);
-	if(!topController)
-		return;
-	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-		if(donation_shown())
+	dispatch_async(dispatch_get_main_queue(), ^{
+		// verify UI is ready and not presenting another modal
+		UIViewController *topController=find_top_controller([gWindow rootViewController]);
+		if(!topController)
 			return;
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+			if(donation_shown())
+				return;
 
-		// Another defensive check: if top VC changed to a modal in the meantime don't show
-		UIViewController *top2 =find_top_controller([gWindow rootViewController]);
-		if (!top2 || top2.presentedViewController) return;
+			// Another defensive check: if top VC changed to a modal in the meantime don't show
+			UIViewController *top2 =find_top_controller([gWindow rootViewController]);
+			if (!top2 || top2.presentedViewController) return;
 
-		// Mark shown before calling (so reentrancy / crashes won't re-trigger)
-		[[NSUserDefaults standardUserDefaults] setBool:YES forKey:(__bridge NSString *)kBattmanDonateShownKey];
-		[[NSUserDefaults standardUserDefaults] synchronize];
+			// Mark shown before calling (so reentrancy / crashes won't re-trigger)
+			[[NSUserDefaults standardUserDefaults] setBool:YES forKey:(__bridge NSString *)kBattmanDonateShownKey];
+			[[NSUserDefaults standardUserDefaults] synchronize];
 
-		show_donation();
+			show_donation();
+		});
 	});
 }
 
