@@ -132,10 +132,11 @@
 	report.layer.borderWidth = 1.0;
 	if (@available(iOS 13.0, *)) {
 		report.layer.borderColor = [UIColor systemGray4Color].CGColor;
+		[report setTitleColor:[UIColor labelColor] forState:UIControlStateNormal];
 	} else {
 		report.layer.borderColor = [UIColor lightGrayColor].CGColor;
+		[report setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
 	}
-	[report setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 	[report addTarget:self action:@selector(issueTapped:) forControlEvents:UIControlEventTouchUpInside];
 	
 	UIButton *email = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -149,10 +150,11 @@
 	email.layer.borderWidth = 1.0;
 	if (@available(iOS 13.0, *)) {
 		email.layer.borderColor = [UIColor systemGray4Color].CGColor;
+		[email setTitleColor:[UIColor labelColor] forState:UIControlStateNormal];
 	} else {
 		email.layer.borderColor = [UIColor lightGrayColor].CGColor;
+		[email setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
 	}
-	[email setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 	[email addTarget:self action:@selector(emailTapped:) forControlEvents:UIControlEventTouchUpInside];
 	
 	NSMutableArray *btns = [NSMutableArray arrayWithCapacity:_donates.count / 2];
