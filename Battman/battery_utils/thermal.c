@@ -47,8 +47,6 @@ static const char *thermal_pressure_string[] = {
 };
 static const char *thermal_notif_level_string[] = {
 	_C("Normal"),
-	/* APPLE LIED TO US, THESE ARE FUCKED */
-#if 0
 	_C("70% Torch"),
 	_C("70% Backlight"),
 	_C("50% Torch"),
@@ -59,11 +57,6 @@ static const char *thermal_notif_level_string[] = {
 	_C("App Terminated"),
 	_C("Device Restart"),
 	_C("Ready")
-#else
-	_C("Fair"),
-	_C("Serious"),
-	_C("Critical")
-#endif
 };
 #undef _C
 #define _C(x) cond_localize_c(x)
@@ -81,19 +74,19 @@ const char *get_thermal_pressure_string(thermal_pressure_t pressure) {
 }
 
 const char *get_thermal_notif_level_string(thermal_notif_level_t level) {
-#if 0
+	static char numstr[32];
+	// Knowing a special value 8: thermtune controlled
+	int realval = OSThermalNotificationCurrentLevel();
+
 	if (level <= kBattmanThermalNotificationLevelAny)
 		return L_NONE;
-	if (level > kBattmanThermalNotificationLevelAny && level < kBattmanThermalNotificationLevelUnknown)
-		return _C(thermal_notif_level_string[level]);
-#else
-	// OSNotif is NSProcessInfoThermalState, at least for post 11
-	if (level >= 0 && level <= 4)
-		return _C(thermal_notif_level_string[level]);
-#endif
 
-	static char numstr[32];
-	sprintf(numstr, "%s (%d)", _C("Unknown"), level);
+	if (level > kBattmanThermalNotificationLevelAny && level < kBattmanThermalNotificationLevelUnknown) {
+		sprintf(numstr, "%s (%d)", _C(thermal_notif_level_string[level]), realval);
+	} else {
+		sprintf(numstr, "%s (%d)", _C("Unknown"), realval);
+	}
+
 	return numstr;
 }
 
@@ -149,7 +142,6 @@ thermal_pressure_t thermal_pressure(void) {
 }
 
 thermal_notif_level_t thermal_notif_level(void) {
-#if !TARGET_OS_IPHONE
 	static bool got_levels = false;
 	static int  levels[11] = { 0 };
 
@@ -169,9 +161,6 @@ thermal_notif_level_t thermal_notif_level(void) {
 			return (thermal_notif_level_t)i;
 
 	return kBattmanThermalNotificationLevelUnknown;
-#else
-	return OSThermalNotificationCurrentLevel();
-#endif
 }
 
 float thermal_max_trigger_temperature(void) {
