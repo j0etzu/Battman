@@ -41,7 +41,7 @@ struct localization_arr_entry {
 
 extern struct localization_arr_entry localization_arr[];
 
-#define PSTRMAP_SIZE 512
+#define PSTRMAP_SIZE 800
 struct localization_entry pstrmap[PSTRMAP_SIZE] = {0};
 
 #ifndef USE_GETTEXT
