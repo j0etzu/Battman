@@ -68,6 +68,12 @@ void donation_prompter_request_check(void) {
 	});
 }
 
+__attribute__((constructor)) static void _donation_run() {
+	CFNotificationCenterRef nc=CFNotificationCenterGetLocalCenter();
+	CFNotificationCenterAddObserver(nc,NULL,(CFNotificationCallback)donation_prompter_request_check,(__bridge CFStringRef)UIApplicationDidFinishLaunchingNotification,NULL,1);
+	CFNotificationCenterAddObserver(nc,NULL,(CFNotificationCallback)donation_prompter_request_check,(__bridge CFStringRef)UIApplicationDidBecomeActiveNotification,NULL,1);
+}
+
 void show_donation(void) {
 	dispatch_async(dispatch_get_main_queue(), ^{
 		UIViewController *top = find_top_controller([gWindow rootViewController]);
