@@ -156,7 +156,7 @@ static BOOL _coolDebugVCPresented = 0;
 		} else if (indexPath.row == 2) {
 			open_url("https://github.com/Torrekie/Battman/wiki");
 		} else if (indexPath.row == 3) {
-			show_donation();
+			show_donation(true);
 		}
     }
 #ifdef DEBUG

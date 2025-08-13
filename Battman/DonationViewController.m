@@ -17,6 +17,7 @@
 @property (nonatomic, strong) NSArray *donateButtons;
 @property (nonatomic, strong) NSString *selectedDonate;
 @property (nonatomic, strong) NSArray *donates;
+@property (assign) BOOL manual;
 @end
 
 @interface CALayer ()
@@ -27,6 +28,14 @@
 
 - (NSString *)title {
 	return _("Support Us");
+}
+
+- (instancetype)initWithFlag:(BOOL)manual {
+	self = [super init];
+	if (self) {
+		_manual = manual;
+	}
+	return self;
 }
 
 - (void)viewDidLoad {
@@ -94,7 +103,7 @@
 	
 	UILabel *note = [[UILabel alloc] init];
 	// TODO: Check if manually triggered
-	note.text = donation_shown() ? _("You can at least get Battman early accesses by donating us 🥺") : _("Don't worry about annoyance, this page only popup itself for once 🥺");
+	note.text = (_manual || donation_shown()) ? _("You can at least get Battman early accesses by donating us 🥺") : _("Don't worry about annoyance, this page only popup itself for once 🥺");
 	note.numberOfLines = 0;
 	note.textAlignment = NSTextAlignmentCenter;
 	note.font = [UIFont systemFontOfSize:10];

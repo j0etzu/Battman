@@ -8,5 +8,5 @@
 #import <UIKit/UIKit.h>
 
 @interface DonationViewController : UIViewController
-
+- (instancetype)initWithFlag:(BOOL)manual;
 @end

@@ -12,7 +12,7 @@ __BEGIN_DECLS
 bool donation_shown(void);
 
 // manually push a UINavigationController containing our DonationViewController anywhere
-void show_donation(void);
+void show_donation(bool manual);
 
 // show_donation() but still obey to the conditions
 void donation_prompter_request_check(void);
