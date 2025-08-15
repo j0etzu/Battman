@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Battman 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 23:13+0800\n"
+"POT-Creation-Date: 2025-08-15 17:10+0800\n"
 "PO-Revision-Date: 2025-01-27 17:32+0800\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -102,7 +102,7 @@ msgid "Battman Wiki & User Manual"
 msgstr "Battman Wiki & User Manual"
 
 #: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:261
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:29
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:30
 msgid "Support Us"
 msgstr "Support Us"
 
@@ -487,7 +487,7 @@ msgid "Will be introduced in future updates."
 msgstr "Will be introduced in future updates."
 
 #: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:238
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:48
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:78
 msgid "Charging Limit"
 msgstr "Charging Limit"
 
@@ -816,19 +816,32 @@ msgstr ""
 msgid "Battman CLI not implemented yet."
 msgstr "Battman CLI not implemented yet."
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:78
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:118
 msgid "Failed to open daemon settings file"
 msgstr "Failed to open daemon settings file"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:94
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:134
 msgid "File mapping failed"
 msgstr "File mapping failed"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:115
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:155
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:260
+msgid "7-Day Battery Level"
+msgstr "7-Day Battery Level"
+
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:157
 msgid "Charging Limit (Experimental)"
 msgstr "Charging Limit (Experimental)"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:121
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:163
+msgid ""
+"The system logs battery charge–level changes for the past 7 days. If this "
+"graph is empty, the power-log service may not be running correctly."
+msgstr ""
+"The system logs battery charge–level changes for the past 7 days. If this "
+"graph is empty, the power-log service may not be running correctly."
+
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:165
 msgid ""
 "Charging Limit uses a background service to monitor your battery's charge "
 "level and automatically adjust charging behavior. You need to restart the "
@@ -838,76 +851,81 @@ msgstr ""
 "level and automatically adjust charging behavior. You need to restart the "
 "service after changing the configuration."
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:147
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:214
 msgid "Unable to connect to the daemon."
 msgstr "Unable to connect to the daemon."
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:169
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:236
 msgid "Couldn't start the daemon — it isn’t responding."
 msgstr "Couldn't start the daemon — it isn’t responding."
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:191
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:261
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:629
+msgid "Unavailable"
+msgstr "Unavailable"
+
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:284
 msgid "When limit is reached"
 msgstr "When limit is reached"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:222
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:315
 msgid "Limit charging at (%)"
 msgstr "Limit charging at (%)"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:245
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:338
 msgid "Resume charging at (%)"
 msgstr "Resume charging at (%)"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:273
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:366
 msgid "Daemon is active"
 msgstr "Daemon is active"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:273
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:366
 msgid "PID"
 msgstr "PID"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:275
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:368
 msgid "Daemon is inactive"
 msgstr "Daemon is inactive"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:281
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:374
 msgid "Stop Daemon (Disable Charging Limit)"
 msgstr "Stop Daemon (Disable Charging Limit)"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:283
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:376
 msgid "Start Daemon (Enforce Charging Limit)"
 msgstr "Start Daemon (Enforce Charging Limit)"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:298
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:302
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:392
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:396
 msgid "Invalid Setup"
 msgstr "Invalid Setup"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:298
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:392
 msgid "Limit Value should be bigger than Resume Value"
 msgstr "Limit Value should be bigger than Resume Value"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:302
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:396
 msgid "Resume Value should be smaller than Limit Value"
 msgstr "Resume Value should be smaller than Limit Value"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:34
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:43
 msgid "Patreon"
 msgstr "Patreon"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:34
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:43
 msgid "Afdian"
 msgstr "Afdian"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:34
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:43
 msgid "UniFans"
 msgstr "UniFans"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:84
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:93
 msgid "Support Battman"
 msgstr "Support Battman"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:90
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:99
 msgid ""
 "If Battman saved you time or made your day easier, please consider a small "
 "donation. Even a few dollars make a real difference and help me keep adding "
@@ -917,19 +935,19 @@ msgstr ""
 "donation. Even a few dollars make a real difference and help me keep adding "
 "improvements (also helps my living)."
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:97
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:106
 msgid "You can at least get Battman early accesses by donating us 🥺"
 msgstr "You can at least get Battman early accesses by donating us 🥺"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:97
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:106
 msgid "Don't worry about annoyance, this page only popup itself for once 🥺"
 msgstr "Don't worry about annoyance, this page only popup itself for once 🥺"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:104
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:113
 msgid "Having Problems?"
 msgstr "Having Problems?"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:110
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:119
 msgid ""
 "We'd love to hear from you! Let us know if you find any bugs or have "
 "suggestions to make things better."
@@ -937,29 +955,29 @@ msgstr ""
 "We'd love to hear from you! Let us know if you find any bugs or have "
 "suggestions to make things better."
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:121
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:130
 msgid "Create a new GitHub issue"
 msgstr "Create a new GitHub issue"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:138
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:148
 msgid "Send an Email"
 msgstr "Send an Email"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:183
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:194
 msgid "No, thanks"
 msgstr "No, thanks"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:237
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:248
 #, objc-format
 msgid "Goto %@"
 msgstr "Goto %@"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:381
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:392
 #, objc-format
 msgid "Error when opening URL: %@"
 msgstr "Error when opening URL: %@"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:406
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:417
 msgid "Your device does not support sending Emails."
 msgstr "Your device does not support sending Emails."
 
@@ -1105,10 +1123,6 @@ msgstr "Not HVC"
 #: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:623
 msgid "Software Controlled"
 msgstr "Software Controlled"
-
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:629
-msgid "Unavailable"
-msgstr "Unavailable"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/worker.c:226
 msgid "Helper failed to launch"
@@ -1436,8 +1450,8 @@ msgid "Externel Power 7"
 msgstr "Externel Power 7"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/libsmc.c:876
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:79
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:96
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:72
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:87
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:85
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:127
 msgid "Unknown"
@@ -1471,57 +1485,45 @@ msgstr "Sleeping"
 msgid "Normal"
 msgstr "Normal"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:52
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:50
 msgid "70% Torch"
 msgstr "70% Torch"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:53
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:51
 msgid "70% Backlight"
 msgstr "70% Backlight"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:54
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:52
 msgid "50% Torch"
 msgstr "50% Torch"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:55
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:53
 msgid "50% Backlight"
 msgstr "50% Backlight"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:56
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:54
 msgid "Torch Disabled"
 msgstr "Torch Disabled"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:57
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:55
 msgid "25% Backlight"
 msgstr "25% Backlight"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:58
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:56
 msgid "Maps halo Disabled"
 msgstr "Maps halo Disabled"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:59
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:57
 msgid "App Terminated"
 msgstr "App Terminated"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:60
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:58
 msgid "Device Restart"
 msgstr "Device Restart"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:61
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:59
 msgid "Ready"
 msgstr "Ready"
-
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:63
-msgid "Fair"
-msgstr "Fair"
-
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:64
-msgid "Serious"
-msgstr "Serious"
-
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:65
-msgid "Critical"
-msgstr "Critical"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:27
 msgid "℃"
@@ -2520,3 +2522,12 @@ msgstr "Max"
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:170
 msgid "Undefined"
 msgstr "Undefined"
+
+#~ msgid "Fair"
+#~ msgstr "Fair"
+
+#~ msgid "Serious"
+#~ msgstr "Serious"
+
+#~ msgid "Critical"
+#~ msgstr "Critical"
