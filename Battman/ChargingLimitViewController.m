@@ -185,8 +185,10 @@ extern const char *container_system_group_path_for_identifier(int,const char*,BO
 	if (!vals)
 		return;
 	const char endconnectioncmd = 5;
-	write(daemon_fd, &endconnectioncmd, 1);
-	close(daemon_fd);
+	if(daemon_fd) {
+		write(daemon_fd, &endconnectioncmd, 1);
+		close(daemon_fd);
+	}
 	munmap(vals, 2);
 }
 
@@ -201,27 +203,6 @@ extern const char *container_system_group_path_for_identifier(int,const char*,BO
 
 - (NSInteger)numberOfSectionsInTableView:(id)tv {
 	return CL_SECTION_COUNT;
-}
-
-- (void)viewDidAppear:(BOOL)animated {
- [super viewDidAppear:animated];
- if (load_graph) {
-	 NSIndexPath *ip = [NSIndexPath indexPathForRow:0 inSection:CL_SECTION_GRAPH];
-	 UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:ip];
-	 UIView *graph =[(id)cell graphView];
-
-	 if (@available(iOS 13.0, *)) {
-		 changeLabelColors(cell, [UIColor labelColor]);
-		 @try {
-			[(id)graph setLabelColor:[UIColor labelColor]];
-		 } @catch (NSException *exception) {
-			 os_log_error(gLog, "ChargingLimit: Failed to setLabelColor for graphView");
-		 }
-	 }
-	 [graph setNeedsLayout];
-	 [graph layoutSubviews];
-	 [graph setNeedsDisplay];
- }
 }
 
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -290,11 +271,12 @@ extern const char *container_system_group_path_for_identifier(int,const char*,BO
 		char sqlpath[PATH_MAX];
 		sprintf(sqlpath,"%s/Library/BatteryLife/CurrentPowerlog.PLSQL",pl_container_path);
 		sqlite3 *p_db;
-		int err=sqlite3_open(sqlpath,&p_db);
+		int err=sqlite3_open_v2(sqlpath,&p_db,SQLITE_OPEN_READONLY|SQLITE_OPEN_NOMUTEX,NULL);
 		if(err!=SQLITE_OK) {
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
 			cell.textLabel.text = _("7-Day Battery Level");
-			cell.detailTextLabel.text = _("Database open failed");
+			cell.detailTextLabel.text = [NSString stringWithUTF8String:sqlite3_errmsg(p_db)];
+			sqlite3_close_v2(p_db);
 			return cell;
 		}
 		time_t cur_time=time(NULL);
@@ -307,10 +289,10 @@ extern const char *container_system_group_path_for_identifier(int,const char*,BO
 			cell.textLabel.text = _("7-Day Battery Level");
 			cell.detailTextLabel.text = [NSString stringWithUTF8String:errmsg];
 			sqlite3_free(errmsg);
-			sqlite3_close(p_db);
+			sqlite3_close_v2(p_db);
 			return cell;
 		}
-		sqlite3_close(p_db);
+		sqlite3_close_v2(p_db);
 		id graphCell = [PSGraphViewTableCell new];
 		NSArray *modelGraphArr=arr;
 		UIScrollView *view = [(id)graphCell scrollView];
