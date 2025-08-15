@@ -5,21 +5,25 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <signal.h>
+#include <sqlite3.h>
 #include <sys/errno.h>
 #include <sys/mman.h>
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <unistd.h>
-#include <sqlite3.h>
 
-enum { CL_SECTION_GRAPH, CL_SECTION_MAIN, CL_SECTION_COUNT };
+enum {
+	CL_SECTION_GRAPH,
+	CL_SECTION_MAIN,
+	CL_SECTION_COUNT
+};
 
 int connect_to_daemon(void) {
 	struct sockaddr_un sockaddr;
 	sockaddr.sun_family = AF_UNIX;
-	const char *end = stpcpy(sockaddr.sun_path, "./Library/dsck");
-	sockaddr.sun_len = (unsigned char)(end - sockaddr.sun_path + 1);
-	int sock = socket(AF_UNIX, SOCK_STREAM, 0);
+	const char *end     = stpcpy(sockaddr.sun_path, "./Library/dsck");
+	sockaddr.sun_len    = (unsigned char)(end - sockaddr.sun_path + 1);
+	int sock            = socket(AF_UNIX, SOCK_STREAM, 0);
 	if (connect(sock, (struct sockaddr *)&sockaddr, sizeof(struct sockaddr_un)) == -1) {
 		// char errstr[1024];
 		////memset(errstr, 0, sizeof(errstr));
@@ -43,10 +47,11 @@ int connect_to_daemon(void) {
 }
 
 static void changeLabelColorsInternal(UIView *view, UIColor *color) {
-	if (!view) return;
+	if (!view)
+		return;
 
 	if ([view isKindOfClass:[UILabel class]]) {
-		UILabel *label = (UILabel *)view;
+		UILabel *label  = (UILabel *)view;
 		label.textColor = color;
 	}
 
@@ -56,41 +61,42 @@ static void changeLabelColorsInternal(UIView *view, UIColor *color) {
 }
 
 static void changeLabelColors(UIView *inputView, UIColor *color) {
-	if (!inputView || !color) return;
+	if (!inputView || !color)
+		return;
 
 	if ([NSThread isMainThread]) {
 		changeLabelColorsInternal(inputView, color);
 	} else {
 		dispatch_async(dispatch_get_main_queue(), ^{
-				changeLabelColorsInternal(inputView, color);
-				});
+			changeLabelColorsInternal(inputView, color);
+		});
 	}
 }
 
-static int _cl_sql_pt_cb(void *arr_ref,int cnt,char **texts,char **names) {
-	NSMutableArray *arr=(__bridge NSMutableArray *)arr_ref;
-	NSDate *dt;
-	NSNumber *val;
-	NSNumberFormatter *formatter=[NSNumberFormatter new];
-	for(int i=0;i<cnt;i++) {
-		if(!strcmp(names[i],"timestamp")) {
-			dt=[NSDate dateWithTimeIntervalSince1970:[[formatter numberFromString:[NSString stringWithUTF8String:texts[i]]] doubleValue]];
-		}else if(!strcmp(names[i],"Level")) {
-			val=[formatter numberFromString:[NSString stringWithUTF8String:texts[i]]];
+static int _cl_sql_pt_cb(void *arr_ref, int cnt, char **texts, char **names) {
+	NSMutableArray    *arr = (__bridge NSMutableArray *)arr_ref;
+	NSDate            *dt;
+	NSNumber          *val;
+	NSNumberFormatter *formatter = [NSNumberFormatter new];
+	for (int i = 0; i < cnt; i++) {
+		if (!strcmp(names[i], "timestamp")) {
+			dt = [NSDate dateWithTimeIntervalSince1970:[[formatter numberFromString:[NSString stringWithUTF8String:texts[i]]] doubleValue]];
+		} else if (!strcmp(names[i], "Level")) {
+			val = [formatter numberFromString:[NSString stringWithUTF8String:texts[i]]];
 		}
 	}
-	[arr addObject:[NSArray arrayWithObjects:dt,val,NULL]];
+	[arr addObject:[NSArray arrayWithObjects:dt, val, NULL]];
 	return 0;
 }
 
 @interface __some_random_defs_111 : NSObject
-- (void)setGraphArray:(NSArray*)arr;
-- (void)setLabelColor:(UIColor*)color;
-- (UIView*)graphView;
+- (void)setGraphArray:(NSArray *)arr;
+- (void)setLabelColor:(UIColor *)color;
+- (UIView *)graphView;
 @end
-extern const char *container_system_group_path_for_identifier(int,const char*,BOOL*);
+extern const char *container_system_group_path_for_identifier(int, const char *, BOOL *);
 
-@implementation ChargingLimitViewController
+@implementation    ChargingLimitViewController
 
 - (NSString *)title {
 	return _("Charging Limit");
@@ -105,14 +111,14 @@ extern const char *container_system_group_path_for_identifier(int,const char*,BO
 	NSBundle *PLBundle = [NSBundle bundleWithPath:@"/System/Library/PreferenceBundles/BatteryUsageUI.bundle"];
 	if (PLBundle) {
 		PSGraphViewTableCell = [PLBundle classNamed:@"PSGraphViewTableCell"];
-		if(PSGraphViewTableCell)
-			load_graph =container_system_group_path_for_identifier(0,"systemgroup.com.apple.powerlog",NULL);
+		if (PSGraphViewTableCell)
+			load_graph = container_system_group_path_for_identifier(0, "systemgroup.com.apple.powerlog", NULL);
 	}
 
 	[self.tableView registerClass:[SliderTableViewCell class] forCellReuseIdentifier:@"clhighthr"];
 	[self.tableView registerClass:[SliderTableViewCell class] forCellReuseIdentifier:@"cllowthr"];
 
-	char buf[1024];
+	char  buf[1024];
 	char *end = stpcpy(stpcpy(buf, getenv("HOME")), "/Library/daemon");
 	strcpy(end, ".run");
 	int drfd = open(buf, O_RDONLY);
@@ -185,7 +191,7 @@ extern const char *container_system_group_path_for_identifier(int,const char*,BO
 	if (!vals)
 		return;
 	const char endconnectioncmd = 5;
-	if(daemon_fd) {
+	if (daemon_fd) {
 		write(daemon_fd, &endconnectioncmd, 1);
 		close(daemon_fd);
 	}
@@ -242,12 +248,12 @@ extern const char *container_system_group_path_for_identifier(int,const char*,BO
 }
 
 - (void)cltypechanged:(UISegmentedControl *)segCon {
-    vals[0] = segCon.selectedSegmentIndex ? 0 : -1;
-    [self daemonRedecide];
-    /* Refreshing the whole tableview causes animation lost */
-    NSIndexPath *resumeIndexLabel = [NSIndexPath indexPathForRow:3 inSection:CL_SECTION_MAIN];
-    NSIndexPath *resumeIndexSlider = [NSIndexPath indexPathForRow:4 inSection:CL_SECTION_MAIN];
-    [self.tableView reloadRowsAtIndexPaths:@[ resumeIndexLabel, resumeIndexSlider ] withRowAnimation:UITableViewRowAnimationFade];
+	vals[0] = segCon.selectedSegmentIndex ? 0 : -1;
+	[self daemonRedecide];
+	/* Refreshing the whole tableview causes animation lost */
+	NSIndexPath *resumeIndexLabel  = [NSIndexPath indexPathForRow:3 inSection:CL_SECTION_MAIN];
+	NSIndexPath *resumeIndexSlider = [NSIndexPath indexPathForRow:4 inSection:CL_SECTION_MAIN];
+	[self.tableView reloadRowsAtIndexPaths:@[resumeIndexLabel, resumeIndexSlider] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -257,46 +263,76 @@ extern const char *container_system_group_path_for_identifier(int,const char*,BO
 	return [super tableView:tableView heightForRowAtIndexPath:indexPath];
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+	if (previousTraitCollection)
+		[super traitCollectionDidChange:previousTraitCollection];
+	[self viewDidAppear:YES];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	if (load_graph) {
+		NSIndexPath *ip = [NSIndexPath indexPathForRow:0 inSection:CL_SECTION_GRAPH];
+		UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:ip];
+		if ([cell isKindOfClass:[PSGraphViewTableCell class]]) {
+			UIView *graph = [(id)cell graphView];
+		
+			if (@available(iOS 13.0, *)) {
+				changeLabelColors(cell, [UIColor labelColor]);
+				@try {
+					[(id)graph setLabelColor:[UIColor labelColor]];
+				} @catch (NSException *exception) {
+					os_log_error(gLog, "ChargingLimit: Failed to setLabelColor for graphView");
+				}
+			}
+
+			[graph setNeedsLayout];
+			[graph layoutSubviews];
+			[graph setNeedsDisplay];
+		}
+	}
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell *cell;
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	if (indexPath.section == CL_SECTION_GRAPH) {
-		if(!load_graph) {
-			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
-			cell.textLabel.text = _("7-Day Battery Level");
+		if (!load_graph) {
+			cell                      = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
+			cell.textLabel.text       = _("7-Day Battery Level");
 			cell.detailTextLabel.text = _("Unavailable");
 			return cell;
 		}
-		const char *pl_container_path=load_graph;
-		char sqlpath[PATH_MAX];
-		sprintf(sqlpath,"%s/Library/BatteryLife/CurrentPowerlog.PLSQL",pl_container_path);
+		const char *pl_container_path = load_graph;
+		char        sqlpath[PATH_MAX];
+		sprintf(sqlpath, "%s/Library/BatteryLife/CurrentPowerlog.PLSQL", pl_container_path);
 		sqlite3 *p_db;
-		int err=sqlite3_open_v2(sqlpath,&p_db,SQLITE_OPEN_READONLY|SQLITE_OPEN_NOMUTEX,NULL);
-		if(err!=SQLITE_OK) {
-			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
-			cell.textLabel.text = _("7-Day Battery Level");
+		int      err = sqlite3_open_v2(sqlpath, &p_db, SQLITE_OPEN_READONLY | SQLITE_OPEN_NOMUTEX, NULL);
+		if (err != SQLITE_OK) {
+			cell                      = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
+			cell.textLabel.text       = _("7-Day Battery Level");
 			cell.detailTextLabel.text = [NSString stringWithUTF8String:sqlite3_errmsg(p_db)];
 			sqlite3_close_v2(p_db);
 			return cell;
 		}
-		time_t cur_time=time(NULL);
-		sprintf(sqlpath,"SELECT * FROM PLBatteryAgent_EventBackward_BatteryUI WHERE timestamp BETWEEN %ld AND %ld ORDER BY timestamp",cur_time-3600*24*7,cur_time);
-		char *errmsg;
-		NSMutableArray *arr=[NSMutableArray array];
-		err=sqlite3_exec(p_db,sqlpath,_cl_sql_pt_cb,(__bridge void*)arr,&errmsg);
-		if(err!=SQLITE_OK) {
-			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
-			cell.textLabel.text = _("7-Day Battery Level");
+		time_t cur_time = time(NULL);
+		sprintf(sqlpath, "SELECT * FROM PLBatteryAgent_EventBackward_BatteryUI WHERE timestamp BETWEEN %ld AND %ld ORDER BY timestamp", cur_time - 3600 * 24 * 7, cur_time);
+		char           *errmsg;
+		NSMutableArray *arr = [NSMutableArray array];
+		err                 = sqlite3_exec(p_db, sqlpath, _cl_sql_pt_cb, (__bridge void *)arr, &errmsg);
+		if (err != SQLITE_OK) {
+			cell                      = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
+			cell.textLabel.text       = _("7-Day Battery Level");
 			cell.detailTextLabel.text = [NSString stringWithUTF8String:errmsg];
 			sqlite3_free(errmsg);
 			sqlite3_close_v2(p_db);
 			return cell;
 		}
 		sqlite3_close_v2(p_db);
-		id graphCell = [PSGraphViewTableCell new];
-		NSArray *modelGraphArr=arr;
-		UIScrollView *view = [(id)graphCell scrollView];
-		view.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		id            graphCell     = [PSGraphViewTableCell new];
+		NSArray      *modelGraphArr = arr;
+		UIScrollView *view          = [(id)graphCell scrollView];
+		view.autoresizingMask       = UIViewAutoresizingFlexibleWidth;
 
 		[(id)graphCell setGraphArray:modelGraphArr];
 
@@ -310,15 +346,15 @@ extern const char *container_system_group_path_for_identifier(int,const char*,BO
 			if (@available(iOS 13.0, *)) {
 				// XXX: Consider use dynamic check
 				if (@available(iOS 14.0, *)) {
-					items = @[ [UIImage systemImageNamed:@"pause.rectangle"], [UIImage systemImageNamed:@"arrow.rectanglepath"] ];
+					items = @[[UIImage systemImageNamed:@"pause.rectangle"], [UIImage systemImageNamed:@"arrow.rectanglepath"]];
 				} else {
 					// Sadly arrow.rectanglepath is iOS 14+
-					items = @[ [UIImage systemImageNamed:@"pause.circle"], [UIImage systemImageNamed:@"arrow.triangle.2.circlepath"] ];
+					items = @[[UIImage systemImageNamed:@"pause.circle"], [UIImage systemImageNamed:@"arrow.triangle.2.circlepath"]];
 				}
 			} else {
 				// pause.rectangle U+10029B
 				// arrow.rectanglepath U+1008C1
-				items = @[ @"􀊛", @"􀣁" ];
+				items = @[@"􀊛", @"􀣁"];
 			}
 			UISegmentedControl *segCon = [[UISegmentedControl alloc] initWithItems:items];
 			if (@available(iOS 13.0, *)) {
@@ -345,14 +381,14 @@ extern const char *container_system_group_path_for_identifier(int,const char*,BO
 			}
 			scell.slider.minimumValue = 0;
 			scell.slider.maximumValue = 100;
-			scell.slider.enabled = 1;
-			scell.textField.enabled = 1;
-			scell.delegate = (id)self;
+			scell.slider.enabled      = 1;
+			scell.textField.enabled   = 1;
+			scell.delegate            = (id)self;
 			if (vals[1] == -1) {
-				scell.slider.value = 100;
+				scell.slider.value   = 100;
 				scell.textField.text = @"100";
 			} else {
-				scell.slider.value = (float)vals[1];
+				scell.slider.value   = (float)vals[1];
 				scell.textField.text = [NSString stringWithFormat:@"%d", (int)vals[1]];
 			}
 			return scell;
@@ -368,21 +404,21 @@ extern const char *container_system_group_path_for_identifier(int,const char*,BO
 			}
 			scell.slider.minimumValue = 0;
 			scell.slider.maximumValue = 100;
-			scell.delegate = (id)self;
+			scell.delegate            = (id)self;
 			if (vals[0] == -1) {
-				scell.slider.enabled = NO;
-				scell.slider.userInteractionEnabled = NO;
-				scell.slider.value = 0;
-				scell.textField.enabled = 0;
+				scell.slider.enabled                   = NO;
+				scell.slider.userInteractionEnabled    = NO;
+				scell.slider.value                     = 0;
+				scell.textField.enabled                = 0;
 				scell.textField.userInteractionEnabled = 0;
-				scell.textField.text = @"0";
+				scell.textField.text                   = @"0";
 			} else {
-				scell.slider.enabled = 1;
-				scell.slider.userInteractionEnabled = 1;
-				scell.slider.value = (float)vals[0];
-				scell.textField.enabled = 1;
+				scell.slider.enabled                   = 1;
+				scell.slider.userInteractionEnabled    = 1;
+				scell.slider.value                     = (float)vals[0];
+				scell.textField.enabled                = 1;
 				scell.textField.userInteractionEnabled = 1;
-				scell.textField.text = [NSString stringWithFormat:@"%d", (int)vals[0]];
+				scell.textField.text                   = [NSString stringWithFormat:@"%d", (int)vals[0]];
 			}
 			return scell;
 		} else if (indexPath.row == 5) {
@@ -410,19 +446,19 @@ extern const char *container_system_group_path_for_identifier(int,const char*,BO
 }
 
 - (void)sliderTableViewCell:(SliderTableViewCell *)cell didChangeValue:(float)value {
-    BOOL isHighThr = [cell.reuseIdentifier isEqualToString:@"clhighthr"];
-    // TODO: Consider do a auto slider adjusting instead of this
-    if (isHighThr && value < vals[0]) {
-	    show_alert(_C("Invalid Setup"), _C("Limit Value should be bigger than Resume Value"), L_OK);
-	    [self.tableView reloadData];
-	    return;
-    } else if (!isHighThr && value > vals[1]) {
-	    show_alert(_C("Invalid Setup"), _C("Resume Value should be smaller than Limit Value"), L_OK);
-	    [self.tableView reloadData];
-	    return;
-    }
-    vals[isHighThr] = (char)value;
-    [self daemonRedecide];
+	BOOL isHighThr = [cell.reuseIdentifier isEqualToString:@"clhighthr"];
+	// TODO: Consider do a auto slider adjusting instead of this
+	if (isHighThr && value < vals[0]) {
+		show_alert(_C("Invalid Setup"), _C("Limit Value should be bigger than Resume Value"), L_OK);
+		[self.tableView reloadData];
+		return;
+	} else if (!isHighThr && value > vals[1]) {
+		show_alert(_C("Invalid Setup"), _C("Resume Value should be smaller than Limit Value"), L_OK);
+		[self.tableView reloadData];
+		return;
+	}
+	vals[isHighThr] = (char)value;
+	[self daemonRedecide];
 }
 
 - (void)daemonRedecide {
