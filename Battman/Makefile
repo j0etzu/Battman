@@ -9,7 +9,7 @@ LOCAL_IP := $(shell ip addr | $(SED) -n "s/.*inet \([0-9]*\.[0-9]*\.[0-9]*\.[0-9
 
 SDKROOT := ${THEOS}/sdks/iPhoneOS13.7.sdk
 
-LIBS := -lobjc -Wl,-weak-lIOAccessoryManager
+LIBS := -lobjc -Wl,-weak-lIOAccessoryManager -lsqlite3
 FRAMEWORKS := -framework UIKit \
 	      -framework Foundation \
 	      -framework CoreGraphics \

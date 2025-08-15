@@ -139,7 +139,6 @@
 		<string>com.apple.powerd.lowpowermode</string>
 		<string>com.apple.coreduetd.batterysaver</string>
 		<string>com.apple.powerui.smartChargeManager</string>
-		<string>com.apple.powerlogHelperd.XPCService.xpc</string>
 	</array>
 	<key>com.apple.security.exception.files.absolute-path.read-write</key>
 	<array>
