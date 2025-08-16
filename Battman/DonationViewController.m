@@ -7,6 +7,7 @@
 
 #import "DonationViewController.h"
 #import "DonationPrompter.h"
+#import "BattmanVectorIcon.h"
 #include "common.h"
 #include "intlextern.h"
 #import <MessageUI/MessageUI.h>
@@ -59,9 +60,11 @@
 	scrollView.alwaysBounceVertical = YES;
 	[self.view addSubview:scrollView];
 
-	// I would like to draw a icon by purely CG
-	UIImage *battman_icon = [UIImage imageWithContentsOfFile:[NSBundle.mainBundle pathForResource:@"1024" ofType:@"png"]];
-	self.icon = [[UIImageView alloc] initWithImage:battman_icon];
+	UIGraphicsBeginImageContextWithOptions(CGSizeMake(1024, 1024), NO, 0);
+	// Consider inline
+	[BattmanVectorIcon drawBattman];
+	self.icon = [[UIImageView alloc] initWithImage:UIGraphicsGetImageFromCurrentImageContext()];
+	UIGraphicsEndImageContext();
 	self.icon.contentMode = UIViewContentModeScaleAspectFit;
 	self.icon.userInteractionEnabled = YES;
 	[self.icon.layer setCornerRadius:120.0f * 0.225]; // App Store uses 22.5%

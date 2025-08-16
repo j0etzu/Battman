@@ -68,6 +68,7 @@
 		6838BFAC2DC3984C007EB66C /* SliderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6838BFAB2DC3984C007EB66C /* SliderTableViewCell.m */; };
 		684114042E4A35D2001B76B6 /* DonationPrompter.m in Sources */ = {isa = PBXBuildFile; fileRef = 684114032E4A34DA001B76B6 /* DonationPrompter.m */; };
 		684114052E4A35E0001B76B6 /* DonationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 684113FE2E4A3492001B76B6 /* DonationViewController.m */; };
+		6841147F2E512AB1001B76B6 /* BattmanVectorIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 6841147D2E512AB1001B76B6 /* BattmanVectorIcon.m */; };
 		6845759A2E3CBD2B00618DFD /* BattmanIcons@3x.artwork in Resources */ = {isa = PBXBuildFile; fileRef = 684575992E3CBD2500618DFD /* BattmanIcons@3x.artwork */; };
 		6845759C2E3CBFEB00618DFD /* BattmanIcons@2x.artwork in Resources */ = {isa = PBXBuildFile; fileRef = 6845759B2E3CBFE500618DFD /* BattmanIcons@2x.artwork */; };
 		684575AA2E3D4ABF00618DFD /* thermtune.c in Sources */ = {isa = PBXBuildFile; fileRef = 6845759E2E3D4A9900618DFD /* thermtune.c */; };
@@ -207,6 +208,8 @@
 		684113FE2E4A3492001B76B6 /* DonationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DonationViewController.m; sourceTree = "<group>"; };
 		684114022E4A34DA001B76B6 /* DonationPrompter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DonationPrompter.h; sourceTree = "<group>"; };
 		684114032E4A34DA001B76B6 /* DonationPrompter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DonationPrompter.m; sourceTree = "<group>"; };
+		6841147D2E512AB1001B76B6 /* BattmanVectorIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BattmanVectorIcon.m; sourceTree = "<group>"; };
+		6841147E2E512AB1001B76B6 /* BattmanVectorIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BattmanVectorIcon.h; sourceTree = "<group>"; };
 		684575992E3CBD2500618DFD /* BattmanIcons@3x.artwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BattmanIcons@3x.artwork"; sourceTree = "<group>"; };
 		6845759B2E3CBFE500618DFD /* BattmanIcons@2x.artwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BattmanIcons@2x.artwork"; sourceTree = "<group>"; };
 		6845759E2E3D4A9900618DFD /* thermtune.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = thermtune.c; path = utils/thermtune/thermtune.c; sourceTree = "<group>"; };
@@ -13467,6 +13470,8 @@
 		686AECC12D3B93CB0059ECD0 /* Battman */ = {
 			isa = PBXGroup;
 			children = (
+				6841147E2E512AB1001B76B6 /* BattmanVectorIcon.h */,
+				6841147D2E512AB1001B76B6 /* BattmanVectorIcon.m */,
 				684114022E4A34DA001B76B6 /* DonationPrompter.h */,
 				684114032E4A34DA001B76B6 /* DonationPrompter.m */,
 				684113FD2E4A3492001B76B6 /* DonationViewController.h */,
@@ -14044,6 +14049,7 @@
 				68AE40B92D8EB8870023D7B0 /* MultiSelectSegmentedControl.m in Sources */,
 				68AE40BA2D8EB8870023D7B0 /* DividerView.m in Sources */,
 				68B16F072E167CE6009B63AC /* DatePickerTableViewCell.m in Sources */,
+				6841147F2E512AB1001B76B6 /* BattmanVectorIcon.m in Sources */,
 				684114042E4A35D2001B76B6 /* DonationPrompter.m in Sources */,
 				68B2913A2DD1FEDA0089BA1F /* hid.m in Sources */,
 				68B7513E2E2A425D003C94BC /* wrapper.c in Sources */,
