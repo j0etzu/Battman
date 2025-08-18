@@ -52,6 +52,8 @@ jobs:
         TMP=$(mktemp -d)
         unzip -q master.zip -d $TMP
         mv $TMP/sdks-master/*.sdk $THEOS/sdks/
+        # Apple lied to us, we are going to expose the lie
+        sed -i 's/) CG_UNAVAILABLE_EMBEDDED/, 2.0)/g' $THEOS/sdks/iPhoneOS*.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers/CGColor.h
         rm -rf master.zip $TMP
     - name: Build
       run: |
