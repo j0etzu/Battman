@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Battman 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-15 17:10+0800\n"
+"POT-Creation-Date: 2025-08-17 19:23+0800\n"
 "PO-Revision-Date: 2025-01-27 17:32+0800\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: /Users/torrekie/proj/Battman/Battman/common.c:336
-#: /Users/torrekie/proj/Battman/Battman/main.m:190
+#: /Users/torrekie/proj/Battman/Battman/main.m:204
 msgid "OK"
 msgstr "好"
 
@@ -102,7 +102,7 @@ msgid "Battman Wiki & User Manual"
 msgstr "Battman Wiki & 用户手册"
 
 #: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:261
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:30
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:31
 msgid "Support Us"
 msgstr "赞助我们"
 
@@ -483,7 +483,7 @@ msgid "Will be introduced in future updates."
 msgstr "将于未来的更新中推出"
 
 #: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:238
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:78
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:102
 msgid "Charging Limit"
 msgstr "充电限制"
 
@@ -778,49 +778,51 @@ msgstr "状态"
 msgid "Thermal Tuning failed with error"
 msgstr "温控调校发生错误"
 
-#: /Users/torrekie/proj/Battman/Battman/main.m:164
+#: /Users/torrekie/proj/Battman/Battman/main.m:168
 msgid "locale_name"
 msgstr "中文"
 
-#: /Users/torrekie/proj/Battman/Battman/main.m:190
+#: /Users/torrekie/proj/Battman/Battman/main.m:204
 msgid "Unregistered Locale"
 msgstr "未注册的本地化"
 
-#: /Users/torrekie/proj/Battman/Battman/main.m:190
+#: /Users/torrekie/proj/Battman/Battman/main.m:204
 msgid ""
 "You are using a localization file which not officially provided by Battman, "
 "the translations may inaccurate."
 msgstr "您正在使用的本地化文件并非由 Battman 官方所提供，译文可能存在偏差。"
 
-#: /Users/torrekie/proj/Battman/Battman/main.m:288
+#: /Users/torrekie/proj/Battman/Battman/main.m:308
 msgid ""
 "stdio logs not redirected in Simulator build, please check stdio in Xcode "
 "console output instead."
 msgstr ""
 "标准输出日志在Simulator构建中不被重定向，请直接在Xcode Console中查看输出。"
 
-#: /Users/torrekie/proj/Battman/Battman/main.m:311
+#: /Users/torrekie/proj/Battman/Battman/main.m:332
 msgid "Battman CLI not implemented yet."
 msgstr "Battman 命令行工具尚未实现。"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:118
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:139
 msgid "Failed to open daemon settings file"
 msgstr "无法打开值守进程配置文件"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:134
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:155
 msgid "File mapping failed"
 msgstr "文件分配失败"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:155
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:260
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:176
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:302
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:313
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:325
 msgid "7-Day Battery Level"
 msgstr "7天电池电量"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:157
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:178
 msgid "Charging Limit (Experimental)"
 msgstr "充电限制（实验性功能）"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:163
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:184
 msgid ""
 "The system logs battery charge–level changes for the past 7 days. If this "
 "graph is empty, the power-log service may not be running correctly."
@@ -828,7 +830,7 @@ msgstr ""
 "系统会记录过去 7 天的电池电量变化。若此图无数据显示，可能是电源日志服务未正常"
 "运行。"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:165
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:186
 msgid ""
 "Charging Limit uses a background service to monitor your battery's charge "
 "level and automatically adjust charging behavior. You need to restart the "
@@ -837,81 +839,81 @@ msgstr ""
 "“充电限制”需要在后台运行服务，以监控电池电量并自动调整充电行为。更改配置后需"
 "要重新启动服务。"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:214
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:219
 msgid "Unable to connect to the daemon."
 msgstr "无法连接到值守进程。"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:236
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:241
 msgid "Couldn't start the daemon — it isn’t responding."
 msgstr "无法启动值守进程——服务无响应"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:261
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:303
 #: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:629
 msgid "Unavailable"
 msgstr "不可用"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:284
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:344
 msgid "When limit is reached"
 msgstr "当达到限制时"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:315
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:375
 msgid "Limit charging at (%)"
 msgstr "充电上限（%）"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:338
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:398
 msgid "Resume charging at (%)"
 msgstr "耗电下限（%）"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:366
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:426
 msgid "Daemon is active"
 msgstr "值守进程正在运行"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:366
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:426
 msgid "PID"
 msgstr "进程ID"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:368
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:428
 msgid "Daemon is inactive"
 msgstr "值守进程未启动"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:374
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:434
 msgid "Stop Daemon (Disable Charging Limit)"
 msgstr "停止值守进程（关闭充电限制）"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:376
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:436
 msgid "Start Daemon (Enforce Charging Limit)"
 msgstr "启动值守进程（强制充电限制）"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:392
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:396
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:452
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:456
 msgid "Invalid Setup"
 msgstr "无效设置"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:392
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:452
 msgid "Limit Value should be bigger than Resume Value"
 msgstr "“充电上限”需大于“耗电下限”"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:396
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:456
 msgid "Resume Value should be smaller than Limit Value"
 msgstr "“耗电下限”需小于“充电上限”"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:43
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:44
 msgid "Patreon"
 msgstr "Patreon"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:43
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:44
 msgid "Afdian"
 msgstr "爱发电"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:43
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:44
 msgid "UniFans"
 msgstr "引力圈"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:93
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:96
 msgid "Support Battman"
 msgstr "支持 Battman"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:99
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:102
 msgid ""
 "If Battman saved you time or made your day easier, please consider a small "
 "donation. Even a few dollars make a real difference and help me keep adding "
@@ -920,19 +922,19 @@ msgstr ""
 "如果 Battman 帮助到了您，可以考虑给我们一点点的捐赠。即使是几块钱也可以推进一"
 "切，促使我继续完善更新（而且也能帮助我的生活）。"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:106
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:109
 msgid "You can at least get Battman early accesses by donating us 🥺"
 msgstr "捐赠我们至少可以得到 Battman 的优先预览🥺"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:106
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:109
 msgid "Don't worry about annoyance, this page only popup itself for once 🥺"
 msgstr "请不要担心骚扰，这个页面只会主动弹出一次🥺"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:113
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:116
 msgid "Having Problems?"
 msgstr "遇到问题？"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:119
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:122
 msgid ""
 "We'd love to hear from you! Let us know if you find any bugs or have "
 "suggestions to make things better."
@@ -940,29 +942,29 @@ msgstr ""
 "我们非常乐意听取您的意见！请让我们知道您是否遇到了任何故障或是有什么提议，以"
 "便让一切朝着更好的方向发展。"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:130
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:133
 msgid "Create a new GitHub issue"
 msgstr "创建新的 GitHub 疑述"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:148
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:151
 msgid "Send an Email"
 msgstr "发送邮件"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:194
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:197
 msgid "No, thanks"
 msgstr "不用了，谢谢"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:248
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:251
 #, objc-format
 msgid "Goto %@"
 msgstr "前往%@"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:392
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:395
 #, objc-format
 msgid "Error when opening URL: %@"
 msgstr "打开 URL 时发生错误：%@"
 
-#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:417
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:420
 msgid "Your device does not support sending Emails."
 msgstr "您的设备不支持发送邮件。"
 

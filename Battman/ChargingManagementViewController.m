@@ -89,7 +89,7 @@ extern void battman_worker_oneshot(char cmd, char arg);
     } else if (sect == CM_SECT_LOW_POWER_MODE) {
         NSUserDefaults *suite = [[NSUserDefaults alloc] initWithSuiteName:batterysaver_state];
 
-#if USE_MOBILEGESTALT
+#if USE_MOBILEGESTALT && 0
         /* The problem is, MobileGestalt is returning Apple preferred presets,
          * but not always the real condition of a device.
          */
@@ -566,8 +566,7 @@ tvend:
         notify_post(batterysaver_notif);
     }
 
-    NSIndexPath *ip = [self.tableView indexPathForCell:cell];
-    DBGLOG(@"Slider changed at row %ld: %f", (long)ip.row, value);
+    DBGLOG(@"Slider changed at row %ld: %f", (long) [self.tableView indexPathForCell:cell].row, value);
 }
 
 #pragma mark - DatePickerTableViewCell Delegate

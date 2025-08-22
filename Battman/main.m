@@ -16,6 +16,10 @@
 #if __has_include("constants.c")
 #include "constants.c"
 #endif
+#if __has_include("mo_verification.h") && defined(USE_GETTEXT)
+#include "mo_verification.h"
+#define ENABLE_MO_CHECK
+#endif
 
 #include "common.h"
 #include "intlextern.h"
@@ -144,9 +148,9 @@ static void gettext_init(void) {
                 char *bindbase = bindtextdomain_ptr(BATTMAN_TEXTDOMAIN, binddir);
                 if (bindbase) {
                     DBGLOG(@"i18n base dir: %s", bindbase);
-                    char *dom = textdomain_ptr(BATTMAN_TEXTDOMAIN);
+                    char __unused *dom = textdomain_ptr(BATTMAN_TEXTDOMAIN);
                     DBGLOG(@"textdomain: %s", dom);
-                    char *enc = bind_textdomain_codeset_ptr(BATTMAN_TEXTDOMAIN, "UTF-8");
+                    char __unused *enc = bind_textdomain_codeset_ptr(BATTMAN_TEXTDOMAIN, "UTF-8");
                     DBGLOG(@"codeset: %s", enc);
                     use_libintl = true;
                 } else {
@@ -164,31 +168,46 @@ static void gettext_init(void) {
             char *locale_name = _("locale_name");
             DBGLOG(@"Locale Name: %s", locale_name);
             if (use_libintl && !strcmp("locale_name", locale_name)) {
-                show_alert("Error", "Unable to match existing Gettext localization, defaulting to English", "Cancel");
+				NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+				if (![defaults objectForKey:@"com.torrekie.Battman.warned_no_locale"]) {
+					show_alert("Error", "Unable to match existing Gettext localization, defaulting to English", "Cancel");
+					[defaults setBool:YES forKey:@"com.torrekie.Battman.warned_no_locale"];
+					[defaults synchronize];
+				}
             }
-#if defined(ENABLE_MO_CHECK) && defined(__LITTLE_ENDIAN__)
-            else {
-                /* This is for preventing users to modify the mo file */
-                static __int128_t registered_locales[] = {
-                    0x6873696c676e45, 6e65, // English, en
-                    0x8796e6adb8e4, 0x4e435f687a, // 中文, zh_CN
-                    0,
-                };
-                int i = 0;
-                static bool is_registered = false;
-                for (i = 0; registered_locales[i] != 0; i = i + 2) {
-                    __int128_t num_str = 0;
-                    memcpy(&num_str, locale_name, strlen(locale_name));
-                    if (registered_locales[i] == num_str) {
-                        is_registered = true;
-                        break;
-                    }
-                }
-                if (is_registered) {
-                    // TODO: sha256 check
-                } else {
-                    show_alert(_("Unregistered Locale"), _("You are using a localization file which not officially provided by Battman, the translations may inaccurate."), _("OK"));
-                }
+#if defined(ENABLE_MO_CHECK)
+            else if (use_libintl) {
+				char mo_fullpath[PATH_MAX];
+				snprintf(mo_fullpath, sizeof(mo_fullpath), "%s/locales/%s/LC_MESSAGES/battman.mo", NSBundle.mainBundle.bundlePath.UTF8String, preferred_language());
+				switch (verify_embedded_mo_by_locale_hash(preferred_language(), mo_fullpath)) {
+					case 114:
+						break; // OK
+					case 514: {
+						// I don't like you to modify my ellegant locales
+						extern void push_fatal_notif(void);
+						push_fatal_notif();
+						break;
+					}
+					case 1919: {
+						// This looks exactlly same with above, but multi-factored
+						NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+						if (![defaults objectForKey:@"com.torrekie.Battman.warned_no_locale"]) {
+							show_alert("Error", "Unable to match existing Gettext localization, defaulting to English", "Cancel");
+							[defaults setBool:YES forKey:@"com.torrekie.Battman.warned_no_locale"];
+							[defaults synchronize];
+						}
+						break;
+					}
+					case 810: {
+						NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+						if (![defaults objectForKey:@"com.torrekie.Battman.warned_3rd_locale"]) {
+							show_alert(_("Unregistered Locale"), _("You are using a localization file which not officially provided by Battman, the translations may inaccurate."), _("OK"));
+							[defaults setBool:YES forKey:@"com.torrekie.Battman.warned_3rd_locale"];
+							[defaults synchronize];
+						}
+						break;
+					}
+				}
             }
 #endif
 
@@ -238,7 +257,8 @@ int main(int argc, char * argv[]) {
 		daemon_main();
 		return 0;
 	}
-#if defined(DEBUG) && !TARGET_OS_SIMULATOR
+#if defined(DEBUG)
+#if !TARGET_OS_SIMULATOR
     // Redirecting is not needed for Simulator
     chdir(getenv("HOME"));
     char *tty = ttyname(0);
@@ -284,9 +304,10 @@ int main(int argc, char * argv[]) {
         // Close the write end of the pipe
         close(pipe_fd[1]);
     }
-#elif TARGET_OS_SIMULATOR
+#else
     redirectedOutput = [[NSMutableAttributedString alloc] initWithString:_("stdio logs not redirected in Simulator build, please check stdio in Xcode console output instead.")];
-#endif
+#endif // TARGET_OS_SIMULATOR
+#endif // DEBUG
     // sleep(10);
     if (is_carbon()) {
 #if TARGET_OS_IPHONE

@@ -39,6 +39,23 @@
 #define LICENSE LICENSE_MIT
 #endif
 
+#if LICENSE == LICENSE_NONFREE
+// Standalone packages (deb, ipa) for use in Torrekie's repo or else
+#define NONFREE_TYPE_STANDALONE	0x10
+// Havoc deb packages
+#define NONFREE_TYPE_HAVOC		0x20
+// Torrekie/Battman releases
+#define NONFREE_TYPE_GITHUB		0x30
+
+#ifndef NONFREE_TYPE
+#define NONFREE_TYPE NONFREE_TYPE_STANDALONE
+#endif
+#endif
+
+#if (LICENSE == LICENSE_NONFREE) && (NONFREE_TYPE == NONFREE_TYPE_HAVOC) && !__has_include("havoc-defs.h")
+#error Havoc configuration is not designed for OSS Battman, please switch LICENSE to LICENSE_MIT!
+#endif
+
 #define DL_CALL(fn, ret, proto, call_args) \
 	({                                     \
 		static ret(*_fp) proto = NULL;     \

@@ -19,8 +19,10 @@
 
 #include "../common.h"
 
-#if !defined(LICENSE) || LICENSE == LICENSE_MIT
+#if !defined(LICENSE) || LICENSE != LICENSE_NONFREE
 #define kBattmanFatalNotifyKey "com.torrekie.Battman.fatal"
+#elif __has_include("../nonfree-defs.h")
+#include "../nonfree-defs.h"
 #endif
 
 __attribute__((always_inline))

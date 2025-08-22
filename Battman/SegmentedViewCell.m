@@ -82,6 +82,8 @@
     return self;
 }
 
+- (id)detailTextLabel {return _detailTextLabel;}
+
 @end
 
 #include "battery_utils/libsmc.h"

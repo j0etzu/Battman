@@ -69,6 +69,127 @@
 		684114042E4A35D2001B76B6 /* DonationPrompter.m in Sources */ = {isa = PBXBuildFile; fileRef = 684114032E4A34DA001B76B6 /* DonationPrompter.m */; };
 		684114052E4A35E0001B76B6 /* DonationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 684113FE2E4A3492001B76B6 /* DonationViewController.m */; };
 		6841147F2E512AB1001B76B6 /* BattmanVectorIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 6841147D2E512AB1001B76B6 /* BattmanVectorIcon.m */; };
+		684114852E5323E2001B76B6 /* iokit_connection.c in Sources */ = {isa = PBXBuildFile; fileRef = 68E9389A2D58980B00223285 /* iokit_connection.c */; };
+		684114862E5323E2001B76B6 /* thermal.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B68F6B2E21026600431E14 /* thermal.c */; };
+		684114872E5323E2001B76B6 /* UILabel+SFSymbolsOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AFCBA32E054D04007A9EC7 /* UILabel+SFSymbolsOverride.m */; };
+		684114882E5323E2001B76B6 /* SegmentButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40B62D8EB8870023D7B0 /* SegmentButton.m */; };
+		684114892E5323E2001B76B6 /* BatteryCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 687743412D4F6C7800375A2C /* BatteryCellView.m */; };
+		6841148A2E5323E2001B76B6 /* ChargingManagementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6838BF822DC27F1E007EB66C /* ChargingManagementViewController.m */; };
+		6841148B2E5323E2001B76B6 /* BatteryInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 687743442D4F6C7800375A2C /* BatteryInfoTableViewCell.m */; };
+		6841148C2E5323E2001B76B6 /* selfcheck.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B291492DDC76B00089BA1F /* selfcheck.c */; };
+		6841148D2E5323E2001B76B6 /* accessory.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B2913C2DD86AAB0089BA1F /* accessory.c */; };
+		6841148E2E5323E2001B76B6 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40B52D8EB8870023D7B0 /* Constants.m */; };
+		6841148F2E5323E2001B76B6 /* MultiSelectSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40AB2D8EB8870023D7B0 /* MultiSelectSegmentedControl.m */; };
+		684114902E5323E2001B76B6 /* DividerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40B02D8EB8870023D7B0 /* DividerView.m */; };
+		684114912E5323E2001B76B6 /* DatePickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B16F062E167CE6009B63AC /* DatePickerTableViewCell.m */; };
+		684114922E5323E2001B76B6 /* BattmanVectorIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 6841147D2E512AB1001B76B6 /* BattmanVectorIcon.m */; };
+		684114932E5323E2001B76B6 /* DonationPrompter.m in Sources */ = {isa = PBXBuildFile; fileRef = 684114032E4A34DA001B76B6 /* DonationPrompter.m */; };
+		684114942E5323E2001B76B6 /* hid.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B291392DD1FEDA0089BA1F /* hid.m */; };
+		684114952E5323E2001B76B6 /* wrapper.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B7513D2E2A425D003C94BC /* wrapper.c */; };
+		684114962E5323E2001B76B6 /* NSData+HexString.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B16F112E1BBCC6009B63AC /* NSData+HexString.m */; };
+		684114972E5323E2001B76B6 /* SimpleTemperatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B291322DD1E6960089BA1F /* SimpleTemperatureViewController.m */; };
+		684114982E5323E2001B76B6 /* localized.c in Sources */ = {isa = PBXBuildFile; fileRef = 6838BF752DBF810D007EB66C /* localized.c */; };
+		684114992E5323E2001B76B6 /* BatteryInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 687743352D4E08AD00375A2C /* BatteryInfoViewController.m */; };
+		6841149A2E5323E2001B76B6 /* SPWaterProgressIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 687743422D4F6C7800375A2C /* SPWaterProgressIndicatorView.m */; };
+		6841149B2E5323E2001B76B6 /* WarnAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6833A8C82DA3C6E500B71299 /* WarnAccessoryView.m */; };
+		6841149C2E5323E2001B76B6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 686AECD42D3B93CD0059ECD0 /* main.m */; };
+		6841149D2E5323E2001B76B6 /* StackViewGestureHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40B42D8EB8870023D7B0 /* StackViewGestureHandler.m */; };
+		6841149E2E5323E2001B76B6 /* protect.S in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDCE72DE1A1D40057870A /* protect.S */; };
+		6841149F2E5323E2001B76B6 /* TemperatureInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B5FF2F2D85617400919BC2 /* TemperatureInfoTableViewCell.m */; };
+		684114A02E5323E2001B76B6 /* CreditViewController.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDD162DE30A8E0057870A /* CreditViewController.c */; };
+		684114A12E5323E2001B76B6 /* worker.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDCEF2DE30A5E0057870A /* worker.c */; };
+		684114A22E5323E2001B76B6 /* MultilineViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6834254F2D7D6A240070CE6F /* MultilineViewCell.m */; };
+		684114A32E5323E2001B76B6 /* UPSMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 689FE0B82DEEEDC600550EBE /* UPSMonitor.m */; };
+		684114A42E5323E2001B76B6 /* UIView+Fill.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40B12D8EB8870023D7B0 /* UIView+Fill.m */; };
+		684114A52E5323E2001B76B6 /* UberSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40AA2D8EB8870023D7B0 /* UberSegmentedControl.m */; };
+		684114A62E5323E2001B76B6 /* SegmentedViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D6DEBD2D745DBC00E129A0 /* SegmentedViewCell.m */; };
+		684114A72E5323E2001B76B6 /* FullSMCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B291352DD1E6960089BA1F /* FullSMCViewController.m */; };
+		684114A82E5323E2001B76B6 /* daemon.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B2911F2DC754100089BA1F /* daemon.c */; };
+		684114A92E5323E2001B76B6 /* battery_info.c in Sources */ = {isa = PBXBuildFile; fileRef = 68A3EAF62D5204D2003381DF /* battery_info.c */; };
+		684114AA2E5323E2001B76B6 /* IOMFB_interaction.c in Sources */ = {isa = PBXBuildFile; fileRef = 6846114F2E0D5250006B651D /* IOMFB_interaction.c */; };
+		684114AB2E5323E2001B76B6 /* pmnotification.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B2911E2DC754100089BA1F /* pmnotification.c */; };
+		684114AC2E5323E2001B76B6 /* GradientArcView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B5FF2D2D85606000919BC2 /* GradientArcView.m */; };
+		684114AD2E5323E2001B76B6 /* BatterySubscriberViewControllerBase.c in Sources */ = {isa = PBXBuildFile; fileRef = 689FE0B42DEAEA4A00550EBE /* BatterySubscriberViewControllerBase.c */; };
+		684114AE2E5323E2001B76B6 /* licensing.S in Sources */ = {isa = PBXBuildFile; fileRef = 6838BF652DB8D06B007EB66C /* licensing.S */; };
+		684114AF2E5323E2001B76B6 /* ThermalTunesViewContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 684575AC2E3E032700618DFD /* ThermalTunesViewContoller.m */; };
+		684114B02E5323E2001B76B6 /* SliderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6838BFAB2DC3984C007EB66C /* SliderTableViewCell.m */; };
+		684114B12E5323E2001B76B6 /* BatteryDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68171A322D534E6B00DD4224 /* BatteryDetailsViewController.m */; };
+		684114B22E5323E2001B76B6 /* CompatibilityHelper.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B291332DD1E6960089BA1F /* CompatibilityHelper.c */; };
+		684114B32E5323E2001B76B6 /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDD172DE30A8E0057870A /* common.c */; };
+		684114B42E5323E2001B76B6 /* DonationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 684113FE2E4A3492001B76B6 /* DonationViewController.m */; };
+		684114B52E5323E2001B76B6 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 687743342D4E08AD00375A2C /* SettingsViewController.m */; };
+		684114B62E5323E2001B76B6 /* ChargingLimitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B291252DC7547B0089BA1F /* ChargingLimitViewController.m */; };
+		684114B72E5323E2001B76B6 /* libsmc.c in Sources */ = {isa = PBXBuildFile; fileRef = 68171A2F2D5221C400DD4224 /* libsmc.c */; };
+		684114B92E5323E2001B76B6 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B751412E2A468C003C94BC /* SystemConfiguration.framework */; };
+		684114BA2E5323E2001B76B6 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6838BF6E2DB8D89E007EB66C /* WebKit.framework */; };
+		684114BB2E5323E2001B76B6 /* intl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 687743152D461E4400375A2C /* intl.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		684114BC2E5323E2001B76B6 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68A3EAFC2D5204EA003381DF /* IOKit.framework */; };
+		684114BE2E5323E2001B76B6 /* BattmanIcons@2x.artwork in Resources */ = {isa = PBXBuildFile; fileRef = 6845759B2E3CBFE500618DFD /* BattmanIcons@2x.artwork */; };
+		684114BF2E5323E2001B76B6 /* BattmanIcons@3x.artwork in Resources */ = {isa = PBXBuildFile; fileRef = 684575992E3CBD2500618DFD /* BattmanIcons@3x.artwork */; };
+		684114C02E5323E2001B76B6 /* license.html in Resources */ = {isa = PBXBuildFile; fileRef = 6838BF642DB8D06B007EB66C /* license.html */; };
+		684114C12E5323E2001B76B6 /* locales in Resources */ = {isa = PBXBuildFile; fileRef = 687742B52D43837B00375A2C /* locales */; };
+		684114DB2E57BDE7001B76B6 /* iokit_connection.c in Sources */ = {isa = PBXBuildFile; fileRef = 68E9389A2D58980B00223285 /* iokit_connection.c */; };
+		684114DC2E57BDE7001B76B6 /* thermal.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B68F6B2E21026600431E14 /* thermal.c */; };
+		684114DD2E57BDE7001B76B6 /* UILabel+SFSymbolsOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AFCBA32E054D04007A9EC7 /* UILabel+SFSymbolsOverride.m */; };
+		684114DE2E57BDE7001B76B6 /* SegmentButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40B62D8EB8870023D7B0 /* SegmentButton.m */; };
+		684114DF2E57BDE7001B76B6 /* BatteryCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 687743412D4F6C7800375A2C /* BatteryCellView.m */; };
+		684114E02E57BDE7001B76B6 /* ChargingManagementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6838BF822DC27F1E007EB66C /* ChargingManagementViewController.m */; };
+		684114E12E57BDE7001B76B6 /* BatteryInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 687743442D4F6C7800375A2C /* BatteryInfoTableViewCell.m */; };
+		684114E22E57BDE7001B76B6 /* selfcheck.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B291492DDC76B00089BA1F /* selfcheck.c */; };
+		684114E32E57BDE7001B76B6 /* accessory.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B2913C2DD86AAB0089BA1F /* accessory.c */; };
+		684114E42E57BDE7001B76B6 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40B52D8EB8870023D7B0 /* Constants.m */; };
+		684114E52E57BDE7001B76B6 /* MultiSelectSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40AB2D8EB8870023D7B0 /* MultiSelectSegmentedControl.m */; };
+		684114E62E57BDE7001B76B6 /* DividerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40B02D8EB8870023D7B0 /* DividerView.m */; };
+		684114E72E57BDE7001B76B6 /* DatePickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B16F062E167CE6009B63AC /* DatePickerTableViewCell.m */; };
+		684114E82E57BDE7001B76B6 /* BattmanVectorIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 6841147D2E512AB1001B76B6 /* BattmanVectorIcon.m */; };
+		684114E92E57BDE7001B76B6 /* DonationPrompter.m in Sources */ = {isa = PBXBuildFile; fileRef = 684114032E4A34DA001B76B6 /* DonationPrompter.m */; };
+		684114EA2E57BDE7001B76B6 /* hid.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B291392DD1FEDA0089BA1F /* hid.m */; };
+		684114EB2E57BDE7001B76B6 /* wrapper.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B7513D2E2A425D003C94BC /* wrapper.c */; };
+		684114EC2E57BDE7001B76B6 /* NSData+HexString.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B16F112E1BBCC6009B63AC /* NSData+HexString.m */; };
+		684114ED2E57BDE7001B76B6 /* SimpleTemperatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B291322DD1E6960089BA1F /* SimpleTemperatureViewController.m */; };
+		684114EE2E57BDE7001B76B6 /* localized.c in Sources */ = {isa = PBXBuildFile; fileRef = 6838BF752DBF810D007EB66C /* localized.c */; };
+		684114EF2E57BDE7001B76B6 /* BatteryInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 687743352D4E08AD00375A2C /* BatteryInfoViewController.m */; };
+		684114F02E57BDE7001B76B6 /* SPWaterProgressIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 687743422D4F6C7800375A2C /* SPWaterProgressIndicatorView.m */; };
+		684114F12E57BDE7001B76B6 /* WarnAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6833A8C82DA3C6E500B71299 /* WarnAccessoryView.m */; };
+		684114F22E57BDE7001B76B6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 686AECD42D3B93CD0059ECD0 /* main.m */; };
+		684114F32E57BDE7001B76B6 /* StackViewGestureHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40B42D8EB8870023D7B0 /* StackViewGestureHandler.m */; };
+		684114F42E57BDE7001B76B6 /* protect.S in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDCE72DE1A1D40057870A /* protect.S */; };
+		684114F52E57BDE7001B76B6 /* TemperatureInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B5FF2F2D85617400919BC2 /* TemperatureInfoTableViewCell.m */; };
+		684114F62E57BDE7001B76B6 /* CreditViewController.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDD162DE30A8E0057870A /* CreditViewController.c */; };
+		684114F72E57BDE7001B76B6 /* worker.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDCEF2DE30A5E0057870A /* worker.c */; };
+		684114F82E57BDE7001B76B6 /* MultilineViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6834254F2D7D6A240070CE6F /* MultilineViewCell.m */; };
+		684114F92E57BDE7001B76B6 /* UPSMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 689FE0B82DEEEDC600550EBE /* UPSMonitor.m */; };
+		684114FA2E57BDE7001B76B6 /* UIView+Fill.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40B12D8EB8870023D7B0 /* UIView+Fill.m */; };
+		684114FB2E57BDE7001B76B6 /* UberSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40AA2D8EB8870023D7B0 /* UberSegmentedControl.m */; };
+		684114FC2E57BDE7001B76B6 /* SegmentedViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D6DEBD2D745DBC00E129A0 /* SegmentedViewCell.m */; };
+		684114FD2E57BDE7001B76B6 /* FullSMCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B291352DD1E6960089BA1F /* FullSMCViewController.m */; };
+		684114FE2E57BDE7001B76B6 /* daemon.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B2911F2DC754100089BA1F /* daemon.c */; };
+		684114FF2E57BDE7001B76B6 /* battery_info.c in Sources */ = {isa = PBXBuildFile; fileRef = 68A3EAF62D5204D2003381DF /* battery_info.c */; };
+		684115002E57BDE7001B76B6 /* IOMFB_interaction.c in Sources */ = {isa = PBXBuildFile; fileRef = 6846114F2E0D5250006B651D /* IOMFB_interaction.c */; };
+		684115012E57BDE7001B76B6 /* pmnotification.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B2911E2DC754100089BA1F /* pmnotification.c */; };
+		684115022E57BDE7001B76B6 /* GradientArcView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B5FF2D2D85606000919BC2 /* GradientArcView.m */; };
+		684115032E57BDE7001B76B6 /* BatterySubscriberViewControllerBase.c in Sources */ = {isa = PBXBuildFile; fileRef = 689FE0B42DEAEA4A00550EBE /* BatterySubscriberViewControllerBase.c */; };
+		684115042E57BDE7001B76B6 /* licensing.S in Sources */ = {isa = PBXBuildFile; fileRef = 6838BF652DB8D06B007EB66C /* licensing.S */; };
+		684115052E57BDE7001B76B6 /* ThermalTunesViewContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 684575AC2E3E032700618DFD /* ThermalTunesViewContoller.m */; };
+		684115062E57BDE7001B76B6 /* SliderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6838BFAB2DC3984C007EB66C /* SliderTableViewCell.m */; };
+		684115072E57BDE7001B76B6 /* BatteryDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68171A322D534E6B00DD4224 /* BatteryDetailsViewController.m */; };
+		684115082E57BDE7001B76B6 /* CompatibilityHelper.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B291332DD1E6960089BA1F /* CompatibilityHelper.c */; };
+		684115092E57BDE7001B76B6 /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDD172DE30A8E0057870A /* common.c */; };
+		6841150A2E57BDE7001B76B6 /* DonationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 684113FE2E4A3492001B76B6 /* DonationViewController.m */; };
+		6841150B2E57BDE7001B76B6 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 687743342D4E08AD00375A2C /* SettingsViewController.m */; };
+		6841150C2E57BDE7001B76B6 /* ChargingLimitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B291252DC7547B0089BA1F /* ChargingLimitViewController.m */; };
+		6841150D2E57BDE7001B76B6 /* libsmc.c in Sources */ = {isa = PBXBuildFile; fileRef = 68171A2F2D5221C400DD4224 /* libsmc.c */; };
+		6841150F2E57BDE7001B76B6 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B751412E2A468C003C94BC /* SystemConfiguration.framework */; };
+		684115102E57BDE7001B76B6 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6838BF6E2DB8D89E007EB66C /* WebKit.framework */; };
+		684115112E57BDE7001B76B6 /* intl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 687743152D461E4400375A2C /* intl.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		684115122E57BDE7001B76B6 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68A3EAFC2D5204EA003381DF /* IOKit.framework */; };
+		684115142E57BDE7001B76B6 /* BattmanIcons@2x.artwork in Resources */ = {isa = PBXBuildFile; fileRef = 6845759B2E3CBFE500618DFD /* BattmanIcons@2x.artwork */; };
+		684115152E57BDE7001B76B6 /* BattmanIcons@3x.artwork in Resources */ = {isa = PBXBuildFile; fileRef = 684575992E3CBD2500618DFD /* BattmanIcons@3x.artwork */; };
+		684115162E57BDE7001B76B6 /* license.html in Resources */ = {isa = PBXBuildFile; fileRef = 6838BF642DB8D06B007EB66C /* license.html */; };
+		684115172E57BDE7001B76B6 /* locales in Resources */ = {isa = PBXBuildFile; fileRef = 687742B52D43837B00375A2C /* locales */; };
+		6841151E2E57BEAF001B76B6 /* SF-Pro-Display-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 68CC02872DB3C57B00914051 /* SF-Pro-Display-Regular.otf */; };
+		6841151F2E57C0F4001B76B6 /* nonfree-havoc.m in Sources */ = {isa = PBXBuildFile; fileRef = 684114D52E57BCE7001B76B6 /* nonfree-havoc.m */; };
+		6841152D2E57E166001B76B6 /* control in Sources */ = {isa = PBXBuildFile; fileRef = 6841152C2E57E166001B76B6 /* control */; };
 		6845759A2E3CBD2B00618DFD /* BattmanIcons@3x.artwork in Resources */ = {isa = PBXBuildFile; fileRef = 684575992E3CBD2500618DFD /* BattmanIcons@3x.artwork */; };
 		6845759C2E3CBFEB00618DFD /* BattmanIcons@2x.artwork in Resources */ = {isa = PBXBuildFile; fileRef = 6845759B2E3CBFE500618DFD /* BattmanIcons@2x.artwork */; };
 		684575AA2E3D4ABF00618DFD /* thermtune.c in Sources */ = {isa = PBXBuildFile; fileRef = 6845759E2E3D4A9900618DFD /* thermtune.c */; };
@@ -129,6 +250,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 68DCA5AF2D40EC57004D0104;
 			remoteInfo = base.pot;
+		};
+		684114822E5323E2001B76B6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 686AECB72D3B93CB0059ECD0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 687742AB2D437EE400375A2C;
+			remoteInfo = "Gettext Localizations";
+		};
+		684114D82E57BDE7001B76B6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 686AECB72D3B93CB0059ECD0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 687742AB2D437EE400375A2C;
+			remoteInfo = "Gettext Localizations";
 		};
 		687742B72D43866400375A2C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -210,6 +345,13 @@
 		684114032E4A34DA001B76B6 /* DonationPrompter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DonationPrompter.m; sourceTree = "<group>"; };
 		6841147D2E512AB1001B76B6 /* BattmanVectorIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BattmanVectorIcon.m; sourceTree = "<group>"; };
 		6841147E2E512AB1001B76B6 /* BattmanVectorIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BattmanVectorIcon.h; sourceTree = "<group>"; };
+		684114C62E5323E2001B76B6 /* Battman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Battman.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		684114C72E5323E4001B76B6 /* Battman-nonfree.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Battman-nonfree.plist"; path = "/Users/torrekie/proj/Battman/Battman-nonfree.plist"; sourceTree = "<absolute>"; };
+		684114D52E57BCE7001B76B6 /* nonfree-havoc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "nonfree-havoc.m"; sourceTree = "<group>"; };
+		6841151C2E57BDE7001B76B6 /* Battman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Battman.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6841151D2E57BDE9001B76B6 /* Battman-havoc.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Battman-havoc.plist"; path = "/Users/torrekie/proj/Battman/Battman-havoc.plist"; sourceTree = "<absolute>"; };
+		684115202E57C13D001B76B6 /* havoc-defs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "havoc-defs.h"; sourceTree = "<group>"; };
+		6841152C2E57E166001B76B6 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; path = control; sourceTree = "<group>"; };
 		684575992E3CBD2500618DFD /* BattmanIcons@3x.artwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BattmanIcons@3x.artwork"; sourceTree = "<group>"; };
 		6845759B2E3CBFE500618DFD /* BattmanIcons@2x.artwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BattmanIcons@2x.artwork"; sourceTree = "<group>"; };
 		6845759E2E3D4A9900618DFD /* thermtune.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = thermtune.c; path = utils/thermtune/thermtune.c; sourceTree = "<group>"; };
@@ -1610,6 +1752,28 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		684114B82E5323E2001B76B6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				684114B92E5323E2001B76B6 /* SystemConfiguration.framework in Frameworks */,
+				684114BA2E5323E2001B76B6 /* WebKit.framework in Frameworks */,
+				684114BB2E5323E2001B76B6 /* intl.framework in Frameworks */,
+				684114BC2E5323E2001B76B6 /* IOKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6841150E2E57BDE7001B76B6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6841150F2E57BDE7001B76B6 /* SystemConfiguration.framework in Frameworks */,
+				684115102E57BDE7001B76B6 /* WebKit.framework in Frameworks */,
+				684115112E57BDE7001B76B6 /* intl.framework in Frameworks */,
+				684115122E57BDE7001B76B6 /* IOKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		684575A02E3D4AAB00618DFD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1663,6 +1827,16 @@
 				6838BF752DBF810D007EB66C /* localized.c */,
 			);
 			path = license;
+			sourceTree = "<group>";
+		};
+		684114D42E57BCAC001B76B6 /* Havoc */ = {
+			isa = PBXGroup;
+			children = (
+				684114D52E57BCE7001B76B6 /* nonfree-havoc.m */,
+				684115202E57C13D001B76B6 /* havoc-defs.h */,
+				6841152C2E57E166001B76B6 /* control */,
+			);
+			name = Havoc;
 			sourceTree = "<group>";
 		};
 		6845759D2E3D4A7A00618DFD /* thermtune */ = {
@@ -13452,6 +13626,8 @@
 				686AECC12D3B93CB0059ECD0 /* Battman */,
 				686AECC02D3B93CB0059ECD0 /* Products */,
 				687743162D461E5100375A2C /* Frameworks */,
+				684114C72E5323E4001B76B6 /* Battman-nonfree.plist */,
+				6841151D2E57BDE9001B76B6 /* Battman-havoc.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -13463,6 +13639,8 @@
 				68B68F522E1FB66000431E14 /* thermnote */,
 				68B68F612E20F47600431E14 /* thermwatch */,
 				684575A32E3D4AAC00618DFD /* thermtune */,
+				684114C62E5323E2001B76B6 /* Battman.app */,
+				6841151C2E57BDE7001B76B6 /* Battman.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -13470,6 +13648,7 @@
 		686AECC12D3B93CB0059ECD0 /* Battman */ = {
 			isa = PBXGroup;
 			children = (
+				684114D42E57BCAC001B76B6 /* Havoc */,
 				6841147E2E512AB1001B76B6 /* BattmanVectorIcon.h */,
 				6841147D2E512AB1001B76B6 /* BattmanVectorIcon.m */,
 				684114022E4A34DA001B76B6 /* DonationPrompter.h */,
@@ -13725,6 +13904,46 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		684114802E5323E2001B76B6 /* Battman-nonfree */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 684114C32E5323E2001B76B6 /* Build configuration list for PBXNativeTarget "Battman-nonfree" */;
+			buildPhases = (
+				684114832E5323E2001B76B6 /* Generate Sources */,
+				684114842E5323E2001B76B6 /* Sources */,
+				684114B82E5323E2001B76B6 /* Frameworks */,
+				684114BD2E5323E2001B76B6 /* Resources */,
+				684114C22E5323E2001B76B6 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				684114812E5323E2001B76B6 /* PBXTargetDependency */,
+			);
+			name = "Battman-nonfree";
+			productName = Battman;
+			productReference = 684114C62E5323E2001B76B6 /* Battman.app */;
+			productType = "com.apple.product-type.application";
+		};
+		684114D62E57BDE7001B76B6 /* Battman-havoc */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 684115192E57BDE7001B76B6 /* Build configuration list for PBXNativeTarget "Battman-havoc" */;
+			buildPhases = (
+				684114D92E57BDE7001B76B6 /* Generate Sources */,
+				684114DA2E57BDE7001B76B6 /* Sources */,
+				6841150E2E57BDE7001B76B6 /* Frameworks */,
+				684115132E57BDE7001B76B6 /* Resources */,
+				684115182E57BDE7001B76B6 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				684114D72E57BDE7001B76B6 /* PBXTargetDependency */,
+			);
+			name = "Battman-havoc";
+			productName = Battman;
+			productReference = 6841151C2E57BDE7001B76B6 /* Battman.app */;
+			productType = "com.apple.product-type.application";
+		};
 		684575A22E3D4AAB00618DFD /* thermtune */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 684575A72E3D4AAC00618DFD /* Build configuration list for PBXNativeTarget "thermtune" */;
@@ -13878,6 +14097,8 @@
 				68B68F512E1FB66000431E14 /* thermnote */,
 				68B68F602E20F47600431E14 /* thermwatch */,
 				684575A22E3D4AAB00618DFD /* thermtune */,
+				684114802E5323E2001B76B6 /* Battman-nonfree */,
+				684114D62E57BDE7001B76B6 /* Battman-havoc */,
 			);
 		};
 /* End PBXProject section */
@@ -13893,6 +14114,29 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		684114BD2E5323E2001B76B6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				684114BE2E5323E2001B76B6 /* BattmanIcons@2x.artwork in Resources */,
+				684114BF2E5323E2001B76B6 /* BattmanIcons@3x.artwork in Resources */,
+				684114C02E5323E2001B76B6 /* license.html in Resources */,
+				684114C12E5323E2001B76B6 /* locales in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		684115132E57BDE7001B76B6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6841151E2E57BEAF001B76B6 /* SF-Pro-Display-Regular.otf in Resources */,
+				684115142E57BDE7001B76B6 /* BattmanIcons@2x.artwork in Resources */,
+				684115152E57BDE7001B76B6 /* BattmanIcons@3x.artwork in Resources */,
+				684115162E57BDE7001B76B6 /* license.html in Resources */,
+				684115172E57BDE7001B76B6 /* locales in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		686AECBD2D3B93CB0059ECD0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -13927,6 +14171,7 @@
 		};
 		6838BF6D2DB8D363007EB66C /* Generate Sources */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -13943,7 +14188,85 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PATH=/opt/homebrew/bin:$PATH\n\nINFILE=${SCRIPT_INPUT_FILE_0}\nOUTFILE=${SCRIPT_OUTPUT_FILE_0}\n\necho \"const unsigned char lh_arr[] = {\" > ${OUTFILE}\nopenssl sha256 -c ${INFILE} | gsed \"s/^.*= /0x/g;s/:/,0x/g\" >> ${OUTFILE}\necho \"};\" >> ${OUTFILE}\n";
+			shellScript = "PATH=/opt/homebrew/bin:$PATH\n\nINFILE=${SCRIPT_INPUT_FILE_0}\nOUTFILE=${SCRIPT_OUTPUT_FILE_0}\n\necho \"const unsigned char lh_arr[] = {\" > ${OUTFILE}\nopenssl sha256 -c ${INFILE} | gsed \"s/^.*= /0x/g;s/:/,0x/g\" >> ${OUTFILE}\necho \"};\" >> ${OUTFILE}\n\nif [ -e ${SRCROOT}/Battman/gen_locale_hashes.py ]; then\n\trm \"${DERIVED_FILE_DIR}/mo_verification.h\"\n\tpython3 ${SRCROOT}/Battman/gen_locale_hashes.py --out \"${DERIVED_FILE_DIR}/mo_verification\" `find \"${PROJECT_DIR}/${PROJECT_NAME}/locales\" -type f -name battman.mo`\nfi\n";
+		};
+		684114832E5323E2001B76B6 /* Generate Sources */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Battman/license/license.html",
+			);
+			name = "Generate Sources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/constants.c",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "PATH=/opt/homebrew/bin:$PATH\n\nINFILE=${SCRIPT_INPUT_FILE_0}\nOUTFILE=${SCRIPT_OUTPUT_FILE_0}\n\necho \"const unsigned char lh_arr[] = {\" > ${OUTFILE}\nopenssl sha256 -c ${INFILE} | gsed \"s/^.*= /0x/g;s/:/,0x/g\" >> ${OUTFILE}\necho \"};\" >> ${OUTFILE}\n\nif [ -e ${SRCROOT}/Battman/gen_locale_hashes.py ]; then\n\trm \"${DERIVED_FILE_DIR}/mo_verification.h\"\n\tpython3 ${SRCROOT}/Battman/gen_locale_hashes.py --out \"${DERIVED_FILE_DIR}/mo_verification\" `find \"${PROJECT_DIR}/${PROJECT_NAME}/locales\" -type f -name battman.mo`\nfi\n";
+		};
+		684114C22E5323E2001B76B6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e -x\n\nPATH=/opt/homebrew/bin:$PATH\n\n# ldid fakesign\nif [ ${PLATFORM_NAME} == \"iphoneos\" ]; then\n  ldid -S${PROJECT_DIR}/Battman.entitlements ${CODESIGNING_FOLDER_PATH}/Battman\nfi\n\n# Replace GIT_COMMIT_HASH in Info.plist\nCOMMIT_HASH=`git rev-parse --short HEAD`\n/usr/libexec/PlistBuddy -c \"Set :GIT_COMMIT_HASH $COMMIT_HASH\" \"${CODESIGNING_FOLDER_PATH}/Info.plist\"\n\n# generate and sync icons to app root\nsh ${PROJECT_DIR}/Battman/generate_icons.sh ${PROJECT_DIR}/Battman.svg ${CODESIGNING_FOLDER_PATH}/\n\n# restore\ngit restore \"${INFOPLIST_FILE}\" || true\n";
+		};
+		684114D92E57BDE7001B76B6 /* Generate Sources */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Battman/license/license.html",
+			);
+			name = "Generate Sources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/constants.c",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "PATH=/opt/homebrew/bin:$PATH\n\nINFILE=${SCRIPT_INPUT_FILE_0}\nOUTFILE=${SCRIPT_OUTPUT_FILE_0}\n\necho \"const unsigned char lh_arr[] = {\" > ${OUTFILE}\nopenssl sha256 -c ${INFILE} | gsed \"s/^.*= /0x/g;s/:/,0x/g\" >> ${OUTFILE}\necho \"};\" >> ${OUTFILE}\n\nif [ -e ${SRCROOT}/Battman/gen_locale_hashes.py ]; then\n\trm \"${DERIVED_FILE_DIR}/mo_verification.h\"\n\tpython3 ${SRCROOT}/Battman/gen_locale_hashes.py --out \"${DERIVED_FILE_DIR}/mo_verification\" `find \"${PROJECT_DIR}/${PROJECT_NAME}/locales\" -type f -name battman.mo`\nfi\n";
+		};
+		684115182E57BDE7001B76B6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e -x\n\nPATH=/opt/homebrew/bin:$PATH\n\n# ldid fakesign\nif [ ${PLATFORM_NAME} == \"iphoneos\" ]; then\n  ldid -S${PROJECT_DIR}/Battman.entitlements ${CODESIGNING_FOLDER_PATH}/Battman\nfi\n\n# Replace GIT_COMMIT_HASH in Info.plist\nCOMMIT_HASH=`git rev-parse --short HEAD`\n/usr/libexec/PlistBuddy -c \"Set :GIT_COMMIT_HASH $COMMIT_HASH\" \"${CODESIGNING_FOLDER_PATH}/Info.plist\"\n\n# generate and sync icons to app root\nsh ${PROJECT_DIR}/Battman/generate_icons.sh ${PROJECT_DIR}/Battman.svg ${CODESIGNING_FOLDER_PATH}/\n\n# restore\ngit restore \"${INFOPLIST_FILE}\" || true\n\nif [ ${PLATFORM_NAME} == \"iphoneos\" ]; then\n# deb\nmkdir -p ${CODESIGNING_FOLDER_PATH}/../tree/Applications/\nrsync -Kah ${CODESIGNING_FOLDER_PATH}/../Battman.app ${CODESIGNING_FOLDER_PATH}/../tree/Applications/\nrsync -Kah ${CODESIGNING_FOLDER_PATH}/../intl.framework ${CODESIGNING_FOLDER_PATH}/../tree/Applications/Battman.app/Frameworks/\nrm -r ${CODESIGNING_FOLDER_PATH}/../tree/Applications/Battman.app/Frameworks/intl.framework/Headers\nmkdir -p ${CODESIGNING_FOLDER_PATH}/../tree/DEBIAN\ncp ${PROJECT_DIR}/Battman/control ${CODESIGNING_FOLDER_PATH}/../tree/DEBIAN/\ngsed -i \"s/ARCH/iphoneos-arm/g\" ${CODESIGNING_FOLDER_PATH}/../tree/DEBIAN/control\ndpkg-deb --root-owner-group -b ${CODESIGNING_FOLDER_PATH}/../tree ${CODESIGNING_FOLDER_PATH}/../\n# deb rootless\nmkdir -p ${CODESIGNING_FOLDER_PATH}/../tree-rootless/var/jb/\nrsync -Kah ${CODESIGNING_FOLDER_PATH}/../tree/Applications ${CODESIGNING_FOLDER_PATH}/../tree-rootless/var/jb/\nmkdir -p ${CODESIGNING_FOLDER_PATH}/../tree-rootless/DEBIAN\ncp ${PROJECT_DIR}/Battman/control ${CODESIGNING_FOLDER_PATH}/../tree-rootless/DEBIAN/\ngsed -i \"s/ARCH/iphoneos-arm64/g\" ${CODESIGNING_FOLDER_PATH}/../tree-rootless/DEBIAN/control\ndpkg-deb --root-owner-group -b ${CODESIGNING_FOLDER_PATH}/../tree-rootless ${CODESIGNING_FOLDER_PATH}/../\nrm -r ${CODESIGNING_FOLDER_PATH}/../tree ${CODESIGNING_FOLDER_PATH}/../tree-rootless\nfi\n";
 		};
 		687742AF2D437EEA00375A2C /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -14024,6 +14347,123 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		684114842E5323E2001B76B6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				684114852E5323E2001B76B6 /* iokit_connection.c in Sources */,
+				684114862E5323E2001B76B6 /* thermal.c in Sources */,
+				684114872E5323E2001B76B6 /* UILabel+SFSymbolsOverride.m in Sources */,
+				684114882E5323E2001B76B6 /* SegmentButton.m in Sources */,
+				684114892E5323E2001B76B6 /* BatteryCellView.m in Sources */,
+				6841148A2E5323E2001B76B6 /* ChargingManagementViewController.m in Sources */,
+				6841148B2E5323E2001B76B6 /* BatteryInfoTableViewCell.m in Sources */,
+				6841148C2E5323E2001B76B6 /* selfcheck.c in Sources */,
+				6841148D2E5323E2001B76B6 /* accessory.c in Sources */,
+				6841148E2E5323E2001B76B6 /* Constants.m in Sources */,
+				6841148F2E5323E2001B76B6 /* MultiSelectSegmentedControl.m in Sources */,
+				684114902E5323E2001B76B6 /* DividerView.m in Sources */,
+				684114912E5323E2001B76B6 /* DatePickerTableViewCell.m in Sources */,
+				684114922E5323E2001B76B6 /* BattmanVectorIcon.m in Sources */,
+				684114932E5323E2001B76B6 /* DonationPrompter.m in Sources */,
+				684114942E5323E2001B76B6 /* hid.m in Sources */,
+				684114952E5323E2001B76B6 /* wrapper.c in Sources */,
+				684114962E5323E2001B76B6 /* NSData+HexString.m in Sources */,
+				684114972E5323E2001B76B6 /* SimpleTemperatureViewController.m in Sources */,
+				684114982E5323E2001B76B6 /* localized.c in Sources */,
+				684114992E5323E2001B76B6 /* BatteryInfoViewController.m in Sources */,
+				6841149A2E5323E2001B76B6 /* SPWaterProgressIndicatorView.m in Sources */,
+				6841149B2E5323E2001B76B6 /* WarnAccessoryView.m in Sources */,
+				6841149C2E5323E2001B76B6 /* main.m in Sources */,
+				6841149D2E5323E2001B76B6 /* StackViewGestureHandler.m in Sources */,
+				6841149E2E5323E2001B76B6 /* protect.S in Sources */,
+				6841149F2E5323E2001B76B6 /* TemperatureInfoTableViewCell.m in Sources */,
+				684114A02E5323E2001B76B6 /* CreditViewController.c in Sources */,
+				684114A12E5323E2001B76B6 /* worker.c in Sources */,
+				684114A22E5323E2001B76B6 /* MultilineViewCell.m in Sources */,
+				684114A32E5323E2001B76B6 /* UPSMonitor.m in Sources */,
+				684114A42E5323E2001B76B6 /* UIView+Fill.m in Sources */,
+				684114A52E5323E2001B76B6 /* UberSegmentedControl.m in Sources */,
+				684114A62E5323E2001B76B6 /* SegmentedViewCell.m in Sources */,
+				684114A72E5323E2001B76B6 /* FullSMCViewController.m in Sources */,
+				684114A82E5323E2001B76B6 /* daemon.c in Sources */,
+				684114A92E5323E2001B76B6 /* battery_info.c in Sources */,
+				684114AA2E5323E2001B76B6 /* IOMFB_interaction.c in Sources */,
+				684114AB2E5323E2001B76B6 /* pmnotification.c in Sources */,
+				684114AC2E5323E2001B76B6 /* GradientArcView.m in Sources */,
+				684114AD2E5323E2001B76B6 /* BatterySubscriberViewControllerBase.c in Sources */,
+				684114AE2E5323E2001B76B6 /* licensing.S in Sources */,
+				684114AF2E5323E2001B76B6 /* ThermalTunesViewContoller.m in Sources */,
+				684114B02E5323E2001B76B6 /* SliderTableViewCell.m in Sources */,
+				684114B12E5323E2001B76B6 /* BatteryDetailsViewController.m in Sources */,
+				684114B22E5323E2001B76B6 /* CompatibilityHelper.c in Sources */,
+				684114B32E5323E2001B76B6 /* common.c in Sources */,
+				684114B42E5323E2001B76B6 /* DonationViewController.m in Sources */,
+				684114B52E5323E2001B76B6 /* SettingsViewController.m in Sources */,
+				684114B62E5323E2001B76B6 /* ChargingLimitViewController.m in Sources */,
+				684114B72E5323E2001B76B6 /* libsmc.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		684114DA2E57BDE7001B76B6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				684114DB2E57BDE7001B76B6 /* iokit_connection.c in Sources */,
+				684114DC2E57BDE7001B76B6 /* thermal.c in Sources */,
+				684114DD2E57BDE7001B76B6 /* UILabel+SFSymbolsOverride.m in Sources */,
+				684114DE2E57BDE7001B76B6 /* SegmentButton.m in Sources */,
+				684114DF2E57BDE7001B76B6 /* BatteryCellView.m in Sources */,
+				684114E02E57BDE7001B76B6 /* ChargingManagementViewController.m in Sources */,
+				684114E12E57BDE7001B76B6 /* BatteryInfoTableViewCell.m in Sources */,
+				684114E22E57BDE7001B76B6 /* selfcheck.c in Sources */,
+				684114E32E57BDE7001B76B6 /* accessory.c in Sources */,
+				6841151F2E57C0F4001B76B6 /* nonfree-havoc.m in Sources */,
+				684114E42E57BDE7001B76B6 /* Constants.m in Sources */,
+				684114E52E57BDE7001B76B6 /* MultiSelectSegmentedControl.m in Sources */,
+				684114E62E57BDE7001B76B6 /* DividerView.m in Sources */,
+				684114E72E57BDE7001B76B6 /* DatePickerTableViewCell.m in Sources */,
+				684114E82E57BDE7001B76B6 /* BattmanVectorIcon.m in Sources */,
+				684114E92E57BDE7001B76B6 /* DonationPrompter.m in Sources */,
+				684114EA2E57BDE7001B76B6 /* hid.m in Sources */,
+				684114EB2E57BDE7001B76B6 /* wrapper.c in Sources */,
+				684114EC2E57BDE7001B76B6 /* NSData+HexString.m in Sources */,
+				684114ED2E57BDE7001B76B6 /* SimpleTemperatureViewController.m in Sources */,
+				684114EE2E57BDE7001B76B6 /* localized.c in Sources */,
+				684114EF2E57BDE7001B76B6 /* BatteryInfoViewController.m in Sources */,
+				684114F02E57BDE7001B76B6 /* SPWaterProgressIndicatorView.m in Sources */,
+				684114F12E57BDE7001B76B6 /* WarnAccessoryView.m in Sources */,
+				684114F22E57BDE7001B76B6 /* main.m in Sources */,
+				684114F32E57BDE7001B76B6 /* StackViewGestureHandler.m in Sources */,
+				684114F42E57BDE7001B76B6 /* protect.S in Sources */,
+				684114F52E57BDE7001B76B6 /* TemperatureInfoTableViewCell.m in Sources */,
+				684114F62E57BDE7001B76B6 /* CreditViewController.c in Sources */,
+				684114F72E57BDE7001B76B6 /* worker.c in Sources */,
+				684114F82E57BDE7001B76B6 /* MultilineViewCell.m in Sources */,
+				684114F92E57BDE7001B76B6 /* UPSMonitor.m in Sources */,
+				684114FA2E57BDE7001B76B6 /* UIView+Fill.m in Sources */,
+				684114FB2E57BDE7001B76B6 /* UberSegmentedControl.m in Sources */,
+				684114FC2E57BDE7001B76B6 /* SegmentedViewCell.m in Sources */,
+				684114FD2E57BDE7001B76B6 /* FullSMCViewController.m in Sources */,
+				684114FE2E57BDE7001B76B6 /* daemon.c in Sources */,
+				684114FF2E57BDE7001B76B6 /* battery_info.c in Sources */,
+				684115002E57BDE7001B76B6 /* IOMFB_interaction.c in Sources */,
+				684115012E57BDE7001B76B6 /* pmnotification.c in Sources */,
+				684115022E57BDE7001B76B6 /* GradientArcView.m in Sources */,
+				684115032E57BDE7001B76B6 /* BatterySubscriberViewControllerBase.c in Sources */,
+				684115042E57BDE7001B76B6 /* licensing.S in Sources */,
+				684115052E57BDE7001B76B6 /* ThermalTunesViewContoller.m in Sources */,
+				684115062E57BDE7001B76B6 /* SliderTableViewCell.m in Sources */,
+				684115072E57BDE7001B76B6 /* BatteryDetailsViewController.m in Sources */,
+				684115082E57BDE7001B76B6 /* CompatibilityHelper.c in Sources */,
+				684115092E57BDE7001B76B6 /* common.c in Sources */,
+				6841150A2E57BDE7001B76B6 /* DonationViewController.m in Sources */,
+				6841150B2E57BDE7001B76B6 /* SettingsViewController.m in Sources */,
+				6841150C2E57BDE7001B76B6 /* ChargingLimitViewController.m in Sources */,
+				6841150D2E57BDE7001B76B6 /* libsmc.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6845759F2E3D4AAB00618DFD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -14073,6 +14513,7 @@
 				68B291382DD1E6960089BA1F /* FullSMCViewController.m in Sources */,
 				68B291232DC754100089BA1F /* daemon.c in Sources */,
 				68A3EAFB2D5204D2003381DF /* battery_info.c in Sources */,
+				6841152D2E57E166001B76B6 /* control in Sources */,
 				684611502E0D5250006B651D /* IOMFB_interaction.c in Sources */,
 				68B291282DC75F610089BA1F /* pmnotification.c in Sources */,
 				68B5FF2E2D85606000919BC2 /* GradientArcView.m in Sources */,
@@ -14122,6 +14563,16 @@
 			target = 68DCA5AF2D40EC57004D0104 /* base.pot */;
 			targetProxy = 6838BF732DBF71BD007EB66C /* PBXContainerItemProxy */;
 		};
+		684114812E5323E2001B76B6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 687742AB2D437EE400375A2C /* Gettext Localizations */;
+			targetProxy = 684114822E5323E2001B76B6 /* PBXContainerItemProxy */;
+		};
+		684114D72E57BDE7001B76B6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 687742AB2D437EE400375A2C /* Gettext Localizations */;
+			targetProxy = 684114D82E57BDE7001B76B6 /* PBXContainerItemProxy */;
+		};
 		687742B82D43866400375A2C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 687742AB2D437EE400375A2C /* Gettext Localizations */;
@@ -14130,6 +14581,204 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		684114C42E5323E2001B76B6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 687743192D46359200375A2C /* Config.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTEGER = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/Battman.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"BATTMAN_TEXTDOMAIN=\\\"battman\\\"",
+					"DEBUG=1",
+					"USE_GETTEXT=1",
+				);
+				HEADER_SEARCH_PATHS = "$(DERIVED_FILE_DIR)";
+				INFOPLIST_FILE = "Battman-nonfree.plist";
+				INSTALL_GROUP = "$(GROUP)";
+				INSTALL_OWNER = "$(USER)";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				LOCALIZED_STRING_MACRO_NAMES = _;
+				LOCALIZED_STRING_SWIFTUI_SUPPORT = NO;
+				OTHER_CFLAGS = (
+					"$(CUSTOM_CFLAGS)",
+					"-DLICENSE=LICENSE_NONFREE",
+				);
+				OTHER_LDFLAGS = "$(OLDFL)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.torrekie.Battman;
+				PRODUCT_NAME = Battman;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSION_INFO_FILE = "";
+				WARNING_CFLAGS = "$(NO_WARN_CFLAGS)";
+			};
+			name = Debug;
+		};
+		684114C52E5323E2001B76B6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 687743192D46359200375A2C /* Config.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTEGER = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/Battman.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"BATTMAN_TEXTDOMAIN=\\\"battman\\\"",
+					"USE_GETTEXT=1",
+				);
+				HEADER_SEARCH_PATHS = "$(DERIVED_FILE_DIR)";
+				INFOPLIST_FILE = "Battman-nonfree.plist";
+				INSTALL_GROUP = "$(GROUP)";
+				INSTALL_OWNER = "$(USER)";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				LOCALIZED_STRING_MACRO_NAMES = _;
+				LOCALIZED_STRING_SWIFTUI_SUPPORT = NO;
+				OTHER_CFLAGS = (
+					"$(CUSTOM_CFLAGS)",
+					"-DLICENSE=LICENSE_NONFREE",
+				);
+				OTHER_LDFLAGS = "$(OLDFL)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.torrekie.Battman;
+				PRODUCT_NAME = Battman;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSION_INFO_FILE = "";
+				WARNING_CFLAGS = "$(NO_WARN_CFLAGS)";
+			};
+			name = Release;
+		};
+		6841151A2E57BDE7001B76B6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 687743192D46359200375A2C /* Config.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTEGER = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/Battman.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
+				CODE_SIGN_STYLE = Manual;
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"BATTMAN_TEXTDOMAIN=\\\"battman\\\"",
+					"DEBUG=1",
+					"USE_GETTEXT=1",
+				);
+				HEADER_SEARCH_PATHS = "$(DERIVED_FILE_DIR)";
+				INFOPLIST_FILE = "Battman-havoc.plist";
+				INSTALL_GROUP = "$(GROUP)";
+				INSTALL_OWNER = "$(USER)";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				LOCALIZED_STRING_MACRO_NAMES = _;
+				LOCALIZED_STRING_SWIFTUI_SUPPORT = NO;
+				OTHER_CFLAGS = (
+					"$(CUSTOM_CFLAGS)",
+					"-DLICENSE=LICENSE_NONFREE",
+					"-DNONFREE_TYPE=NONFREE_TYPE_HAVOC",
+					"-DUSE_MOBILEGESTALT",
+				);
+				OTHER_LDFLAGS = "$(OLDFL)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.torrekie.Battman;
+				PRODUCT_NAME = Battman;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSION_INFO_FILE = "";
+				WARNING_CFLAGS = "$(NO_WARN_CFLAGS)";
+			};
+			name = Debug;
+		};
+		6841151B2E57BDE7001B76B6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 687743192D46359200375A2C /* Config.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTEGER = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/Battman.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
+				CODE_SIGN_STYLE = Manual;
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"BATTMAN_TEXTDOMAIN=\\\"battman\\\"",
+					"USE_GETTEXT=1",
+				);
+				HEADER_SEARCH_PATHS = "$(DERIVED_FILE_DIR)";
+				INFOPLIST_FILE = "Battman-havoc.plist";
+				INSTALL_GROUP = "$(GROUP)";
+				INSTALL_OWNER = "$(USER)";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				LOCALIZED_STRING_MACRO_NAMES = _;
+				LOCALIZED_STRING_SWIFTUI_SUPPORT = NO;
+				OTHER_CFLAGS = (
+					"$(CUSTOM_CFLAGS)",
+					"-DLICENSE=LICENSE_NONFREE",
+					"-DNONFREE_TYPE=NONFREE_TYPE_HAVOC",
+					"-DUSE_MOBILEGESTALT",
+				);
+				OTHER_LDFLAGS = "$(OLDFL)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.torrekie.Battman;
+				PRODUCT_NAME = Battman;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSION_INFO_FILE = "";
+				WARNING_CFLAGS = "$(NO_WARN_CFLAGS)";
+			};
+			name = Release;
+		};
 		684575A82E3D4AAC00618DFD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -14159,6 +14808,7 @@
 			baseConfigurationReference = 687743192D46359200375A2C /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -14223,6 +14873,7 @@
 			baseConfigurationReference = 687743192D46359200375A2C /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -14535,6 +15186,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		684114C32E5323E2001B76B6 /* Build configuration list for PBXNativeTarget "Battman-nonfree" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				684114C42E5323E2001B76B6 /* Debug */,
+				684114C52E5323E2001B76B6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		684115192E57BDE7001B76B6 /* Build configuration list for PBXNativeTarget "Battman-havoc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6841151A2E57BDE7001B76B6 /* Debug */,
+				6841151B2E57BDE7001B76B6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		684575A72E3D4AAC00618DFD /* Build configuration list for PBXNativeTarget "thermtune" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
