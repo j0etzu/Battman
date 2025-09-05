@@ -9,7 +9,7 @@ LOCAL_IP := $(shell ip addr | $(SED) -n "s/.*inet \([0-9]*\.[0-9]*\.[0-9]*\.[0-9
 
 SDKROOT := ${THEOS}/sdks/iPhoneOS13.7.sdk
 
-LIBS := -lobjc -Wl,-weak-lIOAccessoryManager -lsqlite3
+LIBS := -lobjc -Wl,-weak-lIOAccessoryManager -lsqlite3 -lc++
 FRAMEWORKS := -framework UIKit \
 	      -framework Foundation \
 	      -framework CoreGraphics \
@@ -18,7 +18,8 @@ FRAMEWORKS := -framework UIKit \
               -framework IOKit \
               -framework WebKit \
 	      -framework SystemConfiguration \
-	      -framework MessageUI
+	      -framework MessageUI \
+	      -framework UserNotifications
 
 CFLAGS = -Wno-deprecated-declarations -Wno-nullability-completeness -Werror -target arm64-apple-ios${IPHONEOS_DEPLOYMENT_TARGET} -target arm64-apple-darwin -fobjc-arc -fconstant-cfstrings -I./EXTERNAL_HEADERS
 LDFLAGS = -target arm64-apple-ios$(IPHONEOS_DEPLOYMENT_TARGET) -target arm64-apple-darwin $(LIBS) $(FRAMEWORKS) -Wl,-dead_strip_dylibs
