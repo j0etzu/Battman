@@ -74,11 +74,11 @@ enum {
 #define NOT_CHARGING_REASON_TEMP_ABOVE_MAX_START_CHARGING       (uint64_t)(1 << 0x04)
 
 /* Presense */
-#define NOT_CHARGING_REASON_CHARGE_TIMER_EXPIRED                (uint64_t)(1 << 0x05)
+#define NOT_CHARGING_REASON_CHARGE_TIMER_EXPIRED                (uint64_t)(1 << 0x05) /* Charged over 15h or CHST is set */
 #define NOT_CHARGING_REASON_BATTERY_NOT_PRESENT                 (uint64_t)(1 << 0x06)
 #define NOT_CHARGING_REASON_VBUS_NOT_PRESENT                    (uint64_t)(1 << 0x07)
 
-/* Charging Inhibit when SoC and Temp at a specifc range */
+/* Charging Inhibit when SoC >= CC0S or Temp >= CC0T */
 #define NOT_CHARGING_REASON_HIGH_SOC_HIGH_TEMP_STOP_CHARGING    (uint64_t)(1 << 0x08)
 #define NOT_CHARGING_REASON_CSM_COMMUNICATION_FAILED            (uint64_t)(1 << 0x09)
 
@@ -93,7 +93,7 @@ enum {
 #define NOT_CHARGING_REASON_PREDICTIVECHARGING                  (uint64_t)(1 << 0x0F)
 #define NOT_CHARGING_REASON_INDUCTIVE                           (uint64_t)(1 << 0x10) /* Refer to WADS */
 #define NOT_CHARGING_REASON_GG_FW_UPDATE                        (uint64_t)(1 << 0x11)
-#define NOT_CHARGING_REASON_INHIBIT_INFLOW_BATTERY_NOT_PRESENT  (uint64_t)(1 << 0x12) /* I have seen this on my MacBook when fully charged, relevant with battery features */
+#define NOT_CHARGING_REASON_INHIBIT_INFLOW_BATTERY_NOT_PRESENT  (uint64_t)(1 << 0x12) /* CH0R & 0x40 */
 
 #define NOT_CHARGING_REASON_PCTM                                (uint64_t)(1 << 0x13)
 #define NOT_CHARGING_REASON_INHIBIT_CLIENT_ADAPTER              (uint64_t)(1 << 0x14)

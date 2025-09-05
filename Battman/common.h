@@ -8,16 +8,58 @@
 #ifndef common_h
 #define common_h
 
-#include <stdbool.h>
-#include <dlfcn.h>
-#include <TargetConditionals.h>
 #include <CoreFoundation/CoreFoundation.h>
+#include <TargetConditionals.h>
+#include <dlfcn.h>
+#include <os/log.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <sys/types.h>
-#include <os/log.h>
 
-#include "main.h"
 #include "CompatibilityHelper.h"
+#include "main.h"
+
+#if !defined(__OBJC__)
+#include "cobjc/UNNotificationContent.h"
+#include "cobjc/UNUserNotificationCenter.h"
+#include "cobjc/cobjc.h"
+#else
+#import <UserNotifications/UserNotifications.h>
+#endif
+
+#include <stdint.h>
+
+// Bitwisers
+
+/* mask for bit n (returns 0 if n out-of-range for the type of var) */
+#define BIT_MASK_OF(var, n) \
+	((unsigned)(n) < (sizeof(var) * 8) ? ((typeof(var))1 << (n)) : (typeof(var))0)
+
+/* Set bit n to value b (b should be 0 or 1). var must be an lvalue. */
+#define BIT_SET(var, n, b)                         \
+	do {                                           \
+		typeof(var) *_pv = &(var);                 \
+		unsigned     _bn = (unsigned)(n);          \
+		if (_bn < sizeof(*_pv) * 8) {              \
+			if (b)                                 \
+				*_pv |= ((typeof(*_pv))1 << _bn);  \
+			else                                   \
+				*_pv &= ~((typeof(*_pv))1 << _bn); \
+		}                                          \
+	} while (0)
+
+/* Toggle bit n */
+#define BIT_TOGGLE(var, n)                    \
+	do {                                      \
+		typeof(var) *_pv = &(var);            \
+		unsigned     _bn = (unsigned)(n);     \
+		if (_bn < sizeof(*_pv) * 8)           \
+			*_pv ^= ((typeof(*_pv))1 << _bn); \
+	} while (0)
+
+/* Read bit n (returns 0 or 1). Note: var is evaluated twice here. */
+#define BIT_GET(var, n) \
+	((unsigned)(n) < (sizeof(var) * 8) ? (((var) & ((typeof(var))1 << (n))) ? 1 : 0) : 0)
 
 #ifdef DEBUG
 #define DBGLOG(...) NSLog(__VA_ARGS__)
@@ -41,11 +83,11 @@
 
 #if LICENSE == LICENSE_NONFREE
 // Standalone packages (deb, ipa) for use in Torrekie's repo or else
-#define NONFREE_TYPE_STANDALONE	0x10
+#define NONFREE_TYPE_STANDALONE 0x10
 // Havoc deb packages
-#define NONFREE_TYPE_HAVOC		0x20
+#define NONFREE_TYPE_HAVOC 0x20
 // Torrekie/Battman releases
-#define NONFREE_TYPE_GITHUB		0x30
+#define NONFREE_TYPE_GITHUB 0x30
 
 #ifndef NONFREE_TYPE
 #define NONFREE_TYPE NONFREE_TYPE_STANDALONE
@@ -61,7 +103,7 @@
 		static ret(*_fp) proto = NULL;     \
 		if (!_fp)                          \
 			_fp = (ret(*) proto)           \
-		dlsym(RTLD_DEFAULT, #fn);          \
+			    dlsym(RTLD_DEFAULT, #fn);  \
 		_fp call_args;                     \
 	})
 
@@ -72,57 +114,68 @@
 
 #define SFPRO "SFProDisplay-Regular"
 
+typedef enum {
+	BATTMAN_APP,
+	BATTMAN_SUBPROCESS,
+} battman_type_t;
+
 __BEGIN_DECLS
 
 #ifndef __OBJC__
 void NSLog(CFStringRef fmt, ...);
 #endif
 
-extern const char *L_OK;
-extern const char *L_FAILED;
-extern const char *L_ERR;
-extern const char *L_NONE;
-extern const char *L_MA;
-extern const char *L_MAH;
-extern const char *L_MV;
-extern const char *L_TRUE;
-extern const char *L_FALSE;
+extern const char    *L_OK;
+extern const char    *L_FAILED;
+extern const char    *L_ERR;
+extern const char    *L_NONE;
+extern const char    *L_MA;
+extern const char    *L_MAH;
+extern const char    *L_MV;
+extern const char    *L_TRUE;
+extern const char    *L_FALSE;
 
-extern os_log_t gLog;
+extern os_log_t       gLog;
+extern os_log_t       gLogDaemon;
+extern battman_type_t gAppType;
 
-void show_alert(const char *title, const char *message, const char *cancel_button_title);
+void                  show_alert(const char *title, const char *message, const char *cancel_button_title);
 #ifdef __OBJC__
 void show_alert_async(const char *title, const char *message, const char *button, void (^completion)(bool result));
 #else
 void show_alert_async(const char *title, const char *message, const char *button, void *completion);
 #endif
-void show_alert_async_f(const char *title,const char *message,const char *button,void (*completion)(int));
-void show_fatal_overlay_async(const char *title, const char *message);
+void        show_alert_async_f(const char *title, const char *message, const char *button, void (*completion)(int));
+void        show_fatal_overlay_async(const char *title, const char *message);
 
-char *preferred_language(void);
-bool libintl_available(void);
-bool gtk_available(void);
+char       *preferred_language(void);
+bool        libintl_available(void);
+bool        gtk_available(void);
 
-void init_common_text(void);
+void        init_common_text(void);
 
-void app_exit(void);
-bool is_carbon(void);
-void open_url(const char *url);
+void        app_exit(void);
+bool        is_carbon(void);
+void        open_url(const char *url);
 
-bool match_regex(const char *string, const char *pattern);
+bool        match_regex(const char *string, const char *pattern);
 
-int is_rosetta(void);
+int         is_rosetta(void);
 
 const char *lang_cfg_file(void);
-int open_lang_override(int flags,int mode);
-int preferred_language_code(void);
+int         open_lang_override(int flags, int mode);
+int         preferred_language_code(void);
 
 const char *target_type(void);
 
-bool is_debugged(void);
-bool is_platformized(void);
-pid_t get_pid_for_launchd_label(const char *label);
-pid_t get_pid_for_procname(const char *name);
+bool        is_debugged(void);
+bool        is_platformized(void);
+bool        is_main_process(void);
+pid_t       get_pid_for_launchd_label(const char *label);
+pid_t       get_pid_for_procname(const char *name);
+
+int         add_notification(const char *bundleid, const char *title, const char *subtitle, const char *body);
+int         add_notification_with_content(UNUserNotificationCenter *uc, UNMutableNotificationContent *content);
 
 __END_DECLS
 

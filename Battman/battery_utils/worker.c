@@ -208,7 +208,7 @@ static void battman_spawn_worker() {
 	outfdg[1] = tmp;
 	// posix_spawn_file_actions_adddup2(&file_actions,worker_pipefd[0],0);
 	// posix_spawn_file_actions_adddup2(&file_actions,worker_pipefd[1],2);
-	posix_spawnattr_t spawnattr;
+	posix_spawnattr_t spawnattr = NULL;
 	posix_spawnattr_init(&spawnattr);
 	posix_spawnattr_set_persona_np(&spawnattr, 99, 1);
 	posix_spawnattr_set_persona_uid_np(&spawnattr, 0);
@@ -226,6 +226,7 @@ static void battman_spawn_worker() {
 		sprintf(str, "%s: %s", _C("Helper failed to launch"), strerror(err));
 		if (is_carbon())
 			show_alert(L_FAILED, str, L_OK);
+		free(str);
 		return;
 	}
 	close(outfdg[0]);

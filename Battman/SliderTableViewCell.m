@@ -15,6 +15,8 @@
         _slider = [[UISlider alloc] initWithFrame:CGRectZero];
         _slider.translatesAutoresizingMaskIntoConstraints = NO;
         [_slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+		[_slider addTarget:self action:@selector(sliderTouchDown:) forControlEvents:UIControlEventTouchDown];
+		[_slider addTarget:self action:@selector(sliderTouchUp:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside | UIControlEventTouchCancel];
         [self.contentView addSubview:_slider];
         
         // Create text field
@@ -48,6 +50,21 @@
     if ([self.delegate respondsToSelector:@selector(sliderTableViewCell:didChangeValue:)]) {
         [self.delegate sliderTableViewCell:self didChangeValue:sender.value];
     }
+}
+
+- (void)sliderTouchDown:(UISlider *)sender {
+	if ([self.delegate respondsToSelector:@selector(sliderTableViewCellDidBeginChanging:)]) {
+		[self.delegate sliderTableViewCellDidBeginChanging:self];
+	}
+}
+
+- (void)sliderTouchUp:(UISlider *)sender {
+	// Make sure text field shows final value
+	self.textField.text = [NSString stringWithFormat:@"%.4g", sender.value];
+	
+	if ([self.delegate respondsToSelector:@selector(sliderTableViewCell:didEndChangingValue:)]) {
+		[self.delegate sliderTableViewCell:self didEndChangingValue:sender.value];
+	}
 }
 
 #pragma mark - UITextFieldDelegate

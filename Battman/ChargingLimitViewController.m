@@ -1,5 +1,6 @@
 #import "ChargingLimitViewController.h"
 #import "SliderTableViewCell.h"
+#import "PickerAccessoryView.h"
 #include "common.h"
 #include "intlextern.h"
 #include <errno.h>
@@ -96,7 +97,11 @@ static int _cl_sql_pt_cb(void *arr_ref, int cnt, char **texts, char **names) {
 @end
 extern const char *container_system_group_path_for_identifier(int, const char *, BOOL *);
 
-@implementation    ChargingLimitViewController
+@interface ChargingLimitViewController ()
+@property (nonatomic, copy) NSArray *drainModes;
+@end
+
+@implementation ChargingLimitViewController
 
 - (NSString *)title {
 	return _("Charging Limit");
@@ -114,6 +119,11 @@ extern const char *container_system_group_path_for_identifier(int, const char *,
 		if (PSGraphViewTableCell)
 			load_graph = container_system_group_path_for_identifier(0, "systemgroup.com.apple.powerlog", NULL);
 	}
+
+	self.drainModes = @[
+		_("Discharge, Keep A/C"),
+		_("Block A/C")
+	];
 
 	[self.tableView registerClass:[SliderTableViewCell class] forCellReuseIdentifier:@"clhighthr"];
 	[self.tableView registerClass:[SliderTableViewCell class] forCellReuseIdentifier:@"cllowthr"];
@@ -140,16 +150,18 @@ extern const char *container_system_group_path_for_identifier(int, const char *,
 		vals = NULL;
 		return self;
 	}
-	char _vals[2];
-	if (read(fd, _vals, 2) != 2) {
+	// See daemon.c for vals struct, we are doing bad practice here
+	char _vals[3];
+	if (read(fd, _vals, 3) != 2) {
 		NSLog(@"Writing initial values to daemon_settings");
 		_vals[0] = -1;
 		_vals[1] = -1;
+		_vals[2] = 0;
 		lseek(fd, 0, SEEK_SET);
-		write(fd, _vals, 2);
+		write(fd, _vals, 3);
 	}
 	lseek(fd, 0, SEEK_SET);
-	vals = mmap(NULL, 2, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+	vals = mmap(NULL, 3, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 	if ((long long)vals == -1) {
 		NSLog(@"mmap: Error - %s", strerror(errno));
 		show_alert(L_ERR, _C("File mapping failed"), L_OK);
@@ -183,7 +195,7 @@ extern const char *container_system_group_path_for_identifier(int, const char *,
 	if (section == CL_SECTION_GRAPH)
 		return load_graph ? _("The system logs battery charge–level changes for the past 7 days. If this graph is empty, the power-log service may not be running correctly.") : nil;
 	if (section == CL_SECTION_MAIN)
-		return _("Charging Limit uses a background service to monitor your battery's charge level and automatically adjust charging behavior. You need to restart the service after changing the configuration.");
+		return _("Charging Limit uses a background service to monitor your battery's charge level and automatically adjust charging behavior.");
 	return nil;
 }
 
@@ -195,7 +207,7 @@ extern const char *container_system_group_path_for_identifier(int, const char *,
 		write(daemon_fd, &endconnectioncmd, 1);
 		close(daemon_fd);
 	}
-	munmap(vals, 2);
+	munmap(vals, 3);
 }
 
 - (NSInteger)tableView:(id)tv numberOfRowsInSection:(NSInteger)sect {
@@ -203,7 +215,7 @@ extern const char *container_system_group_path_for_identifier(int, const char *,
 		return 1;
 
 	if (sect == CL_SECTION_MAIN)
-		return 7;
+		return 9;
 	return 0;
 }
 
@@ -213,6 +225,10 @@ extern const char *container_system_group_path_for_identifier(int, const char *,
 
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (indexPath.section == CL_SECTION_MAIN && indexPath.row == 6) {
+		if (vals[1] < vals[0]) {
+			show_alert(_C("Invalid Setup"), _C("Limit Value should be bigger than Resume Value"), L_OK);
+			return;
+		}
 		if (daemon_pid) {
 			NSLog(@"Daemon is likely active, requesting stop");
 			if (!daemon_fd) {
@@ -228,7 +244,7 @@ extern const char *container_system_group_path_for_identifier(int, const char *,
 				close(daemon_fd);
 				daemon_fd = 0;
 			}
-			[tv reloadData];
+			[tv reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section], indexPath] withRowAnimation:UITableViewRowAnimationFade];
 		} else {
 			extern int battman_run_daemon(void);
 			daemon_pid = battman_run_daemon();
@@ -236,12 +252,13 @@ extern const char *container_system_group_path_for_identifier(int, const char *,
 				usleep(50000);
 				[self connectToDaemon];
 				if (daemon_fd) {
+					DBGLOG(@"%@: Got Daemon fd: %d", indexPath, daemon_fd);
 					break;
 				} else if (i == 29) {
 					show_alert(L_FAILED, _C("Couldn't start the daemon — it isn’t responding."), L_OK);
 				}
 			}
-			[tv reloadData];
+			[tv reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section], indexPath] withRowAnimation:UITableViewRowAnimationFade];
 		}
 	}
 	[tv deselectRowAtIndexPath:indexPath animated:YES];
@@ -339,7 +356,7 @@ extern const char *container_system_group_path_for_identifier(int, const char *,
 		return graphCell;
 	}
 	if (indexPath.section == CL_SECTION_MAIN) {
-		cell = [UITableViewCell new];
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
 		if (indexPath.row == 0) {
 			cell.textLabel.text = _("When limit is reached");
 			NSArray *items;
@@ -379,7 +396,7 @@ extern const char *container_system_group_path_for_identifier(int, const char *,
 			if (!scell) {
 				scell = [[SliderTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"clhighthr"];
 			}
-			scell.slider.minimumValue = 0;
+			scell.slider.minimumValue = 1;
 			scell.slider.maximumValue = 100;
 			scell.slider.enabled      = 1;
 			scell.textField.enabled   = 1;
@@ -422,13 +439,30 @@ extern const char *container_system_group_path_for_identifier(int, const char *,
 			}
 			return scell;
 		} else if (indexPath.row == 5) {
+			cell.textLabel.text = _("Drain Mode");
+			PickerAccessoryView *picker = [[PickerAccessoryView alloc] initWithFrame:CGRectZero font:nil options:self.drainModes];
+			[picker addTarget:self action:@selector(drainModeChanged:)];
+			[picker selectAutomaticRow:BIT_GET(vals[2], 0) animated:YES];
+			cell.accessoryView = picker;
+			cell.clipsToBounds = YES;
+			return cell;
+		} else if (indexPath.row == 6) {
+			cell.textLabel.text = _("Override OBC On Cycle");
+			UISwitch *cswitch = [UISwitch new];
+			cswitch.on = BIT_GET(vals[2], 1);
+			cell.detailTextLabel.text = cswitch.on ? _("OBC will turn off") : _("OBC will not be affected");
+			[cswitch addTarget:self action:@selector(overrideOBCChanged:) forControlEvents:UIControlEventValueChanged];
+			cell.accessoryView = cswitch;
+			return cell;
+		} else if (indexPath.row == 7) {
 			if (daemon_pid) {
+				DBGLOG(@"%@: Got Daemon PID: %d", indexPath, daemon_pid);
 				cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@: %d)", _("Daemon is active"), _("PID"), daemon_pid];
 			} else {
 				cell.textLabel.text = _("Daemon is inactive");
 			}
 			return cell;
-		} else if (indexPath.row == 6) {
+		} else if (indexPath.row == 8) {
 			cell.selectionStyle = UITableViewCellSelectionStyleDefault;
 			if (daemon_pid) {
 				cell.textLabel.text = _("Stop Daemon (Disable Charging Limit)");
@@ -445,25 +479,76 @@ extern const char *container_system_group_path_for_identifier(int, const char *,
 	return cell;
 }
 
+#pragma mark - SliderTableViewCell Delegate
+
+- (void)sliderTableViewCellDidBeginChanging:(SliderTableViewCell *)cell {
+	BOOL isHighThr = [cell.reuseIdentifier isEqualToString:@"clhighthr"];
+	NSIndexPath *curr = [self.tableView indexPathForCell:cell];
+	NSIndexPath *oppo = [NSIndexPath indexPathForRow:curr.row - (isHighThr ? -2 : 2) inSection:curr.section];
+	if (vals[0] != -1) {
+		SliderTableViewCell *oppocell = [self.tableView cellForRowAtIndexPath:oppo];
+		oppocell.userInteractionEnabled = NO;
+	}
+}
+
 - (void)sliderTableViewCell:(SliderTableViewCell *)cell didChangeValue:(float)value {
 	BOOL isHighThr = [cell.reuseIdentifier isEqualToString:@"clhighthr"];
-	// TODO: Consider do a auto slider adjusting instead of this
-	if (isHighThr && value < vals[0]) {
-		show_alert(_C("Invalid Setup"), _C("Limit Value should be bigger than Resume Value"), L_OK);
-		[self.tableView reloadData];
-		return;
-	} else if (!isHighThr && value > vals[1]) {
-		show_alert(_C("Invalid Setup"), _C("Resume Value should be smaller than Limit Value"), L_OK);
-		[self.tableView reloadData];
-		return;
+	int8_t rounded = (int8_t)lroundf(value);
+	
+	if ((isHighThr && value < vals[0]) || (!isHighThr && value > vals[1])) {
+		vals[!isHighThr] = rounded + (isHighThr ? -1 : 1);
+		vals[!isHighThr] = MIN(MAX(vals[!isHighThr], 0), 100);
+		
+		NSIndexPath *oppo = [NSIndexPath indexPathForRow:[self.tableView indexPathForCell:cell].row - (isHighThr ? -2 : 2) inSection:[self.tableView indexPathForCell:cell].section];
+		SliderTableViewCell *oppocell = [self.tableView cellForRowAtIndexPath:oppo];
+		oppocell.slider.value = vals[!isHighThr];
+		oppocell.textField.text = [NSString stringWithFormat:@"%d", vals[!isHighThr]];
 	}
-	vals[isHighThr] = (char)value;
+
+	vals[isHighThr] = rounded;
+	cell.slider.value = rounded;
+	cell.textField.text = [NSString stringWithFormat:@"%d", rounded];
+}
+
+- (void)sliderTableViewCell:(SliderTableViewCell *)cell didEndChangingValue:(float)value {
+	BOOL isHighThr = [cell.reuseIdentifier isEqualToString:@"clhighthr"];
+	NSIndexPath *curr = [self.tableView indexPathForCell:cell];
+	NSIndexPath *oppo = [NSIndexPath indexPathForRow:curr.row - (isHighThr ? -2 : 2) inSection:curr.section];
+
+	if (vals[0] != -1) {
+		SliderTableViewCell *oppocell = [self.tableView cellForRowAtIndexPath:oppo];
+		oppocell.userInteractionEnabled = YES;
+	}
+	
 	[self daemonRedecide];
 }
 
+
 - (void)daemonRedecide {
+	// Do msync after vals[] changes
+	if (msync(vals, sizeof(vals), MS_SYNC) == -1) {
+		os_log_error(gLog, "msync failed: %s", strerror(errno));
+	}
 	const char redecidecmd = 4;
 	write(daemon_fd, &redecidecmd, 1);
+}
+
+- (void)drainModeChanged:(PickerAccessoryView *)sender {
+	NSInteger row = [sender selectedRowInComponent:0];
+	NSInteger opt = row % sender.options.count;
+	DBGLOG(@"Value %ld: %@", opt, sender.options[opt]);
+	/* Currently we only have 2 drain modes so this is a binary stored at bit 0
+	 * This has to be changed once we have more than 2 */
+	BIT_SET(vals[2], 0, (opt & 1));
+	[self daemonRedecide];
+}
+
+- (void)overrideOBCChanged:(UISwitch *)sender {
+	BIT_SET(vals[2], 1, sender.on);
+	[self daemonRedecide];
+	/* Im lazy, so hardcode here */
+	NSIndexPath *ip = [NSIndexPath indexPathForRow:6 inSection:CL_SECTION_MAIN];
+	[self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 @end

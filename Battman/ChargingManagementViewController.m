@@ -557,17 +557,20 @@ tvend:
 #pragma mark - SliderTableViewCell Delegate
 
 - (void)sliderTableViewCell:(SliderTableViewCell *)cell didChangeValue:(float)value {
-    if ([cell.reuseIdentifier isEqualToString:@"LPM_THR"]) {
-        lpm_thr = value;
-        if (batterysaver)
-        	[batterysaver setFloat:value forKey:@"autoDisableThreshold"];
-        else
-        	battman_worker_call(3, (void *)&value, 4);
-        notify_post(batterysaver_notif);
-    }
-
     DBGLOG(@"Slider changed at row %ld: %f", (long) [self.tableView indexPathForCell:cell].row, value);
 }
+
+- (void)sliderTableViewCell:(SliderTableViewCell *)cell didEndChangingValue:(float)value {
+	if ([cell.reuseIdentifier isEqualToString:@"LPM_THR"]) {
+		lpm_thr = value;
+		if (batterysaver)
+			[batterysaver setFloat:value forKey:@"autoDisableThreshold"];
+		else
+			battman_worker_call(3, (void *)&value, 4);
+		notify_post(batterysaver_notif);
+	}
+}
+
 
 #pragma mark - DatePickerTableViewCell Delegate
 

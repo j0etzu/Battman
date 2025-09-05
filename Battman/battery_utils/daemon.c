@@ -25,6 +25,8 @@
 #include <sys/stat.h>
 #include <sys/un.h>
 #include <unistd.h>
+#include <pwd.h>
+#include <notify.h>
 
 #if __has_include(<spawn_private.h>)
 #include <spawn_private.h>
@@ -43,6 +45,7 @@ extern void subscribeToPowerEvents(void (*cb)(int, io_registry_entry_t, int32_t)
 struct battman_daemon_settings {
 	unsigned char enable_charging_at_level;
 	unsigned char disable_charging_at_level;
+	unsigned char drain_config;
 };
 
 static struct battman_daemon_settings *daemon_settings;
@@ -54,6 +57,7 @@ static char daemon_settings_path[1024];
 static void update_power_level(int);
 
 static void daemon_control_thread(int fd) {
+	// XXX: Consider use XPC or dispatch?
 	while (1) {
 		char cmd;
 		if (read(fd, &cmd, 1) <= 0) {
@@ -134,56 +138,139 @@ static void daemon_control() {
 	}
 }
 
+// The safest approach to change OBC settings, at least iOS 16
+static int obc_switch(bool on) {
+	struct passwd *pw = getpwnam("mobile");
+	if (!pw)
+		return 1;
+
+	uid_t orig_euid = geteuid();
+	gid_t orig_egid = getegid();
+
+	// Required: drop to mobile for the write (so CFPreferences writes to /var/mobile/Library/Preferences)
+	if (setegid(pw->pw_gid) != 0 || seteuid(pw->pw_uid) != 0) {
+		perror("failed to switch to mobile");
+		return 1;
+	}
+
+	CFStringRef domain = CFSTR("com.apple.smartcharging.topoffprotection");
+	CFStringRef key = CFSTR("enabled");
+	CFNumberRef value = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &on);
+
+	CFPreferencesSetValue(key, value, domain, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+	CFRelease(value);
+	if (!CFPreferencesSynchronize(domain, kCFPreferencesCurrentUser, kCFPreferencesAnyHost)) {
+		CFPreferencesAppSynchronize(domain);
+	}
+
+	// Tell CoreDuet/PowerUI we changed the settings
+	notify_post("com.apple.smartcharging.defaultschanged");
+
+	// restore
+	if (seteuid(orig_euid) != 0 || setegid(orig_egid) != 0) {
+		perror("failed to restore euid/egid");
+	}
+
+	return 0;
+}
+
+/* 6 keys we had to notice
+   CH0C: Battery charge control (But not affecting AC)
+   CH0B: Managed charging control
+   CH0I: AC control
+   CH0J: Managed AC control
+   CH0K: Managed AC control
+   CH0R: Inflow inhibit flags
+   When CH0B is set, CH0C and CH0B will be marked with 0010, which typically means the battery charge control has been taken over.
+   When CH0J is set, CH0I and CH0J will be marked with 0x20, which typically means the AC control has been taken over.
+   CH0B/CH0J/CH0K is typically used by OBC, normally we should avoid operating with these keys, since OBC should be controlled by user but not us. But we still provide options to let users override the OBC behavior.
+   CH0R is controlled by BMS, the only condition we had to notice is low flag 1 (0010), which typically means no AC power provided. We should avoid writing keys when this flag matched.
+ */
+
+static void power_switch_safe(bool on, bool override_obc, bool keep_ac) {
+	uint32_t ret4 = 0;
+	smc_read_n('CH0R', &ret4, sizeof(ret4));
+	/* Bit 1: No VBUS */
+	if (ret4 & (1 << 1))
+		return;
+
+	uint8_t ret1 = 0;
+	/* ExternalConnected also refers to inflow state */
+	smc_read_n('CHCE', &ret1, sizeof(ret1));
+	if (!ret1)
+		return;
+
+	// keep_ac should only be set when drain unset
+	ret1 = 0;
+	if (keep_ac) {
+		NSLog(CFSTR("Daemon setting CH0C %s"), on ? "on" : "off");
+		smc_read_n('CH0C', &ret1, sizeof(ret1));
+		/* Bit 0: On/Off (setbatt) */
+		/* Bit 1: OBC or no VBUS */
+		if (ret1 & (1 << 1) && override_obc) {
+			obc_switch(false);
+			smc_write_safe('CH0B', &on, 1);
+		}
+		/* No need to keep other bits when setting, BMS is automatically doing it */
+		if (on != CH0CCache) {
+			CH0CCache = on;
+			smc_write_safe('CH0C', &on, 1);
+		}
+	} else {
+		NSLog(CFSTR("Daemon setting CH0I %s"), on ? "on" : "off");
+		/* Bit 0: On/Off (Inhibit inflow) */
+		/* Bit 1: OBC or no VBUS */
+		/* Bit 5: Field Diagnostics */
+		// Otherwise, just cut off AC to stop charging
+		smc_read_n('CH0I', &ret1, sizeof(ret1));
+		if (ret1 & (1 << 1) && override_obc) {
+			obc_switch(false);
+			// Do not explicitly set CH0J, it will add Bit 5 instead of Bit 1
+			// Resulting in NOT_CHARGING_REASON_FIELDDIAGS
+			// smc_write_safe('CH0J', &on, 1);
+		}
+		/* No need to keep other bits when setting, BMS is automatically doing it */
+		if (on != CH0ICache) {
+			CH0ICache = on;
+			smc_write_safe('CH0I', &on, 1);
+		}
+	}
+}
+
 static void update_power_level(int val) {
 	if (val == -1)
 		return;
 	last_power_level = val;
+
+	char keep_ac = BIT_GET(daemon_settings->drain_config, 0);
+	char override_obc = BIT_GET(daemon_settings->drain_config, 1);
+
 	if (daemon_settings->enable_charging_at_level != 255) {
 		if (val <= daemon_settings->enable_charging_at_level) {
-			val = 0;
-			if (val != CH0ICache) {
-				CH0ICache = val;
-				smc_write_safe('CH0I', &val, 1);
-			}
-			return;
+			val = 0; // Enable
+		} else if (val >= daemon_settings->disable_charging_at_level) {
+			val = 1; // Disable
 		}
-		NSLog(CFSTR("Going to disable at %d"), (int)daemon_settings->disable_charging_at_level);
-		if (val >= daemon_settings->disable_charging_at_level) {
-			val = 1;
-			if (val != CH0ICache) {
-				CH0ICache = val;
-				NSLog(CFSTR("Disabling"));
-				smc_write_safe('CH0I', &val, 1);
-			}
-			return;
-		}
-		return;
+	} else if (daemon_settings->disable_charging_at_level != 255) {
+		val = (val >= daemon_settings->disable_charging_at_level);
 	}
-	if (daemon_settings->disable_charging_at_level != 255) {
-		if (val >= daemon_settings->disable_charging_at_level) {
-			val = 1;
-		} else {
-			val = 0;
-		}
-		if (val != CH0CCache) {
-			CH0CCache = val;
-			smc_write_safe('CH0C', &val, 1);
-		}
-		return;
-	}
+
+	return power_switch_safe(val, override_obc, keep_ac);
 }
 
 static void powerevent_listener(int a, io_registry_entry_t b, int32_t c) {
+	// kIOPMMessageBatteryStatusHasChanged
 	if (c != -536723200)
 		return;
+
 	if (access(daemon_settings_path, F_OK) == -1) {
 		// Quit when app removed or daemon no longer needed
 		exit(0);
 	}
+	// XXX: Guards?
 	CFNumberRef capacity = IORegistryEntryCreateCFProperty(b, CFSTR("CurrentCapacity"), 0, 0);
 	int val;
 	CFNumberGetValue(capacity, kCFNumberIntType, &val);
-	NSLog(CFSTR("Daemon: Value=%d"), val);
 	CFRelease(capacity);
 	update_power_level(val);
 }
@@ -205,6 +292,7 @@ void daemon_main(void) {
 		exit(0);
 	close(settingsfd);
 	smc_open();
+	// FIXME: Implement standalone listeners for daemon
 	subscribeToPowerEvents(powerevent_listener);
 	pthread_t tmp;
 	pthread_create(&tmp, NULL, (void *(*)(void *))daemon_control, NULL);

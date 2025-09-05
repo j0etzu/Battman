@@ -111,7 +111,7 @@
 	note.textAlignment = NSTextAlignmentCenter;
 	note.font = [UIFont systemFontOfSize:10];
 	note.translatesAutoresizingMaskIntoConstraints = NO;
-	
+
 	UILabel *issuetitle = [[UILabel alloc] init];
 	issuetitle.text = _("Having Problems?");
 	issuetitle.numberOfLines = 0;

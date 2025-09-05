@@ -1,5 +1,6 @@
 #pragma once
 
+// FIXME: Seperate typedefs to their own headers
 typedef struct objc_object NSObject;
 typedef NSObject UIView;
 typedef UIView UIWindow;
@@ -17,6 +18,7 @@ typedef NSObject NSIndexPath;
 typedef NSObject UIColor;
 
 typedef long NSInteger;
+typedef double NSTimeInterval;
 
 #define _DefineMethod_Type_Mapper(type,name) type name
 #define _DefineMethod_TypeOnly_Mapper(type,n) COMMA() type

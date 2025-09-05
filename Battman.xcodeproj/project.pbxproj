@@ -66,6 +66,12 @@
 		6838BF762DBF810D007EB66C /* localized.c in Sources */ = {isa = PBXBuildFile; fileRef = 6838BF752DBF810D007EB66C /* localized.c */; };
 		6838BF832DC27F1E007EB66C /* ChargingManagementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6838BF822DC27F1E007EB66C /* ChargingManagementViewController.m */; };
 		6838BFAC2DC3984C007EB66C /* SliderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6838BFAB2DC3984C007EB66C /* SliderTableViewCell.m */; };
+		683B2C5D2E5F73B800FECDF5 /* DatePickerCompactButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 683B2C5C2E5F73B800FECDF5 /* DatePickerCompactButton.m */; };
+		683B2C5E2E5F74B700FECDF5 /* DatePickerCompactButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 683B2C5C2E5F73B800FECDF5 /* DatePickerCompactButton.m */; };
+		683B2C5F2E5F74B700FECDF5 /* DatePickerCompactButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 683B2C5C2E5F73B800FECDF5 /* DatePickerCompactButton.m */; };
+		683B2C9D2E6185D900FECDF5 /* PickerAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 683B2C9C2E6185D900FECDF5 /* PickerAccessoryView.m */; };
+		683B2C9E2E61866200FECDF5 /* PickerAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 683B2C9C2E6185D900FECDF5 /* PickerAccessoryView.m */; };
+		683B2C9F2E61866200FECDF5 /* PickerAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 683B2C9C2E6185D900FECDF5 /* PickerAccessoryView.m */; };
 		684114042E4A35D2001B76B6 /* DonationPrompter.m in Sources */ = {isa = PBXBuildFile; fileRef = 684114032E4A34DA001B76B6 /* DonationPrompter.m */; };
 		684114052E4A35E0001B76B6 /* DonationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 684113FE2E4A3492001B76B6 /* DonationViewController.m */; };
 		6841147F2E512AB1001B76B6 /* BattmanVectorIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 6841147D2E512AB1001B76B6 /* BattmanVectorIcon.m */; };
@@ -188,7 +194,6 @@
 		684115162E57BDE7001B76B6 /* license.html in Resources */ = {isa = PBXBuildFile; fileRef = 6838BF642DB8D06B007EB66C /* license.html */; };
 		684115172E57BDE7001B76B6 /* locales in Resources */ = {isa = PBXBuildFile; fileRef = 687742B52D43837B00375A2C /* locales */; };
 		6841151E2E57BEAF001B76B6 /* SF-Pro-Display-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 68CC02872DB3C57B00914051 /* SF-Pro-Display-Regular.otf */; };
-		6841151F2E57C0F4001B76B6 /* nonfree-havoc.m in Sources */ = {isa = PBXBuildFile; fileRef = 684114D52E57BCE7001B76B6 /* nonfree-havoc.m */; };
 		6841152D2E57E166001B76B6 /* control in Sources */ = {isa = PBXBuildFile; fileRef = 6841152C2E57E166001B76B6 /* control */; };
 		6845759A2E3CBD2B00618DFD /* BattmanIcons@3x.artwork in Resources */ = {isa = PBXBuildFile; fileRef = 684575992E3CBD2500618DFD /* BattmanIcons@3x.artwork */; };
 		6845759C2E3CBFEB00618DFD /* BattmanIcons@2x.artwork in Resources */ = {isa = PBXBuildFile; fileRef = 6845759B2E3CBFE500618DFD /* BattmanIcons@2x.artwork */; };
@@ -339,6 +344,15 @@
 		6838BF822DC27F1E007EB66C /* ChargingManagementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChargingManagementViewController.m; sourceTree = "<group>"; };
 		6838BFAA2DC3984C007EB66C /* SliderTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SliderTableViewCell.h; sourceTree = "<group>"; };
 		6838BFAB2DC3984C007EB66C /* SliderTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SliderTableViewCell.m; sourceTree = "<group>"; };
+		683B2C4D2E5B011C00FECDF5 /* UNUserNotificationCenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UNUserNotificationCenter.h; sourceTree = "<group>"; };
+		683B2C512E5B023300FECDF5 /* cobjc_class.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cobjc_class.h; sourceTree = "<group>"; };
+		683B2C522E5B081400FECDF5 /* UNNotificationContent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UNNotificationContent.h; sourceTree = "<group>"; };
+		683B2C532E5B164300FECDF5 /* UNNotificationRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UNNotificationRequest.h; sourceTree = "<group>"; };
+		683B2C542E5B170C00FECDF5 /* UNNotificationTrigger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UNNotificationTrigger.h; sourceTree = "<group>"; };
+		683B2C5B2E5F73B800FECDF5 /* DatePickerCompactButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DatePickerCompactButton.h; sourceTree = "<group>"; };
+		683B2C5C2E5F73B800FECDF5 /* DatePickerCompactButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DatePickerCompactButton.m; sourceTree = "<group>"; };
+		683B2C9B2E6185D900FECDF5 /* PickerAccessoryView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PickerAccessoryView.h; sourceTree = "<group>"; };
+		683B2C9C2E6185D900FECDF5 /* PickerAccessoryView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PickerAccessoryView.m; sourceTree = "<group>"; };
 		684113FD2E4A3492001B76B6 /* DonationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DonationViewController.h; sourceTree = "<group>"; };
 		684113FE2E4A3492001B76B6 /* DonationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DonationViewController.m; sourceTree = "<group>"; };
 		684114022E4A34DA001B76B6 /* DonationPrompter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DonationPrompter.h; sourceTree = "<group>"; };
@@ -13777,8 +13791,12 @@
 				6838BFAB2DC3984C007EB66C /* SliderTableViewCell.m */,
 				68AFCB9F2E054CD3007A9EC7 /* UILabel+SFSymbolsOverride.h */,
 				68AFCBA32E054D04007A9EC7 /* UILabel+SFSymbolsOverride.m */,
+				683B2C5B2E5F73B800FECDF5 /* DatePickerCompactButton.h */,
+				683B2C5C2E5F73B800FECDF5 /* DatePickerCompactButton.m */,
 				68B16F052E167CE6009B63AC /* DatePickerTableViewCell.h */,
 				68B16F062E167CE6009B63AC /* DatePickerTableViewCell.m */,
+				683B2C9B2E6185D900FECDF5 /* PickerAccessoryView.h */,
+				683B2C9C2E6185D900FECDF5 /* PickerAccessoryView.m */,
 			);
 			name = CustomUIElements;
 			sourceTree = "<group>";
@@ -13895,8 +13913,13 @@
 				68FBDD012DE30A740057870A /* UIWindow.h */,
 				68FBDD022DE30A740057870A /* cobjc.h */,
 				68FBDD062DE30A740057870A /* cobjc_types.h */,
+				683B2C512E5B023300FECDF5 /* cobjc_class.h */,
 				68FBDD082DE30A740057870A /* UILabel.h */,
 				68FBDD092DE30A740057870A /* UIViewController.h */,
+				683B2C4D2E5B011C00FECDF5 /* UNUserNotificationCenter.h */,
+				683B2C522E5B081400FECDF5 /* UNNotificationContent.h */,
+				683B2C542E5B170C00FECDF5 /* UNNotificationTrigger.h */,
+				683B2C532E5B164300FECDF5 /* UNNotificationRequest.h */,
 			);
 			path = cobjc;
 			sourceTree = "<group>";
@@ -14390,6 +14413,7 @@
 				684114A92E5323E2001B76B6 /* battery_info.c in Sources */,
 				684114AA2E5323E2001B76B6 /* IOMFB_interaction.c in Sources */,
 				684114AB2E5323E2001B76B6 /* pmnotification.c in Sources */,
+				683B2C9E2E61866200FECDF5 /* PickerAccessoryView.m in Sources */,
 				684114AC2E5323E2001B76B6 /* GradientArcView.m in Sources */,
 				684114AD2E5323E2001B76B6 /* BatterySubscriberViewControllerBase.c in Sources */,
 				684114AE2E5323E2001B76B6 /* licensing.S in Sources */,
@@ -14398,6 +14422,7 @@
 				684114B12E5323E2001B76B6 /* BatteryDetailsViewController.m in Sources */,
 				684114B22E5323E2001B76B6 /* CompatibilityHelper.c in Sources */,
 				684114B32E5323E2001B76B6 /* common.c in Sources */,
+				683B2C5E2E5F74B700FECDF5 /* DatePickerCompactButton.m in Sources */,
 				684114B42E5323E2001B76B6 /* DonationViewController.m in Sources */,
 				684114B52E5323E2001B76B6 /* SettingsViewController.m in Sources */,
 				684114B62E5323E2001B76B6 /* ChargingLimitViewController.m in Sources */,
@@ -14418,7 +14443,6 @@
 				684114E12E57BDE7001B76B6 /* BatteryInfoTableViewCell.m in Sources */,
 				684114E22E57BDE7001B76B6 /* selfcheck.c in Sources */,
 				684114E32E57BDE7001B76B6 /* accessory.c in Sources */,
-				6841151F2E57C0F4001B76B6 /* nonfree-havoc.m in Sources */,
 				684114E42E57BDE7001B76B6 /* Constants.m in Sources */,
 				684114E52E57BDE7001B76B6 /* MultiSelectSegmentedControl.m in Sources */,
 				684114E62E57BDE7001B76B6 /* DividerView.m in Sources */,
@@ -14449,6 +14473,7 @@
 				684114FF2E57BDE7001B76B6 /* battery_info.c in Sources */,
 				684115002E57BDE7001B76B6 /* IOMFB_interaction.c in Sources */,
 				684115012E57BDE7001B76B6 /* pmnotification.c in Sources */,
+				683B2C9F2E61866200FECDF5 /* PickerAccessoryView.m in Sources */,
 				684115022E57BDE7001B76B6 /* GradientArcView.m in Sources */,
 				684115032E57BDE7001B76B6 /* BatterySubscriberViewControllerBase.c in Sources */,
 				684115042E57BDE7001B76B6 /* licensing.S in Sources */,
@@ -14457,6 +14482,7 @@
 				684115072E57BDE7001B76B6 /* BatteryDetailsViewController.m in Sources */,
 				684115082E57BDE7001B76B6 /* CompatibilityHelper.c in Sources */,
 				684115092E57BDE7001B76B6 /* common.c in Sources */,
+				683B2C5F2E5F74B700FECDF5 /* DatePickerCompactButton.m in Sources */,
 				6841150A2E57BDE7001B76B6 /* DonationViewController.m in Sources */,
 				6841150B2E57BDE7001B76B6 /* SettingsViewController.m in Sources */,
 				6841150C2E57BDE7001B76B6 /* ChargingLimitViewController.m in Sources */,
@@ -14479,7 +14505,9 @@
 				6834254B2D7C4F560070CE6F /* iokit_connection.c in Sources */,
 				68B68F6C2E21026600431E14 /* thermal.c in Sources */,
 				68AFCBA42E054D04007A9EC7 /* UILabel+SFSymbolsOverride.m in Sources */,
+				683B2C9D2E6185D900FECDF5 /* PickerAccessoryView.m in Sources */,
 				68AE40BE2D8EB8870023D7B0 /* SegmentButton.m in Sources */,
+				683B2C5D2E5F73B800FECDF5 /* DatePickerCompactButton.m in Sources */,
 				687743462D4F6C7800375A2C /* BatteryCellView.m in Sources */,
 				6838BF832DC27F1E007EB66C /* ChargingManagementViewController.m in Sources */,
 				687743482D4F6C7800375A2C /* BatteryInfoTableViewCell.m in Sources */,

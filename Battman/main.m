@@ -31,6 +31,8 @@
 extern int _NSGetExecutablePath(char* buf, uint32_t* bufsize);
 #endif
 
+#import <UserNotifications/UserNotifications.h>
+
 struct localization_entry {
 	CFStringRef *cfstr;
 	const char **pstr;
@@ -176,22 +178,18 @@ static void gettext_init(void) {
 				}
             }
 #if defined(ENABLE_MO_CHECK)
-            else if (use_libintl) {
+            else if (use_libintl && gAppType == BATTMAN_APP) {
 				char mo_fullpath[PATH_MAX];
 				snprintf(mo_fullpath, sizeof(mo_fullpath), "%s/locales/%s/LC_MESSAGES/battman.mo", NSBundle.mainBundle.bundlePath.UTF8String, preferred_language());
 				switch (verify_embedded_mo_by_locale_hash(preferred_language(), mo_fullpath)) {
-					case 114:
-						break; // OK
-					case 514: {
-						// I don't like you to modify my ellegant locales
-						extern void push_fatal_notif(void);
-						push_fatal_notif();
+					case 114: {
 						break;
 					}
 					case 1919: {
 						// This looks exactlly same with above, but multi-factored
 						NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-						if (![defaults objectForKey:@"com.torrekie.Battman.warned_no_locale"]) {
+						os_log_error(gLog, "1919");
+						if (![defaults objectForKey:@"com.torrekie.Battman.warned_no_locale"] || DEBUG) {
 							show_alert("Error", "Unable to match existing Gettext localization, defaulting to English", "Cancel");
 							[defaults setBool:YES forKey:@"com.torrekie.Battman.warned_no_locale"];
 							[defaults synchronize];
@@ -199,12 +197,20 @@ static void gettext_init(void) {
 						break;
 					}
 					case 810: {
+						os_log_error(gLog, "810");
 						NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-						if (![defaults objectForKey:@"com.torrekie.Battman.warned_3rd_locale"]) {
+						if (![defaults objectForKey:@"com.torrekie.Battman.warned_3rd_locale"] || DEBUG) {
 							show_alert(_("Unregistered Locale"), _("You are using a localization file which not officially provided by Battman, the translations may inaccurate."), _("OK"));
 							[defaults setBool:YES forKey:@"com.torrekie.Battman.warned_3rd_locale"];
 							[defaults synchronize];
 						}
+						break;
+					}
+					case 514:
+					default: {
+						// I don't like you to modify my ellegant locales
+						extern void push_fatal_notif(void);
+						push_fatal_notif();
 						break;
 					}
 				}
@@ -239,6 +245,8 @@ void (^redirectedOutputListener)(void)=nil;
 #include "security/protect.h"
 
 os_log_t gLog;
+os_log_t gLogDaemon;
+battman_type_t gAppType = BATTMAN_SUBPROCESS;
 
 int main(int argc, char * argv[]) {
 	gLog = os_log_create("com.torrekie.Battman", "default");
@@ -253,10 +261,15 @@ int main(int argc, char * argv[]) {
 		battman_run_worker(argv[2]);
 		return 0;
 	} else if (argc == 2 && strcmp(argv[1], "--daemon") == 0) {
+		gLogDaemon = os_log_create("com.torrekie.Battman", "Daemon");
+		if (gLogDaemon == NULL) {
+			os_log_error(OS_LOG_DEFAULT, "Couldn't create daemon os log object");
+		}
 		extern void daemon_main(void);
 		daemon_main();
 		return 0;
 	}
+	gAppType = BATTMAN_APP;
 #if defined(DEBUG)
 #if !TARGET_OS_SIMULATOR
     // Redirecting is not needed for Simulator
@@ -311,13 +324,13 @@ int main(int argc, char * argv[]) {
     // sleep(10);
     if (is_carbon()) {
 #if TARGET_OS_IPHONE
-	//protect_method(UIViewController,presentViewController:animated:completion:,push_fatal_notif);
-	protect_method(UIWindow,alloc,NULL);
-	protect_method(UIWindow,makeKeyAndVisible,push_fatal_notif);
-	protect_method(NSURLSession,dataTaskWithURL:completionHandler:,NULL);
-	protect_method(NSURLSession,dataTaskWithRequest:completionHandler:,NULL);
+		//protect_method(UIViewController,presentViewController:animated:completion:,push_fatal_notif);
+		protect_method(UIWindow,alloc,NULL);
+		protect_method(UIWindow,makeKeyAndVisible,push_fatal_notif);
+		protect_method(NSURLSession,dataTaskWithURL:completionHandler:,NULL);
+		protect_method(NSURLSession,dataTaskWithRequest:completionHandler:,NULL);
         protect_method(NSURLSession,resume,NULL);
-        extern NSString *battman_bootstrap(char *, int);
+		extern NSString *battman_bootstrap(char *, int);
         return UIApplicationMain(argc, argv, nil, battman_bootstrap("", 0));
 #else
         @autoreleasepool {
