@@ -79,6 +79,21 @@ function read_po() {
 }
 
 declare -A lkeys="(`read_po ./Localizations/base.pot`)"
+
+if [[ "$(<main.m)" =~ \#define\ PSTRMAP_SIZE\ ([[:digit:]]+) ]]; then
+	if (( ${#lkeys[@]} >= ${BASH_REMATCH[1]} )); then
+		echo "generate_code.sh: Count of localization strings exceeding PSTRMAP_SIZE" >&2
+		echo "generate_code.sh: NOTE: num=${#lkeys[@]} vs. PSTRMAP_SIZE=${BASH_REMATCH[1]}" >&2
+		exit 4
+	elif (( $(( ${#lkeys[@]} + 64)) >= ${BASH_REMATCH[1]} )); then
+		echo "generate_code.sh: WARNING: PSTRMAP_SIZE value is not efficient." >&2
+		echo "generate_code.sh: NOTE: num=${#lkeys[@]} vs. PSTRMAP_SIZE=${BASH_REMATCH[1]}" >&2
+	fi
+else
+	echo "generate_code.sh: PSTRMAP_SIZE not found in main.m" >&2
+	exit 4
+fi
+
 locale_files=`ls Localizations/*.po`
 for fn in $locale_files; do
 	declare -A cur="(`read_po ${fn}`)"

@@ -86,8 +86,8 @@ Please file [issues](../../issues/new) if Battman not working correctly on your 
 - [ ] GTK+/X11 UI for iOS/macOS
 - [ ] Auto identify Gas Gauge IC
 - [ ] Optional data collection (For decoding currently unknown params)
-- [ ] Advanced features (AppleSMC/ApplePMGR interface)
-- [ ] Thermal control
+- [x] Advanced features (AppleSMC/ApplePMGR interface)
+- [x] Thermal control
 - [ ] Run as CLI
 - [ ] Run as daemon
 - [x] Charge limit
@@ -95,6 +95,7 @@ Please file [issues](../../issues/new) if Battman not working correctly on your 
 - [ ] App rate limit
 - [ ] Jetsam control
 - [ ] Fan control
+- [ ] Bluetooth accessories (AirPods, etc.)
 
 ### License
 

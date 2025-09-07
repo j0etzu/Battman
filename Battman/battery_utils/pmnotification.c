@@ -25,12 +25,13 @@ static io_iterator_t      _notifyIter = MACH_PORT_NULL;
 static bool _powerMonitoringSuspended = false;
 static bool _powerMonitoringInitialized = false;
 
-static void stpe_cb(void *cb, io_iterator_t it) {
+static void stpe_cb(void **pcb, io_iterator_t it) {
 	if (!it) return;
+
 	io_object_t next;
 	while ((next = IOIteratorNext(it))) {
-		void *refCon = NULL;
-		int err = IOServiceAddInterestNotification(_notifyPort, next, kIOGeneralInterest, (IOServiceInterestCallback)cb, NULL, (void *)&refCon);
+		void *refCon;
+		int err = IOServiceAddInterestNotification(pcb[0], next, kIOGeneralInterest, (IOServiceInterestCallback)pcb[1], NULL, (void *)&refCon);
 		if (err) abort();
 		IOObjectRelease(next);
 	}
@@ -70,17 +71,18 @@ void resumePowerEventMonitoring(void) {
 
 // Enhanced cleanup function for proper shutdown
 void cleanupPowerEventMonitoring(void) {
-	if (!_powerMonitoringInitialized) {
-		return;
+	if (is_main_process()) {
+		if (!_powerMonitoringInitialized) {
+			return;
+		}
+		// Resume queue if it was suspended to allow proper cleanup
+		if (_powerMonitoringSuspended && _powerQueue) {
+			dispatch_resume(_powerQueue);
+			_powerMonitoringSuspended = false;
+		}
 	}
-	
+
 	os_log_info(gLog, "[pmnotification] Starting power monitoring cleanup");
-	
-	// Resume queue if it was suspended to allow proper cleanup
-	if (_powerMonitoringSuspended && _powerQueue) {
-		dispatch_resume(_powerQueue);
-		_powerMonitoringSuspended = false;
-	}
 	
 	// Clean up IOKit resources
 	if (_notifyIter != MACH_PORT_NULL) {
@@ -96,7 +98,7 @@ void cleanupPowerEventMonitoring(void) {
 	}
 	
 	// Clean up dispatch queue
-	if (_powerQueue) {
+	if (is_main_process() && _powerQueue) {
 		// Dispatch a final cleanup block and then release the queue
 		dispatch_async(_powerQueue, ^{
 			os_log_debug(gLog, "[pmnotification] Final cleanup block executed");
@@ -112,54 +114,56 @@ void cleanupPowerEventMonitoring(void) {
 }
 
 void subscribeToPowerEvents(void (*cb)(int, io_registry_entry_t, int32_t)) {
-	if (_powerQueue != NULL) {
-		// Already initialized
-		return;
-	}
-	
-	_powerQueue = dispatch_queue_create("com.torrekie.Battman.pmEvents", DISPATCH_QUEUE_SERIAL);
-	if (_powerQueue == NULL) {
-		os_log_error(gLog, "[pmnotification] Failed to create dispatch queue");
-		return;
-	}
-
 	_notifyPort = IONotificationPortCreate(kIOMasterPortDefault);
 	if (_notifyPort == NULL) {
+#if DEBUG
+		add_notification("com.apple.powerui.lowpowermode", "pmnotification", NULL, "Failed to create IONotificationPort");
+#endif
 		os_log_error(gLog, "[pmnotification] Failed to create IONotificationPort");
 		return;
 	}
+	// Weird design
+	void *port[] = {_notifyPort, cb};
 
-	// Set up dispatch queue for notifications
-	IONotificationPortSetDispatchQueue(_notifyPort, _powerQueue);
+	if (is_main_process()) {
+		if (_powerQueue != NULL) {
+			// Already initialized
+			return;
+		}
+		
+		_powerQueue = dispatch_queue_create("com.torrekie.Battman.pmEvents", DISPATCH_QUEUE_SERIAL);
+		if (_powerQueue == NULL) {
+			os_log_error(gLog, "[pmnotification] Failed to create dispatch queue");
+			return;
+		}
+
+		// Set up dispatch queue for notifications
+		IONotificationPortSetDispatchQueue(_notifyPort, _powerQueue);
+	} else {
+		IONotificationPortSetDispatchQueue(_notifyPort, dispatch_get_global_queue(0, 0));
+	}
 	
-	int err = IOServiceAddMatchingNotification(_notifyPort, kIOFirstMatchNotification, IOServiceMatching("IOPMPowerSource"), (IOServiceMatchingCallback)stpe_cb, cb, &_notifyIter);
+	int err = IOServiceAddMatchingNotification(_notifyPort, kIOFirstMatchNotification, IOServiceMatching("IOPMPowerSource"), (IOServiceMatchingCallback)stpe_cb, port, &_notifyIter);
 	if (err) {
-		os_log_error(gLog, "[pmnotification] Failed to add matching notification: %d", err);
+		char *str = malloc(1024);
+		sprintf(str, "Failed to add matching notification: %d", err);
+#if DEBUG
+		add_notification("com.apple.powerui.lowpowermode", "pmnotification", NULL, str);
+#endif
+		os_log_error(gLog, "[pmnotification] %s", str);
+		free(str);
 		cleanupPowerEventMonitoring();
 		return;
 	}
-	
+
 	// Process any existing power sources
-	stpe_cb(cb, _notifyIter);
+	stpe_cb(port, _notifyIter);
 	_powerMonitoringInitialized = true;
+
 	os_log_info(gLog, "[pmnotification] Power event monitoring started successfully");
 }
 
 #if 0
-// IOServiceMatchingCallback
-static void stpe_cb(void **pcb, io_iterator_t it) {
-	if (!it)
-		return;
-	io_object_t next;
-	while ((next = IOIteratorNext(it))) {
-		void *buf;
-		int err = IOServiceAddInterestNotification(*pcb, next, kIOGeneralInterest, (IOServiceInterestCallback)pcb[1], 0, (void *)&buf);
-		if (err)
-			abort();
-		IOObjectRelease(next);
-	}
-}
-
 void subscribeToPowerEvents(void (*cb)(int, io_registry_entry_t, int32_t)) {
     void *port[] = {IONotificationPortCreate(0), cb};
     IONotificationPortSetDispatchQueue(*port, dispatch_get_global_queue(0, 0));

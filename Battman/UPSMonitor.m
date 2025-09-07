@@ -33,6 +33,7 @@ UPSDeviceSet *gAllUPSDevices = NULL;
 #pragma mark gAllUPSDevices
 
 // Call this right after you do your UPSDeviceSetAdd, or whenever you want to dump the contents:
+#if DEBUG
 static void PrintAllUPSDevices(void) {
 	if (!gAllUPSDevices || gAllUPSDevices->count == 0) {
 		NSLog(@"[UPSMonitor] no UPS devices in set");
@@ -49,6 +50,7 @@ static void PrintAllUPSDevices(void) {
 		CFShow(d->upsEvent);
 	}
 }
+#endif
 
 // Create an empty set
 static UPSDeviceSet *UPSDeviceSetCreate(void) {

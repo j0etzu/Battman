@@ -1,0 +1,18 @@
+Package: com.torrekie.battman
+Name: Battman
+Version: 1.0
+Architecture: ARCH
+Section: Applications
+Depends: firmware (>= 12.0), cy+model.iphone (>= 10.1) | cy+model.ipad (>= 8.1)
+Homepage: https://github.com/Torrekie/Battman
+Maintainer: Torrekie <me@torrekie.dev>
+Author: Torrekie <me@torrekie.dev>
+Description: Battman the Battery Manager
+ Battman is a lightweight app that provides deep
+ real-time battery insights. From charging
+ current, voltage, temperature, to
+ Not-Charging-Reason, adapter information,
+ Smart Charging, Low Power Mode and accessory
+ detection.
+ .
+ It requires A11+ devices as for now.

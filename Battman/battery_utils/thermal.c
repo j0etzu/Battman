@@ -25,14 +25,6 @@ extern const char *const kOSThermalNotificationPressureLevelName;
 		}                                        \
 		(const char *)_cached;                   \
 	})
-#define DL_CALL(fn, ret, proto, call_args) \
-	({                                     \
-		static ret(*_fp) proto = NULL;     \
-		if (!_fp)                          \
-			_fp = (ret(*) proto)           \
-			    dlsym(RTLD_DEFAULT, #fn);  \
-		_fp call_args;                     \
-	})
 
 #define kOSThermalNotificationName GET_STRING_SYMBOL(kOSThermalNotificationName)
 
@@ -82,13 +74,19 @@ const char *get_thermal_pressure_string(thermal_pressure_t pressure) {
 }
 
 const char *get_thermal_notif_level_string(thermal_notif_level_t level) {
+	static char numstr[32];
+	// Knowing a special value 8: thermtune controlled
+	int realval = OSThermalNotificationCurrentLevel();
+
 	if (level <= kBattmanThermalNotificationLevelAny)
 		return L_NONE;
-	if (level > kBattmanThermalNotificationLevelAny && level < kBattmanThermalNotificationLevelUnknown)
-		return _C(thermal_notif_level_string[level]);
 
-	static char numstr[32];
-	sprintf(numstr, "%s (%d)", _C("Unknown"), level);
+	if (level > kBattmanThermalNotificationLevelAny && level < kBattmanThermalNotificationLevelUnknown) {
+		sprintf(numstr, "%s (%d)", _C(thermal_notif_level_string[level]), realval);
+	} else {
+		sprintf(numstr, "%s (%d)", _C("Unknown"), realval);
+	}
+
 	return numstr;
 }
 
@@ -184,20 +182,20 @@ float thermal_max_trigger_temperature(void) {
 	return (float)level / 100.0f;
 }
 
-bool thermal_solar_state(void) {
+int thermal_solar_state(void) {
 	int      token;
 	uint64_t level;
 	
 	// This is set by thermalmonitord
-	if (notify_register_check("com.apple.system.maxthermalsensorvalue", &token)) {
-		return false;
+	if (notify_register_check("com.apple.system.thermalsunlightstate", &token)) {
+		return 0;
 	}
 	if (notify_get_state(token, &level)) {
-		return false;
+		return 0;
 	}
 	if (notify_cancel(token)) {
-		return false;
+		return 0;
 	}
 
-	return (token == 100);
+	return (int)level;
 }

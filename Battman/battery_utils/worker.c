@@ -19,6 +19,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include "../common.h"
+#include "../intlextern.h"
 
 extern int posix_spawnattr_set_persona_np(const posix_spawnattr_t *__restrict, uid_t, uint32_t);
 extern int posix_spawnattr_set_persona_uid_np(const posix_spawnattr_t *__restrict, uid_t);
@@ -119,6 +121,78 @@ void battman_run_worker(const char *pipedata) {
 			write(worker_pipefd[1], &retval, 1);
 			write(worker_pipefd[1], buf, 6);
 			continue;
+		} else if (cmd == 5) {
+			// thermtune bool
+			uint32_t val;
+			char buf[6];
+			read(worker_pipefd[0], &val, 4);
+			int ret = 1001;
+			int sect = (val & 0xF000) >> 12;
+			int row = (val & 0x0F00) >> 8;
+			// TODO: Reduce redundant code
+			switch (sect) {
+				case 1: {
+						// TT_SECT_GENERAL
+						switch (row) {
+							case 0: {
+									// TT_ROW_GENERAL_ENABLED
+									extern int setOSNotifEnabled(bool enable, bool persist);
+									ret = setOSNotifEnabled((val & 1), (val & 2) != 0);
+									break;
+								}
+							case 1: {
+									// TT_ROW_GENERAL_CLTM
+									extern int setCLTMEnabled(bool enable, bool persist);
+									ret = setCLTMEnabled((val & 1), (val & 2) != 0);
+									break;
+								}
+						}
+						break;
+					}
+				case 2: {
+						// TT_SECT_HIP
+						switch (row) {
+							case 0: {
+									// TT_ROW_HIP_ENABLED
+									extern int setHIPEnabled(bool enable, bool persist);
+									ret = setHIPEnabled((val & 1), (val & 2) != 0);
+									break;
+								}
+							case 1: {
+									// TT_ROW_HIP_SIMULATE
+									extern int setSimulateHIPEnabled(bool enable, bool persist);
+									ret = setSimulateHIPEnabled((val & 1), 0);
+									break;
+								}
+						}
+						break;
+					}
+				case 3: {
+						// TT_SECT_SUNLIGHT
+						switch (row) {
+							case 0: {
+									// TT_ROW_SUNLIGHT_AUTO
+									extern bool delSunlightEntry(void);
+									extern int setSunlightEnabled(bool enable, bool persist);
+									if (val & 1) ret = delSunlightEntry();
+									else ret = setSunlightEnabled(0, 0);
+									break;
+								}
+							case 1: {
+									// TT_ROW_SUNLIGHT_SIMULATE
+									extern int setSunlightEnabled(bool enable, bool persist);
+									ret = setSunlightEnabled((val & 1), (val & 2) != 0);
+									break;
+								}
+						}
+						break;
+					}
+			}
+			*(int *)buf = ret;
+			char retval = 2;
+			write(worker_pipefd[1], &retval, 1);
+			write(worker_pipefd[1], buf, 6);
+			continue;
 		}
 	}
 }
@@ -134,7 +208,7 @@ static void battman_spawn_worker() {
 	outfdg[1] = tmp;
 	// posix_spawn_file_actions_adddup2(&file_actions,worker_pipefd[0],0);
 	// posix_spawn_file_actions_adddup2(&file_actions,worker_pipefd[1],2);
-	posix_spawnattr_t spawnattr;
+	posix_spawnattr_t spawnattr = NULL;
 	posix_spawnattr_init(&spawnattr);
 	posix_spawnattr_set_persona_np(&spawnattr, 99, 1);
 	posix_spawnattr_set_persona_uid_np(&spawnattr, 0);
@@ -148,7 +222,12 @@ static void battman_spawn_worker() {
 	int err = posix_spawn(&worker_pid, executable, NULL, &spawnattr, (char **)newargv, environ);
 	if (err != 0) {
 		NSLog(CFSTR("POSIX spawn failed: %s"), strerror(err));
-		abort();
+		char *str = malloc(1024);
+		sprintf(str, "%s: %s", _C("Helper failed to launch"), strerror(err));
+		if (is_carbon())
+			show_alert(L_FAILED, str, L_OK);
+		free(str);
+		return;
 	}
 	close(outfdg[0]);
 	close(outfdg[1]);

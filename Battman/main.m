@@ -16,6 +16,10 @@
 #if __has_include("constants.c")
 #include "constants.c"
 #endif
+#if __has_include("mo_verification.h") && defined(USE_GETTEXT)
+#include "mo_verification.h"
+#define ENABLE_MO_CHECK
+#endif
 
 #include "common.h"
 #include "intlextern.h"
@@ -26,6 +30,8 @@
 #else
 extern int _NSGetExecutablePath(char* buf, uint32_t* bufsize);
 #endif
+
+#import <UserNotifications/UserNotifications.h>
 
 struct localization_entry {
 	CFStringRef *cfstr;
@@ -41,7 +47,7 @@ struct localization_arr_entry {
 
 extern struct localization_arr_entry localization_arr[];
 
-#define PSTRMAP_SIZE 512
+#define PSTRMAP_SIZE 1024
 struct localization_entry pstrmap[PSTRMAP_SIZE] = {0};
 
 #ifndef USE_GETTEXT
@@ -49,7 +55,7 @@ extern int cond_localize_cnt;
 extern int cond_localize_language_cnt;
 
 inline static int localization_simple_hash(const char *str) {
-	return (((unsigned long long)str) >> 3) & 0x1ff;
+	return (((unsigned long long)str) >> 3) & 0x3ff;
 }
 
 __attribute__((destructor)) static void localization_deinit() {
@@ -144,9 +150,9 @@ static void gettext_init(void) {
                 char *bindbase = bindtextdomain_ptr(BATTMAN_TEXTDOMAIN, binddir);
                 if (bindbase) {
                     DBGLOG(@"i18n base dir: %s", bindbase);
-                    char *dom = textdomain_ptr(BATTMAN_TEXTDOMAIN);
+                    char __unused *dom = textdomain_ptr(BATTMAN_TEXTDOMAIN);
                     DBGLOG(@"textdomain: %s", dom);
-                    char *enc = bind_textdomain_codeset_ptr(BATTMAN_TEXTDOMAIN, "UTF-8");
+                    char __unused *enc = bind_textdomain_codeset_ptr(BATTMAN_TEXTDOMAIN, "UTF-8");
                     DBGLOG(@"codeset: %s", enc);
                     use_libintl = true;
                 } else {
@@ -164,31 +170,50 @@ static void gettext_init(void) {
             char *locale_name = _("locale_name");
             DBGLOG(@"Locale Name: %s", locale_name);
             if (use_libintl && !strcmp("locale_name", locale_name)) {
-                show_alert("Error", "Unable to match existing Gettext localization, defaulting to English", "Cancel");
+				NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+				if (![defaults objectForKey:@"com.torrekie.Battman.warned_no_locale"]) {
+					show_alert("Error", "Unable to match existing Gettext localization, defaulting to English", "Cancel");
+					[defaults setBool:YES forKey:@"com.torrekie.Battman.warned_no_locale"];
+					[defaults synchronize];
+				}
             }
-#if defined(ENABLE_MO_CHECK) && defined(__LITTLE_ENDIAN__)
-            else {
-                /* This is for preventing users to modify the mo file */
-                static __int128_t registered_locales[] = {
-                    0x6873696c676e45, 6e65, // English, en
-                    0x8796e6adb8e4, 0x4e435f687a, // 中文, zh_CN
-                    0,
-                };
-                int i = 0;
-                static bool is_registered = false;
-                for (i = 0; registered_locales[i] != 0; i = i + 2) {
-                    __int128_t num_str = 0;
-                    memcpy(&num_str, locale_name, strlen(locale_name));
-                    if (registered_locales[i] == num_str) {
-                        is_registered = true;
-                        break;
-                    }
-                }
-                if (is_registered) {
-                    // TODO: sha256 check
-                } else {
-                    show_alert(_("Unregistered Locale"), _("You are using a localization file which not officially provided by Battman, the translations may inaccurate."), _("OK"));
-                }
+#if defined(ENABLE_MO_CHECK)
+            else if (use_libintl && gAppType == BATTMAN_APP) {
+				char mo_fullpath[PATH_MAX];
+				snprintf(mo_fullpath, sizeof(mo_fullpath), "%s/locales/%s/LC_MESSAGES/battman.mo", NSBundle.mainBundle.bundlePath.UTF8String, preferred_language());
+				switch (verify_embedded_mo_by_locale_hash(preferred_language(), mo_fullpath)) {
+					case 114: {
+						break;
+					}
+					case 1919: {
+						// This looks exactlly same with above, but multi-factored
+						NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+						os_log_error(gLog, "1919");
+						if (![defaults objectForKey:@"com.torrekie.Battman.warned_no_locale"] || DEBUG) {
+							show_alert("Error", "Unable to match existing Gettext localization, defaulting to English", "Cancel");
+							[defaults setBool:YES forKey:@"com.torrekie.Battman.warned_no_locale"];
+							[defaults synchronize];
+						}
+						break;
+					}
+					case 810: {
+						os_log_error(gLog, "810");
+						NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+						if (![defaults objectForKey:@"com.torrekie.Battman.warned_3rd_locale"] || DEBUG) {
+							show_alert(_("Unregistered Locale"), _("You are using a localization file which not officially provided by Battman, the translations may inaccurate."), _("OK"));
+							[defaults setBool:YES forKey:@"com.torrekie.Battman.warned_3rd_locale"];
+							[defaults synchronize];
+						}
+						break;
+					}
+					case 514:
+					default: {
+						// I don't like you to modify my ellegant locales
+						extern void push_fatal_notif(void);
+						push_fatal_notif();
+						break;
+					}
+				}
             }
 #endif
 
@@ -220,6 +245,8 @@ void (^redirectedOutputListener)(void)=nil;
 #include "security/protect.h"
 
 os_log_t gLog;
+os_log_t gLogDaemon;
+battman_type_t gAppType = BATTMAN_SUBPROCESS;
 
 int main(int argc, char * argv[]) {
 	gLog = os_log_create("com.torrekie.Battman", "default");
@@ -234,11 +261,17 @@ int main(int argc, char * argv[]) {
 		battman_run_worker(argv[2]);
 		return 0;
 	} else if (argc == 2 && strcmp(argv[1], "--daemon") == 0) {
+		gLogDaemon = os_log_create("com.torrekie.Battman", "Daemon");
+		if (gLogDaemon == NULL) {
+			os_log_error(OS_LOG_DEFAULT, "Couldn't create daemon os log object");
+		}
 		extern void daemon_main(void);
 		daemon_main();
 		return 0;
 	}
-#if defined(DEBUG) && !TARGET_OS_SIMULATOR
+	gAppType = BATTMAN_APP;
+#if defined(DEBUG)
+#if !TARGET_OS_SIMULATOR
     // Redirecting is not needed for Simulator
     chdir(getenv("HOME"));
     char *tty = ttyname(0);
@@ -284,19 +317,20 @@ int main(int argc, char * argv[]) {
         // Close the write end of the pipe
         close(pipe_fd[1]);
     }
-#elif TARGET_OS_SIMULATOR
+#else
     redirectedOutput = [[NSMutableAttributedString alloc] initWithString:_("stdio logs not redirected in Simulator build, please check stdio in Xcode console output instead.")];
-#endif
+#endif // TARGET_OS_SIMULATOR
+#endif // DEBUG
     // sleep(10);
     if (is_carbon()) {
 #if TARGET_OS_IPHONE
-	//protect_method(UIViewController,presentViewController:animated:completion:,push_fatal_notif);
-	protect_method(UIWindow,alloc,NULL);
-	protect_method(UIWindow,makeKeyAndVisible,push_fatal_notif);
-	protect_method(NSURLSession,dataTaskWithURL:completionHandler:,NULL);
-	protect_method(NSURLSession,dataTaskWithRequest:completionHandler:,NULL);
+		//protect_method(UIViewController,presentViewController:animated:completion:,push_fatal_notif);
+		protect_method(UIWindow,alloc,NULL);
+		protect_method(UIWindow,makeKeyAndVisible,push_fatal_notif);
+		protect_method(NSURLSession,dataTaskWithURL:completionHandler:,NULL);
+		protect_method(NSURLSession,dataTaskWithRequest:completionHandler:,NULL);
         protect_method(NSURLSession,resume,NULL);
-        extern NSString *battman_bootstrap(char *, int);
+		extern NSString *battman_bootstrap(char *, int);
         return UIApplicationMain(argc, argv, nil, battman_bootstrap("", 0));
 #else
         @autoreleasepool {

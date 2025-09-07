@@ -14,14 +14,6 @@
 		<string>spi</string>
 		<string>identity</string>
 	</array>
-	<key>com.apple.security.exception.shared-preference.read-write</key>
-	<array>
-		<string>com.apple.springboard</string>
-		<string>com.apple.powerd.lowpowermode</string>
-		<string>com.apple.powerd.lowpowermode.state</string>
-		<string>com.apple.coreduetd.batterysaver</string>
-		<string>com.apple.coreduetd.batterysaver.state</string>
-	</array>
 
 	<key>platform-application</key>
 	<true/>
@@ -65,10 +57,6 @@
 	<!-- PMGR/GG/SMC -->
 	<key>com.apple.private.gasgauge-update</key>
 	<true/>
-	<key>com.apple.private.iokit.batterydata</key>
-	<true/>
-	<key>com.apple.private.iokit.powerlogging</key>
-	<true/>
 	<key>com.apple.private.powersource-read</key>
 	<true/>
 	<key>com.apple.private.applesmc.user-access</key>
@@ -76,12 +64,14 @@
 	<key>com.apple.gasgauge.user-access-device</key>
 	<true/>
 
-	<!-- CoreDuet/LowPowerMode -->
+	<!-- Power/CoreDuet/LowPowerMode -->
 	<key>com.apple.coreduetd.allow</key>
 	<true/>
 	<key>com.apple.coreduetd.batterysaver.allow</key>
 	<true/>
 	<key>com.apple.powerd.lowpowermode.allow</key>
+	<true/>
+	<key>com.apple.powerui.smartcharging</key>
 	<true/>
 
 	<!-- IOAccessoryManager -->
@@ -95,10 +85,29 @@
 	<true/>
 
 	<!-- IOKit -->
+	<key>com.apple.private.iokit.batterydata</key>
+	<true/>
+	<key>com.apple.private.iokit.powerlogging</key>
+	<true/>
 	<key>com.apple.system.diagnostics.iokit-properties</key>
 	<true/>
 	<key>com.apple.system.get-hardware-identifiers</key>
 	<true/>
+
+	<!-- Security exceptions -->
+	<key>com.apple.security.system-groups</key>
+	<array>
+		<string>systemgroup.com.apple.powerlog</string>
+		<string>systemgroup.com.apple.osanalytics</string>
+	</array>
+	<key>com.apple.security.exception.shared-preference.read-write</key>
+	<array>
+		<string>com.apple.springboard</string>
+		<string>com.apple.powerd.lowpowermode</string>
+		<string>com.apple.powerd.lowpowermode.state</string>
+		<string>com.apple.coreduetd.batterysaver</string>
+		<string>com.apple.coreduetd.batterysaver.state</string>
+	</array>
 	<key>com.apple.security.exception.iokit-user-client-class</key>
 	<array>
 		<string>ApplePPMUserClient</string>
@@ -137,7 +146,46 @@
 	</array>
 	<key>com.apple.private.security.no-sandbox</key>
 	<true/>
+
+	<!-- persona -->
 	<key>com.apple.private.persona-mgmt</key>
+	<true/>
+
+	<!-- SpringBoard -->
+	<key>com.apple.springboard.setIdleText</key>
+	<true/>
+
+	<!-- UserNotifications -->
+	<key>com.apple.private.usernotifications.notification-simulator</key>
+	<true/>
+	<key>com.apple.private.usernotifications.settings</key>
+	<array>
+		<string>read</string>
+		<string>write</string>
+	</array>
+	<key>com.apple.localnotification.schedulingproxy</key>
+	<true/>
+	<key>com.apple.usernotification.notificationschedulerproxy</key>
+	<true/>
+	<key>SBAppUsesLocalNotifications</key>
+	<true/>
+	<key>com.apple.private.notificationcenterui.alerts</key>
+	<true/>
+	<key>com.apple.private.notificationcenter-system</key>
+	<true/>
+	<key>com.apple.developer.notificationcenter-identifiers</key>
+	<true/>
+	<key>com.apple.usernotification.notificationregistrarproxy</key>
+	<true/>
+	<key>com.apple.usernotification.proxy</key>
+	<true/>
+	<key>com.apple.usernotifications.legacy-extension</key>
+	<true/>
+	<key>com.apple.private.usernotifications.settings</key>
+	<array>
+		<string>critical-alerts</string>
+	</array>
+	<key>com.apple.developer.usernotifications.critical-alerts</key>
 	<true/>
 </dict>
 </plist>

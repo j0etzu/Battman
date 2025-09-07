@@ -15,3 +15,7 @@ Battman/build
 build
 *.tmp
 *.swp
+# private
+Battman/havoc-defs.h
+Battman/nonfree-defs.h
+Battman/nonfree-havoc.m

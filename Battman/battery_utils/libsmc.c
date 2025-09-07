@@ -494,16 +494,16 @@ bool get_capacity(uint16_t *remaining, uint16_t *full, uint16_t *design) {
         return false;
 
     /* B0RM should be read reversed that scene (e.g. 0x760D -> 0x0D76) */
-    /* TODO: We need a better detection for this */
-    if (B0RM > B0DC) {
+    /* TODO: I believe there is a better detection for this */
+    if (B0RM > (1.1f * B0DC) && (((B0RM & 0xFF) << 8) | (B0RM >> 8)) > 0) {
         B0RM = ((B0RM & 0xFF) << 8) | (B0RM >> 8);
     }
 
-    if(remaining)
+    if (remaining)
         *remaining = B0RM * num;
-    if(full)
+    if (full)
         *full = B0FC * num;
-    if(design)
+    if (design)
         *design = B0DC * num;
 
     return result == kIOReturnSuccess;
@@ -520,7 +520,7 @@ bool get_gas_gauge(gas_gauge_t *gauge) {
     /* B0AT(ui16): Temperature */
     smc_read_n('B0AT', &gauge->Temperature,2);
 
-    /* B0AV(ui16): Average Voltage */
+    /* B0AV/BC1V(ui16): Average Voltage */
     smc_read_n('B0AV', &gauge->Voltage,2);
     
     /* B0FI(char[2]): Flags */
@@ -565,7 +565,7 @@ bool get_gas_gauge(gas_gauge_t *gauge) {
     /* BQD1(ui16): DOD0 */
     smc_read_n('BQD1', &gauge->DOD0,2);
     
-    /* TODO: BDD1(ui8/ui16): PresentDOD */
+    /* TODO: BDD1(ui8/ui16): PresentDOD / MinDOD */
     /* ui8 (%), ui16 (mAh) */
     // smc_read_n('BDD1', &gauge->PresentDOD,-2);
 
@@ -1143,7 +1143,9 @@ hvc_menu_t *hvc_menu_parse(uint8_t *input, size_t *size) {
 
 #include "inductive_status.h"
 /* Known charger Keys:
+ CHIB(ui8 ): ilim backoff
  CHIE(hex_)[1]: Inflow Inhibit
+ CHIF(ui32): ilim flags
  CHIS(ui32): Charger Input State (like D?AP)?
  */
 bool accessory_available(void) {
@@ -1358,15 +1360,21 @@ bool get_iktara_accessory_array(iktara_accessory_array_t *array) {
     BFS0(ui8 ): Battery Auth Support (0x20: GG Update Support)
     B0FV(hex_): Gas Gauge Firmware Version
     B0Ti(ui32): Charge Limit Rate Index
+ 
+	BMCD(ui16): Battery calibration data
 
-    CHSC(ui8 ): Charger Charging?
+	BSFC(flag): Battery State Fully Charged
+
+    CHSC(ui8 ): Charger Charging-capable
     CHSE(ui8 ): Charger End-of-charge
-    CHST(ui8 ): Charger Terminated?
+    CHST(ui8 ): Charge Timeout
     CHPS(ui32): selected powerpath
     CHPP(ui32): powerpath priority
     CHA?(ui32): Powerpath ?
+	CHHF(ui8 ): Chargr 
     CHHV(ui64): (write only) USB Input High Voltage
     CHI?(ui32): USB Port ? Input Current Limit / PMUConfiguration
+	CH0E(hex_): Charger exception
     CH0I(ui8 ): Battery Connected State 1 << 0
     CH0J(ui8 ): Battery Connected State 1 << 1
     CH0K(ui8 ): Battery Connected State 1 << 2

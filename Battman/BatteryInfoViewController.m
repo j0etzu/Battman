@@ -4,12 +4,80 @@
 #import "BatteryDetailsViewController.h"
 #import "ChargingManagementViewController.h"
 #import "ChargingLimitViewController.h"
+#import "ThermalTunesViewContoller.h"
 #include "battery_utils/battery_utils.h"
 #import "SimpleTemperatureViewController.h"
 #import "UPSMonitor.h"
 
 #include "common.h"
 #include "intlextern.h"
+
+// Privates
+@interface CALayer ()
+- (BOOL)continuousCorners;
+- (BOOL)_continuousCorners;
+- (void)setContinuousCorners:(BOOL)on;
+@end
+
+static BOOL artwork_avail = NO;
+static CFArrayRef (*CPBitmapCreateImagesFromPath)(CFStringRef, CFPropertyListRef *, uint32_t, CFErrorRef *) = NULL;
+
+// Cached arrays
+static CFArrayRef sArtworkNames  = NULL;
+static CFArrayRef sArtworkImages = NULL;
+
+// Initialize by dlopen/dlsym + one call to CPBitmapCreateImagesFromPath
+static void _loadAppSupportBundle(void) {
+	void *h = dlopen("/System/Library/PrivateFrameworks/AppSupport.framework/AppSupport", RTLD_LAZY);
+	if (!h) {
+		os_log_error(gLog, "dlopen(AppSupport) failed: %s\n", dlerror());
+		return;
+	}
+
+	CPBitmapCreateImagesFromPath = dlsym(h, "CPBitmapCreateImagesFromPath");
+	if (!CPBitmapCreateImagesFromPath) {
+		os_log_error(gLog, "dlsym(CPBitmapCreateImagesFromPath) failed: %s\n", dlerror());
+		dlclose(h);
+		return;
+	}
+
+	CFErrorRef  err    = NULL;
+	NSString   *size   = [NSString stringWithFormat:@"BattmanIcons@%dx", [UIScreen mainScreen].scale < 3.0 ? 2 : 3];
+	CFStringRef cfPath = (__bridge CFStringRef)[[NSBundle mainBundle] pathForResource:size ofType:@"artwork"];
+	CFPropertyListRef names = NULL;
+	CFArrayRef images = CPBitmapCreateImagesFromPath(cfPath, &names, 0, &err);
+	
+	if (!images || !names) {
+		if (err) {
+			CFStringRef desc = CFErrorCopyDescription(err);
+			char buf[256];
+			CFStringGetCString(desc, buf, sizeof(buf), kCFStringEncodingUTF8);
+			os_log_error(gLog, "Artwork load error: %s\n", buf);
+			CFRelease(desc);
+			CFRelease(err);
+		}
+		return;
+	}
+	artwork_avail  = true;
+	sArtworkNames  =names;
+	sArtworkImages =images;
+}
+
+static CGImageRef getArtworkImageOf(CFStringRef name) {
+	if (!sArtworkNames || !sArtworkImages)
+		return NULL;
+
+	CFIndex count = CFArrayGetCount(sArtworkNames);
+	for (CFIndex i = 0; i < count; i++) {
+		CFStringRef candidate = CFArrayGetValueAtIndex(sArtworkNames, i);
+		if (CFStringCompare(candidate, name, 0) == kCFCompareEqualTo) {
+			CGImageRef img = (CGImageRef)CFArrayGetValueAtIndex(sArtworkImages, i);
+			return img;
+		}
+	}
+
+	return NULL;
+}
 
 // TODO: UI Refreshing
 
@@ -87,6 +155,7 @@ enum sections_batteryinfo {
     battery_info_init(&batteryInfo);
 	[UPSMonitor startWatchingUPS];
 
+	_loadAppSupportBundle();
     return [super initWithStyle:UITableViewStyleGrouped];
 }
 
@@ -132,7 +201,7 @@ enum sections_batteryinfo {
 				vc = [ChargingLimitViewController new];
 				break;
 			case 2:
-				//vc = [ThermalTunesViewContoller new];
+				vc = [ThermalTunesViewContoller new];
 				break;
 			default:
 				break;
@@ -154,16 +223,30 @@ enum sections_batteryinfo {
         cell.batteryInfo = &batteryInfo;
         // battery_info_update shall be called within cell impl.
         [cell updateBatteryInfo];
+		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         return cell;
     } else if (indexPath.section == BI_SECT_HW_TEMP) {
         TemperatureInfoTableViewCell *cell = [tv dequeueReusableCellWithIdentifier:@"TITVC-ri"];
         if (!cell)
         	cell = [TemperatureInfoTableViewCell new];
+		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         return cell;
     } else if (indexPath.section == BI_SECT_MANAGE) {
+		// XXX: Try make this section "InsetGrouped"
         UITableViewCell *cell = [UITableViewCell new];
 		// I want NSConstantArray
 		NSArray *rows = @[_("Charging Management"), _("Charging Limit"), _("Thermal Tunes")];
+		if (artwork_avail) {
+			NSArray *icns = @[@"LowPowerUsage", @"ChargeLimit", @"Thermometer"];
+			cell.imageView.image = [UIImage imageWithCGImage:getArtworkImageOf((__bridge CFStringRef)icns[indexPath.row]) scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+
+			[cell.imageView.layer setCornerRadius:6.525];
+			if (@available(iOS 13.0, *)) {
+				[cell.imageView.layer setCornerCurve:kCACornerCurveContinuous];
+			}
+			if ([cell.imageView.layer respondsToSelector:@selector(setContinuousCorners:)])
+				[cell.imageView.layer setContinuousCorners:YES];
+		}
 		cell.textLabel.text = rows[indexPath.row];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         return cell;

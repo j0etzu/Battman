@@ -11,6 +11,12 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 
+enum {
+	kSCStatusOK,
+	kSCStatusFailed = 1001,
+	kSCStatusStale  = 3005,
+};
+
 CF_IMPLICIT_BRIDGING_ENABLED
 CF_ASSUME_NONNULL_BEGIN
 
@@ -21,6 +27,13 @@ typedef const struct CF_BRIDGED_TYPE(id) __SCPreferences *SCPreferencesRef;
 SCPreferencesRef __nullable SCPreferencesCreate(CFAllocatorRef __nullable allocator, CFStringRef name, CFStringRef __nullable prefsID);
 
 CFPropertyListRef __nullable SCPreferencesGetValue(SCPreferencesRef prefs, CFStringRef key);
+Boolean SCPreferencesSetValue(SCPreferencesRef prefs, CFStringRef key, CFPropertyListRef value);
+Boolean SCPreferencesRemoveValue(SCPreferencesRef prefs, CFStringRef key);
+void SCPreferencesSynchronize(SCPreferencesRef prefs);
+Boolean SCPreferencesApplyChanges(SCPreferencesRef prefs);
+Boolean SCPreferencesCommitChanges(SCPreferencesRef prefs);
+int SCError(void);
+const char * SCErrorString(int status);
 
 __END_DECLS
 

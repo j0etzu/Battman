@@ -18,5 +18,8 @@
 @end
 
 @protocol SliderTableViewCellDelegate <NSObject>
+@optional
 - (void)sliderTableViewCell:(SliderTableViewCell *)cell didChangeValue:(float)value;
+- (void)sliderTableViewCell:(SliderTableViewCell *)cell didEndChangingValue:(float)value;
+- (void)sliderTableViewCellDidBeginChanging:(SliderTableViewCell *)cell;
 @end

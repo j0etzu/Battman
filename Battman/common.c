@@ -2,12 +2,13 @@
 #include <TargetConditionals.h>
 
 #include <regex.h>
+#include <unistd.h>
 #include <sys/sysctl.h>
 #include <sys/types.h>
 
 #include "battery_utils/battery_info.h"
-#include "cobjc/cobjc.h"
 #include "common.h"
+#include "cobjc/UNNotificationRequest.h"
 #include "gtkextern.h"
 #include "intlextern.h"
 
@@ -419,6 +420,15 @@ void show_alert_async(const char *title, const char *message, const char *button
 	DBGLOG(CFSTR("show_alert called: [%s], [%s], [%s]"), title, message, button);
 
 	NSObjectRetain(completion_block);
+	
+	if (!gtk_available() && gAppType == BATTMAN_SUBPROCESS) {
+		os_log_info(gLog, "%s: %s", title, message);
+		if (completion_block) {
+			((void (*)(void *, BOOL))((char *)completion_block + 16))(completion_block, 1);
+			objc_release(completion_block);
+		}
+		return;
+	}
 	/* Alert in GTK+ if under Xfce / GNOME */
 	/* this check may not accurate */
 	if (gtk_available() && getenv("DISPLAY")) {
@@ -661,6 +671,14 @@ const char *target_type(void) {
 	return buf;
 }
 
+bool is_main_process(void) {
+	if (getppid() != 1)
+		return false;
+
+	// Fallback
+	return gAppType == BATTMAN_APP;
+}
+
 bool is_debugged(void) {
 #ifndef CS_DEBUGGED
 #define CS_DEBUGGED 0x10000000
@@ -769,4 +787,93 @@ pid_t get_pid_for_procname(const char *name) {
 	
 	free(process);
 	return pid;
+}
+
+int add_notification(const char *bundleid, const char *title, const char *subtitle, const char *body) {
+	NSLog(CFSTR("add_notification called: [%s] [%s] [%s] [%s]"), bundleid, title, subtitle, body);
+	int ret = 0;
+	CFStringRef tmpstr = NULL;
+	UNUserNotificationCenter *uc;
+	if (bundleid) {
+		tmpstr = CFStringCreateWithCString(kCFAllocatorDefault, bundleid, kCFStringEncodingUTF8);
+		uc = UNUserNotificationCenterInitWithBundleIdentifier(NSObjectAllocate(UNUserNotificationCenter), tmpstr);
+	} else {
+		uc = UNUserNotificationCenterCurrentNotificationCenter();
+	}
+
+	if (!uc) {
+		NSLog(CFSTR("UC NOT EXIST!!!"));
+		goto ERR_RET;
+	}
+
+	UNMutableNotificationContent *content = NSObjectNew(UNMutableNotificationContent);
+	if (!content)
+		goto ERR_RET;
+		
+	if (bundleid) {
+		UNMutableNotificationContentSetThreadIdentifier(content, tmpstr);
+		CFRelease(tmpstr);
+	}
+	if (title) {
+		tmpstr = CFStringCreateWithCString(kCFAllocatorDefault, title, kCFStringEncodingUTF8);
+		UNMutableNotificationContentSetTitle(content, tmpstr);
+		CFRelease(tmpstr);
+	}
+	if (subtitle) {
+		tmpstr = CFStringCreateWithCString(kCFAllocatorDefault, subtitle, kCFStringEncodingUTF8);
+		UNMutableNotificationContentSetSubtitle(content, tmpstr);
+		CFRelease(tmpstr);
+	}
+	if (body) {
+		tmpstr = CFStringCreateWithCString(kCFAllocatorDefault, body, kCFStringEncodingUTF8);
+		UNMutableNotificationContentSetSubtitle(content, tmpstr);
+		CFRelease(tmpstr);
+	}
+
+	return add_notification_with_content(uc, content);
+
+ERR_RET:
+	ret = -1;
+	if (tmpstr) CFRelease(tmpstr);
+	return ret;
+}
+
+int add_notification_with_content(UNUserNotificationCenter *uc, UNMutableNotificationContent *content) {
+	__block CFRunLoopRef loop = NULL;
+	if (gAppType != BATTMAN_APP)
+		loop = CFRunLoopGetCurrent();
+
+	__block int ret;
+	ret = 0;
+	id idblk1 = (id)^(BOOL success, CFErrorRef error) {
+		if (error) {
+			NSLog(CFSTR("add_notification_with_content auth failed: %@"), error);
+			ret = 1;
+		}
+		if (loop) CFRunLoopStop(loop);
+	};
+
+	UNUserNotificationCenterRequestAuthorizationWithOptions(uc, 4, idblk1);
+
+	if (loop)
+		CFRunLoopRun();
+
+	CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
+	CFStringRef strUUID = CFUUIDCreateString(kCFAllocatorDefault, uuid);
+	//CFRelease(uuid);
+
+	UNNotificationRequest *req = UNNotificationRequestWithIdentifierContentTrigger(strUUID, content, nil);
+	id idblk2 = (id)^(CFErrorRef error) {
+		if (error) {
+			NSLog(CFSTR("add_notification_with_content add failed: %@"), error);
+			ret = 1;
+		}
+		if (loop) CFRunLoopStop(loop);
+	};
+	UNUserNotificationAddNotificationRequest(uc, req, idblk2);
+
+	if (loop)
+		CFRunLoopRun();
+
+	return ret;
 }

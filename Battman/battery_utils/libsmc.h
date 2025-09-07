@@ -258,7 +258,7 @@ typedef struct carrier_mode {
     uint32_t status;        /* CHTE (bootarg: carrier-mode) */
     uint32_t high_voltage;  /* CHTU (bootarg: max-charge-voltage/carrier-max-limit) */
     uint32_t low_voltage;   /* CHTL (bootarg: min-charge-voltage/carrier-min-limit) */
-    /* CHTM */
+	uint32_t test_mode;     /* CHTM */
 } carrier_mode_t;
 
 /* This is not "Single App Mode", possibly enabled on Demo devices but cannot verify */
@@ -282,7 +282,7 @@ typedef struct kiosk_mode {
 
 typedef struct charger_data {
     uint32_t ChargerConfiguration;      /* CHAS */
-    uint32_t ChargingCurrent;           /* CHBI */
+    uint32_t ChargingCurrent;           /* CHBI / B0VI */
     uint32_t ChargingVoltage;           /* CHBV */
     uint16_t ChargerVacVoltageLimit;    /* BVVL */
     uint64_t NotChargingReason;         /* BNCR / CHNC */

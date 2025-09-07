@@ -89,7 +89,7 @@ extern void battman_worker_oneshot(char cmd, char arg);
     } else if (sect == CM_SECT_LOW_POWER_MODE) {
         NSUserDefaults *suite = [[NSUserDefaults alloc] initWithSuiteName:batterysaver_state];
 
-#if USE_MOBILEGESTALT
+#if USE_MOBILEGESTALT && 0
         /* The problem is, MobileGestalt is returning Apple preferred presets,
          * but not always the real condition of a device.
          */
@@ -382,9 +382,13 @@ tvend:
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (indexPath.section == CM_SECT_SMART_CHARGING) {
 		if (indexPath.row == 0) {
-			DatePickerTableViewCell *dcell = [tableView cellForRowAtIndexPath:indexPath];
-			if (dcell.isExpanded)
-				return dcell.button.bounds.size.height + dcell.picker.bounds.size.height;
+			if (@available(iOS 13.0, *)) {
+				// Nothing
+			} else {
+				DatePickerTableViewCell *dcell = [tableView cellForRowAtIndexPath:indexPath];
+				if (dcell.isExpanded)
+					return dcell.button.bounds.size.height + dcell.picker.bounds.size.height;
+			}
 		}
 	}
 	return [super tableView:tableView heightForRowAtIndexPath:indexPath];
@@ -553,18 +557,20 @@ tvend:
 #pragma mark - SliderTableViewCell Delegate
 
 - (void)sliderTableViewCell:(SliderTableViewCell *)cell didChangeValue:(float)value {
-    if ([cell.reuseIdentifier isEqualToString:@"LPM_THR"]) {
-        lpm_thr = value;
-        if (batterysaver)
-        	[batterysaver setFloat:value forKey:@"autoDisableThreshold"];
-        else
-        	battman_worker_call(3, (void *)&value, 4);
-        notify_post(batterysaver_notif);
-    }
-
-    NSIndexPath *ip = [self.tableView indexPathForCell:cell];
-    DBGLOG(@"Slider changed at row %ld: %f", (long)ip.row, value);
+    DBGLOG(@"Slider changed at row %ld: %f", (long) [self.tableView indexPathForCell:cell].row, value);
 }
+
+- (void)sliderTableViewCell:(SliderTableViewCell *)cell didEndChangingValue:(float)value {
+	if ([cell.reuseIdentifier isEqualToString:@"LPM_THR"]) {
+		lpm_thr = value;
+		if (batterysaver)
+			[batterysaver setFloat:value forKey:@"autoDisableThreshold"];
+		else
+			battman_worker_call(3, (void *)&value, 4);
+		notify_post(batterysaver_notif);
+	}
+}
+
 
 #pragma mark - DatePickerTableViewCell Delegate
 

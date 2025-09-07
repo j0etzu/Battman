@@ -5,12 +5,11 @@ SED = sed
 IPHONEOS_DEPLOYMENT_TARGET := 12.0
 export IPHONEOS_DEPLOYMENT_TARGET
 
-LOCAL_IP := $(shell /sbin/ifconfig | $(SED) -n "s/.*inet \([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\) .*/\1/p" | tail -1)
+LOCAL_IP := $(shell ip addr | $(SED) -n "s/.*inet \([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\)[ \\/].*/\1/p" | tail -1)
 
-SDKROOT := ${THEOS}/sdks/iPhoneOS14.5.sdk
 SDKROOT := ${THEOS}/sdks/iPhoneOS13.7.sdk
 
-LIBS := -lobjc -Wl,-weak-lIOAccessoryManager
+LIBS := -lobjc -Wl,-weak-lIOAccessoryManager -lsqlite3 -lc++
 FRAMEWORKS := -framework UIKit \
 	      -framework Foundation \
 	      -framework CoreGraphics \
@@ -18,7 +17,9 @@ FRAMEWORKS := -framework UIKit \
 	      -framework QuartzCore \
               -framework IOKit \
               -framework WebKit \
-	      -framework SystemConfiguration
+	      -framework SystemConfiguration \
+	      -framework MessageUI \
+	      -framework UserNotifications
 
 CFLAGS = -Wno-deprecated-declarations -Wno-nullability-completeness -Werror -target arm64-apple-ios${IPHONEOS_DEPLOYMENT_TARGET} -target arm64-apple-darwin -fobjc-arc -fconstant-cfstrings -I./EXTERNAL_HEADERS
 LDFLAGS = -target arm64-apple-ios$(IPHONEOS_DEPLOYMENT_TARGET) -target arm64-apple-darwin $(LIBS) $(FRAMEWORKS) -Wl,-dead_strip_dylibs
@@ -69,6 +70,8 @@ ifneq (,$(wildcard ./mount/pub_html))
 	PUBLISH_TARGET := publish_mounted_site
 else ifneq (,$(wildcard /var/www/html/files))
 	PUBLISH_TARGET := publish_local_site
+else ifneq (,$(wildcard /srv/http/files))
+	PUBLISH_TARGET := publish_local_site_srv
 else
 	PUBLISH_TARGET := publish_none
 endif
@@ -128,14 +131,19 @@ build/Payload/Battman.app/license.html: license/license.html
 	@mkdir -p $(@D)
 	cp $^ $@
 
-build/Battman.ipa: build/Payload/Battman.app/Battman build/Payload/Battman.app/Info.plist ${ICON_IF_RELEASE} build/Payload/Battman.app/license.html
+build/%/BattmanIcons@2x.artwork: ../BattmanIcons@2x.artwork
+	cp $< $@
+build/%/BattmanIcons@3x.artwork: ../BattmanIcons@3x.artwork
+	cp $< $@
+
+build/Battman.ipa: build/Payload/Battman.app/Battman build/Payload/Battman.app/Info.plist ${ICON_IF_RELEASE} build/Payload/Battman.app/license.html build/Payload/Battman.app/BattmanIcons@2x.artwork build/Payload/Battman.app/BattmanIcons@3x.artwork
 	cd build/ && zip -r Battman.ipa ./Payload
 
 %/Battman.ipa: build/Battman.ipa
 	cp $< $@
 
 %/index.html: %/install_template.html build/Battman.ipa
-	$(SED) 's/LOCAL_IP/${LOCAL_IP}/;s/LATEST_UPDATE/$(shell date)/' /var/www/html/files/battman/install_template.html>/var/www/html/files/battman/index.html
+	$(SED) 's/LOCAL_IP/${LOCAL_IP}/;s/LATEST_UPDATE/$(shell date)/' $(filter %.html,$^)>$@
 
 publish_mounted_site: mount/pub_html/battman/ \
 			mount/pub_html/battman/Battman.ipa \
@@ -145,6 +153,10 @@ publish_mounted_site: mount/pub_html/battman/ \
 publish_local_site: /var/www/html/files/battman \
 			/var/www/html/files/battman/Battman.ipa \
 			/var/www/html/files/battman/index.html
+	@echo Install at: ${LOCAL_IP}
+publish_local_site_srv: /srv/http/files/battman \
+			/srv/http/files/battman/Battman.ipa \
+			/srv/http/files/battman/index.html
 	@echo Install at: ${LOCAL_IP}
 
 publish_none: build/Battman.ipa

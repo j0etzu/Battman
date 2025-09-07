@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Battman 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-24 17:30+0800\n"
+"POT-Creation-Date: 2025-08-29 16:05+0800\n"
 "PO-Revision-Date: 2025-01-27 17:32+0800\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,137 +17,147 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: /Users/torrekie/proj/Battman/Battman/common.c:336
-#: /Users/torrekie/proj/Battman/Battman/main.m:190
+#: /Users/torrekie/proj/Battman/Battman/common.c:337
+#: /Users/torrekie/proj/Battman/Battman/main.m:203
 msgid "OK"
 msgstr "好"
 
-#: /Users/torrekie/proj/Battman/Battman/common.c:337
+#: /Users/torrekie/proj/Battman/Battman/common.c:338
 msgid "Failed"
 msgstr "失败"
 
-#: /Users/torrekie/proj/Battman/Battman/common.c:338
+#: /Users/torrekie/proj/Battman/Battman/common.c:339
 #: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:271
 #: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:236
 msgid "Error"
 msgstr "错误"
 
-#: /Users/torrekie/proj/Battman/Battman/common.c:339
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:670
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:85
+#: /Users/torrekie/proj/Battman/Battman/common.c:340
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:642
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:77
 msgid "None"
 msgstr "无"
 
-#: /Users/torrekie/proj/Battman/Battman/common.c:340
+#: /Users/torrekie/proj/Battman/Battman/common.c:341
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:27
 msgid "mA"
 msgstr "mA"
 
-#: /Users/torrekie/proj/Battman/Battman/common.c:341
+#: /Users/torrekie/proj/Battman/Battman/common.c:342
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:27
 msgid "mAh"
 msgstr "mAh"
 
-#: /Users/torrekie/proj/Battman/Battman/common.c:342
+#: /Users/torrekie/proj/Battman/Battman/common.c:343
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:27
 msgid "mV"
 msgstr "mV"
 
-#: /Users/torrekie/proj/Battman/Battman/common.c:343
+#: /Users/torrekie/proj/Battman/Battman/common.c:344
 #: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:35
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:103
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:85
 msgid "True"
 msgstr "是"
 
-#: /Users/torrekie/proj/Battman/Battman/common.c:344
+#: /Users/torrekie/proj/Battman/Battman/common.c:345
 #: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:35
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:105
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:87
 msgid "False"
 msgstr "否"
 
-#: /Users/torrekie/proj/Battman/Battman/common.c:385
+#: /Users/torrekie/proj/Battman/Battman/common.c:386
 msgid "Swipe up to exit"
 msgstr "向上轻扫以退出"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:34
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:35
 msgid "Logs"
 msgstr "日志"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:114
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:119
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:115
 #: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:120
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:121
 msgid "More"
 msgstr "更多"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:141
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:142
 msgid "About Battman"
 msgstr "关于Battman"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:144
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:145
 msgid "Debug"
 msgstr "调试"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:233
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:338
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:239
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:362
 #: /Users/torrekie/proj/Battman/Battman/CreditViewController.c:7
 msgid "Credit"
 msgstr "致谢"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:237
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:243
 msgid "Source Code"
 msgstr "源代码"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:250
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:252
+msgid "Battman Wiki & User Manual"
+msgstr "Battman Wiki & 用户手册"
+
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:261
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:31
+msgid "Support Us"
+msgstr "赞助我们"
+
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:274
 msgid "Logs (stdout)"
 msgstr "日志（标准输出）"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:255
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:279
 msgid "Select language override"
 msgstr "设置语言"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:260
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:284
 msgid "Exit App"
 msgstr "退出App"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:265
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:289
 msgid "Logs (stdout) (very cool)"
 msgstr "日志（标准输出）（超级炫酷版）"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:270
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:294
 msgid "Redirect daemon logs"
 msgstr "重定向值守进程日志"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:275
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:299
 msgid "Show fatal error view"
 msgstr "显示致命错误视图"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:308
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:332
 msgid "Trigger fatal notify"
 msgstr "触发致命通知"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:313
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:337
 msgid "Trigger UTF jitter"
 msgstr "触发UTF抖动"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:354
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:378
 #: /Users/torrekie/proj/Battman/Battman/CreditViewController.c:23
 msgid "Battman Credit"
 msgstr "Battman 贡献者名单"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:410
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:434
 msgid "Language Override"
 msgstr "更改语言"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:424
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:448
 msgid "Clear"
 msgstr "清除"
 
 #: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:29
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:166
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:238
 msgid "Charging Management"
 msgstr "充电管理"
 
 #: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:75
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:178
 msgid "General"
 msgstr "通用"
 
@@ -156,7 +166,7 @@ msgid "Smart Charging"
 msgstr "优化电池充电"
 
 #: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:79
-#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:489
+#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:493
 msgid "Low Power Mode"
 msgstr "低电量模式"
 
@@ -175,13 +185,13 @@ msgstr ""
 "为准。"
 
 #: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:123
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:839
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:851
 msgid "Enabled"
 msgstr "已启用"
 
 #: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:123
 #: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:184
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:839
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:851
 msgid "Disabled"
 msgstr "已禁用"
 
@@ -238,37 +248,37 @@ msgstr ""
 "优化电池充电功能已启用。它将在接通电源 900 秒（15 分钟）后，或您选择的日期开"
 "始，以较早者为准。"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:403
+#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:407
 msgid "Block Charging"
 msgstr "阻止充电"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:407
+#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:411
 msgid "Block Power Supply"
 msgstr "阻止外部供电"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:429
-#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:445
+#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:433
+#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:449
 msgid "Starting at"
 msgstr "始于"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:457
-#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:473
+#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:461
+#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:477
 msgid "Until"
 msgstr "直到"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:477
+#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:481
 msgid "Schedule"
 msgstr "设置计划"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:494
+#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:498
 msgid "Disable on A/C"
 msgstr "接入电源时禁用"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:508
+#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:512
 msgid "Disable When Exceeds"
 msgstr "达量时禁用"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:541
+#: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:545
 msgid "Hide Low Power Alert"
 msgstr "隐藏电量低提示"
 
@@ -326,11 +336,12 @@ msgid "Max Trigger Temperature"
 msgstr "最大触发温度"
 
 #: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:58
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:180
 msgid "Sunlight Exposure"
 msgstr "阳光暴晒"
 
 #: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:111
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:108
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:177
 msgid "Hardware Temperature"
 msgstr "硬件温度"
 
@@ -407,7 +418,7 @@ msgstr "使用CLTMv2"
 
 #: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:233
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/libsmc.c:854
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:841
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:853
 msgid "Unsupported"
 msgstr "不支持"
 
@@ -415,68 +426,69 @@ msgstr "不支持"
 msgid "Not Running"
 msgstr "不在运行"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:26
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:94
 msgid "Battman"
 msgstr "Battman"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:41
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:109
 msgid "2025 Ⓒ Torrekie <me@torrekie.dev>"
 msgstr "2025 版权所有 Torrekie <me@torrekie.dev>"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:44
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:112
 msgid "Debug Commit"
 msgstr "测试版本 Commit"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:53
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:121
 msgid "Sandboxed"
 msgstr "正在沙盒中运行"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:55
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:123
 msgid "Simulator Sandboxed"
 msgstr "正在虚拟机沙盒中运行"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:57
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:125
 msgid "Simulator Unsandboxed"
 msgstr "未在虚拟机沙盒中运行"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:60
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:128
 msgid "Unsandboxed"
 msgstr "未在沙盒中运行"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:64
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:132
 msgid "Platfomized"
 msgstr "已平台化"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:67
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:135
 msgid "Debugger Attached"
 msgstr "已附加调试器"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:78
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:146
 msgid "Battery"
 msgstr "电池"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:106
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:175
 msgid "Battery Info"
 msgstr "电池信息"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:110
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:179
 msgid "Manage"
 msgstr "管理"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:143
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:212
 msgid "Unimplemented Yet"
 msgstr "尚未实装"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:143
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:212
 msgid "Will be introduced in future updates."
 msgstr "将于未来的更新中推出"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:166
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:48
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:238
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:107
 msgid "Charging Limit"
 msgstr "充电限制"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:166
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:238
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:140
 msgid "Thermal Tunes"
 msgstr "温控调校"
 
@@ -699,165 +711,339 @@ msgstr "在点击 “写入 SMC” 之前，不会向 SMC 写入任何数据。"
 msgid "Refetch Data"
 msgstr "刷新数据"
 
-#: /Users/torrekie/proj/Battman/Battman/main.m:164
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:179
+msgid "Hot-In-Pocket Mode"
+msgstr "口袋过热（Hot-In-Pocket）模式"
+
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:189
+msgid "Review the documentation before making any changes."
+msgstr "在进行任何更改之前，请先查阅文档。"
+
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:190
+msgid ""
+"Changing the default thermal behavior may increase wear on your battery and "
+"reduce its lifespan."
+msgstr "更改默认温控行为可能会增加电池损耗并缩短电池使用寿命。"
+
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:191
+msgid ""
+"Hot-In-Pocket Protection automatically reduces CPU & GPU power when the "
+"display is off and no media is playing, to prevent overheating while the "
+"device is stored in a pocket."
+msgstr ""
+"口袋过热（Hot-In-Pocket）保护在屏幕关闭且不播放任何媒体时自动降低 CPU 与 GPU "
+"活动，避免设备在口袋中积热。"
+
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:234
+msgid "State Updates"
+msgstr "状态更新"
+
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:239
+msgid "Whether applications receive thermal state updates"
+msgstr "应用程序是否接收温控状态更新"
+
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:250
+msgid "Thermal Mitigations"
+msgstr "热缓解"
+
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:255
+msgid "Reduce power budget when heating"
+msgstr "设备升温时降低功耗预算"
+
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:271
+msgid "Enable"
+msgstr "启用"
+
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:281
+msgid "Simulate HIP"
+msgstr "模拟口袋过热"
+
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:298
+msgid "Auto Detect"
+msgstr "自动检测"
+
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:306
+msgid "Exposure Mode"
+msgstr "暴晒模式"
+
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:318
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:77
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:112
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:690
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:889
+msgid "Status"
+msgstr "状态"
+
+#: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:370
+msgid "Thermal Tuning failed with error"
+msgstr "温控调校发生错误"
+
+#: /Users/torrekie/proj/Battman/Battman/main.m:170
 msgid "locale_name"
 msgstr "中文"
 
-#: /Users/torrekie/proj/Battman/Battman/main.m:190
+#: /Users/torrekie/proj/Battman/Battman/main.m:203
 msgid "Unregistered Locale"
 msgstr "未注册的本地化"
 
-#: /Users/torrekie/proj/Battman/Battman/main.m:190
+#: /Users/torrekie/proj/Battman/Battman/main.m:203
 msgid ""
 "You are using a localization file which not officially provided by Battman, "
 "the translations may inaccurate."
 msgstr "您正在使用的本地化文件并非由 Battman 官方所提供，译文可能存在偏差。"
 
-#: /Users/torrekie/proj/Battman/Battman/main.m:288
+#: /Users/torrekie/proj/Battman/Battman/main.m:321
 msgid ""
 "stdio logs not redirected in Simulator build, please check stdio in Xcode "
 "console output instead."
 msgstr ""
 "标准输出日志在Simulator构建中不被重定向，请直接在Xcode Console中查看输出。"
 
-#: /Users/torrekie/proj/Battman/Battman/main.m:311
+#: /Users/torrekie/proj/Battman/Battman/main.m:345
 msgid "Battman CLI not implemented yet."
 msgstr "Battman 命令行工具尚未实现。"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:78
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:124
+msgid "Discharge, Keep A/C"
+msgstr "电池放电，保留外部电源"
+
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:125
+msgid "Block A/C"
+msgstr "阻止外部电源"
+
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:149
 msgid "Failed to open daemon settings file"
 msgstr "无法打开值守进程配置文件"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:94
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:167
 msgid "File mapping failed"
 msgstr "文件分配失败"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:115
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:188
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:319
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:330
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:342
+msgid "7-Day Battery Level"
+msgstr "7天电池电量"
+
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:190
 msgid "Charging Limit (Experimental)"
 msgstr "充电限制（实验性功能）"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:121
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:196
+msgid ""
+"The system logs battery charge–level changes for the past 7 days. If this "
+"graph is empty, the power-log service may not be running correctly."
+msgstr ""
+"系统会记录过去 7 天的电池电量变化。若此图无数据显示，可能是电源日志服务未正常"
+"运行。"
+
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:198
 msgid ""
 "Charging Limit uses a background service to monitor your battery's charge "
-"level and automatically adjust charging behavior. You need to restart the "
-"service after changing the configuration."
-msgstr ""
-"“充电限制”需要在后台运行服务，以监控电池电量并自动调整充电行为。更改配置后需"
-"要重新启动服务。"
+"level and automatically adjust charging behavior."
+msgstr "“充电限制”需要在后台运行服务，以监控电池电量并自动调整充电行为。"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:147
-msgid "Unable to connect to the daemon."
-msgstr "无法连接到值守进程。"
-
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:169
-msgid "Couldn't start the daemon — it isn’t responding."
-msgstr "无法启动值守进程——服务无响应"
-
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:191
-msgid "When limit is reached"
-msgstr "当达到限制时"
-
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:222
-msgid "Limit charging at (%)"
-msgstr "充电上限（%）"
-
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:245
-msgid "Resume charging at (%)"
-msgstr "耗电下限（%）"
-
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:273
-msgid "Daemon is active"
-msgstr "值守进程正在运行"
-
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:273
-msgid "PID"
-msgstr "进程ID"
-
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:275
-msgid "Daemon is inactive"
-msgstr "值守进程未启动"
-
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:281
-msgid "Stop Daemon (Disable Charging Limit)"
-msgstr "停止值守进程（关闭充电限制）"
-
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:283
-msgid "Start Daemon (Enforce Charging Limit)"
-msgstr "启动值守进程（强制充电限制）"
-
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:298
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:302
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:229
 msgid "Invalid Setup"
 msgstr "无效设置"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:298
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:229
 msgid "Limit Value should be bigger than Resume Value"
 msgstr "“充电上限”需大于“耗电下限”"
 
-#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:302
-msgid "Resume Value should be smaller than Limit Value"
-msgstr "“耗电下限”需小于“充电上限”"
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:235
+msgid "Unable to connect to the daemon."
+msgstr "无法连接到值守进程。"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:181
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:258
+msgid "Couldn't start the daemon — it isn’t responding."
+msgstr "无法启动值守进程——服务无响应"
+
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:320
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:629
+msgid "Unavailable"
+msgstr "不可用"
+
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:361
+msgid "When limit is reached"
+msgstr "当达到限制时"
+
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:392
+msgid "Limit charging at (%)"
+msgstr "充电上限（%）"
+
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:415
+msgid "Resume charging at (%)"
+msgstr "耗电下限（%）"
+
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:442
+msgid "Drain Mode"
+msgstr "耗电模式"
+
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:450
+msgid "Override OBC On Cycle"
+msgstr "循环时覆盖“优化电池充电”"
+
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:453
+msgid "OBC will turn off"
+msgstr "“优化电池充电”将被禁用"
+
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:453
+msgid "OBC will not be affected"
+msgstr "“优化电池充电”将不受影响"
+
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:460
+msgid "Daemon is active"
+msgstr "值守进程正在运行"
+
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:460
+msgid "PID"
+msgstr "进程ID"
+
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:462
+msgid "Daemon is inactive"
+msgstr "值守进程未启动"
+
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:468
+msgid "Stop Daemon (Disable Charging Limit)"
+msgstr "停止值守进程（关闭充电限制）"
+
+#: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:470
+msgid "Start Daemon (Enforce Charging Limit)"
+msgstr "启动值守进程（强制充电限制）"
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:44
+msgid "Patreon"
+msgstr "Patreon"
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:44
+msgid "Afdian"
+msgstr "爱发电"
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:44
+msgid "UniFans"
+msgstr "引力圈"
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:96
+msgid "Support Battman"
+msgstr "支持 Battman"
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:102
+msgid ""
+"If Battman saved you time or made your day easier, please consider a small "
+"donation. Even a few dollars make a real difference and help me keep adding "
+"improvements (also helps my living)."
+msgstr ""
+"如果 Battman 帮助到了您，可以考虑给我们一点点的捐赠。即使是几块钱也可以推进一"
+"切，促使我继续完善更新（而且也能帮助我的生活）。"
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:109
+msgid "You can at least get Battman early accesses by donating us 🥺"
+msgstr "捐赠我们至少可以得到 Battman 的优先预览🥺"
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:109
+msgid "Don't worry about annoyance, this page only popup itself for once 🥺"
+msgstr "请不要担心骚扰，这个页面只会主动弹出一次🥺"
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:116
+msgid "Having Problems?"
+msgstr "遇到问题？"
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:122
+msgid ""
+"We'd love to hear from you! Let us know if you find any bugs or have "
+"suggestions to make things better."
+msgstr ""
+"我们非常乐意听取您的意见！请让我们知道您是否遇到了任何故障或是有什么提议，以"
+"便让一切朝着更好的方向发展。"
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:133
+msgid "Create a new GitHub issue"
+msgstr "创建新的 GitHub 疑述"
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:151
+msgid "Send an Email"
+msgstr "发送邮件"
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:197
+msgid "No, thanks"
+msgstr "不用了，谢谢"
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:251
+#, objc-format
+msgid "Goto %@"
+msgstr "前往%@"
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:395
+#, objc-format
+msgid "Error when opening URL: %@"
+msgstr "打开 URL 时发生错误：%@"
+
+#: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:420
+msgid "Your device does not support sending Emails."
+msgstr "您的设备不支持发送邮件。"
+
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:162
 msgid ""
 "No value returned from sensor, device should be checked by service "
 "technician."
 msgstr "无法获取设备传感器数据，建议预约授权服务商进行设备检测。"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:184
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:165
 msgid ""
 "Value exceeded the designed, device should be checked by service technician."
 msgstr "数据超出设计范围，建议预约授权服务商进行设备检测。"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:187
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:168
 msgid "Unusual value, device should be checked by service technician."
 msgstr "不正常的数据，建议预约授权服务商进行设备检测。"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:191
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:172
 msgid ""
 "Significant abnormal data, device should be checked by service technician."
 msgstr "明显异常的数据，建议预约授权服务商进行设备检测。"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:199
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:180
 msgid "Error Data"
 msgstr "错误的数据"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:202
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:183
 msgid "Unusual Data"
 msgstr "异常的数据"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:205
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:186
 msgid "Data Too Large"
 msgstr "过大的数据"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:208
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:189
 msgid "Empty Data"
 msgstr "空数据"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:211
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:192
 msgid "Wrong Data"
 msgstr "有问题的数据"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:221
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:202
 msgid "Internal Battery"
 msgstr "设备电池"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:290
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:260
 msgid "Copied!"
 msgstr "已复制"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:312
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:282
 msgid "Advanced"
 msgstr "高级"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:355
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:325
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:76
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:689
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:924
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:936
 msgid "Type"
 msgstr "类型"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:357
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:327
 msgid ""
 "\"External Power\" indicator may suggest that the connected adapter is a "
 "wireless charger. Most information may not be displayed because wireless "
@@ -866,75 +1052,75 @@ msgstr ""
 "“外部电源”可能表示所连接的适配器为无线充电器。大部分信息可能未显示，因为无线"
 "充电器由硬件以不同方式处理。"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:469
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:441
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:41
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:217
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:750
 msgid "Remaining Capacity"
 msgstr "剩余容量"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:478
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:450
 msgid ""
-"Unusual Remaining Capacity, A non-genuine battery component may be in use."
+"Unusual Remaining Capacity, a non-genuine battery component may be in use."
 msgstr "电池剩余容量数据异常，使用的可能是未经认证的电池部件。"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:478
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:450
 msgid "Estimated Remaining"
 msgstr "预估剩余"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:482
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:454
 msgid "Remaining Capacity not detected."
 msgstr "未获取到剩余容量。"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:486
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:458
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:52
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:119
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:163
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:224
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:762
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:977
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:992
 msgid "Cycle Count"
 msgstr "循环计数"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:533
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:505
 msgid ""
 "Cycle Count exceeded designed cycle count, consider replacing with a genuine "
 "battery."
 msgstr "已循环超过设计标准的周期次数，建议更换原厂电池组件。"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:537
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:509
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:51
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:761
 msgid "Time to Empty"
 msgstr "耗尽时间"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:555
-msgid "Unusual Time to Empty, A non-genuine battery component may be in use."
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:527
+msgid "Unusual Time to Empty, a non-genuine battery component may be in use."
 msgstr "电池耗尽时间异常，使用的可能是未经认证的电池部件"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:559
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:531
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:44
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:220
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:753
 msgid "Depth of Discharge"
 msgstr "放电深度"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:566
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:538
 msgid ""
-"Unusual Depth of Discharge, A non-genuine battery component may be in use."
+"Unusual Depth of Discharge, a non-genuine battery component may be in use."
 msgstr "电池化学放电深度异常，使用的可能是未经认证的电池部件"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:647
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:619
 msgid "Not HVC"
 msgstr "非高压充电"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:651
+#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:623
 msgid "Software Controlled"
 msgstr "软件控制"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryDetailsViewController.m:657
-msgid "Unavailable"
-msgstr "不可用"
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/worker.c:226
+msgid "Helper failed to launch"
+msgstr "辅助程序启动失败"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/libsmc.c:95
 msgid "IOMainPort Open Failed"
@@ -1258,78 +1444,78 @@ msgid "Externel Power 7"
 msgstr "外部电源7"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/libsmc.c:876
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:80
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:91
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:93
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:136
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:72
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:87
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:85
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:127
 msgid "Unknown"
 msgstr "未知"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:49
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:41
 msgid "Nominal"
 msgstr "正常"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:50
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:42
 msgid "Light"
 msgstr "轻微"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:51
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:43
 msgid "Moderate"
 msgstr "中度"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:52
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:44
 msgid "Heavy"
 msgstr "重度"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:53
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:45
 msgid "Trapping"
 msgstr "热量滞留"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:54
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:46
 msgid "Sleeping"
 msgstr "休眠"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:57
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:49
 msgid "Normal"
 msgstr "正常"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:58
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:50
 msgid "70% Torch"
 msgstr "闪光灯衰减至70%"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:59
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:51
 msgid "70% Backlight"
 msgstr "背光衰减至70%"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:60
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:52
 msgid "50% Torch"
 msgstr "闪光灯衰减至50%"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:61
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:53
 msgid "50% Backlight"
 msgstr "背光衰减至50%"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:62
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:54
 msgid "Torch Disabled"
 msgstr "闪光灯已禁用"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:63
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:55
 msgid "25% Backlight"
 msgstr "背光衰减至25%"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:64
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:56
 msgid "Maps halo Disabled"
 msgstr "地图指南针已禁用"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:65
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:57
 msgid "App Terminated"
 msgstr "App 终止运行"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:66
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:58
 msgid "Device Restart"
 msgstr "设备重新启动"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:67
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/thermal.c:59
 msgid "Ready"
 msgstr "已准备好"
 
@@ -1461,7 +1647,7 @@ msgstr ""
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:165
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:222
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:755
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:982
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:997
 msgid "Voltage"
 msgstr "电压"
 
@@ -1492,7 +1678,7 @@ msgstr "设计循环次数"
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:129
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:225
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:764
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:875
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:887
 msgid "State of Charge"
 msgstr "充电状态"
 
@@ -1647,13 +1833,6 @@ msgid ""
 "currently connected power adapter."
 msgstr "此参数表示当前电源适配器的“类型代码”（kIOPSPowerAdapterFamilyKey）。"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:77
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:112
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:690
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:877
-msgid "Status"
-msgstr "状态"
-
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:78
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:714
 msgid "Reason"
@@ -1742,7 +1921,7 @@ msgstr "型号名称"
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:147
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:248
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:704
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:830
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:834
 msgid "Manufacturer"
 msgstr "生产企业"
 
@@ -1750,7 +1929,7 @@ msgstr "生产企业"
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:105
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:150
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:705
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:831
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:835
 msgid "Model"
 msgstr "型号号码"
 
@@ -1759,7 +1938,7 @@ msgstr "型号号码"
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:153
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:249
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:706
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:834
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:838
 msgid "Firmware Version"
 msgstr "固件版本"
 
@@ -1768,7 +1947,7 @@ msgstr "固件版本"
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:154
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:250
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:707
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:835
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:839
 msgid "Hardware Version"
 msgstr "硬件版本"
 
@@ -1789,7 +1968,7 @@ msgstr "Apple 电源管理单元对当前电源适配器类型提供的简短描
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:146
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:251
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:709
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:828
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:832
 msgid "Serial No."
 msgstr "序列号"
 
@@ -1828,19 +2007,19 @@ msgstr "非接触式接口"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:98
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:140
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:825
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:829
 msgid "Acc. ID"
 msgstr "配件ID"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:99
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:144
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:827
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:831
 msgid "Port Type"
 msgstr "端口类型"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:100
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:145
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:826
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:830
 msgid "Allowed Features"
 msgstr "允许的特性"
 
@@ -1851,39 +2030,39 @@ msgstr "配件允许特性标识位，我暂且不知道如何解析。"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:103
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:148
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:862
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:864
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:867
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:901
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:903
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:906
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:874
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:876
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:879
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:913
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:915
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:918
 msgid "Product ID"
 msgstr "产品ID"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:104
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:149
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:855
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:857
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:894
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:896
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:867
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:869
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:906
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:908
 msgid "Vendor ID"
 msgstr "厂商ID"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:106
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:151
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:832
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:836
 msgid "Name"
 msgstr "名称"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:107
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:152
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:833
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:837
 msgid "PPID"
 msgstr "PPID"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:110
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:155
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:836
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:840
 msgid "Battery Pack"
 msgstr "外接电池"
 
@@ -1894,8 +2073,8 @@ msgstr "此项表示当前配件是否作为外接电池运行。"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:111
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:156
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:850
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:912
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:862
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:924
 msgid "Power Supply"
 msgstr "提供电源"
 
@@ -1906,7 +2085,7 @@ msgstr "此项表示当前配件是否提供电源。"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:114
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:158
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:976
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:991
 msgid "Max Capacity"
 msgstr "最大容量"
 
@@ -1917,25 +2096,25 @@ msgstr "配件的满充容量。"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:115
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:159
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:975
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:990
 msgid "Current Capacity"
 msgstr "当前容量"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:116
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:161
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:980
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:995
 msgid "Avg. Charging Current"
 msgstr "平均充电电流"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:117
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:160
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:979
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:994
 msgid "Charging Voltage Rating"
 msgstr "额定充电电压"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:120
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:164
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:981
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:996
 msgid "Current"
 msgstr "电流"
 
@@ -1951,22 +2130,22 @@ msgstr "配件的实时输出电压。"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:122
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:166
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:983
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:998
 msgid "Incoming Current"
 msgstr "输入电流"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:123
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:167
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:984
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:999
 msgid "Incoming Voltage"
 msgstr "输入电压"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:124
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:130
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:168
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:876
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:883
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:985
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:888
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:895
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:1000
 msgid "Accepting Charge"
 msgstr "正在接受充电"
 
@@ -1977,19 +2156,19 @@ msgstr "此项表示配件是否正在接受充电。"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:125
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:169
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:986
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:1001
 msgid "Temperature"
 msgstr "温度"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:126
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:170
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:987
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:1002
 msgid "Acc. Time to Empty"
 msgstr "配件耗尽时间"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:127
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:171
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:988
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:1003
 msgid "Acc. Time to Full"
 msgstr "配件满充时间"
 
@@ -1999,36 +2178,36 @@ msgstr "Apple 系统管理控制器报告的配件电量百分比。"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:131
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:180
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:837
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:849
 msgid "Power Mode"
 msgstr "电源模式"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:132
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:181
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:839
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:841
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:851
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:853
 msgid "Sleep Power"
 msgstr "睡眠电源"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:133
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:182
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:844
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:856
 msgid "Supervised Acc. Attached"
 msgstr "受监管配件已连接"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:134
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:183
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:845
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:857
 msgid "Supervised Transports Restricted"
 msgstr "监管传输已受限"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:135
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:939
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:954
 msgid "Inductive FW Mode"
 msgstr "非接触式固件模式"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:136
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:940
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:955
 msgid "Inductive Region Code"
 msgstr "非接触式区域代码"
 
@@ -2039,7 +2218,7 @@ msgid ""
 msgstr "此项表示目前配件是否遵循地区特定配置。"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:137
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:941
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:956
 msgid "Inductive Auth Timeout"
 msgstr "非接触式认证超时"
 
@@ -2049,7 +2228,7 @@ msgid "Serial Port"
 msgstr "串行接口"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:141
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:919
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:931
 msgid "Digital ID"
 msgstr "数字ID"
 
@@ -2058,7 +2237,7 @@ msgid "The \"Chip ID\" of attached accessory."
 msgstr "接入设备的“芯片ID”。"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:142
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:920
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:932
 msgid "ID Serial No."
 msgstr "设备序列号"
 
@@ -2067,7 +2246,7 @@ msgid "Interface Device Serial Number (ID-SN)."
 msgstr "接口设备序列号（ID-SN）。"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:143
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:921
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:933
 msgid "IM Serial No."
 msgstr "模块序列号"
 
@@ -2080,17 +2259,17 @@ msgid "Accessory Serial Number (ASN)."
 msgstr "配件序列号（ASN）。"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:177
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:924
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:936
 msgid "USB Connect State"
 msgstr "USB连接状态"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:178
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:927
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:939
 msgid "USB Charging Volt."
 msgstr "USB充电电压"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:179
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:929
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:943
 msgid "USB Current Config"
 msgstr "USB电源配置"
 
@@ -2110,28 +2289,28 @@ msgstr "不在充电"
 msgid "Unspecified"
 msgstr "未指定"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:837
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:842
 msgid "Configured Mode"
 msgstr "配置模式"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:837
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:845
 msgid "Active Mode"
 msgstr "启用模式"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:839
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:158
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:851
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:153
 msgid "Limit"
 msgstr "限制"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:924
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:936
 msgid "Active"
 msgstr "启用"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:924
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:936
 msgid "Inactive"
 msgstr "静默"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:924
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:936
 msgid "Published Type"
 msgstr "已配置类型"
 
@@ -2151,162 +2330,162 @@ msgstr "指南针"
 msgid "Atmos Pressure Sensor"
 msgstr "气压传感器"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:77
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:69
 msgid "Off"
 msgstr "关闭"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:78
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:70
 msgid "Low"
 msgstr "低电流"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:79
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:71
 msgid "On"
 msgstr "开启"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:80
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:72
 msgid "High Current"
 msgstr "高电流"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:81
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:73
 msgid "High Current (BM3)"
 msgstr "高电流（BM3）"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:82
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:74
 msgid "Low Voltage"
 msgstr "低电压"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:86
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:78
 msgid "Charger"
 msgstr "充电器"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:87
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:79
 msgid "Host"
 msgstr "端口"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:88
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:80
 msgid "Host (alternate config)"
 msgstr "端口（替代配置）"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:89
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:81
 msgid "Device"
 msgstr "设备"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:90
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:82
 msgid "Device (Auth required)"
 msgstr "设备（需要认证）"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:94
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:86
 msgid "Virtual"
 msgstr "虚拟"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:95
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:87
 msgid "USB-C"
 msgstr "USB-C"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:96
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:88
 msgid "USB-A"
 msgstr "USB-A"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:97
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:89
 msgid "Mini DP"
 msgstr "Mini DP"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:98
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:90
 msgid "FireWire 800"
 msgstr "FireWire 800"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:99
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:91
 msgid "HDMI"
 msgstr "HDMI"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:100
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:92
 msgid "Audio Jack (Mini)"
 msgstr "Audio Jack (Mini)"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:101
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:93
 msgid "Ethernet"
 msgstr "以太网"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:102
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:94
 msgid "MagSafe"
 msgstr "MagSafe"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:103
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:95
 msgid "MagSafe 2"
 msgstr "MagSafe 2"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:104
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:96
 msgid "SD Card"
 msgstr "SD卡"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:105
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:97
 msgid "Lightning"
 msgstr "闪电"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:106
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:98
 msgid "30-Pin"
 msgstr "30-Pin"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:107
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:99
 msgid "Inductive"
 msgstr "非接触式"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:108
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:100
 msgid "Smart Connector"
 msgstr "智能接点"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:109
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:101
 msgid "Display Port"
 msgstr "Display Port"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:110
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:102
 msgid "MagSafe 3"
 msgstr "MagSafe 3"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:112
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:104
 msgid "Contactless"
 msgstr "免接触式"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:113
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:105
 msgid "Wireless"
 msgstr "无线"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:116
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:108
 msgid "RX"
 msgstr "RX"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:117
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:109
 msgid "TX"
 msgstr "TX"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:118
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:110
 msgid "TEST"
 msgstr "TEST"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:119
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:111
 msgid "INVALID"
 msgstr "INVALID"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:145
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:138
 msgid "Supported List"
 msgstr "支持列表"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:154
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:148
 msgid "Detached"
 msgstr "未挂载"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:162
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:157
 msgid "Base"
 msgstr "基准"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:164
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:159
 msgid "Offset"
 msgstr "偏移"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:166
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:161
 msgid "Max"
 msgstr "最大"
 
-#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:176
+#: /Users/torrekie/proj/Battman/Battman/battery_utils/accessory.c:170
 msgid "Undefined"
 msgstr "未定义"

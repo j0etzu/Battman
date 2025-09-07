@@ -6,10 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface DatePickerCompactButton : UIButton
-
-@end
+#import "DatePickerCompactButton.h"
 
 @protocol DatePickerTableViewCellDelegate;
 

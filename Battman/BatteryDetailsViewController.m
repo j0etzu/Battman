@@ -48,24 +48,6 @@ void equipCellHighLegit(UILabel *label) {
 	if (font) CFRelease(font);
 }
 
-UILabel *equipCellDetail(UITableViewCell *cell, NSString *text) {
-	if ([cell respondsToSelector:@selector(detailLabel)]) {
-		// Suppress compiler warning about performSelector leak
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-		UILabel *detail = [cell performSelector:@selector(detailLabel)];
-#pragma clang diagnostic pop
-
-		if ([detail isKindOfClass:[UILabel class]]) {
-			detail.text = text;
-		}
-		return detail;
-	} else {
-		cell.detailTextLabel.text = text;
-	}
-	return cell.detailTextLabel;
-}
-
 void equipDetailCell(UITableViewCell *cell, struct battery_info_node *i) {
 	// PLEASE ENSURE no hidden cell is here when calling
 	/*if ((i->content & BIN_DETAILS_SHARED) == BIN_DETAILS_SHARED ||
@@ -126,18 +108,17 @@ void equipDetailCell(UITableViewCell *cell, struct battery_info_node *i) {
 	} else {
 		final_str = [NSString stringWithUTF8String:bi_node_get_string(i)];
 	}
-
-	UILabel *detailLabel = equipCellDetail(cell, final_str);
+	cell.detailTextLabel.text = final_str;
 
 	// Consider add a "BIN_IS_HIGHLEGIT"
 	if (strstr(i->name, "No.") || strstr(i->name, "ID")) {
-		equipCellHighLegit(detailLabel);
+		equipCellHighLegit(cell.detailTextLabel);
 	}
 
 	if (@available(iOS 13.0, *))
-		detailLabel.textColor = [UIColor secondaryLabelColor];
+		cell.detailTextLabel.textColor = [UIColor secondaryLabelColor];
 	else
-		detailLabel.textColor = [UIColor colorWithRed:(60.0f / 255) green:(60.0f / 255) blue:(67.0f / 255) alpha:0.6];
+		cell.detailTextLabel.textColor = [UIColor colorWithRed:(60.0f / 255) green:(60.0f / 255) blue:(67.0f / 255) alpha:0.6];
 
 	return;
 }
@@ -251,7 +232,7 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 	// FIXME: use preferred_language() for "Copy"
 	[[UIMenuController sharedMenuController] update];
 
-	[self.tableView registerClass:[SegmentedViewCell class] forCellReuseIdentifier:@"HVC"];
+	[self.tableView registerClass:[SegmentedHVCViewCell class] forCellReuseIdentifier:@"HVC"];
 	[self.tableView registerClass:[SegmentedFlagViewCell class] forCellReuseIdentifier:@"FLAGS"];
 	[self.tableView registerClass:[MultilineViewCell class] forCellReuseIdentifier:@"bdvc:addt"];
 	self.tableView.estimatedRowHeight = 100;
@@ -272,17 +253,6 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 		NSString        *pending;
 		UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
 		pending               = cell.detailTextLabel.text;
-		if ([cell respondsToSelector:@selector(detailLabel)]) {
-			// Suppress compiler warning about performSelector leak
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-			UILabel *detail = [cell performSelector:@selector(detailLabel)];
-#pragma clang diagnostic pop
-
-			if ([detail isKindOfClass:[UILabel class]]) {
-				pending = detail.text;
-			}
-		}
 
 		pasteboard = [UIPasteboard generalPasteboard];
 		[pasteboard setString:pending];
@@ -432,10 +402,13 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 		cell_class = [MultilineViewCell class];
 	}
 	UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:ident];
-	cell.accessoryType    = 0;
-	cell.accessoryView    = nil;
-	if (!cell)
+	if(cell) {
+		cell.accessoryType=0;
+		cell.accessoryView=nil;
+		cell.detailTextLabel.font=[UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+	}else{
 		cell = [[cell_class alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ident];
+	}
 
 	struct battery_info_section *bi_section = battery_info_get_section(*batteryInfo, ip.section);
 	struct battery_info_node    *pending_bi = bi_section->data + ip.row + pendingLoadOffsets[ip.section][ip.row];
@@ -449,9 +422,8 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 			cellf = [[SegmentedFlagViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"FLAGS"];
 
 		cellf.textLabel.text       = _(pending_bi->name);
-		cellf.detailTextLabel.text = _(bi_node_get_string(pending_bi));
 		cellf.titleLabel.text      = _(pending_bi->name);
-		cellf.detailLabel.text     = _(bi_node_get_string(pending_bi));
+		cellf.detailTextLabel.text = _(bi_node_get_string(pending_bi));
 		[cellf selectByFlags:gGauge.Flags];
 		if (strlen(gGauge.DeviceName)) {
 			[cellf setBitSetByModel:[NSString stringWithFormat:@"%s", gGauge.DeviceName]];
@@ -475,7 +447,7 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 				static char errmsg[256];
 				// some Shenzhen battries is spoofing this data to affect internal battery health calculations
 				// But they still had to report a real SoC so that indicating actual conditions.
-				sprintf(errmsg, "%s\n%s: %ld", _C("Unusual Remaining Capacity, A non-genuine battery component may be in use."), _C("Estimated Remaining"), lrintf((float)full_cap * gGauge.StateOfCharge / 100.0f));
+				sprintf(errmsg, "%s\n%s: %ld", _C("Unusual Remaining Capacity, a non-genuine battery component may be in use."), _C("Estimated Remaining"), lrintf((float)full_cap * gGauge.StateOfCharge / 100.0f));
 				*str = errmsg;
 			} else if (remain_cap == 0) {
 				code = WARN_EMPTYVAL;
@@ -552,7 +524,7 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 			/* for ensurence, we check if TTE is bigger than 1.5*ideal */
 			if (tte > (ideal * 1.5)) {
 				code = WARN_UNUSUAL;
-				*str = _C("Unusual Time to Empty, A non-genuine battery component may be in use.");
+				*str = _C("Unusual Time to Empty, a non-genuine battery component may be in use.");
 			}
 			return code;
 		});
@@ -563,7 +535,7 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 			 * exceeds when discharging/charging with adapter attached */
 			if (gGauge.DOD0 > (gGauge.Qmax * 3)) {
 				code = WARN_UNUSUAL;
-				*str = _C("Unusual Depth of Discharge, A non-genuine battery component may be in use.");
+				*str = _C("Unusual Depth of Discharge, a non-genuine battery component may be in use.");
 			}
 			return code;
 		});
@@ -617,11 +589,11 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 		hvc_menu_size       = 2;
 #endif
 
-		/* Only use SegmentedViewCell when HVC exists */
+		/* Only use SegmentedHVCViewCell when HVC exists */
 		if (hvc_menu != NULL && hvc_menu_size != 0) {
-			SegmentedViewCell *cell_seg = [tv dequeueReusableCellWithIdentifier:@"HVC"];
+			SegmentedHVCViewCell *cell_seg = [tv dequeueReusableCellWithIdentifier:@"HVC"];
 			if (!cell_seg)
-				cell_seg = [[SegmentedViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"HVC"];
+				cell_seg = [[SegmentedHVCViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"HVC"];
 			if (@available(iOS 13.0, *)) {
 				cell_seg.accessoryType = UITableViewCellAccessoryDetailButton;
 			} else {
@@ -644,21 +616,21 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 
 			/* Content */
 			if (!hvc_soft && (hvc_index > hvc_menu_size)) {
-				cell_seg.detailLabel.text    = [NSString stringWithFormat:@"%d (%@)", hvc_index, _("Not HVC")];
+				cell_seg.detailTextLabel.text    = [NSString stringWithFormat:@"%d (%@)", hvc_index, _("Not HVC")];
 				cell_seg.subTitleLabel.text  = @" ";
 				cell_seg.subDetailLabel.text = @" ";
 			} else if (hvc_soft == true) {
-				cell_seg.detailLabel.text = [NSString stringWithFormat:@"%d (%@)", hvc_index, _("Software Controlled")];
+				cell_seg.detailTextLabel.text = [NSString stringWithFormat:@"%d (%@)", hvc_index, _("Software Controlled")];
 				[cell_seg.segmentedControl setSelectedSegmentIndex:hvc_index];
 				/* Why its not refreshing label after setSelectedSegmentIndex? */
 				cell_seg.subTitleLabel.text  = [NSString stringWithFormat:@"%d %s", hvc_menu[hvc_index].voltage, L_MV];
 				cell_seg.subDetailLabel.text = [NSString stringWithFormat:@"%d %s", hvc_menu[hvc_index].current, L_MA];
 			} else if (hvc_index == -1) {
-				cell_seg.detailLabel.text    = [NSString stringWithFormat:@"%d (%@)", hvc_index, _("Unavailable")];
+				cell_seg.detailTextLabel.text    = [NSString stringWithFormat:@"%d (%@)", hvc_index, _("Unavailable")];
 				cell_seg.subTitleLabel.text  = @" ";
 				cell_seg.subDetailLabel.text = @" ";
 			} else {
-				cell_seg.detailLabel.text = [NSString stringWithFormat:@"%d", hvc_index];
+				cell_seg.detailTextLabel.text = [NSString stringWithFormat:@"%d", hvc_index];
 				[cell_seg.segmentedControl setSelectedSegmentIndex:hvc_index];
 				/* Why its not refreshing label after setSelectedSegmentIndex? */
 				cell_seg.subTitleLabel.text  = [NSString stringWithFormat:@"%d %s", hvc_menu[hvc_index].voltage, L_MV];
@@ -676,11 +648,11 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 
 - (void)hvcSegmentSelected:(UISegmentedControl *)segment {
 	UIView *view = segment;
-	while (view && ![view isKindOfClass:[SegmentedViewCell class]]) {
+	while (view && ![view isKindOfClass:[SegmentedHVCViewCell class]]) {
 		view = [view superview];
 	}
 	if (view) {
-		SegmentedViewCell *cell_seg  = (SegmentedViewCell *)view;
+		SegmentedHVCViewCell *cell_seg  = (SegmentedHVCViewCell *)view;
 		// Now update the cell's title
 		cell_seg.subTitleLabel.text  = [NSString stringWithFormat:@"%d %s", hvc_menu[segment.selectedSegmentIndex].voltage, L_MV];
 		cell_seg.subDetailLabel.text = [NSString stringWithFormat:@"%d %s", hvc_menu[segment.selectedSegmentIndex].current, L_MA];
@@ -696,6 +668,28 @@ void equipWarningCondition_b(UITableViewCell *equippedCell, NSString *textLabel,
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	struct battery_info_section *bi_section = battery_info_get_section(*batteryInfo, indexPath.section);
+	struct battery_info_node    *pending_bi = bi_section->data + indexPath.row + pendingLoadOffsets[indexPath.section][indexPath.row];
+	if(!(pending_bi->content&BIN_HAS_SUBCELLS))
+		return;
+	int rows=0;
+	int is_hidden=0;
+	NSMutableArray *indexPaths=[NSMutableArray array];
+	for(struct battery_info_node *node=pending_bi+1;node->name&&(node->content&BIN_IS_SUBCELL);node++) {
+		if(node->content&(1<<5))
+			is_hidden=1;
+		node->content^=(1<<5);
+		rows++;
+		[indexPaths addObject:[NSIndexPath indexPathForRow:indexPath.row+rows inSection:indexPath.section]];
+	}
+	if(!rows)
+		return;
+	if(is_hidden) {
+		[tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+	}else{
+		[tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+	}
+	//[self updateTableView];
 }
 
 @end
