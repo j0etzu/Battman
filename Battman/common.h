@@ -125,6 +125,11 @@ __BEGIN_DECLS
 void NSLog(CFStringRef fmt, ...);
 #endif
 
+extern CFTypeRef (*MGCopyAnswerPtr)(CFStringRef);
+extern SInt32 (*MGGetSInt32AnswerPtr)(CFStringRef, SInt32);
+extern CFPropertyListRef (*MGCopyMultipleAnswersPtr)(CFArrayRef, CFDictionaryRef);
+extern CFStringRef (*MGGetStringAnswerPtr)(CFStringRef);
+
 extern const char    *L_OK;
 extern const char    *L_FAILED;
 extern const char    *L_ERR;

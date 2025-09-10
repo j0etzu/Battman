@@ -46,6 +46,10 @@ This ensures older-OS users aren't dropped and that any @available/__builtin_ava
 are weakly linked correctly at link time."
 #endif
 
+#if !defined(BATTMAN_VERSION_STRING)
+#error Please define BATTMAN_VERSION_STRING before building!
+#endif
+
 #if !defined(__arm64__) && !defined(__aarch64__) && !defined(__arm64e__)
 #error Current Battman is arm64 only! \
 Please file an issue if you would like to contribute!

@@ -6,6 +6,8 @@
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIconFile</key>
+	<string>Icon</string>
 	<key>CFBundleIcons</key>
 	<dict>
 		<key>CFBundlePrimaryIcon</key>
@@ -27,14 +29,29 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>GIT_COMMIT_HASH</key>
 	<string>$(COMMIT_HASH)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>mailto</string>
+		<string>reddit</string>
+		<string>twitter</string>
+		<string>bilibili</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>SF-Pro-Display-Regular.otf</string>
+	</array>
+	<key>UIAppSupportsHDR</key>
 	<true/>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
@@ -55,6 +72,11 @@
 	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIDeviceFamily</key>
+	<array>
+		<integer>1</integer>
+		<integer>2</integer>
+	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchScreen</key>
@@ -84,20 +106,5 @@
 	</array>
 	<key>UISupportsFullScreenInAssistiveAccess</key>
 	<true/>
-	<key>UIAppSupportsHDR</key>
-	<true/>
-	<key>NSHighResolutionCapable</key>
-	<true/>
-	<key>CFBundleIconFile</key>
-	<string>Icon</string>
-	<key>UIAppFonts</key>
-	<array>
-		<string>SF-Pro-Display-Regular.otf</string>
-	</array>
-	<key>UIDeviceFamily</key>
-	<array>
-		<integer>1</integer>
-		<integer>2</integer>
-	</array>
 </dict>
 </plist>

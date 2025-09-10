@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Battman 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-29 16:05+0800\n"
+"POT-Creation-Date: 2025-09-10 16:43+0800\n"
 "PO-Revision-Date: 2025-01-27 17:32+0800\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: /Users/torrekie/proj/Battman/Battman/common.c:337
-#: /Users/torrekie/proj/Battman/Battman/main.m:203
+#: /Users/torrekie/proj/Battman/Battman/main.m:209
 msgid "OK"
 msgstr "OK"
 
@@ -69,90 +69,110 @@ msgstr "False"
 msgid "Swipe up to exit"
 msgstr "Swipe up to exit"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:35
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:103
 msgid "Logs"
 msgstr "Logs"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:115
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:120
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:121
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:185
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:190
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:191
 msgid "More"
 msgstr "More"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:142
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:196
+msgid "Torrekie's website (zh_CN)"
+msgstr "Torrekie's website (zh_CN)"
+
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:197
+msgid "Follow @Torrekie"
+msgstr "Follow @Torrekie"
+
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:198
+msgid "Subscribe me on Bilibili"
+msgstr "Subscribe me on Bilibili"
+
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:199
+msgid "Follow u/Torrekie on Reddit"
+msgstr "Follow u/Torrekie on Reddit"
+
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:240
 msgid "About Battman"
 msgstr "About Battman"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:145
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:243
 msgid "Debug"
 msgstr "Debug"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:239
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:362
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:387
+msgid "Version"
+msgstr "Version"
+
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:395
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:530
 #: /Users/torrekie/proj/Battman/Battman/CreditViewController.c:7
 msgid "Credit"
 msgstr "Credit"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:243
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:400
 msgid "Source Code"
 msgstr "Source Code"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:252
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:410
 msgid "Battman Wiki & User Manual"
 msgstr "Battman Wiki & User Manual"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:261
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:420
 #: /Users/torrekie/proj/Battman/Battman/DonationViewController.m:31
 msgid "Support Us"
 msgstr "Support Us"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:274
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:447
 msgid "Logs (stdout)"
 msgstr "Logs (stdout)"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:279
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:449
 msgid "Select language override"
 msgstr "Select language override"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:284
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:451
 msgid "Exit App"
 msgstr "Exit App"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:289
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:453
 msgid "Logs (stdout) (very cool)"
 msgstr "Logs (stdout) (very cool)"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:294
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:455
 msgid "Redirect daemon logs"
 msgstr "Redirect daemon logs"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:299
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:457
 msgid "Show fatal error view"
 msgstr "Show fatal error view"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:332
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:486
 msgid "Trigger fatal notify"
 msgstr "Trigger fatal notify"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:337
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:488
 msgid "Trigger UTF jitter"
 msgstr "Trigger UTF jitter"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:378
-#: /Users/torrekie/proj/Battman/Battman/CreditViewController.c:23
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:549
+#: /Users/torrekie/proj/Battman/Battman/CreditViewController.c:26
 msgid "Battman Credit"
 msgstr "Battman Credit"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:434
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:605
 msgid "Language Override"
 msgstr "Language Override"
 
-#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:448
+#: /Users/torrekie/proj/Battman/Battman/SettingsViewController.m:619
 msgid "Clear"
 msgstr "Clear"
 
 #: /Users/torrekie/proj/Battman/Battman/ChargingManagementViewController.m:29
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:238
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:243
 msgid "Charging Management"
 msgstr "Charging Management"
 
@@ -343,7 +363,7 @@ msgid "Sunlight Exposure"
 msgstr "Sunlight Exposure"
 
 #: /Users/torrekie/proj/Battman/Battman/SimpleTemperatureViewController.m:111
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:177
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:182
 msgid "Hardware Temperature"
 msgstr "Hardware Temperature"
 
@@ -430,68 +450,72 @@ msgstr "Unsupported"
 msgid "Not Running"
 msgstr "Not Running"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:94
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:96
 msgid "Battman"
 msgstr "Battman"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:109
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:111
 msgid "2025 Ⓒ Torrekie <me@torrekie.dev>"
 msgstr "2025 Ⓒ Torrekie <me@torrekie.dev>"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:112
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:114
 msgid "Debug Commit"
 msgstr "Debug Commit"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:121
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:116
+msgid "Commit"
+msgstr "Commit"
+
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:123
 msgid "Sandboxed"
 msgstr "Sandboxed"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:123
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:125
 msgid "Simulator Sandboxed"
 msgstr "Simulator Sandboxed"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:125
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:127
 msgid "Simulator Unsandboxed"
 msgstr "Simulator Unsandboxed"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:128
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:130
 msgid "Unsandboxed"
 msgstr "Unsandboxed"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:132
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:134
 msgid "Platfomized"
 msgstr "Platfomized"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:135
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:137
 msgid "Debugger Attached"
 msgstr "Debugger Attached"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:146
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:148
 msgid "Battery"
 msgstr "Battery"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:175
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:180
 msgid "Battery Info"
 msgstr "Battery Info"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:179
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:184
 msgid "Manage"
 msgstr "Manage"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:212
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:217
 msgid "Unimplemented Yet"
 msgstr "Unimplemented Yet"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:212
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:217
 msgid "Will be introduced in future updates."
 msgstr "Will be introduced in future updates."
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:238
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:243
 #: /Users/torrekie/proj/Battman/Battman/ChargingLimitViewController.m:107
 msgid "Charging Limit"
 msgstr "Charging Limit"
 
-#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:238
+#: /Users/torrekie/proj/Battman/Battman/BatteryInfoViewController.m:243
 #: /Users/torrekie/proj/Battman/Battman/ThermalTunesViewContoller.m:140
 msgid "Thermal Tunes"
 msgstr "Thermal Tunes"
@@ -792,11 +816,11 @@ msgstr "Thermal Tuning failed with error"
 msgid "locale_name"
 msgstr "English"
 
-#: /Users/torrekie/proj/Battman/Battman/main.m:203
+#: /Users/torrekie/proj/Battman/Battman/main.m:209
 msgid "Unregistered Locale"
 msgstr "Unregistered Locale"
 
-#: /Users/torrekie/proj/Battman/Battman/main.m:203
+#: /Users/torrekie/proj/Battman/Battman/main.m:209
 msgid ""
 "You are using a localization file which not officially provided by Battman, "
 "the translations may inaccurate."
@@ -804,7 +828,7 @@ msgstr ""
 "You are using a localization file which not officially provided by Battman, "
 "the translations may inaccurate."
 
-#: /Users/torrekie/proj/Battman/Battman/main.m:321
+#: /Users/torrekie/proj/Battman/Battman/main.m:347
 msgid ""
 "stdio logs not redirected in Simulator build, please check stdio in Xcode "
 "console output instead."
@@ -812,7 +836,7 @@ msgstr ""
 "stdio logs not redirected in Simulator build, please check stdio in Xcode "
 "console output instead."
 
-#: /Users/torrekie/proj/Battman/Battman/main.m:345
+#: /Users/torrekie/proj/Battman/Battman/main.m:371
 msgid "Battman CLI not implemented yet."
 msgstr "Battman CLI not implemented yet."
 
@@ -2125,8 +2149,8 @@ msgstr "This indicates if an accessory is now working as a Battery Pack."
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:156
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:862
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:924
-msgid "Power Supply"
-msgstr "Power Supply"
+msgid "Providing Power"
+msgstr "Providing Power"
 
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:111
 #: /Users/torrekie/proj/Battman/Battman/battery_utils/battery_info.c:156

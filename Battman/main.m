@@ -189,7 +189,10 @@ static void gettext_init(void) {
 						// This looks exactlly same with above, but multi-factored
 						NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 						os_log_error(gLog, "1919");
-						if (![defaults objectForKey:@"com.torrekie.Battman.warned_no_locale"] || DEBUG) {
+#ifndef DEBUG
+						if (![defaults objectForKey:@"com.torrekie.Battman.warned_no_locale"])
+#endif
+						{
 							show_alert("Error", "Unable to match existing Gettext localization, defaulting to English", "Cancel");
 							[defaults setBool:YES forKey:@"com.torrekie.Battman.warned_no_locale"];
 							[defaults synchronize];
@@ -199,7 +202,10 @@ static void gettext_init(void) {
 					case 810: {
 						os_log_error(gLog, "810");
 						NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-						if (![defaults objectForKey:@"com.torrekie.Battman.warned_3rd_locale"] || DEBUG) {
+#ifndef DEBUG
+						if (![defaults objectForKey:@"com.torrekie.Battman.warned_3rd_locale"])
+#endif
+						{
 							show_alert(_("Unregistered Locale"), _("You are using a localization file which not officially provided by Battman, the translations may inaccurate."), _("OK"));
 							[defaults setBool:YES forKey:@"com.torrekie.Battman.warned_3rd_locale"];
 							[defaults synchronize];
@@ -235,6 +241,26 @@ const char *cond_localize_c(const char *str) {
     return (const char *)(use_libintl ? gettext_ptr(str) : str);
 }
 #endif
+
+CFTypeRef (*MGCopyAnswerPtr)(CFStringRef) = NULL;
+SInt32 (*MGGetSInt32AnswerPtr)(CFStringRef, SInt32) = NULL;
+CFPropertyListRef (*MGCopyMultipleAnswersPtr)(CFArrayRef, CFDictionaryRef) = NULL;
+CFStringRef (*MGGetStringAnswerPtr)(CFStringRef) = NULL;
+
+__attribute__((constructor))
+void load_mg(void) {
+#if 1
+	void *mobileGestalt = dlopen("/usr/lib/libMobileGestalt.dylib", RTLD_LAZY);
+	if (mobileGestalt) {
+		MGCopyAnswerPtr = dlsym(mobileGestalt, "MGCopyAnswer");
+		MGGetSInt32AnswerPtr = dlsym(mobileGestalt, "MGGetSInt32Answer");
+		MGCopyMultipleAnswersPtr = dlsym(mobileGestalt, "MGCopyMultipleAnswers");
+		MGGetStringAnswerPtr = dlsym(mobileGestalt, "MGGetStringAnswer");
+	}
+#else
+#error Before we find another way to get those info, MobileGestalt cannot be avoided
+#endif
+}
 
 #ifdef DEBUG
 NSMutableAttributedString *redirectedOutput;

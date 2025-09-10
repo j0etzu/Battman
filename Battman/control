@@ -3,7 +3,7 @@ Name: Battman
 Version: 1.0
 Architecture: ARCH
 Section: Applications
-Depends: firmware (>= 12.0), cy+model.iphone (>= 10.1) | cy+model.ipad (>= 8.1)
+Depends: firmware (>= 12.0), cy+model.iphone (>= 10.1) | cy+model.ipad (>= 8.1), libintl8 | libintl
 Homepage: https://github.com/Torrekie/Battman
 Maintainer: Torrekie <me@torrekie.dev>
 Author: Torrekie <me@torrekie.dev>

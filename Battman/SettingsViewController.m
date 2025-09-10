@@ -1,15 +1,83 @@
 #import "SettingsViewController.h"
 #import "DonationPrompter.h"
+#import "BattmanVectorIcon.h"
 #include "common.h"
 #include <math.h>
+#import <CoreImage/CoreImage.h>
+#import <CoreImage/CIFilterBuiltins.h>
+
+// #import "SerialQRCodeTableViewCell.h"
 
 #include "security/selfcheck.h"
+
+@interface CALayer ()
+@property (atomic, assign) BOOL continuousCorners;
+@end
+
+@interface UIImage ()
++ (instancetype)_applicationIconImageForBundleIdentifier:(NSString*)bundleIdentifier format:(int)format scale:(CGFloat)scale;
+@end
+
+#if 0
+@interface AADeviceInfo : NSObject
++ (instancetype)currentInfo;
+- (NSString *)serialNumber;
+@end
+#endif
+
+/* You may thought we init artworks in BatteryInfoViewController was a terrible idea
+ * but this behavior was explicitly intended. Guess why I decided this. */
+extern BOOL artwork_avail;
+extern CGImageRef getArtworkImageOf(CFStringRef name);
+
+#if 0
+static UIImage *loadSerialNumberQRCodeImage(void) {
+	static UIImage *QRCodeImage = nil;
+	static dispatch_once_t onceToken;
+	if (onceToken != -1)
+		dispatch_once(&onceToken, ^{
+			NSString *serial = nil;
+			if (MGCopyAnswerPtr != nil)
+				serial = (__bridge NSString *)MGCopyAnswerPtr(CFSTR("SerialNumber"));
+			if (!serial){
+				// Hacky
+				NSBundle *AppleAccount = [NSBundle bundleWithIdentifier:@"com.apple.AppleAccount"];
+				if ([AppleAccount loadAndReturnError:nil]) {
+					serial = [[[AppleAccount classNamed:@"AADeviceInfo"] currentInfo] serialNumber];
+					[AppleAccount unload];
+				}
+			}
+			if (!serial) return;
+			CIFilter<CIQRCodeGenerator> *filter;
+			if (@available(iOS 13.0, macOS 10.15, *)) {
+				filter = [CIFilter QRCodeGenerator];
+				filter.message = [serial dataUsingEncoding:NSISOLatin1StringEncoding];
+				filter.correctionLevel = @"H";
+			} else {
+				filter = (CIFilter<CIQRCodeGenerator> *)[CIFilter filterWithName:@"CIQRCodeGenerator"];
+				[filter setValue:[serial dataUsingEncoding:NSISOLatin1StringEncoding] forKey:@"inputMessage"];
+				[filter setValue:@"H" forKey:@"inputCorrectionLevel"];
+			}
+			CIImage *image = filter.outputImage;
+			CGRect extent = image.extent;
+			image = [image imageByApplyingTransform:CGAffineTransformMakeScale(140.0 / CGRectGetWidth(extent), 140.0 / CGRectGetWidth(extent))];
+			CIContext *ctx = [CIContext context];
+			CGImageRef cgImage = [ctx createCGImage:image fromRect:image.extent];
+			QRCodeImage = [UIImage imageWithCGImage:cgImage];
+			CGImageRelease(cgImage);
+		});
+	
+	return QRCodeImage;
+}
+#endif
 
 @interface LanguageSelectionVC : UITableViewController
 @end
 
 enum sections_settings {
+	SS_SECT_VERSION,
     SS_SECT_ABOUT,
+	SS_SECT_SNS,
 #ifdef DEBUG
     SS_SECT_DEBUG,
 #endif
@@ -111,6 +179,8 @@ static BOOL _coolDebugVCPresented = 0;
 
 @implementation SettingsViewController
 
+static NSMutableArray *sns_avail = nil;
+
 - (NSString *)title {
     return _("More");
 }
@@ -120,14 +190,42 @@ static BOOL _coolDebugVCPresented = 0;
     tabbarItem.title = _("More");                            // UITabBarSystemItem cannot change title like this
     [tabbarItem setValue:_("More") forKey:@"internalTitle"]; // This is the correct way (But not accepted by App Store)
     self.tabBarItem = tabbarItem;
-    return [super initWithStyle:UITableViewStyleGrouped]; // or plain if desired
+
+	// SNS
+	NSArray *sns_list = @[
+		@"https://torrekie.com", @"", _("Torrekie's website (zh_CN)"),
+		@"twitter://user?screen_name=Torrekie", @"com.atebits.Tweetie2", _("Follow @Torrekie"),
+		@"bilibili://space/169414691", @"tv.danmaku.bilianime", _("Subscribe me on Bilibili"),
+		@"reddit:///u/Torrekie", @"com.reddit.Reddit", _("Follow u/Torrekie on Reddit"),
+	];
+	sns_avail = [NSMutableArray new];
+	for (int i = 0; i < sns_list.count / 3; i++) {
+		NSString *link = sns_list[i * 3];
+		if ([UIApplication.sharedApplication canOpenURL:[NSURL URLWithString:link]]) {
+			[sns_avail addObject:sns_list[(i * 3)]];
+			[sns_avail addObject:sns_list[(i * 3) + 1]];
+			[sns_avail addObject:sns_list[(i * 3) + 2]];
+		}
+	}
+	if (@available(iOS 13.0, *))
+		return [super initWithStyle:UITableViewStyleInsetGrouped];
+	else
+		return [super initWithStyle:UITableViewStyleGrouped];
+}
+
+- (void)viewDidLoad {
+	// [self.tableView registerClass:[SerialQRCodeTableViewCell class] forCellReuseIdentifier:@"QR"];
 }
 
 - (NSInteger)tableView:(id)tv numberOfRowsInSection:(NSInteger)section {
-    if (section == SS_SECT_ABOUT)
+	if (section == SS_SECT_VERSION)
+		return 1;
+	if (section == SS_SECT_ABOUT)
         return 4;
+	if (section == SS_SECT_SNS)
+		return sns_avail.count / 3;
 #ifdef DEBUG
-    else if (section == SS_SECT_DEBUG)
+	if (section == SS_SECT_DEBUG)
         return 9;
 #endif
     return 0;
@@ -138,10 +236,10 @@ static BOOL _coolDebugVCPresented = 0;
 }
 
 - (NSString *)tableView:(UITableView *)tv titleForHeaderInSection:(NSInteger)sect {
-    if (sect == SS_SECT_ABOUT)
+	if (sect == SS_SECT_ABOUT)
         return _("About Battman");
 #ifdef DEBUG
-    else if (sect == SS_SECT_DEBUG)
+    if (sect == SS_SECT_DEBUG)
         return _("Debug");
 #endif
     return nil;
@@ -159,6 +257,10 @@ static BOOL _coolDebugVCPresented = 0;
 			show_donation(true);
 		}
     }
+	if (indexPath.section == SS_SECT_SNS) {
+		NSString *nsstr = sns_avail[indexPath.row * 3];
+		open_url(nsstr.UTF8String);
+	}
 #ifdef DEBUG
     if (indexPath.section == SS_SECT_DEBUG) {
         if (indexPath.row == 0) {
@@ -232,75 +334,129 @@ static BOOL _coolDebugVCPresented = 0;
 - (UITableViewCell *)tableView:(id)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     // TODO: REUSE (Too few cells to reuse for now so no need at this moment)
 	// TODO: Add artwork icons
+	UITableViewCell *cell = nil;
+#if 0
+	if (indexPath.section == SS_SECT_VERSION) {
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
+		switch (indexPath.row) {
+			case 0: {
+				SerialQRCodeTableViewCell *qrCell = [tv dequeueReusableCellWithIdentifier:@"QR"];
+				if (!qrCell) qrCell = [[SerialQRCodeTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"QR"];
+				qrCell.selectionStyle = 0;
+				qrCell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
+				[qrCell setQRCodeImage:loadSerialNumberQRCodeImage()];
+				return qrCell;
+			}
+			default:
+				break;
+		}
+	}
+#endif
+	if (indexPath.section == SS_SECT_VERSION) {
+		if (indexPath.row == 0) {
+			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
+
+			static UIImage *battmanIcon = nil;
+			static dispatch_once_t onceToken;
+			dispatch_once(&onceToken, ^{
+				CGFloat width = ([UIScreen mainScreen].scale == 2.0f) ? 58.0f : 87.0f;
+				CGFloat scale = [UIScreen mainScreen].scale;
+				CGImageRef src = [BattmanVectorIcon BattmanCGImage];
+				CGColorSpaceRef colorSpace = CGImageGetColorSpace(src);
+				if (!colorSpace) colorSpace = CGColorSpaceCreateDeviceRGB();
+				else CGColorSpaceRetain(colorSpace);
+				
+				CGContextRef ctx = CGBitmapContextCreate(NULL, width, width, 8, 0, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Little);
+				CGColorSpaceRelease(colorSpace);
+				if (ctx) {
+					CGContextSetInterpolationQuality(ctx, kCGInterpolationHigh);
+					CGContextTranslateCTM(ctx, 0, width);
+					CGContextScaleCTM(ctx, 1.0, -1.0);
+					CGContextDrawImage(ctx, CGRectMake(0, 0, width, width), src);
+					CGImageRef resized = CGBitmapContextCreateImage(ctx);
+					CGContextRelease(ctx);
+					
+					UIImage *img = [UIImage imageWithCGImage:resized scale:scale orientation:UIImageOrientationDown];
+					CGImageRelease(resized);
+					
+					battmanIcon = [img imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+				}
+			});
+
+			cell.imageView.image = battmanIcon;
+			cell.textLabel.text = _("Version");
+			cell.detailTextLabel.text = [NSString stringWithCString:BATTMAN_VERSION_STRING encoding:NSUTF8StringEncoding];
+		}
+	}
     if (indexPath.section == SS_SECT_ABOUT) {
+		cell = [UITableViewCell new];
         if (indexPath.row == 0) {
-            UITableViewCell *creditCell = [UITableViewCell new];
-            creditCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            creditCell.textLabel.text = _("Credit");
-            return creditCell;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.textLabel.text = _("Credit");
+			if (artwork_avail) {
+				cell.imageView.image = [UIImage imageWithCGImage:getArtworkImageOf(CFSTR("Sponsor")) scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+			}
         } else if (indexPath.row == 1) {
-            UITableViewCell *sourceCodeCell = [UITableViewCell new];
-            sourceCodeCell.textLabel.text = _("Source Code");
+            cell.textLabel.text = _("Source Code");
+			if (artwork_avail) {
+				cell.imageView.image = [UIImage imageWithCGImage:getArtworkImageOf(CFSTR("GitHub")) scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+			}
             if (@available(iOS 13.0, *)) {
-                sourceCodeCell.textLabel.textColor = [UIColor linkColor];
+                cell.textLabel.textColor = [UIColor linkColor];
             } else {
-                sourceCodeCell.textLabel.textColor = [UIColor colorWithRed:0 green:(122.0f / 255) blue:1 alpha:1];
+                cell.textLabel.textColor = [UIColor colorWithRed:0 green:(122.0f / 255) blue:1 alpha:1];
             }
-            return sourceCodeCell;
 		} else if (indexPath.row == 2) {
-			UITableViewCell *wikiCell = [UITableViewCell new];
-			wikiCell.textLabel.text = _("Battman Wiki & User Manual");
-			if (@available(iOS 13.0, *)) {
-				wikiCell.textLabel.textColor = [UIColor linkColor];
-			} else {
-				wikiCell.textLabel.textColor = [UIColor colorWithRed:0 green:(122.0f / 255) blue:1 alpha:1];
+			cell.textLabel.text = _("Battman Wiki & User Manual");
+			if (artwork_avail) {
+				cell.imageView.image = [UIImage imageWithCGImage:getArtworkImageOf(CFSTR("Hint")) scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
 			}
-			return wikiCell;
+			if (@available(iOS 13.0, *)) {
+				cell.textLabel.textColor = [UIColor linkColor];
+			} else {
+				cell.textLabel.textColor = [UIColor colorWithRed:0 green:(122.0f / 255) blue:1 alpha:1];
+			}
 		} else if (indexPath.row == 3) {
-			UITableViewCell *donateCell = [UITableViewCell new];
-			donateCell.textLabel.text = _("Support Us");
-			if (@available(iOS 13.0, *)) {
-				donateCell.textLabel.textColor = [UIColor linkColor];
-			} else {
-				donateCell.textLabel.textColor = [UIColor colorWithRed:0 green:(122.0f / 255) blue:1 alpha:1];
+			cell.textLabel.text = _("Support Us");
+			if (artwork_avail) {
+				cell.imageView.image = [UIImage imageWithCGImage:getArtworkImageOf(CFSTR("Donate")) scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
 			}
-			return donateCell;
+			if (@available(iOS 13.0, *)) {
+				cell.textLabel.textColor = [UIColor linkColor];
+			} else {
+				cell.textLabel.textColor = [UIColor colorWithRed:0 green:(122.0f / 255) blue:1 alpha:1];
+			}
 		}
     }
+	if (indexPath.section == SS_SECT_SNS) {
+		cell = [UITableViewCell new];
+		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		NSString *bundleID = sns_avail[(indexPath.row * 3) + 1];
+		NSString *label = sns_avail[(indexPath.row) * 3 + 2];
+		if (artwork_avail && [bundleID length] == 0) {
+			cell.imageView.image = [UIImage imageWithCGImage:getArtworkImageOf(CFSTR("TorrekieWebLogo")) scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+		} else if ([UIImage respondsToSelector:@selector(_applicationIconImageForBundleIdentifier:format:scale:)])
+			cell.imageView.image = [UIImage _applicationIconImageForBundleIdentifier:bundleID format:0 scale:[UIScreen mainScreen].scale];
+		cell.textLabel.text = label;
+	}
 #ifdef DEBUG
     if (indexPath.section == SS_SECT_DEBUG) {
+		cell = [UITableViewCell new];
+		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         if (indexPath.row == 0) {
-            UITableViewCell *cell = [UITableViewCell new];
             cell.textLabel.text = _("Logs (stdout)");
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            return cell;
         } else if (indexPath.row == 1) {
-            UITableViewCell *cell = [UITableViewCell new];
             cell.textLabel.text = _("Select language override");
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            return cell;
         } else if (indexPath.row == 2) {
-            UITableViewCell *cell = [UITableViewCell new];
             cell.textLabel.text = _("Exit App");
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            return cell;
         } else if (indexPath.row == 3) {
-            UITableViewCell *cell = [UITableViewCell new];
             cell.textLabel.text = _("Logs (stdout) (very cool)");
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            return cell;
         } else if (indexPath.row == 4) {
-            UITableViewCell *cell = [UITableViewCell new];
             cell.textLabel.text = _("Redirect daemon logs");
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            return cell;
         }else if(indexPath.row==5) {
-            UITableViewCell *cell = [UITableViewCell new];
             cell.textLabel.text = _("Show fatal error view");
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            return cell;
         }else if(indexPath.row==6) {
-        	UITableViewCell *cell=[UITableViewCell new];
+			cell.accessoryType = UITableViewCellAccessoryNone;
         	cell.textLabel.text=@"Temp Demo";
         	UIView *accView=[[UIView alloc] initWithFrame:CGRectMake(0,0,250,30)];
         	UISegmentedControl *cur=[[UISegmentedControl alloc] initWithItems:@[@"27.0"]];
@@ -326,23 +482,35 @@ static BOOL _coolDebugVCPresented = 0;
         	[cur.trailingAnchor constraintEqualToAnchor:accView.trailingAnchor].active=1;
         	//[cur.widthAnchor constraintEqualToAnchor:accView.widthAnchor multiplier:0.2].active=1;
         	cell.accessoryView=accView;
-        	return cell;
 		} else if(indexPath.row==7) {
-			UITableViewCell *cell = [UITableViewCell new];
 			cell.textLabel.text = _("Trigger fatal notify");
-			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-			return cell;
 		} else if (indexPath.row == 8) {
-			UITableViewCell *cell = [UITableViewCell new];
 			cell.textLabel.text = _("Trigger UTF jitter");
-			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-			return cell;
 		}
     }
 #endif
-    UITableViewCell *batteryChargeCell = [UITableViewCell new];
-    batteryChargeCell.textLabel.text = @"Test222";
-    return batteryChargeCell;
+	// Normally you should have a valid cell before reaching here
+	if (cell == nil) {
+		cell = [UITableViewCell new];
+		cell.textLabel.text = @"YOU CAN'T SEE ME";
+	}
+
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+	// Smooth corners for icons
+	// U think im goin to use the bundle icon huh? No, we are just lookin for default size
+	UIImage *tmp = [UIImage _applicationIconImageForBundleIdentifier:[NSBundle.mainBundle bundleIdentifier] format:0 scale:[UIScreen mainScreen].scale];
+	if (cell.imageView.image != nil) {
+		[cell.imageView.layer setCornerRadius:tmp.size.width * 0.225f];
+		if (@available(iOS 13.0, *)) {
+			[cell.imageView.layer setCornerCurve:kCACornerCurveContinuous];
+		}
+		if ([cell.imageView.layer respondsToSelector:@selector(setContinuousCorners:)])
+			[cell.imageView.layer setContinuousCorners:YES];
+	}
+	cell.imageView.clipsToBounds = YES;
 }
 
 @end
@@ -363,7 +531,10 @@ static NSString *_contrib[] = {
 }
 
 - (instancetype)init {
-    return [super initWithStyle:UITableViewStyleGrouped];
+	if (@available(iOS 13.0, *))
+		return [super initWithStyle:UITableViewStyleInsetGrouped];
+	else
+		return [super initWithStyle:UITableViewStyleGrouped];
 }
 
 - (NSInteger)tableView:(id)tv numberOfRowsInSection:(NSInteger)section {

@@ -1,5 +1,8 @@
 .PHONY: all publish_mounted_site publish_local_site publish_none clean
 
+# Please make sure this is synced with xcodeproj
+BATTMAN_VERSION := 1.0
+
 SED = sed
 
 IPHONEOS_DEPLOYMENT_TARGET := 12.0
@@ -21,7 +24,7 @@ FRAMEWORKS := -framework UIKit \
 	      -framework MessageUI \
 	      -framework UserNotifications
 
-CFLAGS = -Wno-deprecated-declarations -Wno-nullability-completeness -Werror -target arm64-apple-ios${IPHONEOS_DEPLOYMENT_TARGET} -target arm64-apple-darwin -fobjc-arc -fconstant-cfstrings -I./EXTERNAL_HEADERS
+CFLAGS = -Wno-deprecated-declarations -Wno-nullability-completeness -Werror -target arm64-apple-ios${IPHONEOS_DEPLOYMENT_TARGET} -target arm64-apple-darwin -fobjc-arc -fconstant-cfstrings -I./EXTERNAL_HEADERS -DBATTMAN_VERSION_STRING=\"$(BATTMAN_VERSION)\"
 LDFLAGS = -target arm64-apple-ios$(IPHONEOS_DEPLOYMENT_TARGET) -target arm64-apple-darwin $(LIBS) $(FRAMEWORKS) -Wl,-dead_strip_dylibs
 THEOS := ~/theos
 
@@ -118,7 +121,7 @@ build/Payload/Battman.app/Battman: $(OBJECTS) $(POBJECTS) ../Battman.entitlement
 	$(CODESIGN)../Battman.entitlements $@
 build/Payload/Battman.app/Info.plist: Info.plist
 	@mkdir -p $(@D)
-	$(SED) 's/\$$(DEVELOPMENT_LANGUAGE)/en/;s/\$$(EXECUTABLE_NAME)/Battman/;s/\$$(PRODUCT_BUNDLE_IDENTIFIER)/com.torrekie.Battman/;s/\$$(PRODUCT_NAME)/Battman/;s/\$$(PRODUCT_BUNDLE_PACKAGE_TYPE)/APPL/;s/\$$(COMMIT_HASH)/$(COMMIT_HASH)/' Info.plist > build/Payload/Battman.app/Info.plist
+	$(SED) 's/\$$(CURRENT_PROJECT_VERSION)/$(BATTMAN_VERSION)/;s/\$$(MARKETING_VERSION)/$(BATTMAN_VERSION)/;s/\$$(DEVELOPMENT_LANGUAGE)/en/;s/\$$(EXECUTABLE_NAME)/Battman/;s/\$$(PRODUCT_BUNDLE_IDENTIFIER)/com.torrekie.Battman/;s/\$$(PRODUCT_NAME)/Battman/;s/\$$(PRODUCT_BUNDLE_PACKAGE_TYPE)/APPL/;s/\$$(COMMIT_HASH)/$(COMMIT_HASH)/' Info.plist > build/Payload/Battman.app/Info.plist
 ifneq (${RELEASE},1)
 	$(SED) -i 's/CFBundleIcons/CFBundleIconsDISABLED/' $@
 endif

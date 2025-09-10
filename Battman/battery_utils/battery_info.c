@@ -108,7 +108,7 @@ struct battery_info_node main_battery_template[] = {
 	{ _C("Firmware Version"), NULL, 0 },
 	{ _C("Hardware Version"), NULL, 0 },
 	{ _C("Battery Pack"), _C("This indicates if an accessory is now working as a Battery Pack."), 0 },
-	{ _C("Power Supply"), _C("This indicates if an accessory is now providing power."), BIN_IN_DETAILS | BIN_IS_BOOLEAN },
+	{ _C("Providing Power"), _C("This indicates if an accessory is now providing power."), BIN_IN_DETAILS | BIN_IS_BOOLEAN },
 	{ _C("Status"), 0 },
 	/* Accessory UPS Start */
 	{ _C("Max Capacity"), _C("The accessory battery's Full Charge Capacity."), BIN_IN_DETAILS | BIN_UNIT_MAH },
@@ -153,7 +153,7 @@ struct battery_info_node main_battery_template[] = {
 	{ _C("Firmware Version"), NULL, 0 },
 	{ _C("Hardware Version"), NULL, 0 },
 	{ _C("Battery Pack"), _C("This indicates if an accessory is now working as a Battery Pack."), 0 },
-	{ _C("Power Supply"), _C("This indicates if an accessory is now providing power."), BIN_IN_DETAILS | BIN_IS_BOOLEAN },
+	{ _C("Providing Power"), _C("This indicates if an accessory is now providing power."), BIN_IN_DETAILS | BIN_IS_BOOLEAN },
 	/* Accessory UPS Start */
 	{ _C("Max Capacity"), _C("The accessory battery's Full Charge Capacity."), BIN_IN_DETAILS | BIN_UNIT_MAH },
 	{ _C("Current Capacity"), NULL, BIN_IN_DETAILS | BIN_UNIT_MAH },
@@ -859,7 +859,7 @@ void accessory_info_update(struct battery_info_section *section) {
 	/* AppleSMC Part */
 	bool smc_vendor = false;
 	if (hasSMC && accessory_available() && context->primary_port == kIOAccessoryPortID0Pin) {
-		BI_SET_ITEM(_C("Power Supply"), vbus_port() == 2);
+		BI_SET_ITEM(_C("Providing Power"), vbus_port() == 2);
 		if (get_iktara_accessory_array(&array) && array.present == 1) {
 			/* TODO: Search VID/PID online */
 			const char *vendor_name = manf_id_string((SInt32)array.VID);
@@ -921,7 +921,7 @@ void accessory_info_update(struct battery_info_section *section) {
 		if (vid && pid)
 			hid_vendor = true;
 	} else if (context->primary_port == kIOAccessoryPortIDSerial) {
-		BI_SET_ITEM(_C("Power Supply"), vbus_port() == 1);
+		BI_SET_ITEM(_C("Providing Power"), vbus_port() == 1);
 
 		if (acc_id == 91) {
 			UInt8 digitalID[6];
