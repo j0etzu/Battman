@@ -8,7 +8,15 @@ Strayers' modern battery manager for their good old iOS devices.
 <div style="width:20%; margin: auto;" align="middle">
 <img src="Screenshots/Main.png?raw=true" alt="Battman Main Demo" width="25%" height="25%" />
 <img src="Screenshots/Gas Gauge.png?raw=true" alt="Battman Gas Gauge Demo" width="25%" height="25%" />
+<img src="Screenshots/Gas Gauge-1.png?raw=true" alt="Battman Gas Gauge Demo 2" width="25%" height="25%" />
 <img src="Screenshots/Adapter.png?raw=true" alt="Battman Adapter Demo" width="25%" height="25%" />
+<img src="Screenshots/Inductive.png?raw=true" alt="Battman Inductive Demo" width="25%" height="25%" />
+<img src="Screenshots/Inductive-1.png?raw=true" alt="Battman Inductive Demo 2" width="25%" height="25%" />
+<img src="Screenshots/Serial.png?raw=true" alt="Battman Serial Demo" width="25%" height="25%" />
+<img src="Screenshots/Temperature.png?raw=true" alt="Battman Temperature Demo" width="25%" height="25%" />
+<img src="Screenshots/ChargingMgmt.png?raw=true" alt="Battman Charging Management Demo" width="25%" height="25%" />
+<img src="Screenshots/ChargingLimit.png?raw=true" alt="Battman Charging Limit Demo" width="25%" height="25%" />
+<img src="Screenshots/Thermal.png?raw=true" alt="Battman Thermal Demo" width="25%" height="25%" />
 </div>
 
 $${\color{grey}True \space elegance \space in \space software \space lies \space in \space the \space art \space of \space its \space code \space rather \space than \space in \space superficial \space design.}$$
