@@ -100,6 +100,13 @@ static char *get_CFLocale() {
 
 char *preferred_language(void) {
 	static char name[256];
+#ifdef USE_GETTEXT
+	extern bool has_locale;
+	if (!has_locale) {
+		// Unify UI languages to keep consistency
+		return "en";
+	}
+#endif
 	/* Convert new-style locale names with language tags (ISO 639 and ISO 15924)
 	   to Unix (ISO 639 and ISO 3166) names.  */
 	typedef struct {

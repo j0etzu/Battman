@@ -3,6 +3,7 @@
 #import "BattmanVectorIcon.h"
 #include "common.h"
 #include <math.h>
+#include <sys/utsname.h>
 #import <CoreImage/CoreImage.h>
 #import <CoreImage/CIFilterBuiltins.h>
 
@@ -219,9 +220,14 @@ static NSMutableArray *sns_avail = nil;
 
 - (NSInteger)tableView:(id)tv numberOfRowsInSection:(NSInteger)section {
 	if (section == SS_SECT_VERSION)
-		return 1;
-	if (section == SS_SECT_ABOUT)
-        return 4;
+		return 2;
+	if (section == SS_SECT_ABOUT) {
+#ifdef NONFREE_TYPE
+		return 4 + (NONFREE_TYPE != NONFREE_TYPE_HAVOC);
+#else
+		return 5;
+#endif
+	}
 	if (section == SS_SECT_SNS)
 		return sns_avail.count / 3;
 #ifdef DEBUG
@@ -246,6 +252,43 @@ static NSMutableArray *sns_avail = nil;
 }
 
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (indexPath.section == SS_SECT_VERSION) {
+		if (indexPath.row == 1) {
+			NSString *title = _("Gonna tell us something?");
+			NSString *message = _("Found a bug or have an idea? Please choose one way to contact us:\nopen a GitHub Issue (public — great for steps/logs)\nor Send Email (for private info or attachments). We really appreciate your help!");
+			UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+
+			UIAlertAction *github = [UIAlertAction actionWithTitle:_("Open GitHub Issue") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+				open_url("https://github.com/Torrekie/Battman/issues/new");
+			}];
+			UIAlertAction *email = [UIAlertAction actionWithTitle:_("Send Email") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+				// Don't use MFMailComposeViewController, this is covering the app UI
+				NSString *UDID = nil;
+				NSString *version_uname = nil;
+				struct utsname uts;
+				if (uname(&uts) == 0) {
+					// "uname -a" like string, and encoded as url arg
+					NSMutableCharacterSet *chars = NSCharacterSet.URLQueryAllowedCharacterSet.mutableCopy;
+					[chars removeCharactersInRange:NSMakeRange(':', 1)];
+					[chars removeCharactersInRange:NSMakeRange(';', 1)];
+					[chars removeCharactersInRange:NSMakeRange('/', 1)];
+					version_uname = [[NSString stringWithFormat:@"%s %s %s %s %s", uts.sysname, uts.nodename, uts.release, uts.version, uts.machine] stringByAddingPercentEncodingWithAllowedCharacters:chars];
+				}
+				if (MGCopyAnswerPtr != nil)
+					UDID = (__bridge NSString *)MGCopyAnswerPtr(CFSTR("re6Zb+zwFKJNlkQTUeT+/w"));
+				NSString *url = [NSString stringWithFormat:@"mailto:me@torrekie.dev?subject=Battman%%20Support%%20Request&body=Hi%%2C%%0AI%%20need%%20help%%20with%%20the%%20following%%3A%%0A%%0AIf%%20I%%20did%%20not%%20remove%%20this%%20section%%20or%%20add%%20any%%20additional%%20information%%2C%%20please%%20disregard%%20this%%20email.%%0A%%0ADevice%%20Info%%3A%%0ABattman%%20Version%%3A%%20%s%%20(%@)%%0AUUID%%3A%%20%@%%0AOS%%20Version%%3A%%20%@%%0A%%0AThank%%20you.", BATTMAN_VERSION_STRING, [[NSBundle mainBundle] objectForInfoDictionaryKey:@"GIT_COMMIT_HASH"], UDID, version_uname];
+				open_url(url.UTF8String);
+			}];
+			
+			UIAlertAction *cancel = [UIAlertAction actionWithTitle:_("Cancel") style:UIAlertActionStyleCancel handler:nil];
+			
+			[alert addAction:github];
+			[alert addAction:email];
+			[alert addAction:cancel];
+
+			[self presentViewController:alert animated:YES completion:nil];
+		}
+	}
     if (indexPath.section == SS_SECT_ABOUT) {
         if (indexPath.row == 0) {
             [self.navigationController pushViewController:[CreditViewControllerNew new] animated:YES];
@@ -255,6 +298,8 @@ static NSMutableArray *sns_avail = nil;
 			open_url("https://github.com/Torrekie/Battman/wiki");
 		} else if (indexPath.row == 3) {
 			show_donation(true);
+		} else if (indexPath.row == 4) {
+			open_url("https://havoc.app/package/battman");
 		}
     }
 	if (indexPath.section == SS_SECT_SNS) {
@@ -386,6 +431,13 @@ static NSMutableArray *sns_avail = nil;
 			cell.imageView.image = battmanIcon;
 			cell.textLabel.text = _("Version");
 			cell.detailTextLabel.text = [NSString stringWithCString:BATTMAN_VERSION_STRING encoding:NSUTF8StringEncoding];
+		} else if (indexPath.row == 1) {
+			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+			cell.textLabel.text = _("Report Bug");
+			if (artwork_avail) {
+				cell.imageView.image = [UIImage imageWithCGImage:getArtworkImageOf(CFSTR("Report")) scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+			}
 		}
 	}
     if (indexPath.section == SS_SECT_ABOUT) {
@@ -420,6 +472,16 @@ static NSMutableArray *sns_avail = nil;
 			cell.textLabel.text = _("Support Us");
 			if (artwork_avail) {
 				cell.imageView.image = [UIImage imageWithCGImage:getArtworkImageOf(CFSTR("Donate")) scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+			}
+			if (@available(iOS 13.0, *)) {
+				cell.textLabel.textColor = [UIColor linkColor];
+			} else {
+				cell.textLabel.textColor = [UIColor colorWithRed:0 green:(122.0f / 255) blue:1 alpha:1];
+			}
+		} else if (indexPath.row == 4) {
+			cell.textLabel.text = _("View Battman On Havoc");
+			if (artwork_avail) {
+				cell.imageView.image = [UIImage imageWithCGImage:getArtworkImageOf(CFSTR("Havoc")) scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
 			}
 			if (@available(iOS 13.0, *)) {
 				cell.textLabel.textColor = [UIColor linkColor];

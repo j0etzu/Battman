@@ -123,7 +123,8 @@ const char *cond_localize_c(const char *str) {
    which means we cannot use Localizables.strings
    and NSLocalizedString() at such scene. */
 /* TODO: try implement void *cond_localize(void *strOrCFSTR)? */
-static bool use_libintl = false;
+bool use_libintl = false;
+bool has_locale = true;
 
 static void gettext_init(void) {
     static dispatch_once_t onceToken;
@@ -176,6 +177,7 @@ static void gettext_init(void) {
 					[defaults setBool:YES forKey:@"com.torrekie.Battman.warned_no_locale"];
 					[defaults synchronize];
 				}
+				has_locale = false;
             }
 #if defined(ENABLE_MO_CHECK)
             else if (use_libintl && gAppType == BATTMAN_APP) {
@@ -197,6 +199,7 @@ static void gettext_init(void) {
 							[defaults setBool:YES forKey:@"com.torrekie.Battman.warned_no_locale"];
 							[defaults synchronize];
 						}
+						has_locale = false;
 						break;
 					}
 					case 810: {
@@ -227,6 +230,7 @@ static void gettext_init(void) {
 #define _(x) cond_localize(x)
         } else {
             show_alert("Warning", "Failed to load Gettext, defaulting to English", "OK");
+			has_locale = false;
         }
     });
 }

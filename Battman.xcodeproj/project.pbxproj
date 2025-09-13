@@ -81,6 +81,7 @@
 		683B2D0E2E6C4D9E00FECDF5 /* SerialQRCodeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 683B2D0D2E6C4D9E00FECDF5 /* SerialQRCodeTableViewCell.m */; };
 		683B2D3C2E6C8F6200FECDF5 /* SerialQRCodeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 683B2D0D2E6C4D9E00FECDF5 /* SerialQRCodeTableViewCell.m */; };
 		683B2D3D2E6C8F6300FECDF5 /* SerialQRCodeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 683B2D0D2E6C4D9E00FECDF5 /* SerialQRCodeTableViewCell.m */; };
+		683B2D432E7173CD00FECDF5 /* intl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 687743152D461E4400375A2C /* intl.framework */; };
 		684114042E4A35D2001B76B6 /* DonationPrompter.m in Sources */ = {isa = PBXBuildFile; fileRef = 684114032E4A34DA001B76B6 /* DonationPrompter.m */; };
 		684114052E4A35E0001B76B6 /* DonationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 684113FE2E4A3492001B76B6 /* DonationViewController.m */; };
 		6841147F2E512AB1001B76B6 /* BattmanVectorIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 6841147D2E512AB1001B76B6 /* BattmanVectorIcon.m */; };
@@ -194,7 +195,6 @@
 		6841150D2E57BDE7001B76B6 /* libsmc.c in Sources */ = {isa = PBXBuildFile; fileRef = 68171A2F2D5221C400DD4224 /* libsmc.c */; };
 		6841150F2E57BDE7001B76B6 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B751412E2A468C003C94BC /* SystemConfiguration.framework */; };
 		684115102E57BDE7001B76B6 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6838BF6E2DB8D89E007EB66C /* WebKit.framework */; };
-		684115112E57BDE7001B76B6 /* intl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 687743152D461E4400375A2C /* intl.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		684115122E57BDE7001B76B6 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68A3EAFC2D5204EA003381DF /* IOKit.framework */; };
 		684115142E57BDE7001B76B6 /* BattmanIcons@2x.artwork in Resources */ = {isa = PBXBuildFile; fileRef = 6845759B2E3CBFE500618DFD /* BattmanIcons@2x.artwork */; };
 		684115152E57BDE7001B76B6 /* BattmanIcons@3x.artwork in Resources */ = {isa = PBXBuildFile; fileRef = 684575992E3CBD2500618DFD /* BattmanIcons@3x.artwork */; };
@@ -1792,7 +1792,7 @@
 			files = (
 				6841150F2E57BDE7001B76B6 /* SystemConfiguration.framework in Frameworks */,
 				684115102E57BDE7001B76B6 /* WebKit.framework in Frameworks */,
-				684115112E57BDE7001B76B6 /* intl.framework in Frameworks */,
+				683B2D432E7173CD00FECDF5 /* intl.framework in Frameworks */,
 				684115122E57BDE7001B76B6 /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
