@@ -195,7 +195,7 @@ static void gettext_init(void) {
 						if (![defaults objectForKey:@"com.torrekie.Battman.warned_no_locale"])
 #endif
 						{
-							show_alert("Error", "Unable to match existing Gettext localization, defaulting to English", "Cancel");
+							show_alert("Error", [NSString stringWithFormat:@"Unable to match existing Gettext localization for %s, defaulting to English", preferred_language()].UTF8String, "Cancel");
 							[defaults setBool:YES forKey:@"com.torrekie.Battman.warned_no_locale"];
 							[defaults synchronize];
 						}

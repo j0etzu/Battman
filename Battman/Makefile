@@ -24,7 +24,7 @@ FRAMEWORKS := -framework UIKit \
 	      -framework MessageUI \
 	      -framework UserNotifications
 
-CFLAGS = -Wno-deprecated-declarations -Wno-nullability-completeness -Werror -target arm64-apple-ios${IPHONEOS_DEPLOYMENT_TARGET} -target arm64-apple-darwin -fobjc-arc -fconstant-cfstrings -I./EXTERNAL_HEADERS -DBATTMAN_VERSION_STRING=\"$(BATTMAN_VERSION)\"
+CFLAGS = -Wno-deprecated-declarations -Wno-nullability-completeness -Werror -target arm64-apple-ios${IPHONEOS_DEPLOYMENT_TARGET} -target arm64-apple-darwin -fobjc-arc -fconstant-cfstrings -I./EXTERNAL_HEADERS -DUSE_MOBILEGESTALT -DBATTMAN_VERSION_STRING=\"$(BATTMAN_VERSION)\"
 LDFLAGS = -target arm64-apple-ios$(IPHONEOS_DEPLOYMENT_TARGET) -target arm64-apple-darwin $(LIBS) $(FRAMEWORKS) -Wl,-dead_strip_dylibs
 THEOS := ~/theos
 

@@ -82,6 +82,8 @@
 		683B2D3C2E6C8F6200FECDF5 /* SerialQRCodeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 683B2D0D2E6C4D9E00FECDF5 /* SerialQRCodeTableViewCell.m */; };
 		683B2D3D2E6C8F6300FECDF5 /* SerialQRCodeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 683B2D0D2E6C4D9E00FECDF5 /* SerialQRCodeTableViewCell.m */; };
 		683B2D432E7173CD00FECDF5 /* intl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 687743152D461E4400375A2C /* intl.framework */; };
+		683B2D442E76B2E200FECDF5 /* nonfree-havoc.m in Sources */ = {isa = PBXBuildFile; fileRef = 684114D52E57BCE7001B76B6 /* nonfree-havoc.m */; };
+		683B2D722E8143D100FECDF5 /* licensing.S in Sources */ = {isa = PBXBuildFile; fileRef = 6838BF652DB8D06B007EB66C /* licensing.S */; };
 		684114042E4A35D2001B76B6 /* DonationPrompter.m in Sources */ = {isa = PBXBuildFile; fileRef = 684114032E4A34DA001B76B6 /* DonationPrompter.m */; };
 		684114052E4A35E0001B76B6 /* DonationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 684113FE2E4A3492001B76B6 /* DonationViewController.m */; };
 		6841147F2E512AB1001B76B6 /* BattmanVectorIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 6841147D2E512AB1001B76B6 /* BattmanVectorIcon.m */; };
@@ -183,7 +185,6 @@
 		684115012E57BDE7001B76B6 /* pmnotification.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B2911E2DC754100089BA1F /* pmnotification.c */; };
 		684115022E57BDE7001B76B6 /* GradientArcView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B5FF2D2D85606000919BC2 /* GradientArcView.m */; };
 		684115032E57BDE7001B76B6 /* BatterySubscriberViewControllerBase.c in Sources */ = {isa = PBXBuildFile; fileRef = 689FE0B42DEAEA4A00550EBE /* BatterySubscriberViewControllerBase.c */; };
-		684115042E57BDE7001B76B6 /* licensing.S in Sources */ = {isa = PBXBuildFile; fileRef = 6838BF652DB8D06B007EB66C /* licensing.S */; };
 		684115052E57BDE7001B76B6 /* ThermalTunesViewContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 684575AC2E3E032700618DFD /* ThermalTunesViewContoller.m */; };
 		684115062E57BDE7001B76B6 /* SliderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6838BFAB2DC3984C007EB66C /* SliderTableViewCell.m */; };
 		684115072E57BDE7001B76B6 /* BatteryDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68171A322D534E6B00DD4224 /* BatteryDetailsViewController.m */; };
@@ -14301,7 +14302,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e -x\n\nPATH=/opt/homebrew/bin:$PATH\n\n# ldid fakesign\nif [ ${PLATFORM_NAME} == \"iphoneos\" ]; then\n  ldid -S${PROJECT_DIR}/Battman.entitlements ${CODESIGNING_FOLDER_PATH}/Battman\nfi\n\n# Replace GIT_COMMIT_HASH in Info.plist\nCOMMIT_HASH=`git rev-parse --short HEAD`\n/usr/libexec/PlistBuddy -c \"Set :GIT_COMMIT_HASH $COMMIT_HASH\" \"${CODESIGNING_FOLDER_PATH}/Info.plist\"\n\n# generate and sync icons to app root\nsh ${PROJECT_DIR}/Battman/generate_icons.sh ${PROJECT_DIR}/Battman.svg ${CODESIGNING_FOLDER_PATH}/\n\n# restore\n#git restore \"${INFOPLIST_FILE}\" || true\n\nif [ ${PLATFORM_NAME} == \"iphoneos\" ]; then\n# deb\nmkdir -p ${CODESIGNING_FOLDER_PATH}/../tree/Applications/\nrsync -Kah ${CODESIGNING_FOLDER_PATH}/../Battman.app ${CODESIGNING_FOLDER_PATH}/../tree/Applications/\n#rsync -Kah ${CODESIGNING_FOLDER_PATH}/../intl.framework ${CODESIGNING_FOLDER_PATH}/../tree/Applications/Battman.app/Frameworks/\n#rm -r ${CODESIGNING_FOLDER_PATH}/../tree/Applications/Battman.app/Frameworks/intl.framework/Headers\nmkdir -p ${CODESIGNING_FOLDER_PATH}/../tree/DEBIAN\ncp ${PROJECT_DIR}/Battman/control ${CODESIGNING_FOLDER_PATH}/../tree/DEBIAN/\ngsed -i \"s/ARCH/iphoneos-arm/g\" ${CODESIGNING_FOLDER_PATH}/../tree/DEBIAN/control\ndpkg-deb --root-owner-group -b ${CODESIGNING_FOLDER_PATH}/../tree ${CODESIGNING_FOLDER_PATH}/../\n# deb rootless\nmkdir -p ${CODESIGNING_FOLDER_PATH}/../tree-rootless/var/jb/\nrsync -Kah ${CODESIGNING_FOLDER_PATH}/../tree/Applications ${CODESIGNING_FOLDER_PATH}/../tree-rootless/var/jb/\nmkdir -p ${CODESIGNING_FOLDER_PATH}/../tree-rootless/DEBIAN\ncp ${PROJECT_DIR}/Battman/control ${CODESIGNING_FOLDER_PATH}/../tree-rootless/DEBIAN/\ngsed -i \"s/ARCH/iphoneos-arm64/g\" ${CODESIGNING_FOLDER_PATH}/../tree-rootless/DEBIAN/control\ndpkg-deb --root-owner-group -b ${CODESIGNING_FOLDER_PATH}/../tree-rootless ${CODESIGNING_FOLDER_PATH}/../\nrm -r ${CODESIGNING_FOLDER_PATH}/../tree ${CODESIGNING_FOLDER_PATH}/../tree-rootless\nfi\n";
+			shellScript = "set -e -x\n\nPATH=/opt/homebrew/bin:$PATH\n\n# ldid fakesign\nif [ ${PLATFORM_NAME} == \"iphoneos\" ]; then\n  ldid -S${PROJECT_DIR}/Battman.entitlements ${CODESIGNING_FOLDER_PATH}/Battman\nfi\n\n# Replace GIT_COMMIT_HASH in Info.plist\nCOMMIT_HASH=`git rev-parse --short HEAD`\n/usr/libexec/PlistBuddy -c \"Set :GIT_COMMIT_HASH $COMMIT_HASH\" \"${CODESIGNING_FOLDER_PATH}/Info.plist\"\n\n# generate and sync icons to app root\nsh ${PROJECT_DIR}/Battman/generate_icons.sh ${PROJECT_DIR}/Battman.svg ${CODESIGNING_FOLDER_PATH}/\n\n# restore\n#git restore \"${INFOPLIST_FILE}\" || true\n\nif [ ${PLATFORM_NAME} == \"iphoneos\" ]; then\n# deb\nmkdir -p ${CODESIGNING_FOLDER_PATH}/../tree/Applications/\nrsync -Kah ${CODESIGNING_FOLDER_PATH}/../Battman.app ${CODESIGNING_FOLDER_PATH}/../tree/Applications/\n#rsync -Kah ${CODESIGNING_FOLDER_PATH}/../intl.framework ${CODESIGNING_FOLDER_PATH}/../tree/Applications/Battman.app/Frameworks/\n#rm -r ${CODESIGNING_FOLDER_PATH}/../tree/Applications/Battman.app/Frameworks/intl.framework/Headers\nmkdir -p ${CODESIGNING_FOLDER_PATH}/../tree/DEBIAN\ncp ${PROJECT_DIR}/Battman/control ${CODESIGNING_FOLDER_PATH}/../tree/DEBIAN/\ngsed -i \"s/ARCH/iphoneos-arm/g\" ${CODESIGNING_FOLDER_PATH}/../tree/DEBIAN/control\ndpkg-deb --root-owner-group -b ${CODESIGNING_FOLDER_PATH}/../tree ${CODESIGNING_FOLDER_PATH}/../\n# deb rootless\nmkdir -p ${CODESIGNING_FOLDER_PATH}/../tree-rootless/var/jb/\nrsync -Kah ${CODESIGNING_FOLDER_PATH}/../tree/Applications ${CODESIGNING_FOLDER_PATH}/../tree-rootless/var/jb/\nmkdir -p ${CODESIGNING_FOLDER_PATH}/../tree-rootless/DEBIAN\ncp ${PROJECT_DIR}/Battman/control ${CODESIGNING_FOLDER_PATH}/../tree-rootless/DEBIAN/\ngsed -i \"s/ARCH/iphoneos-arm64/g\" ${CODESIGNING_FOLDER_PATH}/../tree-rootless/DEBIAN/control\ndpkg-deb --root-owner-group -b ${CODESIGNING_FOLDER_PATH}/../tree-rootless ${CODESIGNING_FOLDER_PATH}/../\nrm -r ${CODESIGNING_FOLDER_PATH}/../tree ${CODESIGNING_FOLDER_PATH}/../tree-rootless\nfi\n\n# test: license malformed\n# echo \"<html><body><p>MODIFIED</p></body></html>\" > ${CODESIGNING_FOLDER_PATH}/license.html\n";
 		};
 		687742AF2D437EEA00375A2C /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -14472,6 +14473,7 @@
 				684114ED2E57BDE7001B76B6 /* SimpleTemperatureViewController.m in Sources */,
 				684114EE2E57BDE7001B76B6 /* localized.c in Sources */,
 				684114EF2E57BDE7001B76B6 /* BatteryInfoViewController.m in Sources */,
+				683B2D722E8143D100FECDF5 /* licensing.S in Sources */,
 				684114F02E57BDE7001B76B6 /* SPWaterProgressIndicatorView.m in Sources */,
 				684114F12E57BDE7001B76B6 /* WarnAccessoryView.m in Sources */,
 				684114F22E57BDE7001B76B6 /* main.m in Sources */,
@@ -14492,7 +14494,7 @@
 				683B2C9F2E61866200FECDF5 /* PickerAccessoryView.m in Sources */,
 				684115022E57BDE7001B76B6 /* GradientArcView.m in Sources */,
 				684115032E57BDE7001B76B6 /* BatterySubscriberViewControllerBase.c in Sources */,
-				684115042E57BDE7001B76B6 /* licensing.S in Sources */,
+				683B2D442E76B2E200FECDF5 /* nonfree-havoc.m in Sources */,
 				684115052E57BDE7001B76B6 /* ThermalTunesViewContoller.m in Sources */,
 				684115062E57BDE7001B76B6 /* SliderTableViewCell.m in Sources */,
 				684115072E57BDE7001B76B6 /* BatteryDetailsViewController.m in Sources */,
@@ -14664,6 +14666,8 @@
 				OTHER_CFLAGS = (
 					"$(CUSTOM_CFLAGS)",
 					"-DLICENSE=LICENSE_NONFREE",
+					"-DNONFREE_TYPE=NONFREE_TYPE_GITHUB",
+					"-DUSE_MOBILEGESTALT",
 				);
 				OTHER_LDFLAGS = "$(OLDFL)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.torrekie.Battman;
@@ -14711,6 +14715,8 @@
 				OTHER_CFLAGS = (
 					"$(CUSTOM_CFLAGS)",
 					"-DLICENSE=LICENSE_NONFREE",
+					"-DNONFREE_TYPE=NONFREE_TYPE_GITHUB",
+					"-DUSE_MOBILEGESTALT",
 				);
 				OTHER_LDFLAGS = "$(OLDFL)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.torrekie.Battman;
@@ -14756,6 +14762,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				LLVM_LTO = YES_THIN;
 				LOCALIZED_STRING_MACRO_NAMES = _;
 				LOCALIZED_STRING_SWIFTUI_SUPPORT = NO;
 				OTHER_CFLAGS = (
@@ -14808,6 +14815,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				LLVM_LTO = YES_THIN;
 				LOCALIZED_STRING_MACRO_NAMES = _;
 				LOCALIZED_STRING_SWIFTUI_SUPPORT = NO;
 				OTHER_CFLAGS = (

@@ -430,7 +430,17 @@ static NSMutableArray *sns_avail = nil;
 
 			cell.imageView.image = battmanIcon;
 			cell.textLabel.text = _("Version");
-			cell.detailTextLabel.text = [NSString stringWithCString:BATTMAN_VERSION_STRING encoding:NSUTF8StringEncoding];
+			cell.detailTextLabel.text = [NSString stringWithCString:BATTMAN_VERSION_STRING
+#if LICENSE == LICENSE_NONFREE
+#if NONFREE_TYPE == NONFREE_TYPE_HAVOC
+																	" (Havoc)"
+#elif NONFREE_TYPE == NONFREE_TYPE_GITHUB
+																	" (GitHub)"
+#endif
+#else
+																	" (Public)"
+#endif
+														   encoding:NSUTF8StringEncoding];
 		} else if (indexPath.row == 1) {
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
 			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -442,47 +452,37 @@ static NSMutableArray *sns_avail = nil;
 	}
     if (indexPath.section == SS_SECT_ABOUT) {
 		cell = [UITableViewCell new];
+		BOOL linkColor = YES;
         if (indexPath.row == 0) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.textLabel.text = _("Credit");
 			if (artwork_avail) {
 				cell.imageView.image = [UIImage imageWithCGImage:getArtworkImageOf(CFSTR("Sponsor")) scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
 			}
+			linkColor = NO;
         } else if (indexPath.row == 1) {
             cell.textLabel.text = _("Source Code");
 			if (artwork_avail) {
 				cell.imageView.image = [UIImage imageWithCGImage:getArtworkImageOf(CFSTR("GitHub")) scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
 			}
-            if (@available(iOS 13.0, *)) {
-                cell.textLabel.textColor = [UIColor linkColor];
-            } else {
-                cell.textLabel.textColor = [UIColor colorWithRed:0 green:(122.0f / 255) blue:1 alpha:1];
-            }
 		} else if (indexPath.row == 2) {
 			cell.textLabel.text = _("Battman Wiki & User Manual");
 			if (artwork_avail) {
 				cell.imageView.image = [UIImage imageWithCGImage:getArtworkImageOf(CFSTR("Hint")) scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
-			}
-			if (@available(iOS 13.0, *)) {
-				cell.textLabel.textColor = [UIColor linkColor];
-			} else {
-				cell.textLabel.textColor = [UIColor colorWithRed:0 green:(122.0f / 255) blue:1 alpha:1];
 			}
 		} else if (indexPath.row == 3) {
 			cell.textLabel.text = _("Support Us");
 			if (artwork_avail) {
 				cell.imageView.image = [UIImage imageWithCGImage:getArtworkImageOf(CFSTR("Donate")) scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
 			}
-			if (@available(iOS 13.0, *)) {
-				cell.textLabel.textColor = [UIColor linkColor];
-			} else {
-				cell.textLabel.textColor = [UIColor colorWithRed:0 green:(122.0f / 255) blue:1 alpha:1];
-			}
 		} else if (indexPath.row == 4) {
 			cell.textLabel.text = _("View Battman On Havoc");
 			if (artwork_avail) {
 				cell.imageView.image = [UIImage imageWithCGImage:getArtworkImageOf(CFSTR("Havoc")) scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
 			}
+		}
+		// Color
+		if (linkColor) {
 			if (@available(iOS 13.0, *)) {
 				cell.textLabel.textColor = [UIColor linkColor];
 			} else {

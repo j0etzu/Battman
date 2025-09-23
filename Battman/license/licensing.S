@@ -593,6 +593,7 @@ show_license.pcb:
 	bl _objc_msgSend
 	add sp,sp,#32
 	str x0,[sp,#8]
+#if 0
 	adrp x0,_OBJC_CLASS_$_WKWebView@GOTPAGE
 	ldr x0,[x0,_OBJC_CLASS_$_WKWebView@GOTPAGEOFF]
 	adrp x1,sel.1new@PAGE
@@ -603,14 +604,38 @@ show_license.pcb:
 	;str x21,[sp,#16]
 	;ldr x21,[sp,#8]
 	/*mov x0,x20
-	adrp x1,sel.frame@PAGE
-	ldr x1,[x1,sel.frame@PAGEOFF]
+	 adrp x1,sel.frame@PAGE
+	 ldr x1,[x1,sel.frame@PAGEOFF]
+	 bl _objc_msgSend
+	 adrp x1,sel.setFrame@PAGE
+	 ldr x1,[x1,sel.setFrame@PAGEOFF]
+	 mov x2,x0
+	 mov x0,x21
+	 bl _objc_msgSend*/
+#else
+	; Create WebView with proper frame
+	mov x0,x20
+	adrp x1,sel.bounds@PAGE
+	ldr x1,[x1,sel.bounds@PAGEOFF]
 	bl _objc_msgSend
-	adrp x1,sel.setFrame@PAGE
-	ldr x1,[x1,sel.setFrame@PAGEOFF]
-	mov x2,x0
-	mov x0,x21
-	bl _objc_msgSend*/
+	; x0-x3 now contain CGRect (origin.x, origin.y, size.width, size.height)
+	sub sp,sp,#32
+	stp d0,d1,[sp]      ; Store frame
+	stp d2,d3,[sp,#16]
+
+	adrp x0,_OBJC_CLASS_$_WKWebView@GOTPAGE
+	ldr x0,[x0,_OBJC_CLASS_$_WKWebView@GOTPAGEOFF]
+	adrp x1,allocSel@PAGE
+	ldr x1,[x1,allocSel@PAGEOFF]
+	bl _objc_msgSend
+	ldp d0,d1,[sp]      ; Restore frame
+	ldp d2,d3,[sp,#16]
+	add sp,sp,#32
+	adrp x1,sel.initWithFrame@PAGE
+	ldr x1,[x1,sel.initWithFrame@PAGEOFF]
+	bl _objc_msgSend
+	mov x21,x0
+#endif
 	mov x0,x20
 	mov x2,x21
 	adrp x1,sel.addSubview@PAGE
@@ -685,6 +710,38 @@ show_license.pcb:
 	mov x3,#1
 	bl bindAnchors
 	ldr x21,[sp,#16]
+	adrp x3,.lfd.s@PAGE
+	ldr x2,[x3,.lfd.s@PAGEOFF]
+	adrp x10,.lfd.1@PAGE
+	ldr x1,[x10,.lfd.1@PAGEOFF]
+	; Check if we have valid content
+	cbz x1,load_from_url
+	cbz x2,load_from_url
+	sub sp,sp,#64
+	mov x0,x1
+	mov x1,x2
+	mov x2,sp
+	bl _CC_SHA256
+	adrp x0,_lh_arr@PAGE
+	add x0,x0,_lh_arr@PAGEOFF
+	mov x16,sp
+	ldp q0,q2,[x16]
+	ldp q1,q3,[x0]
+	cmeq v0.2d,v1.2d,v0.2d
+	cmeq v1.2d,v2.2d,v3.2d
+	uminp v0.16b,v1.16b,v0.16b
+	uminv b0,v0.16b
+	umov w0,v0.b[0]
+	add sp,sp,#64
+	cmp w0,#0xFF
+	b.eq load_local_html
+
+load_from_url:
+	; I've decided to fallback to URL, but this does not seems safe enough
+	bl _showCompletionAlert
+
+load_local_html:
+	; Load local HTML content
 	mov x0,#0
 	adrp x3,.lfd.s@PAGE
 	ldr x2,[x3,.lfd.s@PAGEOFF]
@@ -720,6 +777,7 @@ show_license.pcb:
 	adrp x1,sel.loadHTMLString@PAGE
 	ldr x1,[x1,sel.loadHTMLString@PAGEOFF]
 	bl _objc_msgSend
+continue_setup:
 	mov x0,x19
 	ldr x2,[sp]
 	adrp x1,s.setRootVC@PAGE
@@ -1132,6 +1190,21 @@ licenseStr:
 #endif
 defaultConfigurationStr:
 .asciz "Default Configuration"
+fallback_license_url:
+.asciz "https://raw.githubusercontent.com/Torrekie/Battman/master/Battman/license/license.html"
+emptystr:
+.space 1
+mime_html:
+.asciz "text/html"
+
+.section __DATA,__cfstring
+.p2align 3
+emptycfstr:
+	.quad   ___CFConstantStringClassReference
+	.long   1992
+	.space  4
+	.quad   emptystr
+	.quad   0
 
 .section __DATA,__const
 .p2align 3
@@ -1240,6 +1313,12 @@ m.invoke: .asciz "invoke"
 m.copy:
 	.asciz "copy"
 m.setRBBI: .asciz "setRightBarButtonItem:"
+m.bounds: .asciz "bounds"
+m.initWithFrame: .asciz "initWithFrame:"
+m.dataWithContentsOfURL: .asciz "dataWithContentsOfURL:"
+m.initWithData_encoding: .asciz "initWithData:encoding:"
+m.loadRequest: .asciz "loadRequest:"
+m.requestWithURL: .asciz "requestWithURL:"
 
 
 .section __DATA,__objc_selrefs,literal_pointers,no_dead_strip
@@ -1326,6 +1405,12 @@ sel.sendActions: .quad m.sendActions
 sel.setWithObject: .quad m.setWithObject
 sel.initWithBBSI: .quad m.initWithBBSI
 sel.setItems: .quad m.setItems
+sel.bounds: .quad m.bounds
+sel.initWithFrame: .quad m.initWithFrame
+sel.initWithData_encoding: .quad m.initWithData_encoding
+sel.dataWithContentsOfURL: .quad m.dataWithContentsOfURL
+sel.requestWithURL: .quad m.requestWithURL
+sel.loadRequest: .quad m.loadRequest
 
 .section __TEXT,__objc_methname,cstring_literals
 m.setItems:

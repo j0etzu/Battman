@@ -123,9 +123,9 @@ void battman_run_worker(const char *pipedata) {
 			continue;
 		} else if (cmd == 5) {
 			// thermtune bool
-			uint32_t val;
+			uint16_t val;
 			char buf[6];
-			read(worker_pipefd[0], &val, 4);
+			read(worker_pipefd[0], &val, 2);
 			int ret = 1001;
 			int sect = (val & 0xF000) >> 12;
 			int row = (val & 0x0F00) >> 8;

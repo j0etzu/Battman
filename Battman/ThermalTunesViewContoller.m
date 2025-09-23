@@ -362,12 +362,13 @@ static bool has_hip = false;
 //          0x2: Persist
 #define WORKER_THERMAL_BOOL_CMD (uint32_t)((indexPath.section << 12) | (indexPath.row << 8) | (ctrl.persist << 1) | (ctrl.toggled))
 
-- (void)writeThermalBoolCmd:(uint32_t)cmd {
+- (void)writeThermalBoolCmd:(uint16_t)cmd {
 	extern uint64_t battman_worker_call(char cmd, void *arg, uint64_t arglen);
-	uint64_t ret = battman_worker_call(5, (void *)&cmd, 4);
+	// SCStatus and SCError is int (4 bytes)
+	uint32_t ret = battman_worker_call(5, (void *)&cmd, 2) & 0xFFFFFFFF;
 	if (ret != 0) {
 		char *errstr = calloc(1024, 1);
-		sprintf(errstr, "%s: %llu", _C("Thermal Tuning failed with error"), ret);
+		sprintf(errstr, "%s: 0x%x", _C("Thermal Tuning failed with error"), ret);
 		show_alert(L_FAILED, errstr, L_OK);
 		free(errstr);
 	}
@@ -381,7 +382,7 @@ static bool has_hip = false;
 	}
 	if ([control isKindOfClass:[UISwitch class]]) {
 		UISwitch *ctrl = (UISwitch *)control;
-		[self writeThermalBoolCmd:(uint32_t)((indexPath.section << 12) | (indexPath.row << 8) | (ctrl.on))];
+		[self writeThermalBoolCmd:(uint16_t)((indexPath.section << 12) | (indexPath.row << 8) | (ctrl.on))];
 	}
 }
 

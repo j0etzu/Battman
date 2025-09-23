@@ -165,6 +165,8 @@ void        open_url(const char *url);
 
 bool        match_regex(const char *string, const char *pattern);
 
+const char *second_to_datefmt(uint64_t second);
+
 int         is_rosetta(void);
 
 const char *lang_cfg_file(void);

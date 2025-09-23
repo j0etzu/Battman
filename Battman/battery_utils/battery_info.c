@@ -39,7 +39,8 @@ struct battery_info_node main_battery_template[] = {
 	{ _C("Full Charge Capacity"), NULL, BIN_UNIT_MAH | BIN_IN_DETAILS },
 	{ _C("Designed Capacity"), NULL, BIN_UNIT_MAH | BIN_IN_DETAILS },
 	{ _C("Remaining Capacity"), NULL, BIN_UNIT_MAH | BIN_IN_DETAILS },
-	{ _C("Battery Uptime"), _C("The length of time the Battery Management System (BMS) has been up."), BIN_UNIT_MIN | BIN_IN_DETAILS },
+	/* FIXME: bmsUptime uses at least 4 bytes (8 bytes in total), current structure only allow 2 */
+	{ _C("Battery Uptime"), _C("The length of time the Battery Management System (BMS) has been up."), /* BIN_UNIT_MIN | BIN_IN_DETAILS */ 0 },
 	{ _C("Qmax"), NULL, BIN_UNIT_MAH | BIN_IN_DETAILS },
 	{ _C("Depth of Discharge"), _C("Current chemical depth of discharge (DOD₀). The gas gauge updates information on the DOD₀ based on open-circuit voltage (OCV) readings when in a relaxed state."), BIN_UNIT_MAH | BIN_IN_DETAILS },
 	{ _C("Passed Charge"), _C("The cumulative capacity of the current charging or discharging cycle. It is reset to zero with each DOD₀ update."), BIN_UNIT_MAH | BIN_IN_DETAILS },
@@ -748,7 +749,9 @@ void battery_info_update_smc(struct battery_info_section *section) {
 	BI_SET_ITEM(_C("Full Charge Capacity"), full_cap);
 	BI_SET_ITEM(_C("Designed Capacity"), design_cap);
 	BI_SET_ITEM(_C("Remaining Capacity"), remain_cap);
-	BI_SET_ITEM(_C("Battery Uptime"), gGauge.bmsUpTime / 60);
+	/* FIXME: bmsUptime uses at least 4 bytes (8 bytes in total), current structure only allow 2 */
+	// second_to_datefmt is a workaround, the "Battery Uptime" should be numeric type
+	BI_FORMAT_ITEM(_C("Battery Uptime"), "%s", second_to_datefmt(gGauge.bmsUpTime));
 	BI_SET_ITEM(_C("Qmax"), gGauge.Qmax * batt_cell_num());
 	BI_SET_ITEM(_C("Depth of Discharge"), gGauge.DOD0);
 	BI_SET_ITEM(_C("Passed Charge"), gGauge.PassedCharge);
