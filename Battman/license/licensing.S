@@ -1222,6 +1222,7 @@ iOS13ver:
 
 .section __DATA,__common
 .global _graceful,_gWindow,_THEPATH,_THENUM
+.p2align 3
 _graceful:
 	.quad 0
 _gWindow:

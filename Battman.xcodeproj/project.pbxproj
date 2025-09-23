@@ -14762,7 +14762,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				LLVM_LTO = YES_THIN;
+				LLVM_LTO = YES;
 				LOCALIZED_STRING_MACRO_NAMES = _;
 				LOCALIZED_STRING_SWIFTUI_SUPPORT = NO;
 				OTHER_CFLAGS = (
@@ -14815,7 +14815,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				LLVM_LTO = YES_THIN;
+				LLVM_LTO = YES;
 				LOCALIZED_STRING_MACRO_NAMES = _;
 				LOCALIZED_STRING_SWIFTUI_SUPPORT = NO;
 				OTHER_CFLAGS = (
