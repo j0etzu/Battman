@@ -115,6 +115,7 @@ extern const char *container_system_group_path_for_identifier(int, const char *,
 	}
 	NSBundle *PLBundle = [NSBundle bundleWithPath:@"/System/Library/PreferenceBundles/BatteryUsageUI.bundle"];
 	if (PLBundle) {
+		// TODO: Implement our own GraphView
 		PSGraphViewTableCell = [PLBundle classNamed:@"PSGraphViewTableCell"];
 		if (PSGraphViewTableCell)
 			load_graph = container_system_group_path_for_identifier(0, "systemgroup.com.apple.powerlog", NULL);
@@ -325,6 +326,10 @@ extern const char *container_system_group_path_for_identifier(int, const char *,
 		sprintf(sqlpath, "%s/Library/BatteryLife/CurrentPowerlog.PLSQL", pl_container_path);
 		sqlite3 *p_db;
 		int      err = sqlite3_open_v2(sqlpath, &p_db, SQLITE_OPEN_READONLY | SQLITE_OPEN_NOMUTEX, NULL);
+		if (err != SQLITE_OK) {
+			// macOS/Simulator
+			err = sqlite3_open_v2("/var/db/powerlog/Library/BatteryLife/CurrentPowerlog.PLSQL", &p_db, SQLITE_OPEN_READONLY | SQLITE_OPEN_NOMUTEX, NULL);
+		}
 		if (err != SQLITE_OK) {
 			cell                      = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
 			cell.textLabel.text       = _("7-Day Battery Level");

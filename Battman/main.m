@@ -123,7 +123,8 @@ const char *cond_localize_c(const char *str) {
    which means we cannot use Localizables.strings
    and NSLocalizedString() at such scene. */
 /* TODO: try implement void *cond_localize(void *strOrCFSTR)? */
-static bool use_libintl = false;
+bool use_libintl = false;
+bool has_locale = true;
 
 static void gettext_init(void) {
     static dispatch_once_t onceToken;
@@ -176,6 +177,7 @@ static void gettext_init(void) {
 					[defaults setBool:YES forKey:@"com.torrekie.Battman.warned_no_locale"];
 					[defaults synchronize];
 				}
+				has_locale = false;
             }
 #if defined(ENABLE_MO_CHECK)
             else if (use_libintl && gAppType == BATTMAN_APP) {
@@ -189,17 +191,24 @@ static void gettext_init(void) {
 						// This looks exactlly same with above, but multi-factored
 						NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 						os_log_error(gLog, "1919");
-						if (![defaults objectForKey:@"com.torrekie.Battman.warned_no_locale"] || DEBUG) {
-							show_alert("Error", "Unable to match existing Gettext localization, defaulting to English", "Cancel");
+#ifndef DEBUG
+						if (![defaults objectForKey:@"com.torrekie.Battman.warned_no_locale"])
+#endif
+						{
+							show_alert("Error", [NSString stringWithFormat:@"Unable to match existing Gettext localization for %s, defaulting to English", preferred_language()].UTF8String, "Cancel");
 							[defaults setBool:YES forKey:@"com.torrekie.Battman.warned_no_locale"];
 							[defaults synchronize];
 						}
+						has_locale = false;
 						break;
 					}
 					case 810: {
 						os_log_error(gLog, "810");
 						NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-						if (![defaults objectForKey:@"com.torrekie.Battman.warned_3rd_locale"] || DEBUG) {
+#ifndef DEBUG
+						if (![defaults objectForKey:@"com.torrekie.Battman.warned_3rd_locale"])
+#endif
+						{
 							show_alert(_("Unregistered Locale"), _("You are using a localization file which not officially provided by Battman, the translations may inaccurate."), _("OK"));
 							[defaults setBool:YES forKey:@"com.torrekie.Battman.warned_3rd_locale"];
 							[defaults synchronize];
@@ -221,6 +230,7 @@ static void gettext_init(void) {
 #define _(x) cond_localize(x)
         } else {
             show_alert("Warning", "Failed to load Gettext, defaulting to English", "OK");
+			has_locale = false;
         }
     });
 }
@@ -235,6 +245,26 @@ const char *cond_localize_c(const char *str) {
     return (const char *)(use_libintl ? gettext_ptr(str) : str);
 }
 #endif
+
+CFTypeRef (*MGCopyAnswerPtr)(CFStringRef) = NULL;
+SInt32 (*MGGetSInt32AnswerPtr)(CFStringRef, SInt32) = NULL;
+CFPropertyListRef (*MGCopyMultipleAnswersPtr)(CFArrayRef, CFDictionaryRef) = NULL;
+CFStringRef (*MGGetStringAnswerPtr)(CFStringRef) = NULL;
+
+__attribute__((constructor))
+void load_mg(void) {
+#if 1
+	void *mobileGestalt = dlopen("/usr/lib/libMobileGestalt.dylib", RTLD_LAZY);
+	if (mobileGestalt) {
+		MGCopyAnswerPtr = dlsym(mobileGestalt, "MGCopyAnswer");
+		MGGetSInt32AnswerPtr = dlsym(mobileGestalt, "MGGetSInt32Answer");
+		MGCopyMultipleAnswersPtr = dlsym(mobileGestalt, "MGCopyMultipleAnswers");
+		MGGetStringAnswerPtr = dlsym(mobileGestalt, "MGGetStringAnswer");
+	}
+#else
+#error Before we find another way to get those info, MobileGestalt cannot be avoided
+#endif
+}
 
 #ifdef DEBUG
 NSMutableAttributedString *redirectedOutput;

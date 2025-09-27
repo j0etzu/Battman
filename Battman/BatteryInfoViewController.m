@@ -14,12 +14,14 @@
 
 // Privates
 @interface CALayer ()
-- (BOOL)continuousCorners;
-- (BOOL)_continuousCorners;
-- (void)setContinuousCorners:(BOOL)on;
+@property (atomic, assign) BOOL continuousCorners;
 @end
 
-static BOOL artwork_avail = NO;
+@interface UIImage ()
++ (instancetype)_applicationIconImageForBundleIdentifier:(NSString*)bundleIdentifier format:(int)format scale:(CGFloat)scale;
+@end
+
+BOOL artwork_avail = NO;
 static CFArrayRef (*CPBitmapCreateImagesFromPath)(CFStringRef, CFPropertyListRef *, uint32_t, CFErrorRef *) = NULL;
 
 // Cached arrays
@@ -59,11 +61,11 @@ static void _loadAppSupportBundle(void) {
 		return;
 	}
 	artwork_avail  = true;
-	sArtworkNames  =names;
-	sArtworkImages =images;
+	sArtworkNames  = names;
+	sArtworkImages = images;
 }
 
-static CGImageRef getArtworkImageOf(CFStringRef name) {
+CGImageRef getArtworkImageOf(CFStringRef name) {
 	if (!sArtworkNames || !sArtworkImages)
 		return NULL;
 
@@ -110,10 +112,10 @@ enum sections_batteryinfo {
 #ifdef DEBUG
     /* FIXME: GIT_COMMIT_HASH should be a macro */
     copyright.text = [NSString stringWithFormat:@"%@\n%@ %@\n%s %s", me, _("Debug Commit"), [[NSBundle mainBundle] objectForInfoDictionaryKey:@"GIT_COMMIT_HASH"], __DATE__, __TIME__];
-    copyright.numberOfLines = 0;
 #else
-    copyright.text = me;
+	copyright.text = [NSString stringWithFormat:@"%@\n%@ %@", me, _("Commit"), [[NSBundle mainBundle] objectForInfoDictionaryKey:@"GIT_COMMIT_HASH"]];
 #endif
+	copyright.numberOfLines = 0;
 
     /* FIXME: Containered is not Sandboxed, try some extra checks */
     char *home = getenv("HOME");
@@ -156,7 +158,10 @@ enum sections_batteryinfo {
 	[UPSMonitor startWatchingUPS];
 
 	_loadAppSupportBundle();
-    return [super initWithStyle:UITableViewStyleGrouped];
+	if (@available(iOS 13.0, *))
+		return [super initWithStyle:UITableViewStyleInsetGrouped];
+	else
+		return [super initWithStyle:UITableViewStyleGrouped];
 }
 
 - (NSInteger)tableView:(id)tv numberOfRowsInSection:(NSInteger)section {
@@ -239,13 +244,6 @@ enum sections_batteryinfo {
 		if (artwork_avail) {
 			NSArray *icns = @[@"LowPowerUsage", @"ChargeLimit", @"Thermometer"];
 			cell.imageView.image = [UIImage imageWithCGImage:getArtworkImageOf((__bridge CFStringRef)icns[indexPath.row]) scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
-
-			[cell.imageView.layer setCornerRadius:6.525];
-			if (@available(iOS 13.0, *)) {
-				[cell.imageView.layer setCornerCurve:kCACornerCurveContinuous];
-			}
-			if ([cell.imageView.layer respondsToSelector:@selector(setContinuousCorners:)])
-				[cell.imageView.layer setContinuousCorners:YES];
 		}
 		cell.textLabel.text = rows[indexPath.row];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -253,6 +251,21 @@ enum sections_batteryinfo {
     }
 
     return nil;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+	// Smooth corners for icons
+	// U think im goin to use the bundle icon huh? No, we are just lookin for default size
+	UIImage *tmp = [UIImage _applicationIconImageForBundleIdentifier:[NSBundle.mainBundle bundleIdentifier] format:0 scale:[UIScreen mainScreen].scale];
+	if (cell.imageView.image != nil) {
+		[cell.imageView.layer setCornerRadius:tmp.size.width * 0.225f];
+		if (@available(iOS 13.0, *)) {
+			[cell.imageView.layer setCornerCurve:kCACornerCurveContinuous];
+		}
+		if ([cell.imageView.layer respondsToSelector:@selector(setContinuousCorners:)])
+			[cell.imageView.layer setContinuousCorners:YES];
+	}
+	cell.imageView.clipsToBounds = YES;
 }
 
 - (CGFloat)tableView:(id)tv heightForRowAtIndexPath:(NSIndexPath *)indexPath {

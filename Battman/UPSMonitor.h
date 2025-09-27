@@ -95,6 +95,10 @@ typedef struct IOUPSPlugInInterface_v140 {
 } IOUPSPlugInInterface_v140;
 #endif
 
+#ifndef USE_NEW_UPSMONITOR
+#define USE_NEW_UPSMONITOR 1
+#endif
+
 __BEGIN_DECLS
 
 #pragma clang diagnostic push
@@ -137,6 +141,7 @@ typedef struct ups_batt {
 
 extern UPSDeviceSet *gAllUPSDevices;
 
+void PrintAllUPSDevices(void);
 UPSDataRef UPSDeviceMatchingVendorProduct(int vid, int pid);
 ups_batt_t ups_battery_info(UPSDataRef device);
 
@@ -149,6 +154,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UPSMonitor : NSObject
 + (void)startWatchingUPS;
++ (void)stopWatchingUPS;
++ (void)appDidEnterBackground:(NSNotification *)note;
++ (void)appWillEnterForeground:(NSNotification *)note;
++ (void)cleanupAllResources;
 @end
 
 NS_ASSUME_NONNULL_END

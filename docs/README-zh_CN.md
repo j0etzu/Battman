@@ -5,7 +5,15 @@
 <div style="width:20%; margin: auto;" align="middle">
 <img src="../Screenshots/Main-zh_CN.png?raw=true" alt="Battman Main Demo" width="25%" height="25%" />
 <img src="../Screenshots/Gas Gauge-zh_CN.png?raw=true" alt="Battman Gas Gauge Demo" width="25%" height="25%" />
+<img src="../Screenshots/Gas Gauge-1-zh_CN.png?raw=true" alt="Battman Gas Gauge Demo 2" width="25%" height="25%" />
 <img src="../Screenshots/Adapter-zh_CN.png?raw=true" alt="Battman Adapter Demo" width="25%" height="25%" />
+<img src="../Screenshots/Inductive-zh_CN.png?raw=true" alt="Battman Inductive Demo" width="25%" height="25%" />
+<img src="../Screenshots/Inductive-1-zh_CN.png?raw=true" alt="Battman Inductive Demo 2" width="25%" height="25%" />
+<img src="../Screenshots/Serial-zh_CN.png?raw=true" alt="Battman Serial Demo" width="25%" height="25%" />
+<img src="../Screenshots/Temperature-zh_CN.png?raw=true" alt="Battman Temperature Demo" width="25%" height="25%" />
+<img src="../Screenshots/ChargingMgmt-zh_CN.png?raw=true" alt="Battman Charging Management Demo" width="25%" height="25%" />
+<img src="../Screenshots/ChargingLimit-zh_CN.png?raw=true" alt="Battman Charging Limit Demo" width="25%" height="25%" />
+<img src="../Screenshots/Thermal-zh_CN.png?raw=true" alt="Battman Thermal Demo" width="25%" height="25%" />
 </div>
 
 $${\color{grey}真正优雅的软件讲究代码的艺术，而非外表的点缀。}$$

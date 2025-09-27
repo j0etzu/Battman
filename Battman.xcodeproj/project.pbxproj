@@ -72,6 +72,18 @@
 		683B2C9D2E6185D900FECDF5 /* PickerAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 683B2C9C2E6185D900FECDF5 /* PickerAccessoryView.m */; };
 		683B2C9E2E61866200FECDF5 /* PickerAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 683B2C9C2E6185D900FECDF5 /* PickerAccessoryView.m */; };
 		683B2C9F2E61866200FECDF5 /* PickerAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 683B2C9C2E6185D900FECDF5 /* PickerAccessoryView.m */; };
+		683B2D062E6C344E00FECDF5 /* UPSMonitor-new.m in Sources */ = {isa = PBXBuildFile; fileRef = 683B2D052E6C344E00FECDF5 /* UPSMonitor-new.m */; };
+		683B2D072E6C346800FECDF5 /* UPSMonitor-new.m in Sources */ = {isa = PBXBuildFile; fileRef = 683B2D052E6C344E00FECDF5 /* UPSMonitor-new.m */; };
+		683B2D082E6C346800FECDF5 /* UPSMonitor-new.m in Sources */ = {isa = PBXBuildFile; fileRef = 683B2D052E6C344E00FECDF5 /* UPSMonitor-new.m */; };
+		683B2D092E6C361100FECDF5 /* UPSMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 689FE0B82DEEEDC600550EBE /* UPSMonitor.m */; };
+		683B2D0A2E6C361100FECDF5 /* UPSMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 689FE0B82DEEEDC600550EBE /* UPSMonitor.m */; };
+		683B2D0B2E6C361200FECDF5 /* UPSMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 689FE0B82DEEEDC600550EBE /* UPSMonitor.m */; };
+		683B2D0E2E6C4D9E00FECDF5 /* SerialQRCodeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 683B2D0D2E6C4D9E00FECDF5 /* SerialQRCodeTableViewCell.m */; };
+		683B2D3C2E6C8F6200FECDF5 /* SerialQRCodeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 683B2D0D2E6C4D9E00FECDF5 /* SerialQRCodeTableViewCell.m */; };
+		683B2D3D2E6C8F6300FECDF5 /* SerialQRCodeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 683B2D0D2E6C4D9E00FECDF5 /* SerialQRCodeTableViewCell.m */; };
+		683B2D432E7173CD00FECDF5 /* intl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 687743152D461E4400375A2C /* intl.framework */; };
+		683B2D442E76B2E200FECDF5 /* nonfree-havoc.m in Sources */ = {isa = PBXBuildFile; fileRef = 684114D52E57BCE7001B76B6 /* nonfree-havoc.m */; };
+		683B2D722E8143D100FECDF5 /* licensing.S in Sources */ = {isa = PBXBuildFile; fileRef = 6838BF652DB8D06B007EB66C /* licensing.S */; };
 		684114042E4A35D2001B76B6 /* DonationPrompter.m in Sources */ = {isa = PBXBuildFile; fileRef = 684114032E4A34DA001B76B6 /* DonationPrompter.m */; };
 		684114052E4A35E0001B76B6 /* DonationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 684113FE2E4A3492001B76B6 /* DonationViewController.m */; };
 		6841147F2E512AB1001B76B6 /* BattmanVectorIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 6841147D2E512AB1001B76B6 /* BattmanVectorIcon.m */; };
@@ -105,7 +117,6 @@
 		684114A02E5323E2001B76B6 /* CreditViewController.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDD162DE30A8E0057870A /* CreditViewController.c */; };
 		684114A12E5323E2001B76B6 /* worker.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDCEF2DE30A5E0057870A /* worker.c */; };
 		684114A22E5323E2001B76B6 /* MultilineViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6834254F2D7D6A240070CE6F /* MultilineViewCell.m */; };
-		684114A32E5323E2001B76B6 /* UPSMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 689FE0B82DEEEDC600550EBE /* UPSMonitor.m */; };
 		684114A42E5323E2001B76B6 /* UIView+Fill.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40B12D8EB8870023D7B0 /* UIView+Fill.m */; };
 		684114A52E5323E2001B76B6 /* UberSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40AA2D8EB8870023D7B0 /* UberSegmentedControl.m */; };
 		684114A62E5323E2001B76B6 /* SegmentedViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D6DEBD2D745DBC00E129A0 /* SegmentedViewCell.m */; };
@@ -164,7 +175,6 @@
 		684114F62E57BDE7001B76B6 /* CreditViewController.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDD162DE30A8E0057870A /* CreditViewController.c */; };
 		684114F72E57BDE7001B76B6 /* worker.c in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDCEF2DE30A5E0057870A /* worker.c */; };
 		684114F82E57BDE7001B76B6 /* MultilineViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6834254F2D7D6A240070CE6F /* MultilineViewCell.m */; };
-		684114F92E57BDE7001B76B6 /* UPSMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 689FE0B82DEEEDC600550EBE /* UPSMonitor.m */; };
 		684114FA2E57BDE7001B76B6 /* UIView+Fill.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40B12D8EB8870023D7B0 /* UIView+Fill.m */; };
 		684114FB2E57BDE7001B76B6 /* UberSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40AA2D8EB8870023D7B0 /* UberSegmentedControl.m */; };
 		684114FC2E57BDE7001B76B6 /* SegmentedViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 68D6DEBD2D745DBC00E129A0 /* SegmentedViewCell.m */; };
@@ -175,7 +185,6 @@
 		684115012E57BDE7001B76B6 /* pmnotification.c in Sources */ = {isa = PBXBuildFile; fileRef = 68B2911E2DC754100089BA1F /* pmnotification.c */; };
 		684115022E57BDE7001B76B6 /* GradientArcView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B5FF2D2D85606000919BC2 /* GradientArcView.m */; };
 		684115032E57BDE7001B76B6 /* BatterySubscriberViewControllerBase.c in Sources */ = {isa = PBXBuildFile; fileRef = 689FE0B42DEAEA4A00550EBE /* BatterySubscriberViewControllerBase.c */; };
-		684115042E57BDE7001B76B6 /* licensing.S in Sources */ = {isa = PBXBuildFile; fileRef = 6838BF652DB8D06B007EB66C /* licensing.S */; };
 		684115052E57BDE7001B76B6 /* ThermalTunesViewContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 684575AC2E3E032700618DFD /* ThermalTunesViewContoller.m */; };
 		684115062E57BDE7001B76B6 /* SliderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6838BFAB2DC3984C007EB66C /* SliderTableViewCell.m */; };
 		684115072E57BDE7001B76B6 /* BatteryDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68171A322D534E6B00DD4224 /* BatteryDetailsViewController.m */; };
@@ -187,7 +196,6 @@
 		6841150D2E57BDE7001B76B6 /* libsmc.c in Sources */ = {isa = PBXBuildFile; fileRef = 68171A2F2D5221C400DD4224 /* libsmc.c */; };
 		6841150F2E57BDE7001B76B6 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B751412E2A468C003C94BC /* SystemConfiguration.framework */; };
 		684115102E57BDE7001B76B6 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6838BF6E2DB8D89E007EB66C /* WebKit.framework */; };
-		684115112E57BDE7001B76B6 /* intl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 687743152D461E4400375A2C /* intl.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		684115122E57BDE7001B76B6 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68A3EAFC2D5204EA003381DF /* IOKit.framework */; };
 		684115142E57BDE7001B76B6 /* BattmanIcons@2x.artwork in Resources */ = {isa = PBXBuildFile; fileRef = 6845759B2E3CBFE500618DFD /* BattmanIcons@2x.artwork */; };
 		684115152E57BDE7001B76B6 /* BattmanIcons@3x.artwork in Resources */ = {isa = PBXBuildFile; fileRef = 684575992E3CBD2500618DFD /* BattmanIcons@3x.artwork */; };
@@ -209,7 +217,6 @@
 		687743472D4F6C7800375A2C /* SPWaterProgressIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 687743422D4F6C7800375A2C /* SPWaterProgressIndicatorView.m */; };
 		687743482D4F6C7800375A2C /* BatteryInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 687743442D4F6C7800375A2C /* BatteryInfoTableViewCell.m */; };
 		689FE0B52DEAEA4A00550EBE /* BatterySubscriberViewControllerBase.c in Sources */ = {isa = PBXBuildFile; fileRef = 689FE0B42DEAEA4A00550EBE /* BatterySubscriberViewControllerBase.c */; };
-		689FE0B92DEEEDC600550EBE /* UPSMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 689FE0B82DEEEDC600550EBE /* UPSMonitor.m */; };
 		68A3EAFB2D5204D2003381DF /* battery_info.c in Sources */ = {isa = PBXBuildFile; fileRef = 68A3EAF62D5204D2003381DF /* battery_info.c */; };
 		68A3EAFD2D5204EA003381DF /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68A3EAFC2D5204EA003381DF /* IOKit.framework */; };
 		68AE40B82D8EB8870023D7B0 /* UberSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AE40AA2D8EB8870023D7B0 /* UberSegmentedControl.m */; };
@@ -353,6 +360,9 @@
 		683B2C5C2E5F73B800FECDF5 /* DatePickerCompactButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DatePickerCompactButton.m; sourceTree = "<group>"; };
 		683B2C9B2E6185D900FECDF5 /* PickerAccessoryView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PickerAccessoryView.h; sourceTree = "<group>"; };
 		683B2C9C2E6185D900FECDF5 /* PickerAccessoryView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PickerAccessoryView.m; sourceTree = "<group>"; };
+		683B2D052E6C344E00FECDF5 /* UPSMonitor-new.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UPSMonitor-new.m"; sourceTree = "<group>"; };
+		683B2D0C2E6C4D9E00FECDF5 /* SerialQRCodeTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SerialQRCodeTableViewCell.h; sourceTree = "<group>"; };
+		683B2D0D2E6C4D9E00FECDF5 /* SerialQRCodeTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SerialQRCodeTableViewCell.m; sourceTree = "<group>"; };
 		684113FD2E4A3492001B76B6 /* DonationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DonationViewController.h; sourceTree = "<group>"; };
 		684113FE2E4A3492001B76B6 /* DonationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DonationViewController.m; sourceTree = "<group>"; };
 		684114022E4A34DA001B76B6 /* DonationPrompter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DonationPrompter.h; sourceTree = "<group>"; };
@@ -1783,7 +1793,7 @@
 			files = (
 				6841150F2E57BDE7001B76B6 /* SystemConfiguration.framework in Frameworks */,
 				684115102E57BDE7001B76B6 /* WebKit.framework in Frameworks */,
-				684115112E57BDE7001B76B6 /* intl.framework in Frameworks */,
+				683B2D432E7173CD00FECDF5 /* intl.framework in Frameworks */,
 				684115122E57BDE7001B76B6 /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -13719,6 +13729,7 @@
 				68B291432DDC60510089BA1F /* iokitextern.h */,
 				689FE0B72DEEEDC600550EBE /* UPSMonitor.h */,
 				689FE0B82DEEEDC600550EBE /* UPSMonitor.m */,
+				683B2D052E6C344E00FECDF5 /* UPSMonitor-new.m */,
 			);
 			path = Battman;
 			sourceTree = "<group>";
@@ -13797,6 +13808,8 @@
 				68B16F062E167CE6009B63AC /* DatePickerTableViewCell.m */,
 				683B2C9B2E6185D900FECDF5 /* PickerAccessoryView.h */,
 				683B2C9C2E6185D900FECDF5 /* PickerAccessoryView.m */,
+				683B2D0C2E6C4D9E00FECDF5 /* SerialQRCodeTableViewCell.h */,
+				683B2D0D2E6C4D9E00FECDF5 /* SerialQRCodeTableViewCell.m */,
 			);
 			name = CustomUIElements;
 			sourceTree = "<group>";
@@ -14190,7 +14203,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e -x\n\nPATH=/opt/homebrew/bin:$PATH\n\n# ldid fakesign\nif [ ${PLATFORM_NAME} == \"iphoneos\" ]; then\n  ldid -S${PROJECT_DIR}/Battman.entitlements ${CODESIGNING_FOLDER_PATH}/Battman\nfi\n\n# Replace GIT_COMMIT_HASH in Info.plist\nCOMMIT_HASH=`git rev-parse --short HEAD`\n/usr/libexec/PlistBuddy -c \"Set :GIT_COMMIT_HASH $COMMIT_HASH\" \"${CODESIGNING_FOLDER_PATH}/Info.plist\"\n\n# generate and sync icons to app root\nsh ${PROJECT_DIR}/Battman/generate_icons.sh ${PROJECT_DIR}/Battman.svg ${CODESIGNING_FOLDER_PATH}/\n\n# restore\ngit restore \"${INFOPLIST_FILE}\" || true\n";
+			shellScript = "set -e -x\n\nPATH=/opt/homebrew/bin:$PATH\n\n# ldid fakesign\nif [ ${PLATFORM_NAME} == \"iphoneos\" ]; then\n  ldid -S${PROJECT_DIR}/Battman.entitlements ${CODESIGNING_FOLDER_PATH}/Battman\nfi\n\n# Replace GIT_COMMIT_HASH in Info.plist\nCOMMIT_HASH=`git rev-parse --short HEAD`\n/usr/libexec/PlistBuddy -c \"Set :GIT_COMMIT_HASH $COMMIT_HASH\" \"${CODESIGNING_FOLDER_PATH}/Info.plist\"\n\n# generate and sync icons to app root\nsh ${PROJECT_DIR}/Battman/generate_icons.sh ${PROJECT_DIR}/Battman.svg ${CODESIGNING_FOLDER_PATH}/\n\n# restore\n#git restore \"${INFOPLIST_FILE}\" || true\n";
 		};
 		6838BF6D2DB8D363007EB66C /* Generate Sources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -14250,7 +14263,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e -x\n\nPATH=/opt/homebrew/bin:$PATH\n\n# ldid fakesign\nif [ ${PLATFORM_NAME} == \"iphoneos\" ]; then\n  ldid -S${PROJECT_DIR}/Battman.entitlements ${CODESIGNING_FOLDER_PATH}/Battman\nfi\n\n# Replace GIT_COMMIT_HASH in Info.plist\nCOMMIT_HASH=`git rev-parse --short HEAD`\n/usr/libexec/PlistBuddy -c \"Set :GIT_COMMIT_HASH $COMMIT_HASH\" \"${CODESIGNING_FOLDER_PATH}/Info.plist\"\n\n# generate and sync icons to app root\nsh ${PROJECT_DIR}/Battman/generate_icons.sh ${PROJECT_DIR}/Battman.svg ${CODESIGNING_FOLDER_PATH}/\n\n# restore\ngit restore \"${INFOPLIST_FILE}\" || true\n";
+			shellScript = "set -e -x\n\nPATH=/opt/homebrew/bin:$PATH\n\n# ldid fakesign\nif [ ${PLATFORM_NAME} == \"iphoneos\" ]; then\n  ldid -S${PROJECT_DIR}/Battman.entitlements ${CODESIGNING_FOLDER_PATH}/Battman\nfi\n\n# Replace GIT_COMMIT_HASH in Info.plist\nCOMMIT_HASH=`git rev-parse --short HEAD`\n/usr/libexec/PlistBuddy -c \"Set :GIT_COMMIT_HASH $COMMIT_HASH\" \"${CODESIGNING_FOLDER_PATH}/Info.plist\"\n\n# generate and sync icons to app root\nsh ${PROJECT_DIR}/Battman/generate_icons.sh ${PROJECT_DIR}/Battman.svg ${CODESIGNING_FOLDER_PATH}/\n\n# restore\n#git restore \"${INFOPLIST_FILE}\" || true\n";
 		};
 		684114D92E57BDE7001B76B6 /* Generate Sources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -14289,7 +14302,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e -x\n\nPATH=/opt/homebrew/bin:$PATH\n\n# ldid fakesign\nif [ ${PLATFORM_NAME} == \"iphoneos\" ]; then\n  ldid -S${PROJECT_DIR}/Battman.entitlements ${CODESIGNING_FOLDER_PATH}/Battman\nfi\n\n# Replace GIT_COMMIT_HASH in Info.plist\nCOMMIT_HASH=`git rev-parse --short HEAD`\n/usr/libexec/PlistBuddy -c \"Set :GIT_COMMIT_HASH $COMMIT_HASH\" \"${CODESIGNING_FOLDER_PATH}/Info.plist\"\n\n# generate and sync icons to app root\nsh ${PROJECT_DIR}/Battman/generate_icons.sh ${PROJECT_DIR}/Battman.svg ${CODESIGNING_FOLDER_PATH}/\n\n# restore\ngit restore \"${INFOPLIST_FILE}\" || true\n\nif [ ${PLATFORM_NAME} == \"iphoneos\" ]; then\n# deb\nmkdir -p ${CODESIGNING_FOLDER_PATH}/../tree/Applications/\nrsync -Kah ${CODESIGNING_FOLDER_PATH}/../Battman.app ${CODESIGNING_FOLDER_PATH}/../tree/Applications/\nrsync -Kah ${CODESIGNING_FOLDER_PATH}/../intl.framework ${CODESIGNING_FOLDER_PATH}/../tree/Applications/Battman.app/Frameworks/\nrm -r ${CODESIGNING_FOLDER_PATH}/../tree/Applications/Battman.app/Frameworks/intl.framework/Headers\nmkdir -p ${CODESIGNING_FOLDER_PATH}/../tree/DEBIAN\ncp ${PROJECT_DIR}/Battman/control ${CODESIGNING_FOLDER_PATH}/../tree/DEBIAN/\ngsed -i \"s/ARCH/iphoneos-arm/g\" ${CODESIGNING_FOLDER_PATH}/../tree/DEBIAN/control\ndpkg-deb --root-owner-group -b ${CODESIGNING_FOLDER_PATH}/../tree ${CODESIGNING_FOLDER_PATH}/../\n# deb rootless\nmkdir -p ${CODESIGNING_FOLDER_PATH}/../tree-rootless/var/jb/\nrsync -Kah ${CODESIGNING_FOLDER_PATH}/../tree/Applications ${CODESIGNING_FOLDER_PATH}/../tree-rootless/var/jb/\nmkdir -p ${CODESIGNING_FOLDER_PATH}/../tree-rootless/DEBIAN\ncp ${PROJECT_DIR}/Battman/control ${CODESIGNING_FOLDER_PATH}/../tree-rootless/DEBIAN/\ngsed -i \"s/ARCH/iphoneos-arm64/g\" ${CODESIGNING_FOLDER_PATH}/../tree-rootless/DEBIAN/control\ndpkg-deb --root-owner-group -b ${CODESIGNING_FOLDER_PATH}/../tree-rootless ${CODESIGNING_FOLDER_PATH}/../\nrm -r ${CODESIGNING_FOLDER_PATH}/../tree ${CODESIGNING_FOLDER_PATH}/../tree-rootless\nfi\n";
+			shellScript = "set -e -x\n\nPATH=/opt/homebrew/bin:$PATH\n\n# ldid fakesign\nif [ ${PLATFORM_NAME} == \"iphoneos\" ]; then\n  ldid -S${PROJECT_DIR}/Battman.entitlements ${CODESIGNING_FOLDER_PATH}/Battman\nfi\n\n# Replace GIT_COMMIT_HASH in Info.plist\nCOMMIT_HASH=`git rev-parse --short HEAD`\n/usr/libexec/PlistBuddy -c \"Set :GIT_COMMIT_HASH $COMMIT_HASH\" \"${CODESIGNING_FOLDER_PATH}/Info.plist\"\n\n# generate and sync icons to app root\nsh ${PROJECT_DIR}/Battman/generate_icons.sh ${PROJECT_DIR}/Battman.svg ${CODESIGNING_FOLDER_PATH}/\n\n# restore\n#git restore \"${INFOPLIST_FILE}\" || true\n\nif [ ${PLATFORM_NAME} == \"iphoneos\" ]; then\n# deb\nmkdir -p ${CODESIGNING_FOLDER_PATH}/../tree/Applications/\nrsync -Kah ${CODESIGNING_FOLDER_PATH}/../Battman.app ${CODESIGNING_FOLDER_PATH}/../tree/Applications/\n#rsync -Kah ${CODESIGNING_FOLDER_PATH}/../intl.framework ${CODESIGNING_FOLDER_PATH}/../tree/Applications/Battman.app/Frameworks/\n#rm -r ${CODESIGNING_FOLDER_PATH}/../tree/Applications/Battman.app/Frameworks/intl.framework/Headers\nmkdir -p ${CODESIGNING_FOLDER_PATH}/../tree/DEBIAN\ncp ${PROJECT_DIR}/Battman/control ${CODESIGNING_FOLDER_PATH}/../tree/DEBIAN/\ngsed -i \"s/ARCH/iphoneos-arm/g\" ${CODESIGNING_FOLDER_PATH}/../tree/DEBIAN/control\ndpkg-deb --root-owner-group -b ${CODESIGNING_FOLDER_PATH}/../tree ${CODESIGNING_FOLDER_PATH}/../\n# deb rootless\nmkdir -p ${CODESIGNING_FOLDER_PATH}/../tree-rootless/var/jb/\nrsync -Kah ${CODESIGNING_FOLDER_PATH}/../tree/Applications ${CODESIGNING_FOLDER_PATH}/../tree-rootless/var/jb/\nmkdir -p ${CODESIGNING_FOLDER_PATH}/../tree-rootless/DEBIAN\ncp ${PROJECT_DIR}/Battman/control ${CODESIGNING_FOLDER_PATH}/../tree-rootless/DEBIAN/\ngsed -i \"s/ARCH/iphoneos-arm64/g\" ${CODESIGNING_FOLDER_PATH}/../tree-rootless/DEBIAN/control\ndpkg-deb --root-owner-group -b ${CODESIGNING_FOLDER_PATH}/../tree-rootless ${CODESIGNING_FOLDER_PATH}/../\nrm -r ${CODESIGNING_FOLDER_PATH}/../tree ${CODESIGNING_FOLDER_PATH}/../tree-rootless\nfi\n\n# test: license malformed\n# echo \"<html><body><p>MODIFIED</p></body></html>\" > ${CODESIGNING_FOLDER_PATH}/license.html\n";
 		};
 		687742AF2D437EEA00375A2C /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -14379,6 +14392,7 @@
 				684114872E5323E2001B76B6 /* UILabel+SFSymbolsOverride.m in Sources */,
 				684114882E5323E2001B76B6 /* SegmentButton.m in Sources */,
 				684114892E5323E2001B76B6 /* BatteryCellView.m in Sources */,
+				683B2D092E6C361100FECDF5 /* UPSMonitor.m in Sources */,
 				6841148A2E5323E2001B76B6 /* ChargingManagementViewController.m in Sources */,
 				6841148B2E5323E2001B76B6 /* BatteryInfoTableViewCell.m in Sources */,
 				6841148C2E5323E2001B76B6 /* selfcheck.c in Sources */,
@@ -14388,10 +14402,12 @@
 				684114902E5323E2001B76B6 /* DividerView.m in Sources */,
 				684114912E5323E2001B76B6 /* DatePickerTableViewCell.m in Sources */,
 				684114922E5323E2001B76B6 /* BattmanVectorIcon.m in Sources */,
+				683B2D3D2E6C8F6300FECDF5 /* SerialQRCodeTableViewCell.m in Sources */,
 				684114932E5323E2001B76B6 /* DonationPrompter.m in Sources */,
 				684114942E5323E2001B76B6 /* hid.m in Sources */,
 				684114952E5323E2001B76B6 /* wrapper.c in Sources */,
 				684114962E5323E2001B76B6 /* NSData+HexString.m in Sources */,
+				683B2D082E6C346800FECDF5 /* UPSMonitor-new.m in Sources */,
 				684114972E5323E2001B76B6 /* SimpleTemperatureViewController.m in Sources */,
 				684114982E5323E2001B76B6 /* localized.c in Sources */,
 				684114992E5323E2001B76B6 /* BatteryInfoViewController.m in Sources */,
@@ -14404,7 +14420,6 @@
 				684114A02E5323E2001B76B6 /* CreditViewController.c in Sources */,
 				684114A12E5323E2001B76B6 /* worker.c in Sources */,
 				684114A22E5323E2001B76B6 /* MultilineViewCell.m in Sources */,
-				684114A32E5323E2001B76B6 /* UPSMonitor.m in Sources */,
 				684114A42E5323E2001B76B6 /* UIView+Fill.m in Sources */,
 				684114A52E5323E2001B76B6 /* UberSegmentedControl.m in Sources */,
 				684114A62E5323E2001B76B6 /* SegmentedViewCell.m in Sources */,
@@ -14439,6 +14454,7 @@
 				684114DD2E57BDE7001B76B6 /* UILabel+SFSymbolsOverride.m in Sources */,
 				684114DE2E57BDE7001B76B6 /* SegmentButton.m in Sources */,
 				684114DF2E57BDE7001B76B6 /* BatteryCellView.m in Sources */,
+				683B2D0A2E6C361100FECDF5 /* UPSMonitor.m in Sources */,
 				684114E02E57BDE7001B76B6 /* ChargingManagementViewController.m in Sources */,
 				684114E12E57BDE7001B76B6 /* BatteryInfoTableViewCell.m in Sources */,
 				684114E22E57BDE7001B76B6 /* selfcheck.c in Sources */,
@@ -14448,13 +14464,16 @@
 				684114E62E57BDE7001B76B6 /* DividerView.m in Sources */,
 				684114E72E57BDE7001B76B6 /* DatePickerTableViewCell.m in Sources */,
 				684114E82E57BDE7001B76B6 /* BattmanVectorIcon.m in Sources */,
+				683B2D3C2E6C8F6200FECDF5 /* SerialQRCodeTableViewCell.m in Sources */,
 				684114E92E57BDE7001B76B6 /* DonationPrompter.m in Sources */,
 				684114EA2E57BDE7001B76B6 /* hid.m in Sources */,
 				684114EB2E57BDE7001B76B6 /* wrapper.c in Sources */,
 				684114EC2E57BDE7001B76B6 /* NSData+HexString.m in Sources */,
+				683B2D072E6C346800FECDF5 /* UPSMonitor-new.m in Sources */,
 				684114ED2E57BDE7001B76B6 /* SimpleTemperatureViewController.m in Sources */,
 				684114EE2E57BDE7001B76B6 /* localized.c in Sources */,
 				684114EF2E57BDE7001B76B6 /* BatteryInfoViewController.m in Sources */,
+				683B2D722E8143D100FECDF5 /* licensing.S in Sources */,
 				684114F02E57BDE7001B76B6 /* SPWaterProgressIndicatorView.m in Sources */,
 				684114F12E57BDE7001B76B6 /* WarnAccessoryView.m in Sources */,
 				684114F22E57BDE7001B76B6 /* main.m in Sources */,
@@ -14464,7 +14483,6 @@
 				684114F62E57BDE7001B76B6 /* CreditViewController.c in Sources */,
 				684114F72E57BDE7001B76B6 /* worker.c in Sources */,
 				684114F82E57BDE7001B76B6 /* MultilineViewCell.m in Sources */,
-				684114F92E57BDE7001B76B6 /* UPSMonitor.m in Sources */,
 				684114FA2E57BDE7001B76B6 /* UIView+Fill.m in Sources */,
 				684114FB2E57BDE7001B76B6 /* UberSegmentedControl.m in Sources */,
 				684114FC2E57BDE7001B76B6 /* SegmentedViewCell.m in Sources */,
@@ -14476,7 +14494,7 @@
 				683B2C9F2E61866200FECDF5 /* PickerAccessoryView.m in Sources */,
 				684115022E57BDE7001B76B6 /* GradientArcView.m in Sources */,
 				684115032E57BDE7001B76B6 /* BatterySubscriberViewControllerBase.c in Sources */,
-				684115042E57BDE7001B76B6 /* licensing.S in Sources */,
+				683B2D442E76B2E200FECDF5 /* nonfree-havoc.m in Sources */,
 				684115052E57BDE7001B76B6 /* ThermalTunesViewContoller.m in Sources */,
 				684115062E57BDE7001B76B6 /* SliderTableViewCell.m in Sources */,
 				684115072E57BDE7001B76B6 /* BatteryDetailsViewController.m in Sources */,
@@ -14517,9 +14535,11 @@
 				68AE40B92D8EB8870023D7B0 /* MultiSelectSegmentedControl.m in Sources */,
 				68AE40BA2D8EB8870023D7B0 /* DividerView.m in Sources */,
 				68B16F072E167CE6009B63AC /* DatePickerTableViewCell.m in Sources */,
+				683B2D0E2E6C4D9E00FECDF5 /* SerialQRCodeTableViewCell.m in Sources */,
 				6841147F2E512AB1001B76B6 /* BattmanVectorIcon.m in Sources */,
 				684114042E4A35D2001B76B6 /* DonationPrompter.m in Sources */,
 				68B2913A2DD1FEDA0089BA1F /* hid.m in Sources */,
+				683B2D062E6C344E00FECDF5 /* UPSMonitor-new.m in Sources */,
 				68B7513E2E2A425D003C94BC /* wrapper.c in Sources */,
 				68B16F122E1BBCC7009B63AC /* NSData+HexString.m in Sources */,
 				68B291362DD1E6960089BA1F /* SimpleTemperatureViewController.m in Sources */,
@@ -14534,7 +14554,6 @@
 				68FBDD182DE30A8E0057870A /* CreditViewController.c in Sources */,
 				68FBDCF02DE30A5E0057870A /* worker.c in Sources */,
 				683425502D7D6A240070CE6F /* MultilineViewCell.m in Sources */,
-				689FE0B92DEEEDC600550EBE /* UPSMonitor.m in Sources */,
 				68AE40BB2D8EB8870023D7B0 /* UIView+Fill.m in Sources */,
 				68AE40B82D8EB8870023D7B0 /* UberSegmentedControl.m in Sources */,
 				68D6DEBE2D745DBC00E129A0 /* SegmentedViewCell.m in Sources */,
@@ -14554,6 +14573,7 @@
 				68FBDD192DE30A8E0057870A /* common.c in Sources */,
 				684114052E4A35E0001B76B6 /* DonationViewController.m in Sources */,
 				687743362D4E08AD00375A2C /* SettingsViewController.m in Sources */,
+				683B2D0B2E6C361200FECDF5 /* UPSMonitor.m in Sources */,
 				68B291272DC7547B0089BA1F /* ChargingLimitViewController.m in Sources */,
 				68171A302D5221C400DD4224 /* libsmc.c in Sources */,
 			);
@@ -14646,6 +14666,8 @@
 				OTHER_CFLAGS = (
 					"$(CUSTOM_CFLAGS)",
 					"-DLICENSE=LICENSE_NONFREE",
+					"-DNONFREE_TYPE=NONFREE_TYPE_GITHUB",
+					"-DUSE_MOBILEGESTALT",
 				);
 				OTHER_LDFLAGS = "$(OLDFL)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.torrekie.Battman;
@@ -14693,6 +14715,8 @@
 				OTHER_CFLAGS = (
 					"$(CUSTOM_CFLAGS)",
 					"-DLICENSE=LICENSE_NONFREE",
+					"-DNONFREE_TYPE=NONFREE_TYPE_GITHUB",
+					"-DUSE_MOBILEGESTALT",
 				);
 				OTHER_LDFLAGS = "$(OLDFL)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.torrekie.Battman;
@@ -14738,6 +14762,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				LLVM_LTO = YES;
 				LOCALIZED_STRING_MACRO_NAMES = _;
 				LOCALIZED_STRING_SWIFTUI_SUPPORT = NO;
 				OTHER_CFLAGS = (
@@ -14751,7 +14776,8 @@
 				PRODUCT_NAME = Battman;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSION_INFO_FILE = "";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_FILE = "$(PRODUCT_NAME)_vers.c";
 				WARNING_CFLAGS = "$(NO_WARN_CFLAGS)";
 			};
 			name = Debug;
@@ -14789,6 +14815,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				LLVM_LTO = YES;
 				LOCALIZED_STRING_MACRO_NAMES = _;
 				LOCALIZED_STRING_SWIFTUI_SUPPORT = NO;
 				OTHER_CFLAGS = (
@@ -14802,7 +14829,8 @@
 				PRODUCT_NAME = Battman;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSION_INFO_FILE = "";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_FILE = "$(PRODUCT_NAME)_vers.c";
 				WARNING_CFLAGS = "$(NO_WARN_CFLAGS)";
 			};
 			name = Release;

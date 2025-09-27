@@ -10,11 +10,14 @@ Hosted at: [https://github.com/Torrekie/Battman](https://github.com/Torrekie/Bat
 
 * **"Commercial Use"** means any activity directly or indirectly intended to generate profit (for example, sale, inclusion of advertising, or embedding in a commercial product) as well as use in internal business operations.
 * **"Derivative Works"** refers to any modifications, functional enhancements, or integrations with other software based on the Software.
-* **"Official Build"** denotes any version published on Torrekie’s official website or GitHub repository, which is accompanied by a digital signature or hash verification.
+* **"Official Build"** denotes any version published by Torrekie through any of the following distribution channels under Torrekie’s control: Torrekie’s official website, GitHub repository, or **the Havoc.app platform**. Such version must be accompanied by a digital signature or hash verification, or otherwise identified by Torrekie as an official Havoc-distributed build.
+  * **"Havoc Build"** means a build of the Software that is submitted by Torrekie to Havoc.app as a package, and that is published via Havoc.app, bearing the version and metadata that Torrekie specifies, and, if applicable, the same authenticity marker as other Official Builds.
+* **"Torrekie"** means the copyright owner of the Software.
 
 ### 2. Grant of License and Implied Consent
 
 * 2.1 Torrekie hereby grants, free of charge, to any person obtaining a copy of this Software and its accompanying documentation (the "Software") permission to use, reproduce, modify, and distribute copies or substantial portions of the Software solely for non-commercial purposes, subject to the following terms and conditions.
+  * **The version built and submitted by Torrekie to Havoc.app, once published by Havoc, is hereby designated an Official Build, and enjoys the same support, update, and authenticity guarantees as versions on Torrekie’s own site or GitHub.**
 * 2.2 By launching the software and accessing its main interface for the first time, the user is deemed to have fully read, understood, and irrevocably agreed to all terms of this Agreement, regardless of whether the user has actively completed the user agreement review process. Continued use of the Software shall further affirm the legal validity of this consent.
 * 2.3 Any act of bypassing, blocking, or tampering with the user agreement consent interface or related verification processes through technical means (including but not limited to reverse engineering, debugging tools, third-party plugins) shall be deemed as the user’s full awareness and acceptance of all terms herein. The user shall bear all consequences arising from such acts, which shall not affect the legal enforceability of this Agreement against the user.
 
@@ -27,7 +30,8 @@ Hosted at: [https://github.com/Torrekie/Battman](https://github.com/Torrekie/Bat
 ### 4. Non-Commercial Use
 
 * 4.1 **Prohibition of Commercial Use:** The Software may not be used for any commercial purposes. Any Derivative Works must be distributed under the same terms as this License and without imposing additional restrictions.
-* 4.2 The user assumes all risks associated with jailbreaking, sideloading, or violating manufacturer policies.
+* 4.2 **Permitted Use with Havoc Terms:** Notwithstanding anything else, when Software uploaded to Havoc.app under [Havoc Marketplace LLC Developer Terms and Conditions](https://havoc.app/devtos), Havoc.app may use, reproduce, display, distribute, modify, or otherwise exploit the Software **as permitted by those Terms**, including for operating, providing, improving the Havoc Services. Such uses by Havoc.app are **expressly allowed** and do not count as violations under this License, so long as they are consistent with Havoc’s policy regarding package/app submission. **However**, any other commercial uses by third parties beyond Havoc's granted use remain prohibited under this License.
+* 4.3 The user assumes all risks associated with jailbreaking, sideloading, or violating manufacturer policies.
 
 ### 5. Attribution Requirement
 
@@ -40,7 +44,8 @@ THE SOFTWARE IS PROVIDED "AS IS," WITHOUT ANY WARRANTY, EXPRESS OR IMPLIED.
 
 * 6.1 **Important Notice:** "Battman" directly manages device hardware for power management. No warranty is provided regarding its performance, suitability, or fitness for any particular purpose. The user assumes all risks, and Torrekie shall not be liable for any direct, indirect, incidental, or consequential damages – including any damage to devices – arising from the use or inability to use the Software.
 * 6.2 No third-party builds are warranted. Only the Official Build, maintained and updated by Torrekie, is supported.
-* 6.3 Updates will be provided only for Official Builds (those with published hashes on the official website or GitHub repository).
+* 6.3 Updates will be provided only for Official Builds (those with published hashes on the official website, Havoc or GitHub repository).
+* 6.4 For Havoc Builds: only those Havoc builds that are explicitly submitted by Torrekie, identified by version metadata and/or hash, and officially acknowledged by Torrekie, are supported and warranted to the same degree (if any) as Official Builds through other channels.
 
 ### 7. Termination
 

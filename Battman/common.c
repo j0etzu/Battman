@@ -100,6 +100,13 @@ static char *get_CFLocale() {
 
 char *preferred_language(void) {
 	static char name[256];
+#ifdef USE_GETTEXT
+	extern bool has_locale;
+	if (!has_locale) {
+		// Unify UI languages to keep consistency (we are forcing locales on date formatters)
+		return "en";
+	}
+#endif
 	/* Convert new-style locale names with language tags (ISO 639 and ISO 15924)
 	   to Unix (ISO 639 and ISO 3166) names.  */
 	typedef struct {
@@ -167,8 +174,11 @@ char *preferred_language(void) {
 		{ "Latn", "latin"    },
 		{ "Mong", "mongolian"}
 	};
-
+	/* XXX: before we actually provide English variants, redirect them to unified 'en' */
 	sprintf(name, "%s", get_CFLocale());
+	if (strncmp(name, "en-", 3) == 0)
+		return "en";
+
 	/* Step 2: Convert using langtag_table and script_table.  */
 	if ((strlen(name) == 7 || strlen(name) == 10) && name[2] == '-') {
 		unsigned int i1, i2;
@@ -550,6 +560,44 @@ bool match_regex(const char *string, const char *pattern) {
 	int result = regexec(&regex, string, 0, NULL, 0);
 	regfree(&regex);
 	return result == 0;
+}
+
+const char *second_to_datefmt(uint64_t second) {
+	id pool = objc_alloc_init(oclass(NSAutoreleasePool));
+
+	id fmt = objc_alloc_init(oclass(NSDateComponentsFormatter));
+	id localeId = ((id (*)(Class, SEL, const char *))objc_msgSend)(oclass(NSString), oselector(stringWithUTF8String:), preferred_language());
+	id locale = ((id (*)(Class, SEL, id))objc_msgSend)(oclass(NSLocale), oselector(localeWithLocaleIdentifier:), localeId);
+	id calendar = ((id (*)(id, SEL))objc_msgSend)(fmt, oselector(calendar));
+	if (calendar) {
+		((void (*)(id, SEL, id))objc_msgSend)(calendar, oselector(setLocale:), locale);
+	}
+
+	((void (*)(id, SEL, unsigned long))objc_msgSend)(fmt, oselector(setAllowedUnits:), (kCFCalendarUnitDay | kCFCalendarUnitHour | kCFCalendarUnitMinute));
+
+	// NSDateComponentsFormatterUnitsStyleShort;
+	((void (*)(id, SEL, long))objc_msgSend)(fmt, oselector(setUnitsStyle:), 2);
+	// NSDateComponentsFormatterZeroFormattingBehaviorDropAll;
+	((void (*)(id, SEL, unsigned long))objc_msgSend)(fmt, oselector(setZeroFormattingBehavior:), 14);
+	id s = ((id (*)(id, SEL, double))objc_msgSend)(fmt, oselector(stringFromTimeInterval:), (double)second);
+
+	const char *c = NULL;
+	if (s) {
+		c = ((const char *(*)(id, SEL))objc_msgSend)(s, oselector(UTF8String));
+	}
+
+	const char *ret = NULL;
+	if (c) {
+		ret = c;
+	} else {
+		ret = "";
+	}
+
+	if (pool) {
+		((void (*)(id, SEL))objc_msgSend)(pool, oselector(drain));
+	}
+
+	return ret;
 }
 
 // For iOS 12 or ealier, we generate image directly from 'SF-Pro-Display-Regular.otf'

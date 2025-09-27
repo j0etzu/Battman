@@ -8,7 +8,10 @@ CFStringRef CreditViewControllerGetTitle(void) {
 }
 
 CreditVC *CreditViewControllerInit(CreditVC *self) {
-	return osupercall(CreditViewControllerNew,self, initWithStyle:, UITableViewStyleGrouped);
+	UITableViewStyle style = UITableViewStyleGrouped;
+	if (__builtin_available(iOS 13.0, *))
+		style = UITableViewStyleInsetGrouped;
+	return osupercall(CreditViewControllerNew,self, initWithStyle:, style);
 }
 
 long CreditViewControllerNumRows(void) {

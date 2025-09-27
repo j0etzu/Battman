@@ -125,6 +125,11 @@ __BEGIN_DECLS
 void NSLog(CFStringRef fmt, ...);
 #endif
 
+extern CFTypeRef (*MGCopyAnswerPtr)(CFStringRef);
+extern SInt32 (*MGGetSInt32AnswerPtr)(CFStringRef, SInt32);
+extern CFPropertyListRef (*MGCopyMultipleAnswersPtr)(CFArrayRef, CFDictionaryRef);
+extern CFStringRef (*MGGetStringAnswerPtr)(CFStringRef);
+
 extern const char    *L_OK;
 extern const char    *L_FAILED;
 extern const char    *L_ERR;
@@ -159,6 +164,8 @@ bool        is_carbon(void);
 void        open_url(const char *url);
 
 bool        match_regex(const char *string, const char *pattern);
+
+const char *second_to_datefmt(uint64_t second);
 
 int         is_rosetta(void);
 

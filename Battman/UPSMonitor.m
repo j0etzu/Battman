@@ -13,6 +13,8 @@
 #include <syslog.h>
 #import <UIKit/UIKit.h>
 
+#if !USE_NEW_UPSMONITOR
+
 static bool UPSWatching = false;
 static CFRunLoopRef   gBackgroundRunLoop = NULL;
 
@@ -31,26 +33,6 @@ static io_iterator_t            gAddedIter      = MACH_PORT_NULL;
 UPSDeviceSet *gAllUPSDevices = NULL;
 
 #pragma mark gAllUPSDevices
-
-// Call this right after you do your UPSDeviceSetAdd, or whenever you want to dump the contents:
-#if DEBUG
-static void PrintAllUPSDevices(void) {
-	if (!gAllUPSDevices || gAllUPSDevices->count == 0) {
-		NSLog(@"[UPSMonitor] no UPS devices in set");
-		return;
-	}
-	
-	NSLog(@"[UPSMonitor] gAllUPSDevices contains %zu entries:", gAllUPSDevices->count);
-	for (size_t i = 0; i < gAllUPSDevices->count; i++) {
-		UPSDataRef d = gAllUPSDevices->items[i];
-
-		NSLog(@"  [%zu] UPSDataRef %p entryID %llu", i, d, d->regID);
-		CFShow(d->upsProperties);
-		CFShow(d->upsCapabilities);
-		CFShow(d->upsEvent);
-	}
-}
-#endif
 
 // Create an empty set
 static UPSDeviceSet *UPSDeviceSetCreate(void) {
@@ -113,39 +95,6 @@ static size_t UPSDeviceSetCount(UPSDeviceSet *set) {
 static void UPSDeviceSetGetAll(UPSDeviceSet *set, UPSDataRef *outBuffer) {
 	if (!set || !outBuffer) return;
 	memcpy(outBuffer, set->items, set->count * sizeof(UPSDataRef));
-}
-
-UPSDataRef UPSDeviceMatchingVendorProduct(int vid, int pid) {
-	UPSDataRef ret = NULL;
-	if (!gAllUPSDevices || gAllUPSDevices->count == 0) {
-		DBGLOG(@"[UPSMonitor] no UPS devices yet");
-		return NULL;
-	}
-	if (vid == 0 || pid == 0) {
-		return NULL;
-	}
-
-	for (size_t i = 0; i < gAllUPSDevices->count; i++) {
-		UPSDataRef d = gAllUPSDevices->items[i];
-
-		SInt32 vendor, product;
-		CFNumberRef number;
-		if (d->upsProperties) {
-			number = CFDictionaryGetValue(d->upsProperties, CFSTR("Vendor ID"));
-			if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &vendor)) {
-				continue;
-			}
-			number = CFDictionaryGetValue(d->upsProperties, CFSTR("Product ID"));
-			if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &product)) {
-				continue;
-			}
-			if ((vendor == vid) && (product == pid)) {
-				ret = d;
-				break;
-			}
-		}
-	}
-	return ret;
 }
 
 static void
@@ -660,7 +609,62 @@ static bool gNotificationsPaused = false;
 
 @end
 
+UPSDataRef UPSDeviceMatchingVendorProduct(int vid, int pid) {
+	UPSDataRef ret = NULL;
+	if (!gAllUPSDevices || gAllUPSDevices->count == 0) {
+		DBGLOG(@"[UPSMonitor] no UPS devices yet");
+		return NULL;
+	}
+	if (vid == 0 || pid == 0) {
+		return NULL;
+	}
+	
+	for (size_t i = 0; i < gAllUPSDevices->count; i++) {
+		UPSDataRef d = gAllUPSDevices->items[i];
+		
+		SInt32 vendor, product;
+		CFNumberRef number;
+		if (d->upsProperties) {
+			number = CFDictionaryGetValue(d->upsProperties, CFSTR("Vendor ID"));
+			if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &vendor)) {
+				continue;
+			}
+			number = CFDictionaryGetValue(d->upsProperties, CFSTR("Product ID"));
+			if (!number || !CFNumberGetValue(number, kCFNumberSInt32Type, &product)) {
+				continue;
+			}
+			if ((vendor == vid) && (product == pid)) {
+				ret = d;
+				break;
+			}
+		}
+	}
+	return ret;
+}
+
+#endif
+
 #pragma mark -- Misc
+
+// Call this right after you do your UPSDeviceSetAdd, or whenever you want to dump the contents:
+#if DEBUG
+void PrintAllUPSDevices(void) {
+	if (!gAllUPSDevices || gAllUPSDevices->count == 0) {
+		NSLog(@"[UPSMonitor] no UPS devices in set");
+		return;
+	}
+	
+	NSLog(@"[UPSMonitor] gAllUPSDevices contains %zu entries:", gAllUPSDevices->count);
+	for (size_t i = 0; i < gAllUPSDevices->count; i++) {
+		UPSDataRef d = gAllUPSDevices->items[i];
+		
+		NSLog(@"  [%zu] UPSDataRef %p entryID %llu", i, d, d->regID);
+		CFShow(d->upsProperties);
+		CFShow(d->upsCapabilities);
+		CFShow(d->upsEvent);
+	}
+}
+#endif
 
 #define GetIntForKey(x, y, z) 										\
 	number = CFDictionaryGetValue(x, CFSTR(y));							\
